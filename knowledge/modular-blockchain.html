@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模組化區塊鏈 (Modular Blockchain) - Crypto Knowledge Base</title>
+    <meta name="description" content="深入解析模組化區塊鏈架構：Celestia 如何透過拆解執行、結算與數據可用性層 (DA)，解決擴展性不可能三角。">
+    <meta name="keywords" content="Modular Blockchain, 模組化區塊鏈, Celestia, TIA, Data Availability, Rollup, 擴展性">
+    <script src="../assets/js/theme-core.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { slate: { 850: '#15202e' } } } } }
+    </script>
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="bg-slate-50 text-slate-800" data-knowledge-id="modular-blockchain">
+    <div id="header-host"></div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex flex-col lg:flex-row gap-12">
+            <article class="article-body flex-1 min-w-0 prose prose-slate max-w-none">
+                <nav class="flex text-sm text-slate-500 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2">
+                        <li><a href="../index.html" class="hover:text-slate-900">首頁</a></li>
+                        <li><span class="mx-2">/</span></li>
+                        <li><a href="../post/topic-knowledge.html" class="hover:text-slate-900">知識百科</a></li>
+                        <li><span class="mx-2">/</span></li>
+                        <li class="font-medium text-slate-900">關鍵技術 (Tech)</li>
+                    </ol>
+                </nav>
+                <header class="mb-10 not-prose">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span
+                            class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-bold uppercase tracking-wide">Technology</span>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-6">模組化區塊鏈 (Modular
+                        Blockchain)</h1>
+                    <div class="flex items-center text-slate-500 text-sm border-b border-slate-200 pb-6">
+                        <span>最後更新：2026-01-25</span>
+                        <span class="mx-2">·</span>
+                        <span>分類：基礎設施 (Infra)</span>
+                    </div>
+                </header>
+                <div id="toc-mobile-target"></div>
+
+                <!-- 1. Why it Matters -->
+                <section class="mb-12">
+                    <h2 id="importance" class="text-2xl font-bold text-slate-900 mb-4">為什麼這個知識很重要？</h2>
+                    <p class="lead text-lg text-slate-600 mb-6 leading-relaxed">
+                        區塊鏈產業正經歷從「黑莓機 (Monolithic)」到「iPhone (Modular)」的架構革命。過去我們試圖讓一條鏈（如早期的 Solana 或
+                        Ethereum）做所有事，結果不是塞車就是當機。模組化架構將區塊鏈拆解為不同層級，這是 Web3 能夠承載 10 億用戶的唯一路徑。
+                    </p>
+                    <div class="bg-slate-50 border-l-4 border-violet-500 p-6 rounded-r-xl not-prose">
+                        <h4 class="font-bold text-slate-800 mb-2">💡 核心價值</h4>
+                        <p class="text-slate-600 text-sm">
+                            「專業分工」永遠優於「全能通才」。投資模組化敘事，就是投資區塊鏈工業化標準的未來。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 2. Impact on Yield/Risk -->
+                <section class="mb-12">
+                    <h2 id="impact" class="text-2xl font-bold text-slate-900 mb-6">對投資收益與風險的影響</h2>
+                    <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-xl">
+                                    💰</div>
+                                <h3 class="text-lg font-bold text-slate-900">收益潛力 (Yield)</h3>
+                            </div>
+                            <p class="text-slate-600 text-sm leading-relaxed flex-grow">
+                                數據可用性層 (DA) 是模組化堆棧中最稀缺的資源（類似於石油）。作為 DA 層龍頭的 Celestia (TIA)，其代幣捕獲了整個生態的「過路費」，具有極強的現金流屬性。
+                            </p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-xl">
+                                    🛡️</div>
+                                <h3 class="text-lg font-bold text-slate-900">技術風險 (Risk)</h3>
+                            </div>
+                            <p class="text-slate-600 text-sm leading-relaxed flex-grow">
+                                組件之間的「碎片化 (Fragmentation)」是最大隱憂。如果跨鏈互操作性（如流動性共享）體驗不佳，用戶可能會選擇雖然擁擠但體驗統一的單體鏈（如 Solana）。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. 5W1H Analysis -->
+                <section class="mb-12">
+                    <h2 id="5w1h" class="text-2xl font-bold text-slate-900 mb-6">深入解析：5W1H 模型</h2>
+                    <div class="not-prose overflow-hidden rounded-xl border border-slate-200 shadow-sm">
+                        <table class="w-full text-left border-collapse bg-white">
+                            <tbody class="text-sm">
+                                <tr class="border-b border-slate-100 group hover:bg-slate-50 transition-colors">
+                                    <td
+                                        class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50">
+                                        Who</td>
+                                    <td class="py-4 px-6 text-slate-800">
+                                        <strong>關鍵玩家：</strong> Celestia (DA), Ethereum (Settlement), Arbitrum/Optimism
+                                        (Execution).
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-slate-100 group hover:bg-slate-50 transition-colors">
+                                    <td
+                                        class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50">
+                                        What</td>
+                                    <td class="py-4 px-6 text-slate-800">
+                                        <strong>核心定義：</strong> 將區塊鏈的四大功能（執行、結算、共識、數據可用性）解耦，由不同的協議分別處理。
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-slate-100 group hover:bg-slate-50 transition-colors">
+                                    <td
+                                        class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50">
+                                        When</td>
+                                    <td class="py-4 px-6 text-slate-800">
+                                        <strong>爆發時機：</strong> 2024-2026 年是模組化基礎設施大規模落地的時期，伴隨 L2 和 L3 的井噴。
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-slate-100 group hover:bg-slate-50 transition-colors">
+                                    <td
+                                        class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50">
+                                        Why</td>
+                                    <td class="py-4 px-6 text-slate-800">
+                                        <strong>根本原因：</strong> 為了解決「不可能三角 (Trilemma)」。單體鏈無法在保持去中心化的同時無限擴展。
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 4. Mental Model -->
+                <section class="mb-12">
+                    <h2 id="association" class="text-2xl font-bold text-slate-900 mb-6">聯想與市場連動</h2>
+                    <div class="not-prose pl-6 border-l-2 border-indigo-200 space-y-8">
+                        <div class="relative">
+                            <div
+                                class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-indigo-500 border-4 border-white shadow-sm">
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">樂高積木 (Lego Bricks)</h3>
+                            <p class="text-slate-600 text-sm bg-slate-50 p-4 rounded-lg">
+                                想像你在組裝電腦。你可以買現成的 MacBook (Solana)，也可以自己買 CPU、顯卡、硬碟來組裝 (Modular)。後者雖然麻煩，但靈活性和上限更高。
+                            </p>
+                        </div>
+                        <div class="relative">
+                            <div
+                                class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-indigo-300 border-4 border-white shadow-sm">
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">一鍵發鏈 (RaaS)</h3>
+                            <p class="text-slate-600 text-sm bg-slate-50 p-4 rounded-lg">
+                                模組化技術成熟後，任何應用（如遊戲、DeFi）都可以像發 Token 一樣簡單地發行自己的鏈 (Rollup-as-a-Service)。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. Actionable Advice -->
+                <section class="mb-12">
+                    <h2 id="action" class="text-2xl font-bold text-slate-900 mb-6">建議行動指南</h2>
+                    <div class="not-prose grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-5 bg-blue-50 rounded-xl border border-blue-100">
+                            <span class="block text-xs font-bold text-blue-600 uppercase mb-2">觀察 (Observe)</span>
+                            <p class="text-sm font-medium text-slate-800">
+                                關注 <strong>Blob Fees</strong> 和 <strong>TIA 質押率</strong>。這是衡量模組化生態繁榮程度的關鍵指標。
+                            </p>
+                        </div>
+                        <div class="p-5 bg-amber-50 rounded-xl border border-amber-100">
+                            <span class="block text-xs font-bold text-amber-600 uppercase mb-2">判斷 (Judge)</span>
+                            <p class="text-sm font-medium text-slate-800">
+                                如果大量新 Rollup 選擇使用 Celestia 作為 DA 層，TIA 將迎來指數級增長。
+                            </p>
+                        </div>
+                        <div class="p-5 bg-emerald-50 rounded-xl border border-emerald-100">
+                            <span class="block text-xs font-bold text-emerald-600 uppercase mb-2">執行 (Execute)</span>
+                            <p class="text-sm font-medium text-slate-800">
+                                質押 TIA 是獲取模組化生態空投 (Airdrops) 的金鏟子。建議分散至不同錢包以最大化空投收益。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <div id="related-knowledge-container" class="not-prose mt-12"></div>
+            </article>
+            <aside class="hidden lg:block w-64 shrink-0 order-last">
+                <div class="sticky top-24">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">目錄</h3>
+                    <div id="toc-desktop-host" class="border-l-2 border-slate-100 pl-4"></div>
+                </div>
+            </aside>
+        </div>
+    </main>
+    <div id="footer-host"></div>
+    <script src="../assets/js/header-component.js"></script>
+    <script src="../assets/js/footer-component.js"></script>
+    <script src="../assets/js/article-toc.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            new HeaderComponent().init();
+            new FooterComponent().init();
+            if (typeof ArticleTOC !== 'undefined') { new ArticleTOC().init(); }
+        });
+    </script>
+</body>
+
+</html>

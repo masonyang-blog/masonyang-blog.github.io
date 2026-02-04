@@ -1,0 +1,480 @@
+/* 
+ * Crypto Compound Custom CSS 
+ * Architecture: CSS Variables + Dark Mode Overrides
+ * Reference: doc/ui-components-library.md
+ */
+
+:root {
+    /* 1. Base Colors (Slate) */
+    --c-bg-body: #f8fafc;
+    /* slate-50 */
+    --c-bg-card: #ffffff;
+    /* white */
+    --c-text-primary: #0f172a;
+    /* slate-900 */
+    --c-text-secondary: #475569;
+    /* slate-600 */
+    --c-text-tertiary: #94a3b8;
+    /* slate-400 */
+    --c-border: #e2e8f0;
+    /* slate-200 */
+    --c-divider: #cbd5e1;
+    /* slate-300 */
+
+    /* 2. Brand Colors */
+    --c-primary: #f97316;
+    /* orange-500 */
+    --c-primary-hover: #ea580c;
+    /* orange-600 */
+    --c-accent: #8b5cf6;
+    /* violet-500 */
+
+    /* 3. Functional Colors (TradingView Standard) */
+    --c-bull: #089981;
+    --c-bull-bg: rgba(8, 153, 129, 0.1);
+    --c-bear: #F23645;
+    --c-bear-bg: rgba(242, 54, 69, 0.1);
+
+    /* 4. Alert Colors */
+    --c-alert-info-bg: #eff6ff;
+    /* blue-50 */
+    --c-alert-info-border: #3b82f6;
+    /* blue-500 */
+    --c-alert-info-text: #1e3a8a;
+    /* blue-900 */
+
+    --c-alert-warn-bg: #fffbeb;
+    /* amber-50 */
+    --c-alert-warn-border: #f59e0b;
+    /* amber-500 */
+    --c-alert-warn-text: #92400e;
+    /* amber-800 */
+
+    --c-alert-error-bg: #fef2f2;
+    /* red-50 */
+    --c-alert-error-border: #f6465d;
+    /* red-500 */
+    --c-alert-error-text: #991b1b;
+    /* red-800 */
+
+    --c-alert-alpha-bg: #f0fdf4;
+    /* green-50 */
+    --c-alert-alpha-border: #0ecb81;
+    /* green-500 */
+    --c-alert-alpha-text: #14532d;
+    /* green-900 */
+}
+
+/* Dark Mode Overrides */
+html.dark {
+    /* TradingView Dark Theme Palette */
+    --c-bg-body: #131722;
+    /* TV Main BG */
+    --c-bg-card: #1E222D;
+    /* TV Card BG */
+    --c-text-primary: #D1D4DC;
+    /* TV Primary Text */
+    --c-text-secondary: #787B86;
+    /* TV Secondary Text */
+    --c-text-tertiary: #50535E;
+    --c-border: #2A2E39;
+    /* TV Border */
+    --c-divider: #2A2E39;
+
+    --c-primary: #fdba74;
+    /* orange-300 */
+    --c-primary-hover: #ffedd5;
+    /* orange-100 */
+    --c-accent: #a78bfa;
+    /* violet-400 */
+
+    --c-alert-info-bg: rgba(41, 98, 255, 0.1);
+    --c-alert-info-border: #2962FF;
+    --c-alert-info-text: #D1D4DC;
+
+    --c-alert-warn-bg: rgba(245, 158, 11, 0.1);
+    --c-alert-warn-border: #F59E0B;
+    --c-alert-warn-text: #D1D4DC;
+
+    --c-alert-error-bg: rgba(242, 54, 69, 0.1);
+    --c-alert-error-border: #F6465D;
+    --c-alert-error-text: #D1D4DC;
+
+    --c-alert-alpha-bg: rgba(14, 203, 129, 0.1);
+    --c-alert-alpha-border: #0ECB81;
+    --c-alert-alpha-text: #D1D4DC;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--c-bg-body);
+    color: var(--c-text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- Layout Containers --- */
+section.bg-white,
+main.bg-white {
+    background-color: var(--c-bg-body) !important;
+    /* Override Tailwind utility if needed for mode switch */
+    border-color: var(--c-border);
+}
+
+.bg-slate-50,
+.bg-slate-100 {
+    background-color: var(--c-bg-body) !important;
+}
+
+/* --- Cards & Components --- */
+.article-card,
+.topic-card,
+.info-cards>div,
+.factor-card,
+.bg-white {
+    background-color: var(--c-bg-card) !important;
+    border-color: var(--c-border) !important;
+}
+
+/* Dark Mode Border Enhancement */
+html.dark .article-card,
+html.dark .topic-card,
+html.dark .info-cards>div,
+html.dark .factor-card,
+html.dark .bg-white {
+    border: 1px solid var(--c-border) !important;
+}
+
+/* --- Grid System for Info Cards --- */
+.info-cards,
+.risk-group-cards {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+@media (min-width: 640px) {
+
+    .info-cards,
+    .risk-group-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* --- Typography --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+b {
+    color: var(--c-text-primary) !important;
+    scroll-margin-top: 5rem;
+    /* Sticky header offset */
+}
+
+p,
+li,
+blockquote {
+    color: var(--c-text-secondary) !important;
+}
+
+.prose blockquote {
+    border-left-color: var(--c-border);
+    color: var(--c-text-secondary);
+}
+
+hr,
+.border-slate-100,
+.border-slate-200 {
+    border-color: var(--c-border) !important;
+}
+
+/* --- UI Component: Alert --- */
+.alert {
+    border-left-width: 4px;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    margin: 1.5rem 0;
+}
+
+.alert-analyst {
+    background-color: var(--c-alert-info-bg);
+    border: 1px solid transparent;
+    border-left-color: var(--c-alert-info-border);
+    color: var(--c-alert-info-text);
+}
+
+.alert-warning {
+    background-color: var(--c-alert-warn-bg);
+    border: 1px solid transparent;
+    border-left-color: var(--c-alert-warn-border);
+    color: var(--c-alert-warn-text);
+}
+
+.alert-risk,
+.alert-error {
+    background-color: var(--c-alert-error-bg);
+    border: 1px solid transparent;
+    border-left-color: var(--c-alert-error-border);
+    color: var(--c-alert-error-text);
+}
+
+.alert-alpha {
+    background-color: var(--c-alert-alpha-bg);
+    border: 1px solid transparent;
+    border-left-color: var(--c-alert-alpha-border);
+    color: var(--c-alert-alpha-text);
+}
+
+.alert h4,
+.alert strong {
+    color: inherit !important;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* --- UI Component: Bull/Bear Analysis --- */
+.bull-bear-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+    .bull-bear-container {
+        flex-direction: row;
+    }
+}
+
+.case-bull,
+.case-bear {
+    flex: 1;
+    background-color: var(--c-bg-card);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--c-border);
+    /* Default border */
+}
+
+.case-bull {
+    border-top: 4px solid var(--c-bull);
+}
+
+.case-bear {
+    border-top: 4px solid var(--c-bear);
+}
+
+/* --- UI Component: Cards --- */
+.info-card {
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    border-radius: 0.75rem;
+    /* rounded-xl */
+    padding: 1.5rem;
+    /* p-6 */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    /* shadow-sm */
+}
+
+/* --- UI Component: Tables --- */
+.responsive-table-wrapper {
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    border: 1px solid var(--c-border);
+    margin: 1.5rem 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--c-bg-card);
+}
+
+th {
+    background-color: var(--c-bg-body);
+    color: var(--c-text-primary);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid var(--c-border);
+}
+
+td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--c-border);
+    color: var(--c-text-secondary);
+}
+
+/* --- Interactive Elements --- */
+.filter-btn {
+    transition: all 0.2s;
+    background-color: var(--c-bg-card);
+    /* was #fff */
+    color: var(--c-text-secondary);
+    /* was #334155 */
+}
+
+.filter-btn.active,
+.active-filter {
+    background-color: var(--c-primary) !important;
+    color: white !important;
+}
+
+/* --- Animations --- */
+#rocket {
+    animation: fly 5s linear infinite;
+    offset-path: path('M 150 200 Q 250 50, 400 100 T 650 200');
+}
+
+@keyframes fly {
+    0% {
+        offset-distance: 0%;
+    }
+
+    100% {
+        offset-distance: 100%;
+    }
+}
+
+.factor-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.factor-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Micro-interactions */
+button,
+.filter-btn,
+summary {
+    transition: transform 0.1s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+button:active,
+.filter-btn:active {
+    transform: scale(0.98);
+}
+
+/* --- UI Component: Unlock Schedule --- */
+.unlock-schedule-container {
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+/* --- UI Component: Professional Insight --- */
+.professional-insight-card {
+    background-color: var(--c-bg-card);
+    border: 1px dashed var(--c-accent);
+    /* Dashed border for insight */
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.professional-insight-card[open] {
+    border-style: solid;
+    /* Solid when open */
+    background-color: var(--c-alert-info-bg);
+    /* Slight tint when open */
+}
+
+/* --- TradingView Utilities --- */
+.text-up,
+.text-green-600 {
+    color: var(--c-bull) !important;
+}
+
+.text-down,
+.text-red-600 {
+    color: var(--c-bear) !important;
+}
+
+/* --- Special Sections --- */
+.section-divider {
+    display: flex;
+    align-items: center;
+    color: var(--c-divider);
+}
+
+.section-divider::before,
+.section-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--c-border);
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    max-height: 55vh;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 500px;
+    }
+}
+
+/* --- UI Component: Comparison Table --- */
+.comparison-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 1rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.comparison-table thead th {
+    font-weight: 600;
+    color: var(--c-text-secondary);
+}
+
+.comparison-table tbody tr {
+    background-color: var(--c-bg-body);
+}
+
+.comparison-table tbody tr td:first-child {
+    text-align: left;
+    font-weight: 500;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+.comparison-table tbody tr td:last-child {
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.tick-mark {
+    color: var(--c-bull);
+}
+
+.cross-mark {
+    color: var(--c-bear);
+}
+
+/* Image Filter for Dark Mode */
+.dark img:not([src*=".svg"]) {
+    filter: brightness(0.85) contrast(1.1);
+}
+
+.dark .dark-invert {
+    filter: invert(1);
+}
