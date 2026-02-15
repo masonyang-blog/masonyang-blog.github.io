@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時事點評 | Crypto Compound News</title>
+    <meta name="description" content="Crypto Compound 時事點評專區，提供最新的加密貨幣市場分析、監管動態與趨勢解讀。">
+    <meta name="google-site-verification" content="F1sAja4V6KTk17SiojYOS8UF1GP9-hu8TXI8iVKQ27Y" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/theme-core.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#15202e', // Custom darker slate
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Page Header -->
+            <div class="mb-12 border-b border-slate-200 pb-8">
+                <span class="text-blue-600 font-bold tracking-wide uppercase text-sm">Crypto News</span>
+                <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 leading-tight font-noto mt-2">
+                    時事點評
+                </h1>
+                <p class="mt-4 text-lg text-slate-600">
+                    深度解析市場動態，為您過濾雜訊，鎖定真正重要的投資信號。
+                </p>
+            </div>
+
+            <!-- News List -->
+            <div id="news-grid" class="space-y-6">
+                <!-- JS will populate this -->
+            </div>
+
+            <div id="no-results" class="text-center py-16 text-slate-500" style="display: none;">
+                <p>目前尚無新聞發布 📰</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Components -->
+    <script src="../assets/js/header-component.js"></script>
+    <script src="../assets/js/footer-component.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Header with active state
+            const header = new HeaderComponent();
+            header.init(); // Active state handling is usually by URL matching or manual set in next loop
+
+            // Or simpler:
+            // new HeaderComponent().init();
+
+            new FooterComponent().init();
+        });
+    </script>
+
+    <!-- Articles Data -->
+    <script src="../assets/js/articles-data.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Fetch articles
+            const allArticles = window.ArticleRepository ? window.ArticleRepository.all : [];
+
+            // Filter for News only
+            const newsArticles = allArticles.filter(a => a.category === 'news');
+
+            // Sort by date desc
+            newsArticles.sort((a, b) => new Date(b.published) - new Date(a.published));
+
+            const newsGrid = document.getElementById('news-grid');
+            const noResults = document.getElementById('no-results');
+
+            if (newsArticles.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+
+            // Render
+            newsGrid.innerHTML = newsArticles.map(article => `
+                <article class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow group">
+                    <a href="../${article.link}" class="block">
+                        <div class="flex items-center gap-3 text-sm text-slate-500 mb-3">
+                            <time datetime="${article.published}">${article.published}</time>
+                            <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+                            <span class="${article.tagColor} font-medium">${article.tag}</span>
+                        </div>
+                        <h2 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                            ${article.title}
+                        </h2>
+                        <p class="text-slate-600 leading-relaxed text-sm line-clamp-2">
+                            ${article.desc}
+                        </p>
+                    </a>
+                </article>
+            `).join('');
+
+        });
+    </script>
+</body>
+
+</html>

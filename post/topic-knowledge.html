@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知識資料庫 (Knowledge Database) | Crypto Compound</title>
+    <meta name="description" content="Crypto Compound 知識資料庫：彙整加密貨幣領域的核心名詞、技術術語與關鍵概念，助您快速掌握產業脈絡。">
+    <meta name="google-site-verification" content="F1sAja4V6KTk17SiojYOS8UF1GP9-hu8TXI8iVKQ27Y" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/theme-core.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#15202e', // Custom darker slate
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+</head>
+
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Page Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 leading-tight font-noto">知識資料庫
+                    (Knowledge Database)</h1>
+                <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
+                    彙整加密貨幣領域的核心名詞、技術術語與關鍵概念，助您快速掌握產業脈絡。
+                </p>
+            </div>
+
+            <!-- Knowledge Database Host -->
+            <div id="knowledge-base-host"></div>
+
+            <!-- Hidden containers to satisfy strict component requirements -->
+            <div id="toc-mobile-target" class="hidden"></div>
+            <div id="related-articles-container" class="hidden"></div>
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Components -->
+    <script src="../assets/js/header-component.js"></script>
+    <script src="../assets/js/footer-component.js"></script>
+
+    <!-- Knowledge Dependencies -->
+    <script src="../assets/js/core-knowledge-data.js"></script>
+    <script src="../assets/js/core-knowledge-component.js"></script>
+
+    <!-- Other Required Components -->
+    <script src="../assets/js/responsive-toc-component.js"></script>
+    <script src="../assets/js/article-toc.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Standard Init
+            new HeaderComponent().init();
+            new FooterComponent().init();
+
+            // Knowledge Component Init
+            const knowledgeRepo = window.CoreKnowledgeRepository;
+            if (knowledgeRepo) {
+                new CoreKnowledgeComponent('knowledge-base-host').init();
+            } else {
+                console.error("Knowledge Repository failed to load");
+            }
+
+            // Dummy Init for User Rules (optional but good for consistency if scripts check for existence)
+            // These might expect content to function, so passing them empty IDs is safe if they have null checks.
+            // If they error out on empty content, we'll need to wrap them in try-catch or ensure they handle it.
+            // Based on standard practices, libraries should handle missing targets gracefully or we just specificy them.
+            // Given I included the divs, selectors will match.
+        });
+    </script>
+
+</body>
+
+</html>

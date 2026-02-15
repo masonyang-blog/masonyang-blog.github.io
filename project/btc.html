@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO 與 Metadata (已根據 V.I.P. + B.R.A.V.E. 框架優化) -->
+    <title>比特幣 (Bitcoin) - 不只是數位黃金？從零搞懂區塊鏈、挖礦與投資風險的終極指南 | LMY's Crypto Blog</title>
+    <meta name="description"
+        content="LMY's Crypto Blog 是一個專為內容創作者設計的、高度優化的靜態網站解決方案。專案旨在提供一個零依賴、無建置步驟的純粹 HTML/CSS/JS 環境，讓創作者可以完全專注於內容本身，同時確保網站具備高效能、易於維護和對 SEO 友好的特性。">
+    <meta name="keywords" content="比特幣, Bitcoin, 加密貨幣, 區塊鏈, 去中心化, 挖礦, 中本聰, UTXO, 數位黃金, 投資風險, Crypto Mastermind">
+    <meta name="google-site-verification" content="F1sAja4V6KTk17SiojYOS8UF1GP9-hu8TXI8iVKQ27Y" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/theme-core.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#15202e', // Custom darker slate
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Tailwind Typography Plugin -->
+    <script src="https://cdn.tailwindcss.com/3.4.1?plugins=typography"></script>
+
+    <!-- Chart.js for investment analysis charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- JSON-LD 結構化資料 (已更新) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://lmybtc.github.io/post/core-btc.html"
+      },
+      "headline": "比特幣 (Bitcoin) - 不只是數位黃金？從零搞懂區塊鏈、挖礦與投資風險的終極指南 | LMY's Crypto Blog",
+      "description": "想徹底搞懂比特幣？本篇終極指南將從華爾街分析師視角，深度拆解區塊鏈技術、挖礦原理與真實投資風險，助您在加密貨幣市場中做出明智決策。",
+      "author": {
+        "@type": "Organization",
+        "name": "LMY's Crypto Blog",
+        "url": "https://lmybtc.github.io/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "LMY's Crypto Blog"
+      }
+    }
+    </script>
+
+    <!-- Custom Styles for investment analysis charts -->
+
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+</head>
+
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Header -->
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Main Article Content -->
+            <article class="bg-white p-8 sm:p-12 rounded-2xl shadow-lg">
+
+                <!-- Article Hero Section -->
+                <header class="mb-8">
+                    <div class="text-sm font-semibold text-orange-500 uppercase mb-2">核心概念系列</div>
+                    <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 leading-tight font-noto">比特幣
+                        (Bitcoin): 不只是數位黃金？</h1>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl">
+                        一份從零開始的終極指南，我們將從華爾街分析師的視角，為您深度拆解其背後的區塊鏈技術、挖礦原理與真實投資風險。
+                    </p>
+                </header>
+
+                <!-- Table of Contents (Integrated) -->
+                <section class="not-prose my-8 p-6 bg-slate-50 border rounded-2xl">
+                    <h3 class="text-lg font-bold text-slate-800 font-noto mb-4">本篇重點</h3>
+                    <ul id="toc-list" class="space-y-2 text-sm text-slate-600">
+                        <!-- JS will populate this -->
+                    </ul>
+                </section>
+
+                <!-- Main Content with Typography Plugin -->
+                <div
+                    class="prose prose-slate max-w-none prose-h2:font-noto prose-h2:text-slate-800 prose-a:text-orange-600 hover:prose-a:text-orange-500 prose-strong:text-slate-700">
+
+                    <!-- Pain: The Problem with Traditional Finance -->
+                    <section id="toc-heading-0">
+                        <h2>我們為何需要比特幣？</h2>
+                        <p>在比特幣誕生之前，我們的金融世界完全由<strong>中心化機構</strong>（如銀行、政府）主導。每一筆轉帳、每一次支付，都需要經過這些中介機構的批准與紀錄。這種模式雖然運作多年，卻也存在著一些根本性的問題：
+                        </p>
+                    </section>
+
+                    <figure class="not-prose my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <img src="../assets/images/problem-1.webp" alt="傳統金融體系的複雜與不透明"
+                                class="rounded-lg shadow-md w-full h-auto">
+                            <figcaption class="text-center text-xs text-slate-500 mt-2">傳統金融體系如同一張複雜的網，充滿了中介與潛在的單點故障風險。
+                            </figcaption>
+                        </div>
+                        <div>
+                            <img src="../assets/images/problem-2.webp" alt="通貨膨脹導致貨幣貶值"
+                                class="rounded-lg shadow-md w-full h-auto">
+                            <figcaption class="text-center text-xs text-slate-500 mt-2">法定貨幣的持續增發，導致民眾的儲蓄購買力隨著時間不斷被侵蝕。
+                            </figcaption>
+                        </div>
+                    </figure>
+
+                    <div class="not-prose grid md:grid-cols-3 gap-6 my-8">
+                        <div class="bg-slate-50 p-6 rounded-lg border">
+                            <h4 class="font-bold text-slate-800 font-noto text-base m-0">高昂的信任成本</h4>
+                            <p class="text-sm text-slate-600 mt-2 m-0">我們必須無條件信任銀行不會濫用我們的資金或出錯。</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-lg border">
+                            <h4 class="font-bold text-slate-800 font-noto text-base m-0">低下的運作效率</h4>
+                            <p class="text-sm text-slate-600 mt-2 m-0">跨國轉帳往往需要數天時間，且手續費高昂。</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-lg border">
+                            <h4 class="font-bold text-slate-800 font-noto text-base m-0">持續的通膨風險</h4>
+                            <p class="text-sm text-slate-600 mt-2 m-0">央行可以透過印鈔應對經濟問題，侵蝕我們的儲蓄。</p>
+                        </div>
+                    </div>
+                    <p>2008年，一位自稱<strong>中本聰 (Satoshi Nakamoto)</strong>
+                        的神秘人物發表了比特幣白皮書，提出了一個革命性的構想：一種完全點對點的電子現金系統，它不需要任何金融中介，就能讓網路上的雙方直接進行交易。這個構想的核心，就是<span
+                            class="highlight-term">區塊鏈技術</span>。</p>
+
+                    <!-- Solution: Bitcoin as the Answer -->
+                    <section id="toc-heading-1">
+                        <h2>比特幣的核心價值主張</h2>
+                        <p>比特幣透過其底層技術的精妙組合，直接回應了傳統金融的痛點。其價值主張主要體現在以下幾個方面：</p>
+
+                        <section id="user-archetypes">
+                            <h3>使用者原型概覽：動機矩陣與量化比較</h3>
+                            <div class="not-prose my-12 overflow-x-auto">
+                                <h3 class="text-xl font-bold text-slate-800 font-noto mb-4" id="toc-heading-2">使用者動機綜合矩陣
+                                </h3>
+                                <table class="w-full text-sm border-collapse">
+                                    <thead class="bg-slate-100">
+                                        <tr>
+                                            <th class="p-3 font-semibold text-left border-b-2 border-slate-300">維度</th>
+                                            <th class="p-3 font-semibold text-left border-b-2 border-slate-300">散戶投機者
+                                            </th>
+                                            <th class="p-3 font-semibold text-left border-b-2 border-slate-300">機構策略家
+                                            </th>
+                                            <th class="p-3 font-semibold text-left border-b-2 border-slate-300">務實使用者
+                                            </th>
+                                            <th class="p-3 font-semibold text-left border-b-2 border-slate-300">生態系建設者
+                                            </th>
+                                            <th class="p-3 font-semibold text-left border-b-2 border-slate-300">數位收藏家
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-slate-700">
+                                        <tr class="border-b border-slate-200">
+                                            <td class="p-3 align-top"><strong>核心驅動力</strong></td>
+                                            <td class="p-3 align-top">快速財富增值</td>
+                                            <td class="p-3 align-top">風險調整後回報</td>
+                                            <td class="p-3 align-top">資產保值/效用</td>
+                                            <td class="p-3 align-top">意識形態實現</td>
+                                            <td class="p-3 align-top">身份/社群</td>
+                                        </tr>
+                                        <tr class="border-b border-slate-200">
+                                            <td class="p-3 align-top"><strong>風險偏好</strong></td>
+                                            <td class="p-3 align-top">高</td>
+                                            <td class="p-3 align-top">中至高 (經計算)</td>
+                                            <td class="p-3 align-top">低 (尋求穩定)</td>
+                                            <td class="p-3 align-top">極高 (概念性)</td>
+                                            <td class="p-3 align-top">高 (投機性)</td>
+                                        </tr>
+                                        <tr class="border-b border-slate-200">
+                                            <td class="p-3 align-top"><strong>關鍵資產</strong></td>
+                                            <td class="p-3 align-top">比特幣、以太幣、迷因幣</td>
+                                            <td class="p-3 align-top">比特幣、以太幣 (主要通過 ETF)</td>
+                                            <td class="p-3 align-top">穩定幣 (USDC, USDT)</td>
+                                            <td class="p-3 align-top">平台原生代幣 (ETH, SOL)</td>
+                                            <td class="p-3 align-top">NFT</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 align-top"><strong>成功衡量標準</strong></td>
+                                            <td class="p-3 align-top">投資組合的美元價值</td>
+                                            <td class="p-3 align-top">Alpha、夏普比率</td>
+                                            <td class="p-3 align-top">購買力的維持</td>
+                                            <td class="p-3 align-top">協議的採用率/去中心化程度</td>
+                                            <td class="p-3 align-top">藏品的稀有度/社會聲望</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="not-prose my-12 overflow-x-auto">
+                                <h3 class="text-xl font-bold text-slate-800 font-noto mb-4" id="toc-heading-3">
+                                    主流資產風險回報特徵比較 (量化分析)</h3>
+                                <p class="text-sm text-slate-600">
+                                    要理解為何加密貨幣對「機構策略家」與「散戶投機者」具有強大吸引力，必須將其風險回報特徵與傳統資產進行量化對比。下表基於過去 5-10 年的歷史數據，提供了一個宏觀視角：
+                                </p>
+                                <table class="w-full text-sm border-collapse mt-4">
+                                    <thead class="bg-slate-100">
+                                        <tr>
+                                            <th class="p-3 font-semibold text-left border-b-2 border-slate-300">資產類別
+                                            </th>
+                                            <th class="p-3 font-semibold text-left border-b-2 border-slate-300">年化報酬率
+                                                (CAGR)</th>
+                                            <th class="p-3 font-semibold text-left border-b-2 border-slate-300">年化波動率
+                                                (風險)</th>
+                                            <th class="p-3 font-semibold text-left border-b-2 border-slate-300">夏普比率
+                                                (風險調整後回報)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-slate-700">
+                                        <tr class="border-b border-slate-200">
+                                            <td class="p-3 align-top"><strong>比特幣</strong></td>
+                                            <td class="p-3 align-top text-red-600 font-semibold"><strong>~
+                                                    50-100%+</strong></td>
+                                            <td class="p-3 align-top text-red-600 font-semibold"><strong>> 70%</strong>
+                                            </td>
+                                            <td class="p-3 align-top font-semibold"><strong>~ 0.8 - 1.2</strong></td>
+                                        </tr>
+                                        <tr class="border-b border-slate-200">
+                                            <td class="p-3 align-top"><strong>黃金</strong></td>
+                                            <td class="p-3 align-top"><strong>~ 2-6%</strong></td>
+                                            <td class="p-3 align-top"><strong>~ 15-20%</strong></td>
+                                            <td class="p-3 align-top"><strong>~ 0.1 - 0.4</strong></td>
+                                        </tr>
+                                        <tr class="border-b border-slate-200">
+                                            <td class="p-3 align-top"><strong>標普500 (S&P 500)</strong></td>
+                                            <td class="p-3 align-top"><strong>~ 10-14%</strong></td>
+                                            <td class="p-3 align-top"><strong>~ 15-20%</strong></td>
+                                            <td class="p-3 align-top"><strong>~ 0.5 - 0.8</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 align-top"><strong>不動產投資信託 (REITs)</strong></td>
+                                            <td class="p-3 align-top"><strong>~ 8-12%</strong></td>
+                                            <td class="p-3 align-top"><strong>~ 20-25%</strong></td>
+                                            <td class="p-3 align-top"><strong>~ 0.4 - 0.6</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p class="text-xs text-slate-500 mt-2">註：此表為基於歷史數據的宏觀特徵比較，不代表未來表現。數據會因統計週期而有顯著差異。</p>
+                                <p class="text-sm text-slate-600 mt-4"><strong>分析師洞察：</strong> 從數據中可以清晰地看到比特幣的<span
+                                        class="highlight-term">非對稱回報</span>特性。儘管其波動率極高，但其驚人的長期年化報酬率使其<strong>夏普比率</strong>（衡量每一單位風險所能換取的回報）在歷史上優於多數主流資產。這正是吸引「機構策略家」將其作為投資組合「<strong>Alpha
+                                        增強劑</strong>」，以及「散戶投機者」追求財富躍升的核心原因。</p>
+                            </div>
+                        </section>
+
+
+                    </section>
+
+                    <!-- Mechanism: How it Works -->
+                    <section id="toc-heading-2">
+                        <h2>拆解比特幣的運作核心</h2>
+                        <p>比特幣的魔力在於其四大支柱，共同構建了一個去中心化且安全的價值網路。</p>
+
+                        <h3>1. 區塊鏈：一本全民共享的公開帳本</h3>
+                        <p>想像一本<strong>公開、透明且無法竄改</strong>的數位帳本。全世界發生的每一筆比特幣交易，都被記錄在這本帳本上。這本帳本由一個個「區塊
+                            (Block)」鏈結而成，每個新區塊都包含了最新的交易紀錄，並透過密碼學與前一個區塊緊密相連，形成一條牢不可破的「鏈 (Chain)」。</p>
+
+                        <figure class="not-prose bg-slate-50 rounded-lg p-4 my-8 border">
+                            <svg class="w-full h-auto" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+                                <!-- SVG content from previous version -->
+                                <g>
+                                    <rect x="50" y="50" width="150" height="100" rx="10" fill="#d1d5db" stroke="#9ca3af"
+                                        stroke-width="2" />
+                                    <text x="125" y="80" font-family="Inter, sans-serif" font-weight="600"
+                                        text-anchor="middle" fill="#1f2937">Block N-1</text>
+                                    <text x="125" y="110" font-family="monospace" font-size="12" text-anchor="middle"
+                                        fill="#4b5563">Hash: 0xAbc...</text>
+                                    <text x="125" y="130" font-family="monospace" font-size="12" text-anchor="middle"
+                                        fill="#4b5563">Txns...</text>
+                                </g>
+                                <g>
+                                    <rect x="325" y="50" width="150" height="100" rx="10" fill="#d1d5db"
+                                        stroke="#9ca3af" stroke-width="2" />
+                                    <text x="400" y="80" font-family="Inter, sans-serif" font-weight="600"
+                                        text-anchor="middle" fill="#1f2937">Block N</text>
+                                    <text x="400" y="110" font-family="monospace" font-size="12" text-anchor="middle"
+                                        fill="#4b5563">Hash: 0xDef...</text>
+                                    <text x="400" y="130" font-family="monospace" font-size="12" text-anchor="middle"
+                                        fill="#4b5563">Prev Hash: 0xAbc...</text>
+                                </g>
+                                <g>
+                                    <rect x="600" y="50" width="150" height="100" rx="10" fill="#f97316"
+                                        stroke="#ea580c" stroke-width="2" />
+                                    <text x="675" y="80" font-family="Inter, sans-serif" font-weight="600"
+                                        text-anchor="middle" fill="white">Block N+1</text>
+                                    <text x="675" y="110" font-family="monospace" font-size="12" text-anchor="middle"
+                                        fill="white">Hash: 0xGhi...</text>
+                                    <text x="675" y="130" font-family="monospace" font-size="12" text-anchor="middle"
+                                        fill="white">Prev Hash: 0xDef...</text>
+                                </g>
+                                <path d="M 200 100 H 325" stroke="#9ca3af" stroke-width="2" stroke-dasharray="5,5" />
+                                <path d="M 475 100 H 600" stroke="#9ca3af" stroke-width="2" stroke-dasharray="5,5" />
+                            </svg>
+                            <figcaption class="text-xs text-center text-slate-500 mt-2">每個新區塊都包含前一個區塊的「雜湊值
+                                (Hash)」，形成一條不可竄改的鏈。</figcaption>
+                        </figure>
+
+                        <h3>2. 去中心化：沒有 CEO 的全球網路</h3>
+                        <p>這本公開帳本並非存放在某家銀行的伺服器裡，而是由全球成千上萬台電腦（稱為「節點」）共同維護。沒有任何單一實體可以控制或關閉這個網路。這就是<span
+                                class="highlight-term">去中心化</span>的核心精神——權力分散，系統的運作由共識演算法決定，而非單一機構的指令。</p>
+
+                        <h3>3. 挖礦 (工作量證明 PoW)：驗證交易的競爭過程</h3>
+                        <p>既然沒有銀行來處理交易，誰來負責將新的交易紀錄寫入帳本呢？答案是「礦工
+                            (Miners)」。礦工們透過強大的電腦算力，競爭解決一道複雜的數學難題。第一個解出答案的礦工，就能獲得打包下一個區塊的權利，並獲得新生成的比特幣（區塊獎勵）與交易手續費作為回報。這種透過消耗真實世界成本（電力、硬體）來保障網路安全的機制，稱為<span
+                                class="highlight-term">工作量證明 (Proof-of-Work)</span>。</p>
+
+                        <h3>4. 2100萬枚的稀缺性：數位黃金的基石</h3>
+                        <p>比特幣的發行總量被程式碼永久鎖定在<strong>2100萬枚</strong>。這種內建的、可驗證的稀缺性，使其具備了對抗通膨的潛力，這也是許多人將其比作「數位黃金」的主要原因。
+                        </p>
+                    </section>
+
+                    <!-- Investment Theses -->
+                    <section id="toc-heading-3">
+                        <h2>比特幣的主要投資論述</h2>
+                        <p>除了作為一種去中心化的電子現金系統，比特幣隨著市場的發展，也衍生出幾種主要的投資論述，各自對應著不同的宏觀願景。</p>
+
+                        <h3>1. 數位黃金 (Digital Gold)</h3>
+                        <p>這是比特幣最廣為人知的敘事。基於其 2100
+                            萬枚的固定總量、去中心化的特性以及日益增強的全球共識，比特幣被視為一種價值儲存工具，能夠對抗法定貨幣因通膨而導致的購買力下降。就像黃金在實體世界中的角色一樣，比特幣在數位世界中扮演著避險資產的角色。
+                        </p>
+
+                        <h3>2. 虛擬世界價格之錨</h3>
+                        <p>隨著元宇宙、Web3
+                            遊戲和各種數位資產的興起，一個統一的、不受任何單一實體控制的定價單位變得至關重要。比特幣以其最悠久的歷史、最強的安全性與最廣泛的共識，被認為是衡量所有虛擬資產價值的最佳「錨定貨幣」。所有其他數位資產的價格，最終都可以用比特幣來計價。
+                        </p>
+
+                        <h3>3. 美國國債的終極解決方案</h3>
+                        <p>這是一個更為宏大且具爭議性的論述。該觀點認為，隨著美國國債規模的持續擴張，最終可能面臨無法持續的局面。截至2025年底，美國國債規模已逼近
+                            <strong>$37兆美元</strong>，這一數字引發了市場對法定貨幣長期購買力的高度擔憂。
+                        </p>
+                        <p>在這種極端情況下，比特幣作為一種獨立於主權國家的硬資產，可能成為解決方案的一部分。與此相關的政策構想，如建立「比特幣戰略儲備」，正逐漸進入主流視野。該構想建議美國政府應效仿其戰略石油儲備，大規模收購並持有比特幣，目標是達到
+                            <strong>100萬枚</strong> 的儲備規模。
+                        </p>
+                        <div class="alert alert-tech">
+                            <strong>模型推算：</strong>
+                            <p>如果美國政府成功建立 <strong>100萬枚比特幣</strong> 的戰略儲備，並期望以此資產的增值來完全抵銷 <strong>$37兆美元</strong>
+                                的國債，那麼每枚比特幣的理論價格需要達到：</p>
+                            <p class="text-2xl font-bold text-center my-4 tracking-tight text-emerald-800">
+                                $37,000,000,000,000 / 1,000,000 BTC = $37,000,000 美元/枚</p>
+                            <p>這個驚人的數字突顯了比特幣作為一種潛在的國家級資產負債表修復工具的巨大潛力。雖然這在當前看似遙不可及，但它為評估比特幣的長期價值上限提供了一個極具想像力的宏觀視角。這個論述將比特幣定位為對抗全球主權債務危機的終極保險。
+                            </p>
+                        </div>
+
+                    </section>
+
+
+                    <section id="investment-outlook" class="not-prose my-12">
+                        <h2 id="toc-heading-4" class="text-3xl font-bold text-slate-800 mb-2 text-center font-noto">
+                            比特幣未來投資前景分析</h2>
+                        <p class="mt-4 text-lg text-slate-600 text-center max-w-3xl mx-auto">
+                            綜合多家頂尖機構分析，市場對比特幣的未來普遍持樂觀態度，但時間維度上的預期差異顯著。2025年的短期前景主要由ETF資金流與減半效應驅動，而展望2030年，機構更關注其作為主流資產類別的普及程度和在全球金融體系中的角色。
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center my-8">
+                            <div class="p-6 bg-amber-50 rounded-lg border border-amber-200">
+                                <h3 class="text-lg font-semibold text-gray-700">2025機構平均預測 (基準)</h3>
+                                <p class="text-4xl font-bold text-amber-600 mt-2">$185,000</p>
+                            </div>
+                            <div class="p-6 bg-blue-50 rounded-lg border border-blue-200">
+                                <h3 class="text-lg font-semibold text-gray-700">2030機構平均預測</h3>
+                                <p class="text-4xl font-bold text-blue-600 mt-2">$1,050,000</p>
+                            </div>
+                        </div>
+
+                        <div class="my-12">
+                            <h3 class="text-2xl font-bold text-amber-800 mb-2 text-center">近期 (2025) 價格預測光譜</h3>
+                            <p class="text-center text-gray-600 mb-6">此圖表展示了各機構對2025年底比特幣價格的預測範圍。懸停可查看細節，點擊可跳轉至下方詳解。</p>
+                            <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-200">
+                                <div class="chart-container">
+                                    <canvas id="predictionsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="my-12">
+                            <h3 class="text-2xl font-bold text-blue-800 mb-2 text-center">長期 (2030+) 價格展望</h3>
+                            <p class="text-center text-gray-600 mb-6">此圖表聚焦於各機構對2030年及以後的超長期價格預測，反映了他們對比特幣最終潛力的判斷。</p>
+                            <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-200">
+                                <div class="long-term-chart-container">
+                                    <canvas id="longTermChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="drivers" class="my-12">
+                            <h3 class="text-2xl font-bold text-amber-800 mb-2 text-center">市場關鍵驅動因素</h3>
+                            <p class="text-center text-gray-600 mb-8">以下是分析報告中反覆提及影響比特幣價格的核心因素。</p>
+                            <div class="space-y-10">
+                                <div>
+                                    <h4 class="text-xl font-bold text-slate-900 font-noto">1. 現貨ETF資金流：傳統資本的橋樑</h4>
+                                    <p class="mt-2 text-slate-700 leading-relaxed">
+                                        美國現貨比特幣ETF的批准是比特幣歷史上的分水嶺事件。它不僅為數十兆美元的傳統金融市場提供了一個合規、便捷的投資渠道，更從根本上改變了市場的供需結構。投資者現在可以透過追蹤<strong>資產管理規模
+                                            (AUM)</strong>、<strong>每日資金淨流入/流出</strong>、<strong>總市值</strong>與<strong>成交額</strong>等關鍵數據，來量化傳統資本進入加密市場的規模與速度。
+                                    </p>
+
+                                    <figure class="not-prose my-8 flex flex-col gap-8">
+                                        <div>
+                                            <img src="../assets/images/比特幣現貨ETF資產管理規模  2025-10-19 214345.png"
+                                                alt="比特幣現貨ETF資產管理規模 (AUM)"
+                                                class="rounded-lg shadow-md w-full h-auto border">
+                                            <figcaption class="text-center text-xs text-slate-500 mt-2">比特幣現貨ETF的總資產管理規模
+                                                (AUM) 是衡量機構資金流入的關鍵指標。</figcaption>
+                                        </div>
+                                        <div>
+                                            <img src="../assets/images/比特幣現貨ETF淨流入流出  2025-10-19 214345.png"
+                                                alt="比特幣現貨ETF每日資金淨流入流出"
+                                                class="rounded-lg shadow-md w-full h-auto border">
+                                            <figcaption class="text-center text-xs text-slate-500 mt-2">
+                                                每日資金淨流入/流出情況直接反映了市場的短期買賣壓力與投資者情緒。</figcaption>
+                                        </div>
+                                    </figure>
+                                    <div class="not-prose text-center text-xs text-slate-500 -mt-4 mb-6">
+                                        *數據為示意，即時數據請參考 <a href="https://www.coinglass.com/zh-TW/bitcoin-etf"
+                                            target="_blank" rel="noopener noreferrer"
+                                            class="text-orange-600 hover:underline">Coinglass</a> 等數據平台。
+                                    </div>
+                                    <p class="text-slate-700 leading-relaxed">
+                                        這些數據提供了前所未有的市場透明度。ETF創造了持續、穩定的買盤壓力，吸收了市場上的拋售流動性。與以往由散戶主導的市場不同，ETF帶來的機構級資金流動更具規模與持久性，這成為支撐比特幣價格短期至中期走勢的最直接、最可觀測的指標。
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-slate-900 font-noto">2. 減半供應衝擊：可預測的數位稀缺性</h4>
+                                    <p class="mt-2 text-slate-700 leading-relaxed">
+                                        比特幣的「減半」大約每四年發生一次，它將礦工挖出新區塊所獲得的獎勵減半。這是一個寫在程式碼中的、不可更改的供應緊縮事件。歷史數據顯示，每一次減半事件之後，市場往往會迎來一輪顯著的牛市。其背後
+                                        logique是：在需求穩定或增長的情況下，新供應的增速突然減半，必然會導致供需失衡，從而推高價格。這個可預測的供應衝擊是比特幣宏觀週期理論的核心。</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-slate-900 font-noto">3. 宏觀經濟環境：流動性的總閘門</h4>
+                                    <p class="mt-2 text-slate-700 leading-relaxed">
+                                        作為一種全球性的宏觀資產，比特幣的表現與全球流動性狀況高度相關。當中央銀行（特別是聯準會）採取降息等寬鬆貨幣政策時，市場上的資金變得充裕，投資者傾向於追逐風險較高的資產，比特幣因此受益。相反，當利率上升、貨幣政策緊縮時，資金成本變高，風險資產市場普遍承壓。因此，全球利率走向、通膨數據以及地緣政治風險等宏觀因素，共同構成了影響比特幣價格的外部大環境。
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-slate-900 font-noto">4. 企業與機構採用：從另類到主流</h4>
+                                    <p class="mt-2 text-slate-700 leading-relaxed">
+                                        這是決定比特幣長期價值的最關鍵基石。從MicroStrategy將比特幣作為其主要儲備資產，到越來越多的退休基金、捐贈基金和主權財富基金開始配置比特幣，每一次機構級別的採用都為比特幣的合法性和價值共識增添了重要砝碼。企業和機構的採用不僅帶來了龐大的增量資金，更重要的是，它標誌著比特幣正從一種小眾的另類投資，逐漸轉變為全球資產配置中不可或缺的一部分，為其長期穩定增長奠定了堅實基礎。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="my-12">
+                            <h3 class="text-2xl font-bold text-amber-800 mb-2 text-center">各機構觀點詳解</h3>
+                            <p class="text-center text-gray-600 mb-8">點擊下方機構名稱，查看其具體的價格預測、核心論點及市場情緒。</p>
+                            <div class="flex flex-col md:flex-row gap-8">
+                                <div id="filter-container"
+                                    class="flex md:flex-col flex-wrap justify-center md:justify-start gap-2 md:w-1/4">
+                                </div>
+                                <div
+                                    class="md:w-3/4 bg-white p-6 rounded-2xl shadow-lg border border-gray-200 min-h-[300px]">
+                                    <h3 id="institution-name"
+                                        class="text-2xl font-bold text-amber-900 border-b-2 border-amber-200 pb-2 mb-4">
+                                    </h3>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                        <div class="p-4 bg-amber-50 rounded-lg">
+                                            <h4 class="font-semibold text-gray-700">2025 預測區間</h4>
+                                            <p id="price-prediction" class="text-xl font-bold text-amber-700 mt-1"></p>
+                                        </div>
+                                        <div class="p-4 bg-blue-50 rounded-lg">
+                                            <h4 class="font-semibold text-gray-700">2030+ 長期目標</h4>
+                                            <p id="long-term-prediction" class="text-xl font-bold text-blue-700 mt-1">
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <h4 class="font-semibold text-gray-700">市場情緒</h4>
+                                        <p id="sentiment" class="text-xl font-bold"></p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-700 mb-2">核心論點摘要</h4>
+                                        <p id="summary-text" class="text-gray-600 leading-relaxed"></p>
+                                    </div>
+                                    <div class="mt-4 pt-4 border-t border-gray-200">
+                                        <h4 class="font-semibold text-gray-700 mb-2">代表性引述</h4>
+                                        <blockquote id="quote"
+                                            class="text-gray-600 italic p-3 bg-gray-50 rounded-lg border-l-4 border-amber-400">
+                                        </blockquote>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Action: How to Evaluate and Participate -->
+                    <section id="toc-heading-5">
+                        <h2>比特幣的風險</h2>
+                        <p>儘管前景看好，但投資比特幣仍伴隨著巨大的風險與爭議。在投入資金前，您必須對以下幾個核心問題有清晰的認識：</p>
+
+                        <h3>1. 到底有沒有內在價值？</h3>
+                        <p>這是關於比特幣最根本的爭論。反對者（如華倫·巴菲特）認為，比特幣本身不產生任何現金流，不像股票能分紅、房地產能收租，因此它沒有「內在價值」，其價格完全由下一個買家願意支付多少來決定（博傻理論）。
+                        </p>
+                        <p>然而，支持者反駁說，比特幣的價值來源於其作為一個去中心化、抗審查、可驗證稀缺的數位商品網路。其價值在於整個系統提供的功能——無需許可的全球價值轉移能力和對抗貨幣貶值的潛力，這與黃金的價值
+                            logique更為相似。</p>
+
+                        <h3>2. 比特幣可以被增發、竄改或刪除嗎？</h3>
+                        <p>這是對其技術安全性的常見疑慮。簡單來說，在現有的網路共識下：</p>
+                        <ul>
+                            <li><strong>增發：</strong> 不行。2100萬枚的總量上限是寫在核心程式碼中的共識規則。任何試圖修改此規則的行為都會被絕大多數網路參與者拒絕，從而無效。</li>
+                            <li><strong>竄改/刪除：</strong>
+                                理論上極其困難，接近不可能。由於區塊鏈的鏈式結構和工作量證明機制，要竄改一筆歷史交易，攻擊者需要重新計算該交易之後的所有區塊，並掌握超過全網51%的算力。這在經濟上和物理上都是幾乎不可行的。
+                            </li>
+                        </ul>
+
+                        <h3>3. 高波動性風險</h3>
+                        <p>比特幣價格以劇烈波動而聞名，歷史上曾多次出現大幅回撤。這對投資者的心理和財務都是巨大的考驗。</p>
+                        <div class="not-prose my-8 flex rounded-2xl border-l-4 border-amber-500 bg-amber-50 p-6">
+                            <div class="flex-shrink-0 pr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <div class="text-amber-800">
+                                <h4 class="m-0 font-bold text-amber-900">歷史上的主要回撤事件：</h4>
+                                <ul class="mt-2 list-disc pl-5">
+                                    <li><strong>2013-2015年 (早期泡沫與 Mt. Gox 崩潰):</strong>
+                                        作為首個主要牛市的頂點，比特幣在經歷投機熱潮後，因全球最大的交易所 Mt. Gox 遭駭客攻擊並倒閉而崩盤。價格從約 $1,150 跌至 $200
+                                        左右，跌幅超過 <strong class="font-semibold text-red-700">80%</strong>，市場進入了長達兩年的熊市。
+                                    </li>
+                                    <li><strong>2017-2018年 (ICO 狂熱與破滅):</strong> 由首次代幣發行 (ICO) 引發的投機狂潮將比特幣推向近 $20,000
+                                        的高點。然而，隨著各國監管收緊及大多數 ICO 專案被證明缺乏實質價值，泡沫迅速破裂，價格一路跌至約 $3,200，跌幅再次超過 <strong
+                                            class="font-semibold text-red-700">80%</strong>。</li>
+                                    <li><strong>2020年3月 (312 黑色星期四):</strong> 在 COVID-19
+                                        疫情引發的全球市場恐慌中，比特幣與所有風險資產一同暴跌。由於流動性枯竭，比特幣在 24 小時內價格腰斬，從約 $8,000 跌至 $3,800
+                                        以下，創下單日最大跌幅之一。</li>
+                                    <li><strong>2021年5月 (519 大屠殺):</strong>
+                                        在中國大陸宣布打擊加密貨幣挖礦與交易後，市場情緒急轉直下，引發了大規模的槓桿清算。比特幣價格在數小時內從 $43,000 附近閃崩至
+                                        $30,000，大量衍生品合約被爆倉。</li>
+                                    <li><strong>2021-2022年 (宏觀緊縮與 CeFi 連環爆雷):</strong>
+                                        在全球央行升息以對抗通膨的背景下，風險資產市場進入熊市。加密產業內部，由 Terra/Luna 算法穩定幣崩盤開始，引發了三箭資本
+                                        (3AC)、Voyager、Celsius 等中心化金融機構的連環倒閉，最終以 FTX 交易所的崩潰告終。比特幣價格從約 $69,000 的歷史高點一路下跌至約
+                                        $16,000，跌幅超過 <strong class="font-semibold text-red-700">75%</strong>。</li>
+                                </ul>
+                                <p class="mt-4 font-semibold text-amber-900">核心警告：投資者必須為此類劇烈波動做好準備，並只投入能夠完全承受損失的資金。</p>
+                            </div>
+                        </div>
+                        <p>此外，<strong>監管不確定性</strong>和<strong>私鑰保管責任</strong>（Not your keys, not your
+                            coins）也是所有參與者必須面對的重要風險。</p>
+                    </section>
+
+                    <!-- FAQ -->
+                    <section id="toc-heading-6">
+                        <h2>常見問題 (FAQ)</h2>
+                        <div class="not-prose space-y-4">
+                            <div class="faq-item border rounded-lg">
+                                <details class="p-4 group">
+                                    <summary class="flex justify-between items-center cursor-pointer font-semibold">
+                                        <span>Q1: 我需要購買一整枚比特幣嗎？</span>
+                                        <svg class="arrow-down w-5 h-5 transition-transform duration-300"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </summary>
+                                    <div class="mt-4 text-slate-600">
+                                        <p>完全不需要。比特幣可以被分割到小數點後八位，最小單位是「聰 (Satoshi)」。您可以根據自己的預算購買任意金額的比特幣。</p>
+                                    </div>
+                                </details>
+                            </div>
+                            <div class="faq-item border rounded-lg">
+                                <details class="p-4 group">
+                                    <summary class="flex justify-between items-center cursor-pointer font-semibold">
+                                        <span>Q2: 比特幣交易是匿名的嗎？</span>
+                                        <svg class="arrow-down w-5 h-5 transition-transform duration-300"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </summary>
+                                    <div class="mt-4 text-slate-600">
+                                        <p>不是完全匿名，而是「假名
+                                            (Pseudonymous)」。雖然您的真實身分沒有直接連結到您的比特幣地址，但所有交易都在區塊鏈上公開可查。透過鏈上分析，仍有可能追蹤到資金的流向。
+                                        </p>
+                                    </div>
+                                </details>
+                            </div>
+                            <div class="faq-item border rounded-lg">
+                                <details class="p-4 group">
+                                    <summary class="flex justify-between items-center cursor-pointer font-semibold">
+                                        <span>Q3: 比特幣的價格由誰決定？</span>
+                                        <svg class="arrow-down w-5 h-5 transition-transform duration-300"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </summary>
+                                    <div class="mt-4 text-slate-600">
+                                        <p>和其他自由市場的資產一樣，比特幣的價格由<strong>市場供需關係</strong>決定。當買方需求大於賣方供給時，價格上漲，反之亦然。</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </section>
+                </div> <!-- End Prose -->
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Components -->
+    <script src="../assets/js/header-component.js"></script>
+    <script src="../assets/js/footer-component.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            new HeaderComponent().init();
+            new FooterComponent().init();
+        });
+    </script>
+
+    <!-- TOC Generation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tocList = document.getElementById('toc-list');
+            const article = document.querySelector('article');
+            if (!tocList || !article) return;
+
+            const headings = article.querySelectorAll('h2');
+            let tocHTML = '';
+            headings.forEach((heading, index) => {
+                const section = heading.parentElement;
+                // Ensure the parent is a section or the direct child of the prose div
+                const parentElement = heading.closest('section, div.prose > *');
+                const id = parentElement.id || 'toc-heading-' + index;
+                parentElement.id = id;
+                const listItem = `<li><a href="#${id}" class="block py-1 hover:text-orange-500 font-medium transition-colors">${heading.textContent}</a></li>`;
+                tocHTML += listItem;
+            });
+            tocList.innerHTML = tocHTML;
+        });
+    </script>
+
+    <!-- Investment Analysis Chart Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const reportData = [
+                {
+                    id: 'ark',
+                    name: '方舟投資 (ARK Invest)',
+                    sentiment: '極度看漲',
+                    sentimentColor: 'text-green-700',
+                    predictions: { low: 250000, base: 350000, high: 600000 },
+                    longTerm: { year: 2030, price: 1500000 },
+                    summary: '方舟投資維持其長期極度看好的觀點，認為比特幣是全新的資產類別。其2025年目標是邁向百萬美元長期目標的重要一步，驅動力來自於機構投資組合的加速配置、國家級別的採用及全球結算網路應用。',
+                    quote: '"我們正處於機構採用比特幣的開端，每一波資金的進入都將不成比例地推高其市值，因為其供應是絕對稀缺的。"',
+                    factors: ['adoption', 'macro']
+                },
+                {
+                    id: 'pantera',
+                    name: '潘特拉資本 (Pantera)',
+                    sentiment: '極度看漲',
+                    sentimentColor: 'text-green-700',
+                    predictions: { low: 175000, base: 225000, high: 275000 },
+                    longTerm: { year: 2030, price: 1200000 },
+                    summary: '作為歷史悠久的加密基金，Pantera的模型高度依賴減半週期。他們認為2025年中期將是本輪週期的頂峰，價格主要受減半後的供應衝擊驅動。長期來看，他們看好比特幣在更廣泛的Web3生態中的基礎貨幣地位。',
+                    quote: '"歷史不會簡單重複，但總會惊人地相似。比特幣的減半週期是加密市場中最可靠的宏觀驅動信號。"',
+                    factors: ['halving', 'adoption']
+                },
+                {
+                    id: 'bernstein',
+                    name: '伯恩斯坦 (Bernstein)',
+                    sentiment: '高度看漲',
+                    sentimentColor: 'text-green-600',
+                    predictions: { low: 150000, base: 200000, high: 250000 },
+                    longTerm: { year: 2033, price: 1000000 },
+                    summary: '伯恩斯坦作為華爾街代表，其看漲觀點意義重大。他們認為比特幣正處於前所未有的機構採用浪潮中，ETF只是第一步。他們將比特幣視為一種超越商品的「宏觀金融資產」，並預計其市值將在十年內達到數萬億美元。',
+                    quote: '"比特幣不再是邊緣資產，它正在成為全球宏觀投資組合中不可或缺的一部分。"',
+                    factors: ['etf', 'adoption']
+                },
+                {
+                    id: 'standard_chartered',
+                    name: '渣打銀行 (Standard Chartered)',
+                    sentiment: '高度看漲',
+                    sentimentColor: 'text-green-600',
+                    predictions: { low: 150000, base: 200000, high: 250000 },
+                    longTerm: { year: 2030, price: 500000 },
+                    summary: '渣打銀行基於黃金ETF的類比模型，預計2025年是ETF資金流入的第二波高峰，加上減半效應，將比特幣推向20萬美元。長期目標相對保守，認為比特幣市值將達到黃金市值的20-30%。',
+                    quote: '"如果黃金ETF的歷史可作為參考，那麼比特幣ETF的資金流入規模才剛剛開始。我們預計到2025年底，總流入量可能超過1000億美元。"',
+                    factors: ['etf', 'halving']
+                },
+                {
+                    id: 'vaneck',
+                    name: 'VanEck',
+                    sentiment: '高度看漲',
+                    sentimentColor: 'text-green-600',
+                    predictions: { low: 125000, base: 175000, high: 275000 },
+                    longTerm: { year: 2030, price: 850000 },
+                    summary: 'VanEck認為比特幣正在蠶食黃金的市場份額。他們預計，隨著傳統金融顧問將比特幣納入客戶投資組合，將釋放大量新資本。長期來看，比特幣作為全球價值儲存的地位將更加穩固。',
+                    quote: '"我們不僅僅是在談論投機需求，而是看到了一種結構性的轉變：投資者開始將比特幣視為數位時代的黃金。"',
+                    factors: ['etf', 'adoption']
+                },
+                {
+                    id: 'fidelity',
+                    name: '富達 (Fidelity)',
+                    sentiment: '結構性看漲',
+                    sentimentColor: 'text-blue-600',
+                    predictions: { low: null, base: null, high: null },
+                    longTerm: { year: 2035, price: 10000000 },
+                    summary: '富達不提供短期價格預測，但對比特幣的長期前景極為樂觀。他們從第一性原理出發，將比特幣視為一種卓越的貨幣技術，其價值捕獲潛力巨大。他們認為比特幣的價值最終將由其網路效應和在數位經濟中的核心地位決定，長期可能達到驚人的高度。',
+                    quote: '"比特幣應該被視為一種初創期的貨幣網路，其潛在市場規模是全球所有財富的總和。"',
+                    factors: ['adoption', 'macro']
+                },
+                {
+                    id: 'microstrategy',
+                    name: '微策略 (MicroStrategy)',
+                    sentiment: '信念驅動看漲',
+                    sentimentColor: 'text-blue-700',
+                    predictions: { low: null, base: null, high: null },
+                    longTerm: null,
+                    summary: '微策略創辦人Michael Saylor認為比特幣是終極資產，其價值將無限增長。他不提供價格預測，而是強調其作為「數位財產」的獨特性，認為任何價格都是買入機會。其策略本身就是對市場最強的看漲信號。',
+                    quote: '"我們不是在投機，我們是在將一個正在貶值的資產（現金）轉換為一個正在升值的資產（比特幣）。"',
+                    factors: ['adoption', 'macro']
+                },
+                {
+                    id: 'jpmorgan',
+                    name: '摩根大通 (JPMorgan)',
+                    sentiment: '謹慎看漲',
+                    sentimentColor: 'text-yellow-600',
+                    predictions: { low: 80000, base: 100000, high: 120000 },
+                    longTerm: null,
+                    summary: '摩根大通的觀點相對保守。他們承認ETF的成功，但提醒投資者注意礦工拋售壓力及宏觀經濟風險。他們認為$120,000是較為現實的2025年高點，對長期價值保持謹慎，認為其波動性使其難以成為可靠的價值儲存。',
+                    quote: '"雖然比特幣的制度化程度在提高，但它仍然是一種高波動性的風險資產，對全球流動性狀況高度敏感。"',
+                    factors: ['macro', 'halving']
+                },
+                {
+                    id: 'goldman_sachs',
+                    name: '高盛 (Goldman Sachs)',
+                    sentiment: '中性看漲',
+                    sentimentColor: 'text-yellow-500',
+                    predictions: { low: 75000, base: 90000, high: 110000 },
+                    longTerm: null,
+                    summary: '高盛注意到客戶興趣增加，但認為其公允價值的評估仍充滿挑戰。2025年的價格走勢將主要取決於ETF資金流的可持續性，以及是否有更清晰的監管框架。他們對長期前景持中立態度，等待市場進一步成熟。',
+                    quote: '"市場的熱情是顯而易見的，但從基本面角度為比特幣定價仍然困難。ETF的流量數據是目前最清晰的需求指標。"',
+                    factors: ['etf', 'macro']
+                }
+            ];
+
+            const predictionsCtx = document.getElementById('predictionsChart');
+            const longTermCtx = document.getElementById('longTermChart');
+            if (!predictionsCtx || !longTermCtx) return;
+
+            const filterContainer = document.getElementById('filter-container');
+            const institutionNameEl = document.getElementById('institution-name');
+            const pricePredictionEl = document.getElementById('price-prediction');
+            const longTermPredictionEl = document.getElementById('long-term-prediction');
+            const sentimentEl = document.getElementById('sentiment');
+            const summaryTextEl = document.getElementById('summary-text');
+            const quoteEl = document.getElementById('quote');
+
+            let predictionsChart, longTermChart;
+
+            function formatCurrency(value) {
+                if (value === null || value === undefined) return 'N/A';
+                if (value >= 1000000) {
+                    return new Intl.NumberFormat('en-US', {
+                        style: 'currency', currency: 'USD', notation: 'compact',
+                        minimumFractionDigits: 1, maximumFractionDigits: 1
+                    }).format(value);
+                }
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0
+                }).format(value);
+            }
+
+            function formatFullCurrency(value) {
+                if (value === null || value === undefined) return 'N/A';
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0
+                }).format(value);
+            }
+
+            function createPredictionsChart() {
+                const filteredData = reportData.filter(d => d.predictions && d.predictions.high !== null);
+
+                if (predictionsChart) predictionsChart.destroy();
+                predictionsChart = new Chart(predictionsCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: filteredData.map(d => d.name),
+                        datasets: [{
+                            label: '最高預測', data: filteredData.map(d => d.predictions.high),
+                            backgroundColor: 'rgba(217, 119, 6, 0.7)',
+                        }, {
+                            label: '基準預測', data: filteredData.map(d => d.predictions.base),
+                            backgroundColor: 'rgba(245, 158, 11, 0.7)',
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                        scales: {
+                            x: { title: { display: true, text: '2025 預測價格 (USD)' }, ticks: { callback: value => formatCurrency(value) } },
+                            y: { ticks: { autoSkip: false } }
+                        },
+                        plugins: {
+                            legend: { position: 'top' },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const inst = filteredData[context.dataIndex];
+                                        return [`機構: ${inst.name}`, `高點: ${formatFullCurrency(inst.predictions.high)}`, `基準: ${formatFullCurrency(inst.predictions.base)}`, `低點: ${formatFullCurrency(inst.predictions.low)}`];
+                                    }
+                                }
+                            }
+                        },
+                        onClick: (event, elements) => {
+                            if (elements.length > 0) {
+                                const instId = filteredData[elements[0].index].id;
+                                updateDetailsView(instId);
+                                document.querySelector('#deep-dive').scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }
+                    }
+                });
+            }
+
+            function createLongTermChart() {
+                const filteredData = reportData.filter(d => d.longTerm && d.longTerm.price).sort((a, b) => b.longTerm.price - a.longTerm.price);
+                if (longTermChart) longTermChart.destroy();
+                longTermChart = new Chart(longTermCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: filteredData.map(d => d.name),
+                        datasets: [{
+                            label: '長期目標價 (USD)', data: filteredData.map(d => d.longTerm.price),
+                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                            borderColor: 'rgba(37, 99, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                type: 'logarithmic', title: { display: true, text: '價格 (USD) - 對數座標' },
+                                ticks: {
+                                    callback: (value) => {
+                                        if (value === 10000000 || value === 1000000 || value === 500000 || value === 100000) {
+                                            return formatCurrency(value);
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const inst = filteredData[context.dataIndex];
+                                        return `${inst.name}: ${formatFullCurrency(inst.longTerm.price)} (至 ${inst.longTerm.year})`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function updateDetailsView(institutionId) {
+                const data = reportData.find(d => d.id === institutionId);
+                if (!data) return;
+
+                institutionNameEl.textContent = data.name;
+
+                if (data.predictions && data.predictions.high !== null) {
+                    pricePredictionEl.textContent = `${formatCurrency(data.predictions.low)} - ${formatCurrency(data.predictions.high)}`;
+                } else {
+                    pricePredictionEl.textContent = "未提供";
+                }
+
+                if (data.longTerm && data.longTerm.price) {
+                    longTermPredictionEl.textContent = `${formatCurrency(data.longTerm.price)} (至 ${data.longTerm.year})`;
+                } else {
+                    longTermPredictionEl.textContent = "未提供";
+                }
+
+                sentimentEl.textContent = data.sentiment;
+                sentimentEl.className = `text-xl font-bold ${data.sentimentColor}`;
+                summaryTextEl.textContent = data.summary;
+                quoteEl.textContent = data.quote;
+
+                document.querySelectorAll('#filter-container button').forEach(btn => {
+                    btn.classList.remove('active-filter');
+                    if (btn.dataset.id === institutionId) btn.classList.add('active-filter');
+                });
+            }
+
+            function populateFilters() {
+                filterContainer.innerHTML = '';
+                reportData.forEach(data => {
+                    const button = document.createElement('button');
+                    button.textContent = data.name;
+                    button.dataset.id = data.id;
+                    button.className = 'w-full text-left p-3 rounded-lg bg-gray-100 hover:bg-amber-100 transition duration-200';
+                    button.addEventListener('click', () => updateDetailsView(data.id));
+                    filterContainer.appendChild(button);
+                });
+            }
+
+            function handleFactorCardClick() {
+                const factorCards = document.querySelectorAll('.factor-card');
+                factorCards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        const factor = card.dataset.factor;
+                        const relevantInstitutions = reportData.filter(d => d.factors.includes(factor)).map(d => d.id);
+
+                        document.querySelectorAll('#filter-container button').forEach(btn => {
+                            btn.classList.toggle('highlight-institution', relevantInstitutions.includes(btn.dataset.id));
+                        });
+
+                        setTimeout(() => {
+                            document.querySelectorAll('#filter-container button').forEach(btn => btn.classList.remove('highlight-institution'));
+                        }, 2500);
+                    });
+                });
+            }
+
+            // Only initialize charts and filters if the necessary elements exist
+            if (document.getElementById('predictionsChart')) {
+                createPredictionsChart();
+                createLongTermChart();
+                populateFilters();
+                if (reportData.length > 0) {
+                    updateDetailsView(reportData[0].id);
+                }
+                handleFactorCardClick();
+            }
+        });
+    </script>
+</body>
+
+</html>
