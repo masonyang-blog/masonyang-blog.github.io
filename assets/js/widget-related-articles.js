@@ -1,0 +1,317 @@
+/**
+ * Related Articles Component
+ * @class WidgetRelatedArticles
+ * @description Renders a list of related blog posts using core-articles-data.js.
+ * Uses Shadow DOM for encapsulation and guarantees no global CSS pollution.
+ */
+(function (global) {
+    "use strict";
+
+    class WidgetRelatedArticles {
+        /**
+         * @param {HTMLElement} hostElement - The DOM element to attach to
+         * @param {string} currentArticleId - ID of the current page's article (to exclude)
+         * @param {Array} dataSource - Array of article objects (core-articles-data.js)
+         * @param {Array} topicArticles - Optional separate list of topic articles (for backwards compatibility)
+         */
+        constructor(hostElement, currentArticleId, dataSource, topicArticles = []) {
+            this.hostElement = hostElement;
+            this.currentArticleId = currentArticleId;
+
+            // Fallback to central repository if undefined
+            if (!dataSource && global.ArticleRepository && global.ArticleRepository.all) {
+                this.dataSource = global.ArticleRepository.all;
+            } else {
+                this.dataSource = dataSource || [];
+            }
+
+            // Configuration Options
+            this._config = {
+                debug: false,
+                maxItems: 3
+            };
+
+            if (!this.hostElement) {
+                console.warn('WidgetRelatedArticles: Host element provided is null');
+                return;
+            }
+
+            // Create Shadow DOM
+            this.shadowRoot = this.hostElement.attachShadow({ mode: 'closed' });
+        }
+
+        /**
+         * Initialize and render the component
+         */
+        init() {
+            if (!this.dataSource || this.dataSource.length === 0) {
+                this._log('warn', 'No data source provided or empty');
+                return this;
+            }
+
+            // Fallback for ID if not passed perfectly
+            if (!this.currentArticleId && document.body.dataset) {
+                this.currentArticleId = document.body.dataset.articleId || document.body.dataset.assetId || '';
+            }
+
+            // 1. Find the current article metadata
+            const currentArticle = this.dataSource.find(a => a.id === this.currentArticleId);
+            let relatedItems = [];
+
+            // 2. Intelligent filtering algorithm
+            if (currentArticle) {
+                // Remove self
+                const others = this.dataSource.filter(a => a.id !== this.currentArticleId);
+
+                // Priority 1: Exact match on Category + Tag
+                const tier1 = others.filter(a => a.category === currentArticle.category && a.tag === currentArticle.tag);
+
+                // Priority 2: Match on Category only
+                const tier2 = others.filter(a => a.category === currentArticle.category && a.tag !== currentArticle.tag);
+
+                // Priority 3: Anything else (latest)
+                const tier3 = others.filter(a => a.category !== currentArticle.category);
+
+                // Merge and slice
+                relatedItems = [...tier1, ...tier2, ...tier3].slice(0, this._config.maxItems);
+            } else {
+                // If the current article is not registered, just show the latest 3
+                this._log('info', `Current article ID '${this.currentArticleId}' not found, showing general recommendations.`);
+                relatedItems = this.dataSource.filter(a => a.id !== this.currentArticleId).slice(-this._config.maxItems).reverse();
+            }
+
+            if (relatedItems.length === 0) {
+                this._log('info', 'No related items found to display.');
+                return this;
+            }
+
+            // 3. Render Shadow UI
+            this._render(relatedItems);
+            return this;
+        }
+
+        /**
+         * Re-routing absolute/relative path based on the current URL
+         * @returns {string} The relative prefix (e.g. '../' or './')
+         */
+        _getBasePath() {
+            const path = window.location.pathname;
+            // Typical folder structure: project/, post/, news/, knowledge/
+            if (path.includes('/post/') || path.includes('/project/') || path.includes('/news/') || path.includes('/knowledge/')) {
+                return '../';
+            }
+            return './';
+        }
+
+        /**
+         * Render the Shadow DOM element
+         * @param {Array} items
+         */
+        _render(items) {
+            const basePath = this._getBasePath();
+
+            // Styles specific for Related Articles (matching widget-related-coins but tailored)
+            const style = document.createElement('style');
+            style.textContent = `
+                :host {
+                    display: block;
+                    font-family: 'Inter', system-ui, sans-serif;
+                    margin-top: 3rem;
+                }
+                
+                .section-title {
+                    font-size: 1.25rem;
+                    font-weight: 700;
+                    color: #0f172a; /* slate-900 */
+                    margin-bottom: 1.5rem;
+                    padding-bottom: 0.5rem;
+                    border-bottom: 2px solid #e2e8f0;
+                }
+
+                .grid {
+                    display: grid;
+                    grid-template-columns: repeat(1, 1fr);
+                    gap: 1.5rem;
+                }
+
+                @media (min-width: 640px) {
+                    .grid { grid-template-columns: repeat(2, 1fr); }
+                }
+
+                @media (min-width: 1024px) {
+                    .grid { grid-template-columns: repeat(3, 1fr); }
+                }
+
+                .card {
+                    background: white;
+                    border: 1px solid #e2e8f0; /* slate-200 */
+                    border-radius: 0.75rem;
+                    padding: 1.25rem;
+                    transition: all 0.2s ease;
+                    text-decoration: none;
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                    box-sizing: border-box;
+                }
+
+                .card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                    border-color: #cbd5e1;
+                }
+
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 0.75rem;
+                    font-size: 0.75rem;
+                }
+
+                .tag {
+                    font-weight: 700;
+                    letter-spacing: 0.05em;
+                }
+
+                .date {
+                    color: #94a3b8; /* slate-400 */
+                }
+
+                .title {
+                    font-size: 1.125rem;
+                    font-weight: 700;
+                    color: #0f172a; /* slate-900 */
+                    margin-bottom: 0.5rem;
+                    line-height: 1.4;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+
+                .desc {
+                    font-size: 0.875rem;
+                    color: #64748b; /* slate-500 */
+                    line-height: 1.6;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    margin-bottom: 1rem;
+                    flex-grow: 1;
+                }
+
+                .meta {
+                    font-size: 0.875rem;
+                    font-weight: 600;
+                    color: #3b82f6; /* blue-500 */
+                    display: flex;
+                    align-items: center;
+                }
+
+                .meta span {
+                    margin-left: 0.25rem;
+                    transition: transform 0.2s ease;
+                }
+
+                .card:hover .meta span {
+                    transform: translateX(4px);
+                }
+
+                /* Dark Mode Support */
+                :host-context(html.dark) .section-title {
+                    color: #f1f5f9;
+                    border-color: #334155;
+                }
+
+                :host-context(html.dark) .card {
+                    background-color: #1e293b; /* slate-800 */
+                    border-color: #334155;
+                }
+
+                :host-context(html.dark) .title {
+                    color: #f1f5f9;
+                }
+
+                :host-context(html.dark) .desc {
+                    color: #94a3b8;
+                }
+            `;
+            this.shadowRoot.appendChild(style);
+
+            // Container
+            const container = document.createElement('div');
+
+            // Title
+            const title = document.createElement('h3');
+            title.className = 'section-title';
+            title.textContent = 'å»¶ä¼¸?±è?';
+            container.appendChild(title);
+
+            // Grid
+            const grid = document.createElement('div');
+            grid.className = 'grid';
+
+            items.forEach(item => {
+                const link = document.createElement('a');
+                // Construct the full relative path safely
+                link.href = basePath + (item.link || '#');
+                link.className = 'card';
+
+                // Reconstruct exact color classes (since Tailwind classes won't work in Shadow DOM, we use inline colors based on the data)
+                // Actually, text-[color]-500 doesn't compile inside Shadow DOM directly. 
+                // We map raw known colors if provided, or fallback.
+                let tagHex = "#3b82f6"; // Default Blue
+                if (item.tagColor) {
+                    if (item.tagColor.includes('violet')) tagHex = '#8b5cf6';
+                    else if (item.tagColor.includes('orange')) tagHex = '#f97316';
+                    else if (item.tagColor.includes('amber')) tagHex = '#f59e0b';
+                    else if (item.tagColor.includes('green')) tagHex = '#22c55e';
+                    else if (item.tagColor.includes('pink')) tagHex = '#ec4899';
+                    else if (item.tagColor.includes('emerald')) tagHex = '#10b981';
+                }
+
+                link.innerHTML = `
+                    <div class="card-header">
+                        <span class="tag" style="color: ${tagHex};">${item.tag || 'å°ˆé??‡ç?'}</span>
+                        <span class="date">${item.published || ''}</span>
+                    </div>
+                    <div class="title">${item.title}</div>
+                    <div class="desc">${item.desc}</div>
+                    <div class="meta">æ·±å…¥?±è? <span>&rarr;</span></div>
+                `;
+                grid.appendChild(link);
+            });
+
+            container.appendChild(grid);
+            this.shadowRoot.appendChild(container);
+        }
+
+        _log(level, msg) {
+            if (this._config.debug) {
+                console[level](`[WidgetRelatedArticles] ${msg}`);
+            }
+        }
+
+        // --- Chainable Setters ---
+
+        setDebug(enabled) {
+            this._config.debug = !!enabled;
+            return this;
+        }
+
+        setMaxItems(count) {
+            this._config.maxItems = parseInt(count) || 3;
+            return this;
+        }
+
+        // For backwards compatibility with some calls
+        initialize() {
+            return this.init();
+        }
+    }
+
+    global.WidgetRelatedArticles = WidgetRelatedArticles;
+
+})(window);
