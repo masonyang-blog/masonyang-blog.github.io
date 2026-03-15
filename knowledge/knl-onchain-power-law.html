@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Power Law Corridor - Crypto Knowledge Base</title>
+    <meta name="description" content="深入解析比特幣冪律模型 (Power Law Corridor)，透過長期的對數成長軌跡預測比特幣的公允價值中樞、絕對支撐位與泡沫阻力位。">
+    <meta name="keywords" content="Power Law Corridor, 冪律模型, 比特幣成長軌跡, 對數回歸, 比特幣公允價值, 投資知識">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-knowledge-id="knl-onchain-power-law">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- MAIN: Three-Column Layout (lg+: [Left TOC] [Article] [Right Sidebar]) -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽</p>
+                    <div id="toc-desktop-host"></div>
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="../post/topic-knowledge.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">知識百科</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">Power Law Corridor</li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header Card ── -->
+                <header
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            ON-CHAIN
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            最後更新：<time datetime="2026-03-15">2026-03-15</time>
+                        </span>
+                    </div>
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        比特幣冪律模型 (Power Law Corridor)
+                    </h1>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                        冪律模型是比特幣最為宏觀的科學估值模型之一。它認為比特幣的價格成長並非指數級（Exponential），而是遵循冪律規律，隨著時間推移展現出一個寬闊但清晰的對數成長通道。
+                    </p>
+                </header>
+
+                <!-- ── Mobile TOC Target ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- ── Article Body Card ── -->
+                <article
+                    class="article-body bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <!-- 1. Why it Matters -->
+                    <section class="mb-12">
+                        <h2 id="importance" class="not-prose indicator-h2">
+                            <span class="number-circle">1</span>
+                            <span class="title-main">為什麼這個知識很重要？</span>
+                        </h2>
+                        <p>冪律模型的重要性在於它提供了「時間的尺度」。它告訴投資者，不要期待比特幣永遠以 2011-2013 年那樣的速度增長，但也不必擔心它會歸零。它將比特幣定義為一種不斷自我強化、成長率遞減但價格持續創新高的數位大宗商品。這個模型能幫助投資者建立極長線（5-10年以上）的信念儲備。</p>
+                        <div
+                            class="not-prose bg-slate-50 dark:bg-slate-900/50 border-l-4 border-emerald-500 p-6 rounded-r-xl">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">💡 核心價值</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm">
+                                這是唯一一個在比特幣歷史上從未被打破、且具備高度數學嚴謹性的宏觀通道模型。
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 2. Impact on Yield/Risk -->
+                    <section class="mb-12">
+                        <h2 id="impact" class="not-prose indicator-h2">
+                            <span class="number-circle">2</span>
+                            <span class="title-main">對投資收益與風險的影響</span>
+                        </h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-xl">
+                                        🎯</div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">收益影響 (Yield)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-grow">
+                                    模型中的「綠色中線」（均值）提供了明確的價格預期。當價格低於中線時，未來均值回歸帶來的收益空間極大。
+                                </p>
+                            </div>
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center text-xl">
+                                        🛡️</div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">風險影響 (Risk)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-grow">
+                                    「紅色底線」是生死支撐。歷史上跌破此線的機率極低，是防禦性資產配置的最強底線參考。
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. 5W1H Analysis -->
+                    <section class="mb-12">
+                        <h2 id="5w1h" class="not-prose indicator-h2">
+                            <span class="number-circle">3</span>
+                            <span class="title-main">深入解析：5W1H 模型</span>
+                        </h2>
+                        <div
+                            class="not-prose overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-6">
+                            <table class="w-full text-left border-collapse bg-white dark:bg-slate-800">
+                                <tbody class="text-sm">
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            What</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>定義：</strong>
+                                            基於對數時間 vs 對數價格的線性回歸模型，形成的成長通道。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            When</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>時效：</strong>
+                                            極長線指標，適合以「年」為單位進行資產配置與規劃。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Where</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>參考：</strong>
+                                            Bitbo Power Law、LookIntoBitcoin 模型圖表。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Why</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>動機：</strong>
+                                            為了量化比特幣的「遞減增長率」，避免被短期的不理性泡沫誤導。</td>
+                                    </tr>
+                                    <tr class="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            How</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>規律：</strong>
+                                            價格會反覆測試紅色支撐，並向紫色阻力衝刺，長期向綠色均值靠攏。</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- 4. Mental Model / Association -->
+                    <section class="mb-12">
+                        <h2 id="association" class="not-prose indicator-h2">
+                            <span class="number-circle">4</span>
+                            <span class="title-main">聯想與市場連動</span>
+                        </h2>
+                        <p>這可以聯想為「成長的樹木」：</p>
+                        <ul class="space-y-4">
+                            <li><strong>紅色底線</strong>：是樹木每年最基本的年輪增長。</li>
+                            <li><strong>紫色頂部</strong>：是即便在最肥沃的年份，樹木也不可能長到的高度上限。</li>
+                            <li><strong>綠色中軸</strong>：是這顆樹最自然的平均生長速度。</li>
+                        </ul>
+                    </section>
+
+                    <!-- 5. 點位分析 (2026 示例) -->
+                    <section class="mb-12">
+                        <h2 id="data-analysis" class="not-prose indicator-h2">
+                            <span class="number-circle">5</span>
+                            <span class="title-main">具體點位分析 (2026 示例)</span>
+                        </h2>
+                        <p>根據最新的冪律讀數，2026 年的時間切片呈現如下：</p>
+                        <div class="not-prose pl-6 border-l-2 border-indigo-500 space-y-6 mt-8">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">紫色阻力 (頂部)：約 53.8 萬美元</h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm">代表本週期理論上的狂熱頂部，觸碰即是清倉信號。</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">綠色均值 (公允)：約 15.1 萬美元</h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm">代表在沒有過度泡沫或恐慌下的公允價值。</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">紅色支撐 (生死)：約 5.3 萬美元</h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm">代表絕對底部支撐，此處不應有任何賣盤。</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Footer Disclaimer -->
+                    <div
+                        class="not-prose mt-12 pt-8 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。加密貨幣投資屬高風險，請謹慎評估。</p>
+                        <p class="mt-4">
+                            前往 <a href="../post/topic-btc-sovereign-liquidity.html"
+                                class="text-blue-600 dark:text-blue-400 font-bold hover:underline">主權流動性專題</a>
+                            查看冪律模型如何定義比特幣的長期價值。
+                        </p>
+                    </div>
+
+                </article>
+
+                <!-- Related Articles (Mobile bottom) -->
+                <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+            </div>
+            <!-- /END Center Column -->
+
+            <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+
+                    <!-- A. Article Meta Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                知識資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-03-15</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">宏觀模型 (Model)</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- B. Key Findings Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                核心重點</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">任何貼近紅色底線的時刻都是買點</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">價格長期會向綠色均值回歸</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- C. Related Articles (Desktop sidebar) -->
+                    <div id="related-articles-sidebar"
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                延伸閱讀</p>
+                        </div>
+                        <div id="related-knowledge-sidebar-host"></div>
+                    </div>
+
+                </div>
+            </aside>
+            <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Header & Footer
+            new HeaderComponent().setHomeUrl('../index.html').init();
+            new FooterComponent().init();
+
+            // TOC
+            if (typeof ArticleTOC !== 'undefined') { new ArticleTOC().init(); }
+            if (window.ResponsiveTocComponent) { new ResponsiveTocComponent().init(); }
+
+            // Scroll Events
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                if (progressBar) { progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%'; }
+
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) { bttSidebarBtn.classList.toggle('hidden', !isScrolled); }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資產相關性 (Asset Correlation) - Crypto Knowledge Base</title>
+    <meta name="description" content="探討比特幣與納斯達克指數、黃金等傳統資產在 2026 年的相關性動態，以及避險屬性的再評估。">
+    <meta name="keywords" content="資產相關性, 納斯達克, 黃金, 避險屬性, Beta, 投資組合, 加密貨幣, 投資知識">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-knowledge-id="asset-correlation">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- MAIN: Three-Column Layout (lg+: [Left TOC] [Article] [Right Sidebar]) -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽</p>
+                    <div id="toc-desktop-host"></div>
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="../post/topic-knowledge.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">知識百科</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">資產相關性與避險屬性
+                        </li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header Card ── -->
+                <header
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            Macro Economy
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            最後更新：<time datetime="2026-01-25">2026-01-25</time>
+                        </span>
+                    </div>
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        資產相關性與避險屬性 (Asset Correlation)
+                    </h1>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                        理解比特幣與傳統資產（如美股、黃金）的相關性，是機構配置資產的基礎。如果你誤以為比特幣是「避險資產」而在股市崩盤時重倉買入，可能會因為其「高貝塔 (High
+                        Beta)」的科技股屬性而遭受雙重打擊。
+                    </p>
+                </header>
+
+                <!-- ── Mobile TOC Target ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- ── Article Body Card ── -->
+                <article
+                    class="article-body bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4">
+
+                    <!-- 1. Why it Matters -->
+                    <section class="mb-12">
+                        <h2 id="importance">1. 為什麼這個知識很重要？</h2>
+                        <p>理解比特幣與傳統資產（如美股、黃金）的相關性，是機構配置資產的基礎。如果你誤以為比特幣是「避險資產」而在股市崩盤時重倉買入，可能會因為其「高貝塔 (High
+                            Beta)」的科技股屬性而遭受雙重打擊。</p>
+                        <div
+                            class="not-prose bg-slate-50 dark:bg-slate-900/50 border-l-4 border-violet-500 p-6 rounded-r-xl">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">💡 核心價值</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm">
+                                相關性係數 (Correlation Coefficient) 決定了資產在你的投資組合中是扮演「攻擊手」還是「防禦者」。
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 2. Impact on Yield/Risk -->
+                    <section class="mb-12">
+                        <h2 id="impact">2. 對投資收益與風險的影響</h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-xl">
+                                        💰</div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">收益增強 (Yield)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-grow">
+                                    在「Risk-On」（風險偏好上升）時期，比特幣通常表現為「加強版納斯達克」。如果納指漲 1%，比特幣可能漲 3%。利用這種高相關性，可以在股市牛市中獲得超額
+                                    alpha。
+                                </p>
+                            </div>
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center text-xl">
+                                        🛡️</div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">風險暴露 (Risk)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-grow">
+                                    在流動性危機（如 2020 年 3 月）中，所有資產相關性會趨向於 1（齊跌）。此時比特幣無法避險。了解這一點，能讓你在宏觀黑天鵝來臨時，優先選擇 USDT 或黃金而非
+                                    BTC。
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. 5W1H Analysis -->
+                    <section class="mb-12">
+                        <h2 id="5w1h">3. 深入解析：5W1H 模型</h2>
+                        <div
+                            class="not-prose overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-6">
+                            <table class="w-full text-left border-collapse bg-white dark:bg-slate-800">
+                                <tbody class="text-sm">
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Who</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>關聯對象：</strong>
+                                            主要是 <strong>Nasdaq 100 (NDX)</strong> 和 <strong>黃金 (Gold)</strong>。美元指數
+                                            (DXY) 則呈現負相關。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            What</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>當前數據：</strong>
+                                            2026 年初，BTC 與 NDX 相關係數為 0.38（中度正相關），與黃金為 0.01（無相關）。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            When</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>變化時機：</strong>
+                                            在通膨預期上升時，BTC 傾向於與黃金連動（抗通膨）；在經濟增長預期強時，傾向於與科技股連動（成長性）。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Why</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>根本原因：</strong>
+                                            機構投資者（如對沖基金）的重疊。他們通常將加密貨幣和科技股歸類在同一個「風險資產」資金池中。</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- 4. Mental Model / Association -->
+                    <section class="mb-12">
+                        <h2 id="association">4. 聯想與市場連動</h2>
+                        <div class="not-prose pl-6 border-l-2 border-indigo-200 dark:border-indigo-800 space-y-8 mt-8">
+                            <div class="relative">
+                                <div
+                                    class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-indigo-500 border-4 border-white dark:border-slate-800 shadow-sm">
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">觸發 (Trigger)
+                                </h3>
+                                <p
+                                    class="text-slate-600 dark:text-slate-400 text-sm bg-slate-50 dark:bg-slate-900/40 p-4 rounded-lg">
+                                    美股盤前期貨大跌（例如 Nvidia 財報爆雷）。</p>
+                            </div>
+                            <div class="relative">
+                                <div
+                                    class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-indigo-300 dark:bg-indigo-600 border-4 border-white dark:border-slate-800 shadow-sm">
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">連動 (Correlation)
+                                </h3>
+                                <p
+                                    class="text-slate-600 dark:text-slate-400 text-sm bg-slate-50 dark:bg-slate-900/40 p-4 rounded-lg">
+                                    比特幣通常會跟跌，且跌幅往往大於美股（因為加密市場 24/7 交易，流動性更好，常被作為第一變現出口）。</p>
+                            </div>
+                            <div class="relative">
+                                <div
+                                    class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-indigo-100 dark:bg-indigo-300 border-4 border-white dark:border-slate-800 shadow-sm">
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">背離 (Decoupling)
+                                </h3>
+                                <p
+                                    class="text-slate-600 dark:text-slate-400 text-sm bg-slate-50 dark:bg-slate-900/40 p-4 rounded-lg">
+                                    如果美股跌但比特幣不跌反漲，這是極強的<strong>看多訊號</strong>，代表獨立行情（Idiosyncratic Move）開始。</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 5. Actionable Advice -->
+                    <section class="mb-12">
+                        <h2 id="action">5. 建議行動指南</h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                            <div
+                                class="p-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/50">
+                                <span class="block text-xs font-bold text-blue-600 dark:text-blue-400 uppercase mb-2">觀察
+                                    (Observe)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">每天開盤前，先看一眼納斯達克期貨
+                                    (NQ=F) 和美元指數 (DXY)。</p>
+                            </div>
+                            <div
+                                class="p-5 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-100 dark:border-amber-800/50">
+                                <span
+                                    class="block text-xs font-bold text-amber-600 dark:text-amber-400 uppercase mb-2">判斷
+                                    (Judge)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">
+                                    如果相關性高（同漲同跌），則用宏觀邏輯交易。如果相關性低（走勢分歧），則用幣圈原生邏輯大膽交易。</p>
+                            </div>
+                            <div
+                                class="p-5 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
+                                <span
+                                    class="block text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase mb-2">執行
+                                    (Execute)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">2026
+                                    年上半預計相關性會下降，建議減少對美股波動的恐慌，專注於加密市場內部的流動性輪動。</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Footer Disclaimer -->
+                    <div
+                        class="not-prose mt-12 pt-8 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。加密貨幣投資屬高風險，請謹慎評估。</p>
+                        <p class="mt-4">
+                            此知識點為比特幣核心影響因子之一，前往 <a href="../post/bitcoin-price-factors.html"
+                                class="text-violet-600 dark:text-violet-400 font-bold hover:underline">比特幣因素曼陀羅</a>
+                            查看其共振關係。
+                        </p>
+                    </div>
+
+                </article>
+
+                <!-- Related Articles (Mobile bottom) -->
+                <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+            </div>
+            <!-- /END Center Column -->
+
+            <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+
+                    <!-- A. Article Meta Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                知識資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-01-25</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">宏觀經濟</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- B. Key Findings Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                核心重點</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-violet-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    比特幣與納指雖有相關性，但並非絕對「避險資產」。</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-violet-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    相關係數決定了資產在組合中扮演攻擊或防禦角色。</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- C. Related Articles (Desktop sidebar) -->
+                    <div id="related-articles-sidebar"
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                延伸閱讀</p>
+                        </div>
+                        <div id="related-knowledge-sidebar-host"></div>
+                    </div>
+
+                </div>
+            </aside>
+            <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Header & Footer
+            new HeaderComponent().setHomeUrl('../index.html').init();
+            new FooterComponent().init();
+
+            // TOC
+            if (typeof ArticleTOC !== 'undefined') { new ArticleTOC().init(); }
+            if (window.ResponsiveTocComponent) { new ResponsiveTocComponent().init(); }
+
+            // Scroll Events
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                if (progressBar) { progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%'; }
+
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) { bttSidebarBtn.classList.toggle('hidden', !isScrolled); }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+        });
+    </script>
+</body>
+
+</html>

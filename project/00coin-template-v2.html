@@ -1,0 +1,725 @@
+<!-- ==========================================================================
+     範本名稱：幣種介紹百科 專用範本 v2 (Three-Column Layout)
+     使用指南：
+     1. 建立檔案：複製本檔並命名為 [代號].html 放置於 project/ 目錄。
+     2. 設定 ID ：在 <body> 標籤設定 data-asset-id="幣種ID" (需與 widget-crypto-data.js 對應)。
+     3. 配置路徑：本範本預設 assets 路徑為 ../assets/ (適用於 project/ 目錄)。
+     
+     頁面架構：
+     - 左側欄 (lg+)：[#toc-desktop-host] 桌面版 sticky 目錄。
+     - 中央主欄：Hero (含即時價格) + [#toc-mobile-target] 行動版 TOC + 文章本體。
+     - 右側欄 (lg+)：即時價格卡、快速概覽、延伸閱讀、[#related-coins-sidebar] 相關幣種。
+     
+     組件初始化 (JS)：
+     - new RealTimePriceComponent().setSymbol(assetId).init(); // 即時市價
+     - new ArticleTOC().init(); // 桌面目錄
+     - new RelatedCoinsComponent(sidebarEl, assetId, data).init(); // 雙掛載推薦
+     
+     維護規範：
+     - 禁止行內樣式，所有表格必須用 <div>.responsive-table-wrapper 包裹。
+     - 錨點位移由 CSS scroll-margin-top 處理。
+     - 修改全站字串嚴禁使用 PowerShell Get-Content，請務必使用 Python (utf-8)。
+     ========================================================================== -->
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[幣種名稱] ([代號]) 完整介紹：[核心價值]、[應用]與[投資分析] - Mason Yang Blog</title>
+    <meta name="description" content="[幣種名稱] ([代號]) 是什麼？本文深入解析其[核心機制]、[代幣經濟]與[未來展望]，並提供購買教學與風險分析。">
+    <meta name="keywords" content="[幣種名稱], [代號], 加密貨幣, 區塊鏈, 投資, 介紹">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#15202e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- TradingView Widget -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Smooth scroll for TOC navigation */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Anchor offset for sticky header */
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+
+        /* TOC sidebar scrollbar styling */
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-asset-id="[asset-id]">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Panel]
+         <lg  : Single column (sidebars hidden)
+    ========================================================= -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+                 Hidden on mobile (handled by #toc-mobile-target)
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+
+                    <!-- TOC Header -->
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+
+                    <!-- ArticleTOC will render here (ID must be toc-desktop-host) -->
+                    <div id="toc-desktop-host"></div>
+
+                    <!-- Back to Top (bottom of TOC sidebar) -->
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Main Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">加密貨幣百科</a>
+                        </li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">[幣種名稱]
+                        </li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header ── -->
+                <header
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-8 mb-6">
+
+                    <!-- Meta Bar -->
+                    <div class="flex flex-wrap items-center gap-3 mb-4">
+                        <span
+                            class="px-2.5 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            [板塊：核心論述 / 項目評測]
+                        </span>
+                        <!-- Real-time Price Ticker -->
+                        <div id="crypto-ticker-target"></div>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">
+                            最後更新：<time datetime="2026-03-09">2026-03-09</time>
+                            <span class="mx-1.5">·</span>約 10 分鐘閱讀
+                        </span>
+                    </div>
+
+                    <!-- H1 -->
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-3">
+                        [幣種名稱] (<span class="text-slate-500 dark:text-slate-400">[代號]</span>)：[核心價值]
+                    </h1>
+
+                    <!-- Subtitle -->
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                        [一句話說明最核心的技術定位與投資邏輯]
+                    </p>
+
+                    <!-- Quick Links Bar -->
+                    <div class="flex flex-wrap gap-3 pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <a href="[官方網站]" target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                </path>
+                            </svg>
+                            官方網站
+                        </a>
+                        <a href="[白皮書鏈接]" target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                            白皮書
+                        </a>
+                        <a href="[區塊鏈瀏覽器]" target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9">
+                                </path>
+                            </svg>
+                            區塊鏈瀏覽器
+                        </a>
+                    </div>
+                </header>
+
+                <!-- ── Mobile TOC Target (行動版目錄，桌面版隱藏) ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- ── Article Body ── -->
+                <article
+                    class="article-body bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-8 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <!-- 1. What Is It -->
+                    <section id="what-is">
+                        <h2 id="summary" class="not-prose indicator-h2">
+                            <span class="number-circle">1</span>
+                            <span class="title-main">什麼是 [幣種名稱]？</span>
+                        </h2>
+                        <p
+                            class="lead text-lg font-medium text-slate-700 dark:text-slate-300 not-prose mb-4 leading-relaxed">
+                            [幣種名稱] ([代號]) 是一個[核心定義]。它旨在解決[痛點]，並透過[核心機制]來實現[目標]。
+                        </p>
+                        <p>
+                            [詳細介紹段落...第二段，可講歷史背景、創辦人、發展里程碑]
+                        </p>
+                    </section>
+
+                    <!-- 2. Core Value -->
+                    <section id="core-value">
+                        <h2 id="value" class="not-prose indicator-h2">
+                            <span class="number-circle">2</span>
+                            <span class="title-main">核心價值與技術特色</span>
+                        </h2>
+                        <p>[說明核心技術價值的引言段落]</p>
+                        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                            <!-- Feature Card 1 -->
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl p-5">
+                                <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 mb-2">特色一</h3>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">說明...</p>
+                            </div>
+                            <!-- Feature Card 2 -->
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl p-5">
+                                <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 mb-2">特色二</h3>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">說明...</p>
+                            </div>
+                            <!-- Feature Card 3 -->
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl p-5">
+                                <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 mb-2">特色三</h3>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">說明...</p>
+                            </div>
+                            <!-- Feature Card 4 -->
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl p-5">
+                                <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 mb-2">特色四</h3>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">說明...</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. Tokenomics -->
+                    <section id="tokenomics">
+                        <h2 id="economics" class="not-prose indicator-h2">
+                            <span class="number-circle">3</span>
+                            <span class="title-main">代幣經濟模型 (Tokenomics)</span>
+                        </h2>
+                        <p>了解代幣的供需與分配是評估一個項目長期可持續性的關鍵。以下是 [代號] 的核心代幣數據：</p>
+
+                        <div
+                            class="not-prose responsive-table-wrapper my-6 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-600">
+                            <table class="min-w-full text-left text-sm bg-white dark:bg-slate-800">
+                                <thead
+                                    class="bg-slate-50 dark:bg-slate-700 border-b border-slate-200 dark:border-slate-600">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                            指標</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                            數值</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                                        <th scope="row"
+                                            class="px-6 py-3.5 font-medium text-slate-900 dark:text-slate-100">總供應量
+                                            (Max Supply)</th>
+                                        <td class="px-6 py-3.5 font-mono text-slate-700 dark:text-slate-300">[數值]
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                                        <th scope="row"
+                                            class="px-6 py-3.5 font-medium text-slate-900 dark:text-slate-100">流通量
+                                            (Circulating Supply)</th>
+                                        <td class="px-6 py-3.5 font-mono text-slate-700 dark:text-slate-300">[數值]
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                                        <th scope="row"
+                                            class="px-6 py-3.5 font-medium text-slate-900 dark:text-slate-100">代幣發行年份
+                                        </th>
+                                        <td class="px-6 py-3.5 font-mono text-slate-700 dark:text-slate-300">[年份]
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                                        <th scope="row"
+                                            class="px-6 py-3.5 font-medium text-slate-900 dark:text-slate-100">共識機制
+                                        </th>
+                                        <td class="px-6 py-3.5 text-slate-700 dark:text-slate-300">[PoW / PoS / 其他]
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- 4. Price History -->
+                    <section id="price-history">
+                        <h2 id="trend" class="not-prose indicator-h2">
+                            <span class="number-circle">4</span>
+                            <span class="title-main">歷史價格與走勢</span>
+                        </h2>
+                        <p>[簡短說明：可以從圖表看出哪些關鍵時間點，例如高點、重大事件]</p>
+                        <div id="tv-chart-container"
+                            class="not-prose rounded-xl overflow-hidden border border-slate-200 dark:border-slate-600 my-6"
+                            style="height: 420px;">
+                            <!-- TradingView Widget will load here -->
+                        </div>
+                    </section>
+
+                    <!-- 5. Investment Analysis -->
+                    <section id="investment-analysis">
+                        <h2 id="analysis" class="not-prose indicator-h2">
+                            <span class="number-circle">5</span>
+                            <span class="title-main">投資潛力分析</span>
+                        </h2>
+                        <p>[引言：說明如何從多角度評估這個資產的投資價值]</p>
+
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                            <!-- Bull Case -->
+                            <div
+                                class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-5">
+                                <h3 class="text-base font-bold text-green-800 dark:text-green-300 mb-3">看多觀點 (Bull
+                                    Case)</h3>
+                                <ul class="space-y-2 text-sm text-green-900 dark:text-green-200">
+                                    <li class="flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 shrink-0"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>優點一</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 shrink-0"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>優點二</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 shrink-0"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>優點三</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Bear Case -->
+                            <div
+                                class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-5">
+                                <h3 class="text-base font-bold text-red-800 dark:text-red-300 mb-3">看空隱憂 (Bear
+                                    Case)</h3>
+                                <ul class="space-y-2 text-sm text-red-900 dark:text-red-200">
+                                    <li class="flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-red-500 dark:text-red-400 mt-0.5 shrink-0"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>風險一</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-red-500 dark:text-red-400 mt-0.5 shrink-0"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>風險二</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-red-500 dark:text-red-400 mt-0.5 shrink-0"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>風險三</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Mobile: Related Coins (shown at bottom on mobile only) -->
+                    <div id="related-coins-container" class="not-prose lg:hidden mt-8"></div>
+
+                    <!-- Disclaimer -->
+                    <div
+                        class="not-prose mt-10 p-5 bg-slate-50 dark:bg-slate-700/50 rounded-xl text-xs text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-600">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本站內容僅供教育與資訊參考，不構成任何財務建議。加密貨幣投資屬於高風險資產，請務必做好自我研究 (DYOR) 並謹慎評估自身的風險承受能力。</p>
+                    </div>
+
+                </article>
+            </div>
+            <!-- /END Center Column -->
+
+            <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Info Panel
+                 Hidden on mobile (content shown at article bottom)
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+
+                    <!-- A. Price Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                即時市價</p>
+                        </div>
+                        <div class="p-4">
+                            <!-- Price Ticker (compact mode) -->
+                            <div id="price-sidebar-target" class="text-sm"></div>
+                            <!-- Fallback placeholder -->
+                            <div class="price-placeholder">
+                                <div class="text-xl font-bold font-mono text-slate-900 dark:text-slate-100">$--.--</div>
+                                <div class="text-xs text-slate-400 dark:text-slate-500 mt-1">[代號] / USDT</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- B. Quick Stats Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                快速概覽</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">類型</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">[L1 / DeFi / ...]
+                                </dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">總供應量</dt>
+                                <dd class="text-xs font-mono text-slate-800 dark:text-slate-200">[數值]</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">共識機制</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">[PoW / PoS]</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發行年份</dt>
+                                <dd class="text-xs font-mono text-slate-800 dark:text-slate-200">[年份]</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">創辦人</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">[姓名]</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- C. Extended Reading (Internal Links) -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                延伸閱讀</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li>
+                                <a href="#"
+                                    class="flex items-start gap-2 px-4 py-3 text-xs text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 mt-0.5 shrink-0"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    [相關文章標題一]
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="flex items-start gap-2 px-4 py-3 text-xs text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 mt-0.5 shrink-0"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    [相關文章標題二]
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="flex items-start gap-2 px-4 py-3 text-xs text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 mt-0.5 shrink-0"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    [相關文章標題三]
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- D. Related Coins (Desktop sidebar) -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                相關幣種</p>
+                        </div>
+                        <div id="related-coins-sidebar" class="p-2"></div>
+                    </div>
+
+                </div>
+            </aside>
+            <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- =========================================================
+         Fixed Floating UI Elements
+    ========================================================= -->
+
+    <!-- Back to Top Button (bottom-right) -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- =========================================================
+         Scripts
+    ========================================================= -->
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/widget-crypto-data.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+    <script src="../assets/js/widget-related-coins.js"></script>
+    <script src="../assets/js/widget-price-ticker.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. Layout Shell ──────────────────────────────────
+            new HeaderComponent().init();
+            new FooterComponent().init();
+
+            // ── 2. Desktop TOC (Left Sidebar) ────────────────────
+            // ArticleTOC renders into #toc-desktop-host
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // ── 3. Mobile TOC ─────────────────────────────────────
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // ── 4. Asset-based Widgets ───────────────────────────
+            const assetId = document.body.dataset.assetId;
+
+            if (assetId) {
+
+                // Real-time Price (Hero ticker)
+                if (window.RealTimePriceComponent) {
+                    new RealTimePriceComponent()
+                        .setSymbol(assetId)
+                        .setTargetId('crypto-ticker-target')
+                        .init();
+                }
+
+                // Related Coins: Desktop Sidebar
+                const sidebarEl = document.getElementById('related-coins-sidebar');
+                if (sidebarEl && window.RelatedCoinsComponent && window.cryptoAssetsData) {
+                    new RelatedCoinsComponent(sidebarEl, assetId, window.cryptoAssetsData)
+                        .setMaxItems(5)
+                        .init();
+                }
+
+                // Related Coins: Mobile Bottom (lg:hidden)
+                const mobileEl = document.getElementById('related-coins-container');
+                if (mobileEl && window.RelatedCoinsComponent && window.cryptoAssetsData) {
+                    new RelatedCoinsComponent(mobileEl, assetId, window.cryptoAssetsData)
+                        .setMaxItems(6)
+                        .init();
+                }
+
+                // TradingView Chart
+                const chartContainer = document.getElementById('tv-chart-container');
+                if (chartContainer && window.TradingView) {
+                    new TradingView.widget({
+                        "container_id": "tv-chart-container",
+                        "autosize": true,
+                        "symbol": `BINANCE:${assetId.toUpperCase()}USDT`,
+                        "interval": "W",
+                        "timezone": "Asia/Taipei",
+                        "theme": document.documentElement.classList.contains('dark') ? "dark" : "light",
+                        "style": "1",
+                        "locale": "zh_TW",
+                        "toolbar_bg": "#f1f3f6",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "save_image": false,
+                        "hide_side_toolbar": false
+                    });
+                }
+            }
+
+            // ── 5. Scroll Events ──────────────────────────────────
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                // Progress bar
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+
+                // Back to top buttons (show after 500px)
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            // Back to top: click handlers
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) {
+                    btn.addEventListener('click', () => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                }
+            });
+
+        });
+    </script>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FinancialProduct",
+      "name": "[幣種名稱]",
+      "tickerSymbol": "[代號]",
+      "description": "[幣種名稱] ([代號]) 是什麼？本文深入解析其核心機制、代幣經濟與未來展望。",
+      "url": "https://lmybtc.github.io/post/[檔名].html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Mason Yang Blog"
+      }
+    }
+    </script>
+
+</body>
+
+</html>

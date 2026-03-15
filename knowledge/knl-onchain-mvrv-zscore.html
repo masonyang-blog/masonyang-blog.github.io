@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVRV Z-Score - Crypto Knowledge Base</title>
+    <meta name="description" content="深入解析比特幣 MVRV Z-Score 指標，衡量市場價值與實現價值的偏離程度，精準判斷比特幣週期的市場底部與泡沫頂部。">
+    <meta name="keywords" content="MVRV Z-Score, 比特幣估值, 市值與實現價值, 比特幣底部, 鏈上數據, 投資知識">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-knowledge-id="knl-onchain-mvrv-zscore">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- MAIN: Three-Column Layout (lg+: [Left TOC] [Article] [Right Sidebar]) -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽</p>
+                    <div id="toc-desktop-host"></div>
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="../post/topic-knowledge.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">知識百科</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">MVRV Z-Score</li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header Card ── -->
+                <header
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            ON-CHAIN
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            最後更新：<time datetime="2026-03-15">2026-03-15</time>
+                        </span>
+                    </div>
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        MVRV Z-Score
+                    </h1>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                        MVRV Z-Score 透過比較市場價值（Market Value）與實現價值（Realized Value），標準化後得出的一個數值。這是一個用來判斷比特幣價格何時處於「偏離公允價值」極端狀態的強大工具。
+                    </p>
+                </header>
+
+                <!-- ── Mobile TOC Target ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- ── Article Body Card ── -->
+                <article
+                    class="article-body bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <!-- 1. Why it Matters -->
+                    <section class="mb-12">
+                        <h2 id="importance" class="not-prose indicator-h2">
+                            <span class="number-circle">1</span>
+                            <span class="title-main">為什麼這個知識很重要？</span>
+                        </h2>
+                        <p>理解 MVRV Z-Score 等於是理解市場的「壓力鍋」。當 Z-Score 極高時，代表市場中絕大多數的人都處於巨額未實現利潤中，拋壓一觸即發。當 Z-Score 極低甚至為負時，代表市場中大多數的人都在虧損，這是情緒最絕望、但利潤空間最大的佈局良機。它幫助投資者在情緒洪流中保持理性。</p>
+                        <div
+                            class="not-prose bg-slate-50 dark:bg-slate-900/50 border-l-4 border-emerald-500 p-6 rounded-r-xl">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">💡 核心價值</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm">
+                                此指標是衡量市場泡沫與否、以及買盤力道是否耗竭的最佳量化標準。
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 2. Impact on Yield/Risk -->
+                    <section class="mb-12">
+                        <h2 id="impact" class="not-prose indicator-h2">
+                            <span class="number-circle">2</span>
+                            <span class="title-main">對投資收益與風險的影響</span>
+                        </h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-xl">
+                                        📊</div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">收益影響 (Yield)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-grow">
+                                    在 Z-Score 進入低點區間（綠色帶）時，往往對應週期的歷史低點。
+                                </p>
+                            </div>
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center text-xl">
+                                        🧨</div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">風險影響 (Risk)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-grow">
+                                    當 Z-Score 衝進紅色預警區（通常 > 7-9），意味著市場極度過熱，崩盤風險極大。
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. 5W1H Analysis -->
+                    <section class="mb-12">
+                        <h2 id="5w1h" class="not-prose indicator-h2">
+                            <span class="number-circle">3</span>
+                            <span class="title-main">深入解析：5W1H 模型</span>
+                        </h2>
+                        <div
+                            class="not-prose overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-6">
+                            <table class="w-full text-left border-collapse bg-white dark:bg-slate-800">
+                                <tbody class="text-sm">
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            What</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>定義：</strong>
+                                            (Market Cap - Realized Cap) / Standard Deviation of Market Cap。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            When</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>更新：</strong>
+                                            鏈上數據即時更新，對週期判斷有強烈的指導意義。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Where</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>位置：</strong>
+                                            Glassnode、Woo Charts 等主流鏈上分析工具。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Why</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>動機：</strong>
+                                            為了過濾掉價格的隨機波動，聚焦於市場的價值中樞。</td>
+                                    </tr>
+                                    <tr class="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            How</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>操作：</strong>
+                                            Z-Score 近似於 0 或更低 = 買入；Z-Score 超過 7 = 考慮賣出。</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- 4. Mental Model / Association -->
+                    <section class="mb-12">
+                        <h2 id="association" class="not-prose indicator-h2">
+                            <span class="number-circle">4</span>
+                            <span class="title-main">聯想與市場連動</span>
+                        </h2>
+                        <p>這可以聯想為「獲利溫度計」：</p>
+                        <ul class="space-y-4">
+                            <li><strong>高 Z-Score（紅色）</strong>：代表全市場的人都在賺錢，此時價格與持倉成本脫鉤，這是一種「發高燒」的狀態，隨時會降溫。</li>
+                            <li><strong>低 Z-Score（綠色）</strong>：代表全市場的人都在虧錢，甚至在「發冷」。這是一種過度恐慌的低溫，市場勢必會緩慢回溫。</li>
+                        </ul>
+                    </section>
+
+                    <!-- 5. Actionable Advice -->
+                    <section class="mb-12">
+                        <h2 id="action" class="not-prose indicator-h2">
+                            <span class="number-circle">5</span>
+                            <span class="title-main">建議行動指南</span>
+                        </h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                            <div
+                                class="p-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/50">
+                                <span class="block text-xs font-bold text-blue-600 dark:text-blue-400 uppercase mb-2">觀察
+                                    (Observe)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">當 Z-Score 緩步抬升，代表市場情緒從冷卻轉向復甦。</p>
+                            </div>
+                            <div
+                                class="p-5 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-100 dark:border-amber-800/50">
+                                <span
+                                    class="block text-xs font-bold text-amber-600 dark:text-amber-400 uppercase mb-2">警戒
+                                    (Alert)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">數值超過 4 以上時，應停止追高，並開始分批設定利潤保護點。</p>
+                            </div>
+                            <div
+                                class="p-5 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
+                                <span
+                                    class="block text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase mb-2">機遇
+                                    (Opportunity)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">數值低於 1 以下，是比特幣大長線投資最具性價比的防禦區間。</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Footer Disclaimer -->
+                    <div
+                        class="not-prose mt-12 pt-8 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。加密貨幣投資屬高風險，請謹慎評估。</p>
+                        <p class="mt-4">
+                            前往 <a href="../post/topic-btc-sovereign-liquidity.html"
+                                class="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">主權流動性專題</a>
+                            深入了解 MVRV 如何與其他鏈上指標共振。
+                        </p>
+                    </div>
+
+                </article>
+
+                <!-- Related Articles (Mobile bottom) -->
+                <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+            </div>
+            <!-- /END Center Column -->
+
+            <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+
+                    <!-- A. Article Meta Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                知識資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-03-15</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">鏈上估值 (On-chain)</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- B. Key Findings Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                核心重點</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">低於 0 代表價格低於所有人的持倉成本，是絕對低點</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">高於 7 代表市場已失去理智，是泡沫崩潰的前兆</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- C. Related Articles (Desktop sidebar) -->
+                    <div id="related-articles-sidebar"
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                延伸閱讀</p>
+                        </div>
+                        <div id="related-knowledge-sidebar-host"></div>
+                    </div>
+
+                </div>
+            </aside>
+            <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Header & Footer
+            new HeaderComponent().setHomeUrl('../index.html').init();
+            new FooterComponent().init();
+
+            // TOC
+            if (typeof ArticleTOC !== 'undefined') { new ArticleTOC().init(); }
+            if (window.ResponsiveTocComponent) { new ResponsiveTocComponent().init(); }
+
+            // Scroll Events
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                if (progressBar) { progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%'; }
+
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) { bttSidebarBtn.classList.toggle('hidden', !isScrolled); }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+        });
+    </script>
+</body>
+
+</html>

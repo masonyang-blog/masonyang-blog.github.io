@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>比特幣與宏觀經濟 7 大關鍵指標深度解析｜CPI、M2、美債、聯準會資產負債表 - Mason Yang Blog</title>
+    <meta name="description"
+        content="深度解析 7 大宏觀數據（CPI、M1、M2、美元貶值、10 年期美債收益率、30 年期房貸利率、聯準會資產負債表）如何共同驅動比特幣的長線週期。從歷史覆盤到 2026 年現況判定，帶你看懂下一波牛市的宏觀底層邏輯。">
+    <meta name="keywords"
+        content="比特幣, BTC, CPI, M1, M2, 宏觀經濟, 美債收益率, 聯準會, 量化寬鬆, QE, QT, 聯準會資產負債表, WALCL, 房貸利率, 美元貶值, 通膨, 流動性, 比特幣週期">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#15202e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="bg-slate-50 text-slate-800" data-article-id="topic-btc-macro-analysis">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+
+                    <!-- ArticleTOC renders here -->
+                    <div id="toc-desktop-host"></div>
+
+                    <!-- Back to top (sidebar) -->
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">主題文章</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">BTC 宏觀指標解析
+                        </li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header ── -->
+                <header
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <!-- Category + Date -->
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            市場分析
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            <time datetime="2026-03-09">2026-03-09</time>
+                        </span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 15 分鐘閱讀</span>
+                    </div>
+
+                    <!-- H1 -->
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        比特幣 × 宏觀 7 大指標全景解析：CPI、M2、美債、聯準會如何共振驅動 BTC 週期？
+                    </h1>
+
+                    <!-- Subtitle / Hook -->
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        深度解析 7 大宏觀數據（CPI、M1、M2、美元貶值、10yr 美債、30yr 房貸利率、聯準會資產負債表）如何共同驅動比特幣長線週期。
+                    </p>
+                </header>
+
+                <!-- ── Mobile TOC Target (行動版) ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <article
+                    class="article-body bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <p
+                        class="not-prose lead text-xl text-slate-700 dark:text-slate-200 font-medium leading-relaxed border-l-4 border-blue-500 pl-6 py-2 bg-blue-50/50 dark:bg-blue-900/10 rounded-r-lg mb-12">
+                        看懂宏觀，才真正看懂比特幣。本文以 7 張來自 FRED 的核心宏觀數據圖表為基礎，幫你建立屬於你自己的宏觀鷹架角度。
+                    </p>
+
+                    <!-- Section 1: CPI -->
+                    <h2 class="not-prose indicator-h2">
+                        <span class="number-circle">1</span>
+                        <span class="title-main">U.S. CPI vs Bitcoin</span>
+                        <span class="title-sub">通膨預期與抗通膨屬性</span>
+                    </h2>
+
+                    <p>消費者物價指數年同比 (CPI YoY) 衡量的是一籃子日常消費品（食物、住房、交通、醫療等）在過去 12
+                        個月的整體漲幅。它不僅是衡量人民實際生活成本的溫度計，更是決定聯準會貨幣政策走向的最核心數據。
+                    </p>
+
+                    <h3 class="not-prose analysis-h3">
+                        <span class="title-main">影響鏈邏輯：CPI → 聯準會政策 → 流動性 → BTC 定價</span>
+                    </h3>
+                    <p>這條邏輯鏈是破解幣價走向的第一把鑰匙。當 CPI 持續高於聯準會 2%
+                        的目標值，聯準會被迫升息以冷卻需求、抑制通膨。升息意味著資金成本上升——借貸更昂貴、定存更吸引人，資金從高風險資產外流回到固定收益市場。比特幣作為「流動性的晴雨表」，在這個過程中首當其衝。反之，當
+                        CPI 穩步回落，市場就會提前押注降息時間表，風險偏好重新點燃，比特幣往往在真正降息前便領先於大盤率先上漲。</p>
+
+                    <figure class="my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-macro-analysis-cpi.png" alt="U.S. CPI vs Bitcoin Chart"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500 !my-0">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            美國 CPI YoY 同比變化與比特幣價格走勢 (數據來源：FRED CPIAUCSL)
+                        </figcaption>
+                    </figure>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+                        <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                            <h4 class="text-blue-700 font-bold mb-3 flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> 圖表判讀與歷史覆盤
+                            </h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">圖中最關鍵的區間是 2021 至 2022 年。CPI 從不到 2% 飆升至接近
+                                9%，聯準會被迫以近 40 年最快節奏升息。比特幣的初期反應是上漲（市場誤讀通膨為避險需求），但一旦升息落地、流動性急速收縮，比特幣從 69,000 美元暴跌至 16,000
+                                美元。核心啟示：比特幣的真正敵人不是通膨本身，而是聯準會為了對抗通膨而採取的緊縮手段。</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                            <h4 class="text-blue-900 font-bold mb-3 flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-700 rounded-full"></span> 現況與未來推論
+                            </h4>
+                            <p class="text-sm text-slate-700 leading-relaxed">目前 CPI 已從峰值大幅回落至 2.5-3%
+                                附近，進入「溫和通膨」區間——這對比特幣是黃金窗口期：聯準會已明確停止升息，降息路徑逐漸開啟，而通膨尚未低到引發通縮擔憂。未來最大的風險是「通膨二次回歸」：若能源、服務業或關稅政策再度推高
+                                CPI 至 4% 以上，聯準會的鷹派聲音將重新主導，比特幣可能面臨 10-30% 的短線回調壓力。反之，若 CPI 繼續向 2% 靠攏，比特幣的長線主升浪才真正確立。</p>
+                        </div>
+                    </div>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-blue-200 dark:border-blue-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解 CPI 嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，掌握通膨週期的底層細節。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-macro-cpi.html" class="shrink-0 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Section 2: M1 -->
+                    <h2 class="not-prose indicator-h2">
+                        <span class="number-circle">2</span>
+                        <span class="title-main">US Money Supply (M1)</span>
+                        <span class="title-sub">即時流動性的引擎</span>
+                    </h2>
+
+                    <p>M1 是最「活性」的貨幣，包含流通中的現金以及可無障礙隨時動用的活期存款。它反映的是市場上「隨時可投入的子彈」有多少，是觀察即時流動性最敏感的指標。</p>
+
+                    <h3 class="not-prose analysis-h3">
+                        <span class="title-main">機制解析：M1 擴張如何為比特幣點火？</span>
+                    </h3>
+                    <p>機制很簡單：當政府大規模發放刺激補貼或聯準會壓低利率鼓勵借貸，M1 快速膨脹，人們手中的活錢增多，儲蓄的機會成本降低，部分資金開始流向高風險高報酬的資產類別。比特幣因其全球開放的交易特性與
+                        24/7
+                        的市場，往往是這股熱錢的第一個停靠站。</p>
+
+                    <figure class="my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-macro-analysis-m1.png"
+                                alt="US Money Supply M1 vs Bitcoin Chart"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500 !my-0">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            美國 M1 供應量同比成長與比特幣價格走勢 (數據來源：FRED M1)
+                        </figcaption>
+                    </figure>
+
+                        </div>
+                    </div>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-blue-200 dark:border-blue-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解 M1 嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，掌握貨幣供應的流動性真相。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-macro-m1.html" class="shrink-0 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Section 3: M2 -->
+                    <h2 class="not-prose indicator-h2">
+                        <span class="number-circle">3</span>
+                        <span class="title-main">US Money Supply (M2)</span>
+                        <span class="title-sub">宏觀水位的「生死線」</span>
+                    </h2>
+
+                    <p>若說 M1 是市場的「活水」，M2 就是整個水塘的「總水位」。M2 = M1 + 貨幣市場帳戶 + 小額定期存款 + 其他短期金融資產，是衡量整體金融系統流動性最全面的指標。</p>
+
+                    <h3 class="not-prose analysis-h3">
+                        <span class="title-main">M2 是比特幣牛熊週期的「宏觀背景板」</span>
+                    </h3>
+                    <p>這是所有指標中與比特幣相關性最高的一項。M2 的增減代表的是整個金融體系的「呼吸」：擴張是吸氣，收縮是呼氣。歷史數據明確顯示，每當 M2 YoY
+                        維持在正值且保持增長，比特幣幾乎必然處於長線上升趨勢中；而 M2 YoY 轉負，則對應著加密市場心智最深廣的寒冬。這不是巧合，而是必然的市場鐵律。</p>
+
+                    <figure class="my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-macro-analysis-m2.png"
+                                alt="US Money Supply M2 vs Bitcoin Chart"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500 !my-0">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            美國 M2 供應量同比成長與比特幣價格走勢 (數據來源：FRED M2)
+                        </figcaption>
+                    </figure>
+
+                        </div>
+                    </div>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-blue-200 dark:border-blue-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解 M2 嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，掌握全球宏觀水位的生死線。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-macro-m2.html" class="shrink-0 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Section 4: Dollar Devaluation -->
+                    <h2 class="not-prose indicator-h2">
+                        <span class="number-circle">4</span>
+                        <span class="title-main">美元貶值：法幣購買力的終局</span>
+                        <span class="title-sub">為什麼比特幣是必要的存在</span>
+                    </h2>
+
+                    <p>這張圖表展示了美元購買力崩潰的歷史軌跡。持有美元的成本會持續上升，所謂的「被稀釋」，不是突然發生的，而是全面滲入的制度性出血。自 1913 年聯準會成立以來，美元已失去超過 96% 的購買力。
+                    </p>
+
+                    <h3 class="not-prose analysis-h3">
+                        <span class="title-main">機制解析：貨幣如何失去購買力？</span>
+                    </h3>
+                    <p>這個過程分兩個階段：第一階段，聯準會為了填補赤字或刺激經濟而增加貨幣供應，導致貨幣量持續增長；第二階段，更多的金錢追逐相同的商品與服務，價格自然上漲，也就是「通膨」。實際購買力下降，若想保全資產，持有者就需要尋找貨幣以外的資產防禦。
+                    </p>
+
+                    <figure class="my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-macro-analysis-dollar.png" alt="U.S. Dollar Devaluation Chart"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500 !my-0">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            美元購買力損耗歷史 (1913-2026)，以相對最高購買力百分比表示 (數據來源：FRED CPI)
+                        </figcaption>
+                    </figure>
+
+                        </div>
+                    </div>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-blue-200 dark:border-blue-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解美元貶值嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，理解法幣系統的終局與防禦策略。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-macro-usd-devaluation.html" class="shrink-0 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Section 5: Treasury Yield vs Bitcoin -->
+                    <h2 class="not-prose indicator-h2">
+                        <span class="number-circle">5</span>
+                        <span class="title-main">美債收益率 vs 比特幣</span>
+                        <span class="title-sub">對標「無風險利率」的超額回報</span>
+                    </h2>
+
+                    <p>10
+                        年期美債收益率（DGS10）是全球金融市場最重要的「定錨利率」。它被稱為「無風險利率」，是所有資產定價的基準線。任何資產的預期回報率，都需要在這個基準之上加入「風險溢價」，才能說服投資者承擔更高的不確定性。
+                    </p>
+
+                    <h3 class="not-prose analysis-h3">
+                        <span class="title-main">競爭邏輯：美債收益率如何「搶奪」比特幣的資金？</span>
+                    </h3>
+                    <p>當 10 年期美債收益率攀升至
+                        4-5%，投資者可以輕鬆獲得有國家信用背書的穩定回報，這種「無腦定存」的吸引力大增，促使資金從高風險的比特幣撤退。然而，當我們放大圖表的時間尺度，這個邏輯在長期完全被逆轉：比特幣的年度收益率在牛市年份可高達
+                        100-500%，讓美債的 4-5% 顯得微不足道。這正是比特幣作為「超額回報資產」的核心訴求。</p>
+
+                    <figure class="my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-macro-analysis-treasury.png"
+                                alt="10-year Treasury Bond Yield vs Bitcoin"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500 !my-0">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            10 年期美債收益率與比特幣年度報酬率 (YoY) 對比 (數據來源：FRED DGS10)
+                        </figcaption>
+                    </figure>
+
+                        </div>
+                    </div>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-blue-200 dark:border-blue-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解美債收益率嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，掌握資產定價的基準線與切換邏輯。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-macro-treasury-yield.html" class="shrink-0 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Section 6: 30yr Mortgage Rate vs Bitcoin -->
+                    <h2 class="not-prose indicator-h2">
+                        <span class="number-circle">6</span>
+                        <span class="title-main">30 年期房貸利率 vs 比特幣</span>
+                        <span class="title-sub">貨幣政策傳導的終端指標</span>
+                    </h2>
+
+                    <p>30 年期房貸利率是聯準會政策傳導的「終端指標」。當聯準會調整聯邦基金利率，其效果會逐步傳導至銀行借貸成本，最終反映在普通美國家庭每月的房貸還款額上。它代表著貨幣政策最深入民間的影響力。</p>
+
+                    <h3 class="not-prose analysis-h3">
+                        <span class="title-main">為何房貸利率是比特幣的領先指標？</span>
+                    </h3>
+                    <p>邏輯鏈：房貸利率飆升 → 月供金額大增 → 購屋意願崩潰 → 房地產市場凍結 → 消費者信心走跌 → 聯準會承受降息壓力 → 市場提前押注寬鬆 →
+                        比特幣啟動。這條傳導路徑意味著，當房貸利率從頂部開始穩定下滑，往往預示著整個緊縮週期已走過最壞的時刻，比特幣的中長線機會正在成形。</p>
+
+                    <figure class="my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-macro-analysis-mortgage.png"
+                                alt="30-year U.S. Mortgage Rate vs Bitcoin"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500 !my-0">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            30 年期房貸利率與比特幣價格走勢對比 (數據來源：FRED MORTGAGE30US)
+                        </figcaption>
+                    </figure>
+
+                        </div>
+                    </div>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-blue-200 dark:border-blue-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解房貸利率嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，掌握貨幣政策的民間傳導路徑。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-macro-mortgage-rate.html" class="shrink-0 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Section 7: Fed Balance Sheet vs Bitcoin -->
+                    <h2 class="not-prose indicator-h2">
+                        <span class="number-circle">7</span>
+                        <span class="title-main">聯準會資產負債表 vs 比特幣</span>
+                        <span class="title-sub">央行資產規模與市場水位的共振</span>
+                    </h2>
+
+                    <p>聯準會資產負債表（WALCL）是觀察貨幣政策最直接的「底層指標」。它記錄了聯準會通過購買各類資產（主要是美國國債和機構不動產抵押貸款證券 MBS）注入市場的資金規模。</p>
+
+                    <h3 class="not-prose analysis-h3">
+                        <span class="title-main">QE 與 QT：如何直接影響資產價格？</span>
+                    </h3>
+                    <p>量化寬鬆（QE）：聯準會購買資產 → 資金流入金融體系 → 市場流動性暴增 → 估值全面拉升，高風險資產（如比特幣）漲幅最為驚人。量化緊縮（QT）：聯準會停止再投資到期資產甚至主動出售資產 →
+                        市場流動性收縮 → 風險偏好下滑 → 比特幣率先承壓。這是最直接的「央行水龍頭」比喻。</p>
+
+                    <figure class="my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-macro-analysis-fed.png" alt="Fed Balance Sheet vs Bitcoin"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500 !my-0">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            聯準會資產負債表總規模 (WALCL) 與比特幣價格走勢 (數據來源：FRED WALCL)
+                        </figcaption>
+                    </figure>
+
+                        </div>
+                    </div>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-blue-200 dark:border-blue-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解聯準會縮表嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，掌握央行水龍頭的開關邏輯。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-macro-fed-balance-sheet.html" class="shrink-0 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- References & Disclaimer -->
+                    <div
+                        class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">參考資料 (References)</p>
+                        <p class="mb-3 text-slate-500 dark:text-slate-400">FRED (St. Louis Fed) / Bureau of Labor
+                            Statistics / Federal Reserve Board</p>
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。加密貨幣投資屬高風險，請謹慎評估。</p>
+                        <p>FRED 聲明：本產品使用了 FRED API，但並未獲得聖路易斯聯邦儲備銀行的認可或認證。</p>
+                    </div>
+
+                </article>
+
+                <!-- Related Articles (Mobile bottom) -->
+                <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+            </div>
+            <!-- /END Center Column -->
+
+            <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+
+                    <!-- A. Article Meta Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                文章資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-03-09</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">市場分析</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">閱讀時間</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">約 15 分鐘</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- B. Key Findings Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                核心結論</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">CPI 溫和，降息窗口開啟</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">M2 重新擴張，水位抬升</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">聯準會縮表放緩，信號轉向</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- C. Related Articles (Desktop sidebar) -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                延伸閱讀</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li>
+                                <a href="topic-btc-sovereign-liquidity-20260305.html"
+                                    class="flex items-start gap-2 px-4 py-3 text-xs text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 mt-0.5 shrink-0"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    五大鏈上指標共振：為什麼現在是低點？
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </aside>
+            <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button (fixed, bottom-right) -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Components -->
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const header = new HeaderComponent();
+            header.setHomeUrl('../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // Init TOC
+            if (typeof ArticleTOC !== 'undefined') new ArticleTOC().init();
+            if (window.ResponsiveTocComponent) new ResponsiveTocComponent().init();
+
+            // Scroll Events
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                if (progressBar) progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+        });
+    </script>
+</body>
+
+</html>

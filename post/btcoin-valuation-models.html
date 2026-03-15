@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>比特幣估值模型：從數位黃金到網路效應的多元維度分析 - Mason Yang Blog</title>
+    <meta name="description" content="深入探討比特幣的五大估值維度，包括資產對標法、網路效應、供給側模型與鏈上數據分析。建立科學的加密貨幣估值框架。">
+    <meta name="keywords" content="比特幣, 估值模型, 數位黃金, 梅特卡夫定律, S2F 模型, 冪律模型, 宏觀分析, 加密貨幣">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="card-btc-valuation-models">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- LEFT SIDEBAR: Desktop TOC -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+                    <div id="toc-desktop-host"></div>
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- CENTER: Article Content -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">主題文章</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">比特幣估值模型</li>
+                    </ol>
+                </nav>
+
+                <!-- Hero Header -->
+                <header
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            核心論述
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            <time datetime="2026-03-14">2026-03-14</time>
+                        </span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 12 分鐘閱讀</span>
+                    </div>
+
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        比特幣估值模型：從數位黃金到網路效應的多元維度分析
+                    </h1>
+
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        透過多維度模型交叉驗證，深度解析比特幣在數位化主權時代的定價邏輯與內在價值支撐。
+                    </p>
+
+                    <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#比特幣</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#估值模型</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#宏觀分析</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#鏈上數據</span>
+                    </div>
+                </header>
+
+                <!-- Mobile TOC Target -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- Article Body -->
+                <article
+                    class="article-body bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <p
+                        class="not-prose lead text-xl text-slate-700 dark:text-slate-200 font-medium leading-relaxed border-l-4 border-blue-500 pl-6 py-2 bg-blue-50/50 dark:bg-blue-900/10 rounded-r-lg mb-12">
+                        比特幣究意價值幾何？它是「無中生有」的泡沫，還是「數位時代」的金融基石？本篇將透過資產對標、網路效應、庫存流量比（S2F）與冪律模型，為您解構比特幣的內在價值底層邏輯。
+                    </p>
+
+                    <!-- ────────────────────────────────────
+                         SECTION 1: 資產對標與市場份額法
+                    ──────────────────────────────────── -->
+                    <h2 id="asset-analogy" class="not-prose indicator-h2">
+                        <span class="number-circle">1</span>
+                        <span class="title-main">資產對標與市場份額法</span>
+                        <span class="title-sub">Asset Analogy & TAM Allocation</span>
+                    </h2>
+
+                    <p>這類模型將比特幣視為某種既存資產類的數位化演進，主要邏輯在於：隨著文明數位化，實物資產的職能（如價值儲存）將向比特幣轉移。</p>
+
+                    <h3 class="not-prose analysis-h3">數位黃金對標 (TAM Allocation)</h3>
+                    <div class="mb-4">
+                        <a href="../knowledge/knl-sov-tam.html" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                            <span>📚 深入解析：數位黃金對標法</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <p>這是目前機構投資者最常用的估值框架。其核心算法為：</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg font-mono text-sm border border-slate-200 dark:border-slate-700 my-6">
+                        P = (TAM_gold &times; &omega;) / S_max
+                    </div>
+                    <ul>
+                        <li><strong>P</strong>: 比特幣隱含單價</li>
+                        <li><strong>TAM_gold</strong>: 黃金總市值（目前約 14 - 16 兆美元）</li>
+                        <li><strong>&omega;</strong>: 比特幣預期滲透率（如 10%, 50%, 或 100%）</li>
+                        <li><strong>S_max</strong>: 比特幣最大供應量（21,000,000）</li>
+                    </ul>
+
+                    <h3 class="not-prose analysis-h3">全球法幣對沖模型 (M2 Hedge)</h3>
+                    <div class="mb-4">
+                        <a href="../knowledge/knl-m2-hedge.html" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                            <span>📚 深入解析：法幣對沖模型</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <p>此模型測算全球廣義貨幣 M2 總量中，有多少比例會為了逃避通貨膨脹而轉向比特幣。其邏輯與黃金對標類似，但對標的是法幣系統的貶值程度。</p>
+
+                    <!-- ────────────────────────────────────
+                         SECTION 2: 網路效應模型
+                    ──────────────────────────────────── -->
+                    <h2 id="network-effects" class="not-prose indicator-h2">
+                        <span class="number-circle">2</span>
+                        <span class="title-main">網路效應模型</span>
+                        <span class="title-sub">Network Effect Models</span>
+                    </h2>
+
+                    <p>這類模型基於通訊網路的價值增長規律，認為比特幣不只是一種類商品資產，更是一個全球性的價值交換網路。</p>
+
+                    <h3 class="not-prose analysis-h3">梅特卡夫定律 (Metcalfe's Law)</h3>
+                    <div class="mb-4">
+                        <a href="../knowledge/knl-metcalfe.html" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                            <span>📚 深入解析：梅特卡夫定律</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <p>這是網際網路時代的經典定律，指出網路的價值與其節點數的平方成正比。其算法通常表示為：</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg font-mono text-sm border border-slate-200 dark:border-slate-700 my-6">
+                        V &propto; n&sup2; 或 V = a &times; n &middot; ln(n)
+                    </div>
+                    <p>其中 <strong>V</strong> 代表網路總價值（市值），<strong>n</strong> 代表每日活躍地址數。當用戶數線性增加，網路價值會呈指數級爆發。這解釋了為何比特幣在用戶增長初期會出現極其劇烈的價格波段。</p>
+
+                    <h3 class="not-prose analysis-h3">NVT 比率 (Network Value to Transactions)</h3>
+                    <div class="mb-4">
+                        <a href="../knowledge/knl-nvt-ratio.html" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                            <span>📚 深入解析：NVT 比率</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <p>NVT 被稱為加密貨幣界的「本益比（P/E）」。它衡量的是網路價值與每日交易量（USD）的比率。若交易量（實際效用）跟不上市值漲幅，通常預示著市場過熱。</p>
+
+                    <!-- ────────────────────────────────────
+                         SECTION 3: 供給側與生產成本模型
+                    ──────────────────────────────────── -->
+                    <h2 id="supply-side" class="not-prose indicator-h2">
+                        <span class="number-circle">3</span>
+                        <span class="title-main">供給側與生產成本模型</span>
+                        <span class="title-sub">Supply-Side & Production Costs</span>
+                    </h2>
+
+                    <p>比特幣作為一種「數位大宗商品」，其生產成本往往形成價格地板。這類模型從供給的稀缺性與生產者的盈虧平衡點出發。</p>
+
+                    <h3 class="not-prose analysis-h3">庫存流量比模型 (Stock-to-Flow, S2F)</h3>
+                    <div class="mb-4">
+                        <a href="../knowledge/knl-s2f-model.html" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                            <span>📚 深入解析：S2F 模型</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <p>這是 PlanB 推廣的著名模型，核心邏輯是「稀缺性定義價值」。</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg font-mono text-sm border border-slate-200 dark:border-slate-700 my-6">
+                        S2F = Stock / Flow ; Model_Price = eᵃ &times; (S2F)ᵇ
+                    </div>
+                    <p>比特幣每四年減半一次，其 Flow（年度產出）會大幅下降，導致 S2F 翻倍。歷史上，比特幣價格在減半後通常會遵循 S2F 曲線呈階梯式上漲。</p>
+
+                    <h3 class="not-prose analysis-h3">邊際生產成本模型 (Production Cost Model)</h3>
+                    <div class="mb-4">
+                        <a href="../knowledge/knl-production-cost.html" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                            <span>📚 深入解析：邊際生產成本</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <p>礦工是市場的主要賣方。若價格低於生產成本（主要是電費與硬體攤提），礦工會停機或惜售，從而形成強大的價格支撐位。</p>
+
+                    <!-- ────────────────────────────────────
+                         SECTION 4: 鏈上數據與進階量化模型
+                    ──────────────────────────────────── -->
+                    <h2 id="on-chain-models" class="not-prose indicator-h2">
+                        <span class="number-circle">4</span>
+                        <span class="title-main">鏈上數據與進階量化模型</span>
+                        <span class="title-sub">On-chain Data & Advanced Quant</span>
+                    </h2>
+
+                    <p>利用區塊鏈的透明性，我們可以避開市場噪音，直接分析投資者的持倉成本與心理狀態。</p>
+
+                    <h3 class="not-prose analysis-h3">MVRV 模型 (Market Value to Realized Value)</h3>
+                    <div class="mb-4">
+                        <a href="../knowledge/knl-mvrv-ratio.html" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                            <span>📚 深入解析：MVRV 比率</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <p>MVRV 衡量市值與實現市值（Realized Cap）的比率。其實現市值代表了全網持倉的平均成本。</p>
+                    <ul>
+                        <li><strong>MVRV > 3.7</strong>: 代表市場極度貪婪。</li>
+                        <li><strong>MVRV < 1.0</strong>: 代表投資者普遍虧損，通常是歷史性的大底。</li>
+                    </ul>
+
+                    <h3 class="not-prose analysis-h3">比特幣冪律模型 (Bitcoin Power Law)</h3>
+                    <div class="mb-4">
+                        <a href="../knowledge/knl-power-law.html" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                            <span>📚 深入解析：比特幣冪律模型</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <p>由物理學家推廣的冪律規律認為，比特幣的增長並非隨機，而是遵循自然界的物理規律，在對數座標軸上呈穩定的線性走廊。這為長期持有者提供了極佳的週期風險控管框架。</p>
+
+                    <h3 class="not-prose analysis-h3">宏觀流動性模型 (Global Liquidity Proxy)</h3>
+                    <div class="mb-4">
+                        <a href="../knowledge/knl-global-liquidity.html" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                            <span>📚 深入解析：宏觀流動性指標</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <p>比特幣是全球流動性的「靈敏度儀」。當央行擴表（G5 M2 增加）時，比特幣作為抗通膨資產會率先反應。在數位主權時代，它已成為觀察全球法幣體系健康度的關鍵指標。</p>
+
+                    <!-- ────────────────────────────────────
+                         SECTION 5: 綜合模型評估表
+                    ──────────────────────────────────── -->
+                    <h2 id="comparison-table" class="not-prose indicator-h2">
+                        <span class="number-circle">5</span>
+                        <span class="title-main">綜合模型評估表</span>
+                        <span class="title-sub">Model Comparison & Summary</span>
+                    </h2>
+
+                    <div class="not-prose responsive-table-wrapper my-10">
+                        <table class="w-full text-sm text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 dark:bg-slate-700/50 border-y border-slate-200 dark:border-slate-600">
+                                    <th class="px-4 py-4 font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">模型名稱</th>
+                                    <th class="px-4 py-4 font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">核心算法維度</th>
+                                    <th class="px-4 py-4 font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">預測目標</th>
+                                    <th class="px-4 py-4 font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">適合投資者</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-700/50">
+                                <tr>
+                                    <td class="px-4 py-4 font-bold text-slate-800 dark:text-slate-200">SoV 對標法</td>
+                                    <td class="px-4 py-4">市場滲透率</td>
+                                    <td class="px-4 py-4">長期終極價格 (5-10年)</td>
+                                    <td class="px-4 py-4">價值投資、HODLer</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 font-bold text-slate-800 dark:text-slate-200">梅特卡夫定律</td>
+                                    <td class="px-4 py-4">用戶增長</td>
+                                    <td class="px-4 py-4">網路內在價值</td>
+                                    <td class="px-4 py-4">成長型投資者</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 font-bold text-slate-800 dark:text-slate-200">S2F 模型</td>
+                                    <td class="px-4 py-4">供應稀缺性</td>
+                                    <td class="px-4 py-4">週期性高點</td>
+                                    <td class="px-4 py-4">趨勢跟隨者</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 font-bold text-slate-800 dark:text-slate-200">MVRV / MM</td>
+                                    <td class="px-4 py-4">成本與均值回歸</td>
+                                    <td class="px-4 py-4">牛熊頂底判定</td>
+                                    <td class="px-4 py-4">戰術型資產配置者</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 font-bold text-slate-800 dark:text-slate-200">冪律模型</td>
+                                    <td class="px-4 py-4">時間與規模</td>
+                                    <td class="px-4 py-4">價格區間通道</td>
+                                    <td class="px-4 py-4">長期風險控管</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- ────────────────────────────────────
+                         CONCLUSION
+                    ──────────────────────────────────── -->
+                    <div
+                        class="not-prose alert alert-analyst relative overflow-hidden my-16 shadow-lg border-l-4 border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 backdrop-blur-sm rounded-xl p-8">
+                        <div class="relative z-10">
+                            <div
+                                class="flex items-center gap-3 mb-6 border-b border-blue-200/50 dark:border-blue-700/50 pb-4">
+                                <div class="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
+                                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <strong
+                                    class="text-2xl text-blue-900 dark:text-blue-100 font-extrabold tracking-tight">Mason
+                                    Yang 總結</strong>
+                            </div>
+                            <p class="text-slate-700 dark:text-slate-200 leading-relaxed font-medium text-lg">
+                                單一模型皆有缺陷（例如 S2F 曾失效，SoV 法過於理想）。專業機構通常採用<strong>「模型共振」</strong>法：當 MVRV 顯示見底、挖礦成本提供支撐、且全球流動性開始轉向擴張時，便是最高勝率的入場點。
+                            </p>
+                            <p class="text-slate-700 dark:text-slate-200 leading-relaxed font-medium text-lg mt-4">
+                                比特幣的價值不再是玄學，而是一個可量化、可追蹤的數位網路經濟體。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- ────────────────────────────────────
+                         INTERACTIVE DASHBOARD: 2026 實戰估值預測
+                    ──────────────────────────────────── -->
+                    <h2 id="interactive-dashboard" class="not-prose indicator-h2">
+                        <span class="number-circle">6</span>
+                        <span class="title-main">2026 實戰估值預測</span>
+                        <span class="title-sub">Interactive Forecast Dashboard</span>
+                    </h2>
+
+                    <div class="not-prose my-10">
+                        <btc-valuation-dash id="main-dashboard"></btc-valuation-dash>
+                    </div>
+
+                </article>
+
+                <!-- Related Articles (Mobile bottom) -->
+                <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+            </div>
+
+            <!-- RIGHT SIDEBAR: Article Info Panel -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+
+                    <!-- Article Meta Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                文章資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-03-14</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">核心論述</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">閱讀時間</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">約 12 分鐘</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- Key Findings Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                核心結論</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">比特幣具備多重估值屬性，從儲值手段到網路經濟體。</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">冪律模型為長期持有者提供了穩定的價格走廊參考。</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">SoV 對標法揭示了比特幣相對於黃金的巨大上行潛力。</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Related Articles (Desktop sidebar) -->
+                    <div id="related-articles-sidebar"></div>
+
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../assets/js/core-header.js"></script>
+    <script src="../../assets/js/core-footer.js"></script>
+    <script src="../../assets/js/ui-toc-responsive.js"></script>
+    <script src="../../assets/js/ui-toc-desktop.js"></script>
+    <script src="../../assets/js/core-articles-data.js"></script>
+
+    <script>
+        /**
+         * BtcValuationDash Component
+         * Features: KPI Grid, Interactive Model Explorer, Price Corridor Chart
+         */
+        (function() {
+            class BtcValuationDash extends HTMLElement {
+                constructor() {
+                    super();
+                    this.attachShadow({ mode: 'open' });
+                    this._debug = false;
+                    this._activeModel = 'sov';
+                    this._charts = {};
+                }
+
+                set debug(val) { this._debug = !!val; return this; }
+                get debug() { return this._debug; }
+
+                connectedCallback() {
+                    this.render();
+                    this.initCharts();
+                }
+
+                render() {
+                    this.shadowRoot.innerHTML = `
+                        <style>
+                            :host { display: block; font-family: 'Inter', system-ui, sans-serif; }
+                            .dash-container { background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+                            .kpi-grid { display: grid; grid-template-cols: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1.5rem; background: var(--sub-bg, #f8fafc); border-bottom: 1px solid var(--border-color, #e2e8f0); }
+                            .kpi-card { padding: 1.25rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 1rem; border-top-width: 4px; transition: transform 0.2s; }
+                            .kpi-card:hover { transform: translateY(-2px); }
+                            .kpi-label { font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+                            .kpi-value { font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0.25rem 0; }
+                            
+                            .explorer-layout { display: flex; flex-direction: column; }
+                            @media (min-width: 1024px) { .explorer-layout { flex-direction: row; } }
+                            
+                            .explorer-nav { width: 100%; border-bottom: 1px solid #e2e8f0; background: #ffffff; }
+                            @media (min-width: 1024px) { .explorer-nav { width: 300px; border-bottom: none; border-right: 1px solid #e2e8f0; } }
+                            
+                            .nav-btn { width: 100%; text-align: left; padding: 1.25rem; border: none; background: none; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: all 0.2s; }
+                            .nav-btn:hover { background: #f8fafc; }
+                            .nav-btn.active { background: #f1f5f9; border-left: 4px solid #0d9488; }
+                            .btn-title { font-weight: 700; color: #1e293b; display: block; }
+                            .btn-sub { font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; }
+                            
+                            .explorer-content { flex: 1; padding: 2rem; background: #ffffff; }
+                            .model-info-box { margin-bottom: 1.5rem; }
+                            .model-title { font-size: 1.25rem; font-weight: 800; color: #0d9488; margin-bottom: 0.5rem; }
+                            .model-formula { display: inline-block; padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 0.5rem; font-family: monospace; font-size: 0.875rem; color: #475569; border: 1px solid #e2e8f0; margin-bottom: 1rem; }
+                            .model-desc { font-size: 0.95rem; line-height: 1.6; color: #475569; }
+                            
+                            .chart-box { height: 350px; position: relative; width: 100%; }
+                            
+                            .corridor-section { padding: 2rem; border-top: 1px solid #e2e8f0; background: #ffffff; }
+                            .corridor-grid { display: grid; grid-template-cols: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+                            .corridor-item { padding: 1.25rem; border-radius: 1rem; border: 1px solid transparent; }
+                            .floor { background: #fff1f2; border-color: #fecdd3; color: #9f1239; }
+                            .fair { background: #f0fdfa; border-color: #ccfbf1; color: #115e59; }
+                            .target { background: #eef2ff; border-color: #e0e7ff; color: #3730a3; }
+                            .item-label { font-weight: 700; margin-bottom: 0.5rem; display: block; }
+                            .item-value { font-size: 1.5rem; font-weight: 900; }
+                            
+                            /* Dark Mode Overrides */
+                            :host-context(.dark) .dash-container { background: #1e293b; border-color: #334155; }
+                            :host-context(.dark) .kpi-grid { background: #15202e; border-color: #334155; }
+                            :host-context(.dark) .kpi-card { background: #1e293b; border-color: #334155; }
+                            :host-context(.dark) .kpi-value { color: #f1f5f9; }
+                            :host-context(.dark) .explorer-nav { background: #1e293b; border-color: #334155; }
+                            :host-context(.dark) .nav-btn { border-color: #334155; }
+                            :host-context(.dark) .nav-btn:hover { background: #334155; }
+                            :host-context(.dark) .nav-btn.active { background: #334155; border-left-color: #2dd4bf; }
+                            :host-context(.dark) .btn-title { color: #f1f5f9; }
+                            :host-context(.dark) .explorer-content { background: #1e293b; }
+                            :host-context(.dark) .model-title { color: #2dd4bf; }
+                            :host-context(.dark) .model-formula { background: #334155; color: #cbd5e1; border-color: #475569; }
+                            :host-context(.dark) .model-desc { color: #cbd5e1; }
+                            :host-context(.dark) .corridor-section { background: #1e293b; border-color: #334155; }
+                            :host-context(.dark) .floor { background: rgba(159, 18, 57, 0.2); border-color: #9f1239; color: #fda4af; }
+                            :host-context(.dark) .fair { background: rgba(17, 94, 89, 0.2); border-color: #115e59; color: #5eead4; }
+                            :host-context(.dark) .target { background: rgba(55, 48, 163, 0.2); border-color: #3730a3; color: #c7d2fe; }
+                        </style>
+                        
+                        <div class="dash-container">
+                            <!-- KPI Grid -->
+                            <div class="kpi-grid">
+                                <div class="kpi-card" style="border-top-color: #fbbf24;">
+                                    <div class="kpi-label">黃金總市值 (TAM)</div>
+                                    <div class="kpi-value">36.8T</div>
+                                    <div class="kpi-label">~$5,170/oz</div>
+                                </div>
+                                <div class="kpi-card" style="border-top-color: #6366f1;">
+                                    <div class="kpi-label">全球 M2 供應量</div>
+                                    <div class="kpi-value">99.8T</div>
+                                    <div class="kpi-label">2026 預估</div>
+                                </div>
+                                <div class="kpi-card" style="border-top-color: #14b8a6;">
+                                    <div class="kpi-label">BTC 流通量</div>
+                                    <div class="kpi-value">1,980W</div>
+                                    <div class="kpi-label">當前基準</div>
+                                </div>
+                                <div class="kpi-card" style="border-top-color: #f43f5e;">
+                                    <div class="kpi-label">創世以來天數</div>
+                                    <div class="kpi-value">6,280d</div>
+                                    <div class="kpi-label">BTC Age</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Explorer -->
+                            <div class="explorer-layout">
+                                <div class="explorer-nav">
+                                    <button class="nav-btn active" data-model="sov">
+                                        <span class="btn-title">數位黃金對標法 (SoV)</span>
+                                        <span class="btn-sub">基於黃金市值預期滲透率</span>
+                                    </button>
+                                    <button class="nav-btn" data-model="m2">
+                                        <span class="btn-title">全球法幣對沖模型</span>
+                                        <span class="btn-sub">M2 貨幣擴張避險資金</span>
+                                    </button>
+                                    <button class="nav-btn" data-model="powerlaw">
+                                        <span class="btn-title">比特幣冪律模型</span>
+                                        <span class="btn-sub">時間與價格的對數回歸走廊</span>
+                                    </button>
+                                    <button class="nav-btn" data-model="s2f">
+                                        <span class="btn-title">庫存流量比 (S2F)</span>
+                                        <span class="btn-sub">稀缺性驅動之價值</span>
+                                    </button>
+                                </div>
+                                
+                                <div class="explorer-content">
+                                    <div class="model-info-box">
+                                        <div class="model-title" id="m-title">數位黃金對標法 (SoV Model)</div>
+                                        <div class="model-formula" id="m-formula">P = (36.8T &times; &omega;) / 2,100萬</div>
+                                        <div class="model-desc" id="m-desc">比特幣目前約佔黃金市值的 3.8%。若機構滲透率增長，達到保守的 5% 份額將推升價格至 $87,600；若達到中期目標的 17% 份額，價格將逼近 $300,000。</div>
+                                    </div>
+                                    <div class="chart-box">
+                                        <canvas id="explorer-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Corridor -->
+                            <div class="corridor-section">
+                                <div class="model-title" style="color: #1e293b; margin-bottom: 1.5rem;">⚖️ 2026 綜合價格走廊 (Price Corridor)</div>
+                                <div class="corridor-grid">
+                                    <div class="corridor-item floor">
+                                        <span class="item-label">底部支撐 (Floor)</span>
+                                        <span class="item-value">$65k - $72k</span>
+                                    </div>
+                                    <div class="corridor-item fair">
+                                        <span class="item-label">短期公允 (Fair)</span>
+                                        <span class="item-value">$85k - $110k</span>
+                                    </div>
+                                    <div class="corridor-item target">
+                                        <span class="item-label">牛市目標 (Target)</span>
+                                        <span class="item-value">$140k - $290k</span>
+                                    </div>
+                                </div>
+                                <div class="chart-box" style="height: 250px;">
+                                    <canvas id="corridor-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    this.shadowRoot.querySelectorAll('.nav-btn').forEach(btn => {
+                        btn.addEventListener('click', () => this.switchModel(btn.dataset.model));
+                    });
+                }
+
+                initCharts() {
+                    const ctxE = this.shadowRoot.getElementById('explorer-chart').getContext('2d');
+                    const ctxC = this.shadowRoot.getElementById('corridor-chart').getContext('2d');
+                    
+                    const modelData = {
+                        sov: {
+                            title: '數位黃金對標法 (SoV Model)',
+                            formula: 'P = (36.8T &times; &omega;) / 2,100萬',
+                            desc: '比特幣目前約佔黃金市值的 3.8%。若機構滲透率增長，達到保守的 5% 份額將推升價格至 $87,600；若達到中期目標的 17% 份額，價格將逼近 $300,000。',
+                            labels: ['當前基準', '保守 (5%)', '中期 (17%)'],
+                            data: [70000, 87600, 297900],
+                            colors: ['#cbd5e1', '#0d9488', '#0f766e']
+                        },
+                        m2: {
+                            title: '全球法幣對沖模型 (M2 Hedge)',
+                            formula: 'P = (100T &times; &omega;) / 2,100萬',
+                            desc: '在全球 100 兆美元的 M2 供應中，如果僅有 3% 的流動資產為了規避法幣貶值而配置比特幣，價格將翻倍突破 14 萬美元。',
+                            labels: ['當前基準', '對沖 (3%)'],
+                            data: [70000, 142800],
+                            colors: ['#cbd5e1', '#4f46e5']
+                        },
+                        powerlaw: {
+                            title: '比特幣冪律模型 (Power Law)',
+                            formula: 'Price = 10⁻¹⁷ &times; (Days)⁵.⁸',
+                            desc: '2026 年底的中軸公允價值預估在 10.5 萬美元。目前 7 萬美元的價格處於走廊下沿，具備高度安全邊際。',
+                            labels: ['支撐下沿', '當前現況', '中軸公允', '阻力上沿'],
+                            data: [72000, 70000, 105000, 210000],
+                            colors: ['#f43f5e', '#cbd5e1', '#0ea5e9', '#8b5cf6']
+                        },
+                        s2f: {
+                            title: '庫存流量比模型 (S2F)',
+                            formula: '理論峰值：$100k - $250k',
+                            desc: '減半後的稀缺性已超過黃金。根據 S2F 曲線推估，2026 年的理論波動峰值區間應落在 10 萬至 25 萬美元之間。',
+                            labels: ['當前基準', 'S2F 下限', 'S2F 上限'],
+                            data: [70000, 100000, 250000],
+                            colors: ['#cbd5e1', '#f59e0b', '#d97706']
+                        }
+                    };
+
+                    this._modelData = modelData;
+                    
+                    this._charts.explorer = new Chart(ctxE, {
+                        type: 'bar',
+                        data: {
+                            labels: modelData.sov.labels,
+                            datasets: [{
+                                data: modelData.sov.data,
+                                backgroundColor: modelData.sov.colors,
+                                borderRadius: 8,
+                                maxBarThickness: 50
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                y: { beginAtZero: true, grid: { color: 'rgba(200, 200, 200, 0.1)' }, ticks: { callback: v => '$' + (v/1000) + 'k' } },
+                                x: { grid: { display: false } }
+                            }
+                        }
+                    });
+
+                    this._charts.corridor = new Chart(ctxC, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Floor', 'Fair', 'Target'],
+                            datasets: [{
+                                data: [[65000, 72000], [85000, 110000], [140000, 290000]],
+                                backgroundColor: ['#f43f5e', '#14b8a6', '#6366f1'],
+                                borderRadius: 8,
+                                barPercentage: 0.6
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { beginAtZero: true, grid: { color: 'rgba(200, 200, 200, 0.1)' }, ticks: { callback: v => '$' + (v/1000) + 'k' } },
+                                y: { grid: { display: false } }
+                            }
+                        }
+                    });
+                }
+
+                switchModel(key) {
+                    const data = this._modelData[key];
+                    this.shadowRoot.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.model === key));
+                    
+                    this.shadowRoot.getElementById('m-title').innerHTML = data.title;
+                    this.shadowRoot.getElementById('m-formula').innerHTML = data.formula;
+                    this.shadowRoot.getElementById('m-desc').innerHTML = data.desc;
+                    
+                    this._charts.explorer.data.labels = data.labels;
+                    this._charts.explorer.data.datasets[0].data = data.data;
+                    this._charts.explorer.data.datasets[0].backgroundColor = data.colors;
+                    this._charts.explorer.update();
+                }
+            }
+            customElements.define('btc-valuation-dash', BtcValuationDash);
+        })();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Layout Shell
+            const header = new HeaderComponent();
+            header.setHomeUrl('../../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // Desktop TOC
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // Mobile TOC
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // Related Articles
+            if (window.RelatedArticlesComponent) {
+                new RelatedArticlesComponent().init();
+            }
+
+            // Scroll Events
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+        });
+    </script>
+
+</body>
+
+</html>

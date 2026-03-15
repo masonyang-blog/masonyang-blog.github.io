@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全球法幣對沖模型 (M2 Hedge Model) - Crypto Knowledge Base</title>
+    <meta name="description" content="衡量比特幣作為對沖全球貨幣供應量 (M2) 擴張與購買力貶值的核心工具。">
+    <meta name="keywords" content="M2, 貨幣供應量, 比特幣估值, 法幣對沖, 通貨膨脹, 投資百科">
+
+    <!-- Theme Core -->
+    <script src="../assets/js/core-theme.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { slate: { 850: '#15202e' } }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        h2[id], h3[id], section[id] { scroll-margin-top: 6rem; }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-knowledge-id="knl-m2-hedge">
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+    <div id="header-host"></div>
+
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">目錄導覽</p>
+                    <div id="toc-desktop-host"></div>
+                </div>
+            </aside>
+
+            <div class="flex-1 min-w-0">
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html" class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg></li>
+                        <li><a href="../post/topic-knowledge.html" class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">知識百科</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">全球法幣對沖模型</li>
+                    </ol>
+                </nav>
+
+                <header class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span class="px-2.5 py-1 bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 rounded-full text-xs font-bold uppercase tracking-wide">宏觀經濟</span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">最後更新：2026-03-15</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        全球法幣對沖模型 (M2 Hedge Model)
+                    </h1>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                        認為比特幣不是在漲價，而是「法幣在跌價」。該模型通過將比特幣市值與全球廣義貨幣供應量 (M2) 關聯，衡量其吸收貨幣流動性、對沖貶值的能力。
+                    </p>
+                </header>
+
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <article class="article-body bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6">
+
+                    <section class="mb-12">
+                        <h2 id="importance" class="not-prose indicator-h2">
+                            <span class="number-circle">1</span>
+                            <span class="title-main">為什麼這個模型很重要？</span>
+                        </h2>
+                        <p>在信用貨幣體系下，全球 M2 年化增長率往往超過經濟實際增速。長期來看，持有法幣就是持有「不斷縮水的資產」。比特幣因其絕對稀缺性，成為了法幣擴張背景下的最強力海綿。</p>
+                        <div class="not-prose bg-slate-50 dark:bg-slate-900/50 border-l-4 border-violet-500 p-6 rounded-r-xl">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">💡 核心價值</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm">它是理解「牛市主升浪通常與貨幣放水同步」的底層逻辑。</p>
+                        </div>
+                    </section>
+
+                    <section class="mb-12">
+                        <h2 id="impact" class="not-prose indicator-h2">
+                            <span class="number-circle">2</span>
+                            <span class="title-main">對投資收益與風險的影響</span>
+                        </h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div class="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-xl">💰</div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">收益影響 (Yield)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-grow">
+                                    在印鈔週期中持有比特幣，能實現購買力的「階梯式跨越」，而不僅僅是名義資產的增加。
+                                </p>
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center text-xl">🛡️</div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">風險影響 (Risk)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-grow">
+                                    當央行轉向緊縮 (QT) 且 M2 增速放緩甚至轉負時，資產估值將面臨劇烈回撤壓力。
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="mb-12">
+                        <h2 id="5w1h" class="not-prose indicator-h2">
+                            <span class="number-circle">3</span>
+                            <span class="title-main">深入解析：5W1H 模型</span>
+                        </h2>
+                        <div class="not-prose overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-6">
+                            <table class="w-full text-left border-collapse bg-white dark:bg-slate-800">
+                                <tbody class="text-sm">
+                                    <tr class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">Who / What</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>定義：</strong>P = (M2_global &times; &omega;) / 2,100萬。比特幣是法幣系統的溢價捕獲器。</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">Why</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>原因：</strong>法幣供應量無上限，比特幣總量恆定。資產定價是兩者稀缺度的博弈。</td>
+                                    </tr>
+                                    <tr class="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">How</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>傳導：</strong>央行擴表 -> 市場流動性氾濫 -> 稀缺資產（比特幣）名義價格飆升。</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="mb-12">
+                        <h2 id="association" class="not-prose indicator-h2">
+                            <span class="number-circle">4</span>
+                            <span class="title-main">聯想與市場連動</span>
+                        </h2>
+                        <div class="not-prose pl-6 border-l-2 border-indigo-200 dark:border-indigo-800 space-y-8 mt-8">
+                            <div class="relative">
+                                <div class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-indigo-500 border-4 border-white dark:border-slate-800 shadow-sm"></div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">訊號觸發 (Trigger)</h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm bg-slate-50 dark:bg-slate-900/40 p-4 rounded-lg">
+                                    Fed 反轉降息政策，全球 G5 國家同時開啟擴表模式。
+                                </p>
+                            </div>
+                            <div class="relative">
+                                <div class="absolute -left-[33px] top-0 w-4 h-4 rounded-full bg-indigo-300 dark:bg-indigo-600 border-4 border-white dark:border-slate-800 shadow-sm"></div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">市場反應 (Reaction)</h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm bg-slate-50 dark:bg-slate-900/40 p-4 rounded-lg">
+                                    全球流動性增加，比特幣作為「流動性海綿」會領先納斯達克開始拉升。
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="mb-12">
+                        <h2 id="action" class="not-prose indicator-h2">
+                            <span class="number-circle">5</span>
+                            <span class="title-main">建議行動指南</span>
+                        </h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                            <div class="p-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/50">
+                                <span class="block text-xs font-bold text-blue-600 dark:text-blue-400 uppercase mb-2">觀察</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">監控 G5 國家 M2 增長率動量 (MoM Change)。</p>
+                            </div>
+                            <div class="p-5 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-100 dark:border-amber-800/50">
+                                <span class="block text-xs font-bold text-amber-600 dark:text-amber-400 uppercase mb-2">判斷</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">M2 轉為加速擴張時，是增加 Beta 資產（BTC/ETH）的最佳窗口。</p>
+                            </div>
+                            <div class="p-5 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
+                                <span class="block text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase mb-2">執行</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">建立法幣本位與購買力本位的雙重記帳，確保資產跑贏放水速度。</p>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+
+                <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+            </div>
+
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+                    <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">知識資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-03-15</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <div id="footer-host"></div>
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new HeaderComponent().setHomeUrl('../index.html').init();
+            new FooterComponent().init();
+            if (typeof ArticleTOC !== 'undefined') { new ArticleTOC().init(); }
+            if (window.ResponsiveTocComponent) { new ResponsiveTocComponent().init(); }
+        });
+    </script>
+</body>
+</html>

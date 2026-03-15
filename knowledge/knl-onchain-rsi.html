@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly RSI (Relative Strength Index) - Crypto Knowledge Base</title>
+    <meta name="description" content="深入解析比特幣月線 RSI 動能指標，判斷長期市場的超買與超賣狀態，精準捕捉週期性的底部分佈與頂部獲利區間。">
+    <meta name="keywords" content="Monthly RSI, 相對強弱指標, 比特幣動能, 超買超賣, 鏈上數據, 投資知識">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-knowledge-id="knl-onchain-rsi">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- MAIN: Three-Column Layout (lg+: [Left TOC] [Article] [Right Sidebar]) -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽</p>
+                    <div id="toc-desktop-host"></div>
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="../post/topic-knowledge.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">知識百科</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">Monthly RSI</li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header Card ── -->
+                <header
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            ON-CHAIN
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            最後更新：<time datetime="2026-03-15">2026-03-15</time>
+                        </span>
+                    </div>
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        月線 RSI 動能指標 (Monthly RSI)
+                    </h1>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                        相對強弱指標 (RSI) 是技術分析中最經典的動能指標。而在比特幣月線級別上，RSI 指標能有效過濾掉短期的價格雜訊，揭示市場長期「超買」狂熱與「超賣」恐慌的極端區間。
+                    </p>
+                </header>
+
+                <!-- ── Mobile TOC Target ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- ── Article Body Card ── -->
+                <article
+                    class="article-body bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <!-- 1. Why it Matters -->
+                    <section class="mb-12">
+                        <h2 id="importance" class="not-prose indicator-h2">
+                            <span class="number-circle">1</span>
+                            <span class="title-main">為什麼這個知識很重要？</span>
+                        </h2>
+                        <p>投資中最難的是「擇時」（Timing）。月線 RSI 提供了一個宏觀的時間感。它告訴投資者，當前的市場是處於剛啟動的牛市初期、還是接近末尾的瘋狂期。雖然它不能告訴你精確的價格底部，但它能告訴你「動能」何時已經接近極限，從而避免在市場最瘋狂時接盤，或在最絕望時離場。</p>
+                        <div
+                            class="not-prose bg-slate-50 dark:bg-slate-900/50 border-l-4 border-emerald-500 p-6 rounded-r-xl">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">💡 核心價值</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm">
+                                月線 RSI 是過濾情緒噪音、定錨長期動能趨勢的利器。
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 2. Impact on Yield/Risk -->
+                    <section class="mb-12">
+                        <h2 id="impact" class="not-prose indicator-h2">
+                            <span class="number-circle">2</span>
+                            <span class="title-main">對投資收益與風險的影響</span>
+                        </h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-xl">
+                                        ⚡</div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">收益影響 (Yield)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-grow">
+                                    當月線 RSI 從「超賣區」（通常 < 40-50）底部反彈時，往往標誌著新一輪長線行情的主升段即將開啟。
+                                </p>
+                            </div>
+                            <div
+                                class="bg-slate-50 dark:bg-slate-700/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center text-xl">
+                                        🛑</div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">風險影響 (Risk)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-grow">
+                                    一旦月線 RSI 突破 80 甚至進入 90 的「極度狂熱區」，市場的購買力已經透支，此時任何風吹草動都可能引發劇烈的回撤。
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. 5W1H Analysis -->
+                    <section class="mb-12">
+                        <h2 id="5w1h" class="not-prose indicator-h2">
+                            <span class="number-circle">3</span>
+                            <span class="title-main">深入解析：5W1H 模型</span>
+                        </h2>
+                        <div
+                            class="not-prose overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-6">
+                            <table class="w-full text-left border-collapse bg-white dark:bg-slate-800">
+                                <tbody class="text-sm">
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            What</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>定義：</strong>
+                                            衡量一定時期內價格上漲幅度與下跌幅度的相對強度，數值為 0-100。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            When</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>時機：</strong>
+                                            每月收盤後數據最為關鍵，用來判斷下一個月甚至下一季度的方向。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Where</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>來源：</strong>
+                                            TradingView 或各大金融網站的 K 線圖表。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Why</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>原理：</strong>
+                                            反映了市場買家與賣家力量的消長。長期低迷後的回升通常代表買盤回歸。</td>
+                                    </tr>
+                                    <tr class="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            How</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>指標：</strong>
+                                             RSI < 45 = 超賣/低估；45-70 = 健康成長； > 80 = 極度超買。</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- 4. Mental Model / Association -->
+                    <section class="mb-12">
+                        <h2 id="association" class="not-prose indicator-h2">
+                            <span class="number-circle">4</span>
+                            <span class="title-main">聯想與市場連動</span>
+                        </h2>
+                        <p>想像這是一台車的「轉速表」：</p>
+                        <ul class="space-y-4">
+                            <li><strong>低 RSI (40以下)</strong>：代表引擎熄火或正在怠速，但也意味著它隨時可以重新踩油門加速。</li>
+                            <li><strong>高 RSI (80以上)</strong>：代表轉速表已經進入「紅線區」。雖然車還在跑，但引擎隨時會過熱爆缸。</li>
+                        </ul>
+                    </section>
+
+                    <!-- 5. Actionable Advice -->
+                    <section class="mb-12">
+                        <h2 id="action" class="not-prose indicator-h2">
+                            <span class="number-circle">5</span>
+                            <span class="title-main">建議行動指南</span>
+                        </h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                            <div
+                                class="p-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/50">
+                                <span class="block text-xs font-bold text-blue-600 dark:text-blue-400 uppercase mb-2">佈局期
+                                    (Accumulate)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">當月線 RSI 處於 40-50 之間徘徊時，通常是下行風險被債縮的冷卻區。</p>
+                            </div>
+                            <div
+                                class="p-5 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-100 dark:border-amber-800/50">
+                                <span
+                                    class="block text-xs font-bold text-amber-600 dark:text-amber-400 uppercase mb-2">起跑點
+                                    (Start)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">一旦月線 RSI 重新站回 50 以上，通常代表多頭重新掌握了主導權。</p>
+                            </div>
+                            <div
+                                class="p-5 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
+                                <span
+                                    class="block text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase mb-2">獲利期
+                                    (Profit)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">當 RSI 進入 85 以上，歷史證據顯示這通常是比特幣牛市最後的衝刺期。</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Footer Disclaimer -->
+                    <div
+                        class="not-prose mt-12 pt-8 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。加密貨幣投資屬高風險，請謹謹慎評估。</p>
+                        <p class="mt-4">
+                            前往 <a href="../post/topic-btc-sovereign-liquidity.html"
+                                class="text-blue-600 dark:text-blue-400 font-bold hover:underline">主權流動性專題</a>
+                            查看動能指標如何輔助鏈上數據進行底部確認。
+                        </p>
+                    </div>
+
+                </article>
+
+                <!-- Related Articles (Mobile bottom) -->
+                <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+            </div>
+            <!-- /END Center Column -->
+
+            <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+
+                    <!-- A. Article Meta Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                知識資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-03-15</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">動能指標 (Momentum)</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- B. Key Findings Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                核心重點</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">RSI 43 左右是歷史週期的「超賣冷卻區」</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">突破 80 往往標誌著長線投資者的最佳離場時機</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- C. Related Articles (Desktop sidebar) -->
+                    <div id="related-articles-sidebar"
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                延伸閱讀</p>
+                        </div>
+                        <div id="related-knowledge-sidebar-host"></div>
+                    </div>
+
+                </div>
+            </aside>
+            <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Header & Footer
+            new HeaderComponent().setHomeUrl('../index.html').init();
+            new FooterComponent().init();
+
+            // TOC
+            if (typeof ArticleTOC !== 'undefined') { new ArticleTOC().init(); }
+            if (window.ResponsiveTocComponent) { new ResponsiveTocComponent().init(); }
+
+            // Scroll Events
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                if (progressBar) { progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%'; }
+
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) { bttSidebarBtn.classList.toggle('hidden', !isScrolled); }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+        });
+    </script>
+</body>
+
+</html>

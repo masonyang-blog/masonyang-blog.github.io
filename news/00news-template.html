@@ -1,0 +1,573 @@
+<!-- ==========================================================================
+     📰 時事新聞 / 分析文章 專用樣板 v3 (Three-Column Layout)
+     使用指南：
+     1. 建立檔案：複製本檔並命名為 news-YYYYMMDD-[主題].html 放置於 news/ 目錄。
+     2. 綁定 ID ：在 <body> 標籤設定 data-article-id="..." (須與檔名、core-news-data.js 內 ID 一致)。
+     3. 配置路徑：本範本預設 assets 路徑為 ../../assets/ (適用於 news/ 目錄)。
+     4. 資料註冊庫：存檔後，至 assets/js/core-news-data.js 新增對應資料，以連動全站搜尋系統。
+     5. Sitemap 更新：手動將新頁面網址加入根目錄的 sitemap.xml。
+     
+     頁面架構：
+     - 左側欄 (lg+)：[#toc-desktop-host] 桌面版 sticky 目錄。
+     - 中央主欄：[#toc-mobile-target] 行動版 TOC + 文章本體 [article-body]。
+     - 右側欄 (lg+)：文章資訊面板 (作者、日期、標籤、延伸閱讀)。
+     
+     組件初始化 (JS)：
+     - new HeaderComponent().setHomeUrl('../../index.html').init();
+     - new ArticleTOC().init(); // 桌面目錄
+     - new ResponsiveTocComponent().init(); // 行動目錄
+     
+     維護規範：
+     - 禁止行內樣式，表格必須用 <div>.responsive-table-wrapper 包裹。
+     - 錨點位移由 CSS scroll-margin-top 處理。
+     - 修改全站字串嚴禁使用 PowerShell Get-Content，請務必使用 Python (utf-8)。
+     ========================================================================== -->
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[文章標題] - Mason Yang Blog</title>
+    <meta name="description" content="[150字以內的文章摘要，用於搜尋引擎顯示]">
+    <meta name="keywords" content="[關鍵字1], [關鍵字2], [關鍵字3], 加密貨幣, 宏觀分析">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="news-YYYYMMDD-kebab-id">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+
+                    <!-- ArticleTOC renders here -->
+                    <div id="toc-desktop-host"></div>
+
+                    <!-- Back to top (sidebar) -->
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="../post/archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">主題文章</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">[文章標題]</li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header ── -->
+                <header
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <!-- Category + Date -->
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            [分類：市場分析 / 投資策略 / 前沿技術]
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            <time datetime="YYYY-MM-DD">YYYY-MM-DD</time>
+                        </span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 [N] 分鐘閱讀</span>
+                    </div>
+
+                    <!-- H1 -->
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        [文章主標題：完整且具 SEO 競爭力的關鍵字組合]
+                    </h1>
+
+                    <!-- Subtitle / Hook -->
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        [副標題或導引說明：解釋文章視角、覆蓋的核心問題]
+                    </p>
+
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#[標籤1]</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#[標籤2]</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#[標籤3]</span>
+                    </div>
+                </header>
+
+                <!-- ── Mobile TOC Target (行動版) ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- ── Article Body ── -->
+                <article
+                    class="article-body bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <!-- ── Lead Paragraph (前導引言) ── -->
+                    <p
+                        class="not-prose lead text-xl text-slate-700 dark:text-slate-200 font-medium leading-relaxed border-l-4 border-blue-500 pl-6 py-2 bg-blue-50/50 dark:bg-blue-900/10 rounded-r-lg mb-12">
+                        [前導引言：1-2句最強的 hook，點出文章最核心的洞察或結論。讓讀者知道「讀完這篇文章，他會得到什麼」。]
+                    </p>
+
+                    <!-- ────────────────────────────────────
+                         SECTION 1
+                    ──────────────────────────────────── -->
+                    <h2 id="section-1" class="not-prose indicator-h2">
+                        <span class="number-circle">1</span>
+                        <span class="title-main">[主標題名稱]</span>
+                        <span class="title-sub">[副標題重點]</span>
+                    </h2>
+
+                    <p>[段落一：描述指標背景、邏輯鏈，讀者為何需要關注這個面向。]</p>
+                    218:
+                    <h3 class="not-prose analysis-h3">[次標題：深化分析或延伸點]</h3>
+
+                    <!-- Chart Figure (Hover Image) -->
+                    <figure class="not-prose my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 dark:border-slate-600 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="news-pic/[圖片檔名].png" alt="[圖片替代文字]"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 dark:text-slate-400 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            [圖表名稱與說明] (資料來源：[來源])
+                        </figcaption>
+                    </figure>
+
+                    <!-- Analysis Cards（歷史判讀 + 現況推論） -->
+                    <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+                        <div
+                            class="bg-slate-50 dark:bg-slate-700/50 p-6 rounded-xl border border-slate-200 dark:border-slate-600">
+                            <h4 class="text-blue-700 dark:text-blue-300 font-bold mb-3 flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                圖表判讀與歷史覆盤
+                            </h4>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                [從歷史數據說明：哪個時間點是關鍵？對比歷史數據的意義。]
+                            </p>
+                        </div>
+                        <div
+                            class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-xl border border-blue-100 dark:border-blue-800">
+                            <h4 class="text-blue-900 dark:text-blue-200 font-bold mb-3 flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-700 rounded-full"></span>
+                                現況分析與未來推論
+                            </h4>
+                            <p class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">
+                                [基於當前數據的判斷、未來情境的推論，以及對讀者的行動建議。]
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- ────────────────────────────────────
+                         SECTION 2
+                    ──────────────────────────────────── -->
+                    <h2 id="section-2" class="not-prose indicator-h2">
+                        <span class="number-circle">2</span>
+                        <span class="title-main">[第二主標題]</span>
+                        <span class="title-sub">[第二副標題]</span>
+                    </h2>
+
+                    <p>[段落內容...]</p>
+
+                    <!-- 可複製以上 Section 結構繼續擴充 -->
+                    <!-- SECTION 3, 4, 5 ... -->
+
+                    <!-- ────────────────────────────────────
+                         Part 2: 文章分析 (Article Analysis)
+                    ──────────────────────────────────── -->
+                    <div class="not-prose mt-16 border-t-2 border-slate-100 dark:border-slate-700 pt-10">
+                        <h2
+                            class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-8 border-l-4 border-blue-600 pl-4">
+                            文章分析
+                        </h2>
+
+                        <!-- Analysis Area 1 -->
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-6">[分析面向一：例如 推論方式分析]
+                        </h3>
+                        <p class="mb-6 text-slate-700 dark:text-slate-300">[面向一引言說明]</p>
+
+                        <div class="space-y-8 pl-4 border-l-2 border-slate-100 dark:border-slate-700">
+                            <div>
+                                <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-3 text-lg">[分析點 1.1]</h4>
+                                <ul class="space-y-2 text-slate-700 dark:text-slate-300 list-disc pl-5">
+                                    <li><strong>[項目小標]</strong>：[項目內容]</li>
+                                    <li class="mt-2 text-blue-700 dark:text-blue-400 font-medium">↳ [小結或推論]</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- ────────────────────────────────────
+                             CONCLUSION BLOCK (Mason Yang 評論)
+                        ──────────────────────────────────── -->
+                        <div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-700">
+                            <div class="flex items-center gap-2 mb-4">
+                                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <strong class="text-xl text-slate-900 dark:text-slate-100 m-0 font-bold">Mason Yang
+                                    評論</strong>
+                            </div>
+                            <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-lg mb-4">
+                                [綜合總結段落一：總結原作者觀點的優缺點或核心價值。]
+                            </p>
+                            <p
+                                class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-lg p-6 bg-slate-50 dark:bg-slate-900/40 rounded-xl border-l-4 border-blue-500">
+                                [總結段落二：提出你個人獨特的見解或更合理的框架。]
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- References & Disclaimer -->
+                    <div
+                        class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">參考資料 (References)</p>
+                        <p class="mb-3 text-slate-500 dark:text-slate-400">[資料來源一 / 資料來源二]</p>
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。加密貨幣投資屬高風險，請謹慎評估。</p>
+                        <p>FRED 聲明：本產品使用了 FRED API，但並未獲得聖路易斯聯邦儲備銀行的認可或認證。</p>
+                    </div>
+
+                </article>
+
+                <!-- Related Articles (Mobile bottom) -->
+                <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+            </div>
+            <!-- /END Center Column -->
+
+            <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+
+                    <!-- A. Article Meta Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                文章資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">YYYY-MM-DD</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">[市場分析 / 投資策略 / 前沿技術]
+                                </dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">閱讀時間</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">約 [N] 分鐘</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- B. Key Findings Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                核心結論</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">[核心結論一]</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">[核心結論二]</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">[核心結論三]</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- C. Tags -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                相關標籤</p>
+                        </div>
+                        <div class="px-4 py-3 flex flex-wrap gap-1.5">
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#[標籤1]</span>
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#[標籤2]</span>
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#[標籤3]</span>
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#[標籤4]</span>
+                        </div>
+                    </div>
+
+                    <!-- D. Related Articles (Desktop sidebar) -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                延伸閱讀</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li>
+                                <a href="#"
+                                    class="flex items-start gap-2 px-4 py-3 text-xs text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 mt-0.5 shrink-0"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    [相關文章標題一]
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="flex items-start gap-2 px-4 py-3 text-xs text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 mt-0.5 shrink-0"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    [相關文章標題二]
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="flex items-start gap-2 px-4 py-3 text-xs text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 mt-0.5 shrink-0"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    [相關文章標題三]
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </aside>
+            <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button (fixed, bottom-right) -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- =========================================================
+         Scripts
+    ========================================================= -->
+    <script src="../../assets/js/core-header.js"></script>
+    <script src="../../assets/js/core-footer.js"></script>
+    <script src="../../assets/js/ui-toc-responsive.js"></script>
+    <script src="../../assets/js/ui-toc-desktop.js"></script>
+    <script src="../../assets/js/widget-related-articles.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. Layout Shell ───────────────────────────────────
+            const header = new HeaderComponent();
+            header.setHomeUrl('../../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // ── 3. Mobile TOC ──────────────────────────────────────
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // ── Related Articles (Mobile) ──────────────────────────
+            if (window.WidgetRelatedArticles) {
+                new WidgetRelatedArticles(
+                    document.getElementById('related-articles-container'),
+                    document.body.getAttribute('data-article-id')
+                ).init();
+            }
+
+            // ── 4. Scroll Events ───────────────────────────────────
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                // Progress bar
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+
+                // Back to top (show after 500px)
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+
+        });
+    </script>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "headline": "[文章標題]",
+      "description": "[文章摘要]",
+      "datePublished": "YYYY-MM-DD",
+      "dateModified": "YYYY-MM-DD",
+      "author": {
+        "@type": "Person",
+        "name": "Mason Yang"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Mason Yang Blog",
+        "url": "https://lmybtc.github.io"
+      },
+      "url": "https://lmybtc.github.io/news/[檔名].html"
+    }
+    </script>
+
+</body>
+
+</html>

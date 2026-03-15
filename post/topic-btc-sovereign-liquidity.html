@@ -1,0 +1,677 @@
+<!-- ==========================================================================
+     範本名稱：分析文章 / 時事新聞 專用範本 v3 (Three-Column Layout)
+     頁面架構：
+     - 左側欄 (lg+)：[#toc-desktop-host] 桌面版 sticky 目錄。
+     - 中央主欄：[#toc-mobile-target] 行動版 TOC + 文章本體 [article-body]。
+     - 右側欄 (lg+)：文章資訊面板 (作者、日期、標籤、延伸閱讀)。
+     ========================================================================== -->
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五大鏈上指標共振：為什麼現在可能是比特幣的週期低點？ - Mason Yang Blog</title>
+    <meta name="description"
+        content="從 MVRV Z-Score、2年均線乘數、Power Law、RSI 到彩虹圖，深度解析為何當前市場處於絕佳的低估買入區間。 - Mason Yang Blog">
+    <meta name="keywords"
+        content="市場分析, 比特幣週期, 鏈上數據, MVRV Z-Score, 2-Year MA Multiplier, Power Law Corridor, Monthly RSI, Rainbow Chart, 加密貨幣, 投資策略">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200"
+    data-article-id="topic-btc-sovereign-liquidity">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+
+                    <!-- ArticleTOC renders here -->
+                    <div id="toc-desktop-host"></div>
+
+                    <!-- Back to top (sidebar) -->
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">主題文章</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">BTC 週期低點分析
+                        </li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header ── -->
+                <header
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <!-- Category + Date -->
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            市場分析
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            <time datetime="2026-03-05">2026-03-05</time>
+                        </span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 12 分鐘閱讀</span>
+                    </div>
+
+                    <!-- H1 -->
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        五大鏈上指標共振：為什麼現在可能是比特幣的週期低點？
+                    </h1>
+
+                    <!-- Subtitle / Hook -->
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        從 MVRV Z-Score、2年移動平均線乘數、Power Law 通道，再到 RSI 動能指標與彩虹圖模型，深度解析為何當前市場處於絕佳的低估買入區間。
+                    </p>
+
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#鏈上數據</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#比特幣週期</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#MVRV-Z-Score</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#2Year-MA</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#Power-Law</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#RSI</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#彩虹圖</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#投資策略</span>
+                    </div>
+                </header>
+
+                <!-- ── Mobile TOC Target (行動版) ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- ── Article Body ── -->
+                <article
+                    class="article-body bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <!-- ── Lead Paragraph (前導引言) ── -->
+                    <p
+                        class="not-prose lead text-xl text-slate-700 dark:text-slate-200 font-medium leading-relaxed border-l-4 border-blue-500 pl-6 py-2 bg-blue-50/50 dark:bg-blue-900/10 rounded-r-lg mb-12">
+                        市場上對於比特幣是否已經見頂、牛市是否結束的爭論不休。然而，當我們拋開短線的價格雜訊，從最底層的宏觀鏈上數據與長線數學模型來看，答案卻異常清晰。本文將帶您一次看懂這五大重量級指標，見證歷史難得一見的數據共振。
+                    </p>
+
+                    <!-- Indicator 1 -->
+                    <h2 id="section-1" class="not-prose indicator-h2">
+                        <span class="number-circle">1</span>
+                        <span class="title-main">Bitcoin Investor Tool</span>
+                        <span class="title-sub">觸底綠線的歷史機遇</span>
+                    </h2>
+
+                    <p>「比特幣投資者工具」(2-Year MA Multiplier) 是一個判斷長期趨勢極值非常有效的指標。圖中的綠線代表「2年移動平均線 (2-Year MA)」，而紅線代表該均線的 5
+                        倍放大。從歷史週期來看，當比特幣價格跌至或觸及綠線時，往往代表市場恐慌達到極致、賣壓枯竭，這也是長期投資者絕佳的「底部買入區間」。</p>
+
+                    <figure class="not-prose my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 dark:border-slate-600 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-sovereign-liquidity-1.png" alt="Bitcoin Investor Tool Chart"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 dark:text-slate-400 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            比特幣 2-Year MA Multiplier 走勢 (資料來源：Bitcoin Magazine Pro)
+                        </figcaption>
+                    </figure>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-emerald-200 dark:border-emerald-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解 2-Year MA 嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，掌握均線乘數的週期奧秘。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-onchain-investor-tool.html" class="shrink-0 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Indicator 2 -->
+                    <h2 id="section-2" class="not-prose indicator-h2">
+                        <span class="number-circle">2</span>
+                        <span class="title-main">MVRV Z-Score</span>
+                        <span class="title-sub">距離泡沫狂熱仍有遙遠距離</span>
+                    </h2>
+
+                    <p>除了均線指標，從未實現利潤角度來看的 MVRV Z-Score 也進一步印證了這個低點判斷。MVRV Z-Score 衡量的是比特幣市值（Market Cap）與已實現市值（Realized
+                        Cap）之間的標準差，用來判斷市場是否過熱。</p>
+
+                    <figure class="not-prose my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 dark:border-slate-600 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-sovereign-liquidity-2.png" alt="Bitcoin MVRV Z-Score Chart"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 dark:text-slate-400 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            比特幣 MVRV Z-Score 走勢 (資料來源：Bitcoin Magazine Pro)
+                        </figcaption>
+                    </figure>
+
+                    <p>根據最新的圖表顯示，Z-Score（橘線）目前正處於歷史相對底部的區域。這意味著市值相對於已實現市值的溢價極低，完全沒有達到過往牛市見頂時的極端瘋狂狀態，絕大多數的籌碼並未處於極端盈利狀態。
+                    </p>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-emerald-200 dark:border-emerald-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解 MVRV Z-Score 嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，掌握市值回歸的精確座標。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-onchain-mvrv-zscore.html" class="shrink-0 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Indicator 3 -->
+                    <h2 id="section-3" class="not-prose indicator-h2">
+                        <span class="number-circle">3</span>
+                        <span class="title-main">Power Law 通道</span>
+                        <span class="title-sub">緊貼紅色絕對支撐線</span>
+                    </h2>
+
+                    <p>我們透過最為宏觀的「冪律模型 (Power Law
+                        Corridor)」來檢視。這張圖表以對數座標畫出了比特幣長期的成長軌跡，並分為紅色的絕對支撐底線、綠色的均值回歸線，以及紫色的狂熱見頂阻力線。</p>
+
+                    <figure class="not-prose my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 dark:border-slate-600 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-sovereign-liquidity-3.png"
+                                alt="Bitcoin Power Law Corridor Chart"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 dark:text-slate-400 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            比特幣 Power Law 通道模型 (資料來源：Bitbo)
+                        </figcaption>
+                    </figure>
+
+                    <p>根據 2026 年 3 月的最新讀數，紫色阻力頂部高達 53.8 萬美元，綠色均線落在 15.1 萬美元，而紅色的生死支撐線則位於 5.3 萬美元附近。當前的比特幣價格極度貼近底部的紅色支援線。
+                    </p>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-emerald-200 dark:border-emerald-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解冪律通道嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，看懂比特幣的長線物理規律。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-onchain-power-law.html" class="shrink-0 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Indicator 4 -->
+                    <h2 id="section-4" class="not-prose indicator-h2">
+                        <span class="number-circle">4</span>
+                        <span class="title-main">月線 RSI 動能指標</span>
+                        <span class="title-sub">歷史級別的超賣冷卻區</span>
+                    </h2>
+
+                    <p>相對強弱指標 (RSI) 是判斷市場動能是否過熱或過冷的經典工具。從長線週期來看，當 RSI 呈現超賣低點時，往往代表市場情緒極度悲觀，但這也是勝率極高的底部佈局點。</p>
+
+                    <figure class="not-prose my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 dark:border-slate-600 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-sovereign-liquidity-4.png" alt="Bitcoin Monthly RSI Chart"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 dark:text-slate-400 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            比特幣 RSI 動能指標走勢 (資料來源：Bitbo)
+                        </figcaption>
+                    </figure>
+
+                    <p>根據最新的讀數顯示，當前 RSI 指標僅約為 43 左右，正處於歷史週期的「超賣冷卻區」。往往會隨之迎來下一波強勁的主升段爆發，這證明了當前的下行風險已經極度壓縮。</p>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-emerald-200 dark:border-emerald-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解月線 RSI 嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，掌握動能指標的極致冷熱。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-onchain-rsi.html" class="shrink-0 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Indicator 5 -->
+                    <h2 id="section-5" class="not-prose indicator-h2">
+                        <span class="number-circle">5</span>
+                        <span class="title-main">比特幣彩虹圖</span>
+                        <span class="title-sub">價格落入「深藍色」極度低估區</span>
+                    </h2>
+
+                    <p>我們來檢視幣圈最為人熟知的長期對數成長曲線模型——「彩虹圖 (Rainbow
+                        Chart)」。這個模型透過色帶標示了價格相對於均線的偏離程度，由上而下分別為紅色的狂熱危險區，一路延伸到深藍色的極度低估區。</p>
+
+                    <figure class="not-prose my-10 relative group">
+                        <div
+                            class="overflow-hidden rounded-xl shadow-md border border-slate-200 dark:border-slate-600 bg-slate-900 group-hover:shadow-xl transition-all duration-300">
+                            <img src="post-pic/topic-btc-sovereign-liquidity-5.png" alt="Bitcoin Rainbow Chart"
+                                class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+                        <figcaption
+                            class="text-center text-sm text-slate-500 dark:text-slate-400 mt-4 font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            比特幣彩虹圖模型 (資料來源：Bitbo)
+                        </figcaption>
+                    </figure>
+
+                    <p>截至 2026 年 3 月，比特幣當前價格精準落在最底部的深藍色「Low / 抄底」區帶內。在彩虹圖的歷史軌跡中，只要價格碰觸到這條深藍色色帶，無一例外都是世代級別的最佳長期買點。</p>
+
+                    <div class="not-prose my-12 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-emerald-200 dark:border-emerald-900/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-2xl">📚</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">想要更深入了解彩虹圖嗎？</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">查看知識百科中的完整專題解析，視覺化掌握市場情緒階段。</p>
+                            </div>
+                        </div>
+                        <a href="../knowledge/knl-onchain-rainbow-chart.html" class="shrink-0 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-colors flex items-center gap-2 group">
+                            查看指標百科
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- ────────────────────────────────────
+                         CONCLUSION CARD (Mason Yang 總結)
+                    ──────────────────────────────────── -->
+                    <div
+                        class="not-prose alert alert-analyst relative overflow-hidden my-16 shadow-lg border-l-4 border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 backdrop-blur-sm rounded-xl p-8">
+                        <!-- Decorative Background -->
+                        <div
+                            class="absolute -right-10 -top-10 text-blue-100 dark:text-blue-900 opacity-40 transform rotate-12 pointer-events-none">
+                            <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="relative z-10">
+                            <div
+                                class="flex items-center gap-3 mb-6 border-b border-blue-200/50 dark:border-blue-700/50 pb-4">
+                                <div class="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
+                                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <strong
+                                    class="text-2xl text-blue-900 dark:text-blue-100 font-extrabold tracking-tight">Mason
+                                    Yang Blog 宏觀觀點</strong>
+                            </div>
+                            <p class="text-slate-700 dark:text-slate-200 leading-relaxed font-medium text-lg">
+                                綜合 2-Year MA 觸底、MVRV Z-Score 低點、Power Law 紅線支撐，再加上 RSI 超賣冷卻 與
+                                彩虹圖深藍色極度低估區，這五大宏觀鏈上與數學模型產生了罕見且震撼的共振結論：
+                            </p>
+                            <p class="text-slate-700 dark:text-slate-200 leading-relaxed font-medium text-lg mt-4">
+                                當前的比特幣不但沒有過熱，反而是<span
+                                    class="text-blue-700 dark:text-blue-300 font-bold">極具爆發潛力的「絕對相對低點」</span>。對於長線佈局者而言，這裡不是恐慌逃頂的時候，而是堅定定投、逢低建倉的最強時刻。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- References & Disclaimer -->
+                    <div
+                        class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">參考資料 (References)</p>
+                        <p class="mb-3 text-slate-500 dark:text-slate-400">Glassnode / Bitbo / Bitcoin Magazine</p>
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。加密貨幣投資屬高風險，請謹慎評估。</p>
+                        <p>FRED 聲明：本產品使用了 FRED API，但並未獲得聖路易斯聯邦儲備銀行的認可或認證。</p>
+                    </div>
+
+                </article>
+
+                <!-- Related Articles (Mobile bottom) -->
+                <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+            </div>
+            <!-- /END Center Column -->
+
+            <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+
+                    <!-- A. Article Meta Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                文章資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-03-05</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">市場分析</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">閱讀時間</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">約 12 分鐘</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- B. Key Findings Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                核心結論</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">2-Year MA
+                                    緊貼綠線，歷史低點</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">MVRV Z-Score
+                                    處於底部，無泡沫</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Power Law 貼近生死支撐線
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- C. Tags -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                相關標籤</p>
+                        </div>
+                        <div class="px-4 py-3 flex flex-wrap gap-1.5">
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#鏈上數據</span>
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#比特幣週期</span>
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#MVRV-Z-Score</span>
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#2Year-MA</span>
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#Power-Law</span>
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#RSI</span>
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#彩虹圖</span>
+                        </div>
+                    </div>
+
+                    <!-- D. Related Articles (Desktop sidebar) -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                延伸閱讀</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li>
+                                <a href="why-crypto.html"
+                                    class="flex items-start gap-2 px-4 py-3 text-xs text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 mt-0.5 shrink-0"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    Why Crypto? 數位資產所有權分析
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </aside>
+            <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button (fixed, bottom-right) -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- =========================================================
+         Scripts
+    ========================================================= -->
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. Layout Shell ───────────────────────────────────
+            const header = new HeaderComponent();
+            header.setHomeUrl('../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // ── 3. Mobile TOC ──────────────────────────────────────
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // ── 4. Scroll Events ───────────────────────────────────
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                // Progress bar
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+
+                // Back to top (show after 500px)
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+
+        });
+    </script>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "五大鏈上指標共振：為什麼現在可能是比特幣的週期低點？",
+      "description": "從 MVRV Z-Score、2年均線乘數、Power Law、RSI 到彩虹圖，深度解析為何當前市場處於絕佳的低估買入區間。",
+      "datePublished": "2026-03-05",
+      "author": {
+        "@type": "Person",
+        "name": "Mason Yang"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Mason Yang Blog",
+        "url": "https://lmybtc.github.io"
+      },
+      "url": "https://lmybtc.github.io/post/topic-btc-sovereign-liquidity.html"
+    }
+    </script>
+
+</body>
+
+</html>
