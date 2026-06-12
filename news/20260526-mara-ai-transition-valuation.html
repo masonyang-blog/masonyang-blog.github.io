@@ -1,0 +1,1271 @@
+<!-- ==================== TEMPLATE_GUIDE_START ====================
+     📰 時事新聞 / 分析文章 專用樣板 v3.1 (草稿隔離與發布機制) (Three-Column Layout)
+     使用指南：
+     1. 【草稿隔離先行】：複製本檔並命名為 20260526-mara-ai-transition-valuation.html 優先放置於 doc/draft/ 目錄；唯有通過零缺陷 QA 驗證後，方能移動至 news/ 正式目錄。
+     2. 綁定 ID ：在 <body> 標籤設定 data-article-id="20260526-mara-ai-transition-valuation" (須與檔名及 core-articles-data.js 內 ID 一致)。
+     3. 配置路徑：草稿區預設 assets 路徑為 ../assets/，正式移動至 news/ 目錄時須替換為 ../assets/。
+     4. 資料註冊庫：存檔後，至 assets/js/core-articles-data.js 新增對應資料，【務必】套用 core-taxonomy.js 中定義的 Category/Tag ID。
+     5. Sitemap 更新：手動將新頁面網址加入根目錄的 sitemap.xml。
+     
+     研究報告 (.md) 轉換流程：
+     1. 規劃階段：閱讀草稿，識別核心 5W1H 邏輯與關鍵指標；建立任務清單，明確列出所有 H2 與 H3 章節，確保不遺漏子專題。
+     2. 框架建立：複製本樣板，設定唯一的 data-article-id；配置 Title (關鍵字前置) 與 JSON-LD (AnalysisNewsArticle, FAQPage)。
+     3. 內容填充 (核心)：導言撰寫 Answer-First 的 TL;DR Hook；**[分段搬移] 每一回合僅限處理一段 H2**，並嚴格按 H2 -> H3 順序分塊填充，所有表格必須包裹在 .responsive-table-wrapper 中。完成一段後勾選 Task 文件。
+     4. SEO 與 索引：從 H2/H3 提取 15+ 專業關鍵字；在 mentions 陣列加入相關 Wiki/Wikidata 連結；更新 sitemap.xml 與 core-articles-data.js (archive.html 為自動)。
+
+     頁面架構：
+     - 左側欄 (lg+)：[#toc-desktop-host] 桌面版 sticky 目錄。
+     - 中央主欄：[#toc-mobile-target] 行動版 TOC + 文章本體 [article-body]。
+     - 右側欄 (lg+)：文章資訊面板 (作者、日期、標籤、延伸閱讀)。
+     
+     組件初始化 (JS)：
+     - new HeaderComponent().setHomeUrl('../index.html').init();
+     - new ArticleTOC().init(); // 桌面目錄
+     - new ResponsiveTocComponent().init(); // 行動目錄
+     
+     維護規範：
+     - 禁止行內樣式，表格必須用 <div>.responsive-table-wrapper 包裹。
+     - 錨點位移由 CSS scroll-margin-top 處理。
+     - 修改全站字串嚴禁使用 PowerShell Get-Content，請務必優先使用 Python (utf-8)。
+     ==================== TEMPLATE_GUIDE_END ==================== -->
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 
+        ==========================================================================
+        🚀 AI SEO & METADATA STRATEGY (語義加固與意圖匹配)
+        ==========================================================================
+        1. [Title]: 意圖匹配標籤。關鍵字前置，並加入 2026/年份或「實測分析」等時效信號。
+        2. [Description]: 答案領先策略 (Answer-First)。第一句直接 TL;DR，作為 AI 的語義校驗碼。
+        3. [Canonical]: 鎖定事實來源。防止 RAG 系統將引用權限誤判給抓取站。
+        ==========================================================================
+    -->
+    <title>2026挖礦股估值重塑：MARA與IREN轉型AI算力與微策略(MSTR)資本困境對比</title>
+    <meta name="description" content="2026年比特幣減半後，MARA與IREN等礦企正透過轉型AI算力與HPC數據中心迎來估值重塑。本文深度解析MARA收購Long Ridge及Starwood合資案，對比微策略(MSTR)流動性緊縮困境，驗證算力板塊的Alpha收益。">
+    <meta name="keywords" content="MARA Holdings, AI 算力, 估值重塑, 比特幣挖礦, IREN, TeraWulf, 微策略, MSTR, PJM 互連網絡, Long Ridge, Starwood Capital, Exaion, NVIDIA Blackwell, HPC 數據中心, 能源套利">
+    <link rel="canonical" href="https://masonyang-blog.github.io/news/20260526-mara-ai-transition-valuation.html">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+    </style>
+    <!-- 
+        ==========================================================================
+        🤖 ADVANCED JSON-LD SCHEMA (AI 搜尋時代的實體消岐)
+        ==========================================================================
+        - [sameAs]: 連結權威 ID (Wikipedia/Wikidata) 實現實體消歧。
+        - [about/mentions]: 明確宣告內容核心主題與文中提及的次要實體。
+        - [FAQPage]: 嵌入問答模組，增加 AI 答案片段抓取機率。
+        - [Nested]: 嵌套 Organization、Person 與 Article 建立信譽鏈條。
+        ==========================================================================
+    -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "AnalysisNewsArticle",
+          "@id": "https://masonyang-blog.github.io/news/20260526-mara-ai-transition-valuation.html#article",
+          "isPartOf": {
+            "@id": "https://masonyang-blog.github.io/#website"
+          },
+          "author": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "headline": "2026挖礦股估值重塑：MARA與IREN轉型AI算力與微策略(MSTR)資本困境對比",
+          "description": "2026年比特幣減半後，MARA與IREN等礦企正透過轉型AI算力與HPC數據中心迎來估值重塑。本文深度解析MARA收購Long Ridge及Starwood合資案，對比微策略(MSTR)流動性緊縮困境，驗證算力板塊的Alpha收益。",
+          "datePublished": "2026-05-26",
+          "dateModified": "2026-05-26",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://masonyang-blog.github.io/news/20260526-mara-ai-transition-valuation.html"
+          },
+          "about": [
+            {
+              "@type": "Thing",
+              "name": "MARA Holdings",
+              "sameAs": "https://www.wikidata.org/wiki/Q111953267"
+            }
+          ],
+          "mentions": [
+            {
+              "@type": "Thing",
+              "name": "Iris Energy",
+              "sameAs": "https://www.wikidata.org/wiki/Q115804364"
+            },
+            {
+              "@type": "Thing",
+              "name": "TeraWulf",
+              "sameAs": "https://www.wikidata.org/wiki/Q115802279"
+            },
+            {
+              "@type": "Thing",
+              "name": "MicroStrategy",
+              "sameAs": "https://www.wikidata.org/wiki/Q1135768"
+            },
+            {
+              "@type": "Thing",
+              "name": "NVIDIA",
+              "sameAs": "https://www.wikidata.org/wiki/Q11397"
+            },
+            {
+              "@type": "Thing",
+              "name": "Starwood Capital Group",
+              "sameAs": "https://www.wikidata.org/wiki/Q7602930"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://masonyang-blog.github.io/news/20260526-mara-ai-transition-valuation.html#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "比特幣減半後，MARA Holdings 為什麼大舉出售 20,880 枚比特幣並斥資 15 億美元收購 Long Ridge？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "MARA 旨在去槓桿並清除 30% 以上的可轉債股權稀釋風險，同時藉由 Long Ridge 天然氣發電廠與 Starwood 合資項目，將其 2.2 GW 的電力儲備轉化為法幣經常性收入 (ARR) 穩健的 AI 資料中心，推動估值模型轉換。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "微策略 (MSTR) 面臨哪些資本結構脆弱性風險？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "微策略發行了高達 85 億美元的 STRC A 系列永續優先股並承諾 11.5% 剛性利息，在比特幣回調時，由於其缺乏法幣現金流收入，被迫面臨出售底層比特幣付息的流動性緊縮與反射性下行螺旋風險。"
+              }
+            }
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://masonyang-blog.github.io/#author",
+          "name": "Mason Yang",
+          "url": "https://masonyang-blog.github.io",
+          "jobTitle": "Investment Researcher",
+          "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://masonyang-blog.github.io/logo.png"
+          },
+          "sameAs": [
+            "https://x.com/MasonYang16"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://masonyang-blog.github.io/#website",
+          "url": "https://masonyang-blog.github.io",
+          "name": "Mason Yang Blog",
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://masonyang-blog.github.io/news/20260526-mara-ai-transition-valuation.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "首頁",
+              "item": "https://masonyang-blog.github.io/index.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "數位資產與 Web3",
+              "item": "https://masonyang-blog.github.io/post/archive.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "2026挖礦股估值重塑：MARA與IREN轉型AI算力與微策略(MSTR)資本困境對比",
+              "item": "https://masonyang-blog.github.io/news/20260526-mara-ai-transition-valuation.html"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+</head>
+
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="20260526-mara-ai-transition-valuation">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+
+                    <!-- ArticleTOC renders here -->
+                    <div id="toc-desktop-host">
+                        
+                    </div>
+
+                    <!-- Back to top (sidebar) -->
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="../post/archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">經濟時事分析</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">2026挖礦股估值重塑：MARA與IREN轉型AI算力與微策略(MSTR)資本困境對比</li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header ── -->
+                <header
+                    class="theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <!-- Category + Date -->
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            經濟時事分析
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            <time datetime="2026-05-26">2026-05-26</time>
+                        </span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 15 分鐘閱讀</span>
+                    </div>
+
+                    <!-- H1 -->
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        2026 年挖礦股估值重塑：MARA 轉型 AI 算力基礎設施與同業表現解析
+                    </h1>
+
+                    <!-- Subtitle / Hook -->
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        從高 Beta 比特幣代理資產到穩定法幣現金流，解構 MARA、IREN、WULF 的轉型路徑與 MSTR 的資本困境
+                    </p>
+
+                </header>
+
+                <!-- ── Mobile TOC Target (行動版) ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- ── Article Body ── -->
+                <article
+                    class="article-body theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <div id="main-content-area">
+
+                    <!-- 
+                        📌 D-S-R PROTOCOL INDICATOR (寫作引導)
+                        1. Direct Answer (直接斷言): 段落首句點破核心問題與結論。 (必須包裹在 <strong class="dsr-label">[Direct Answer]</strong>)
+                        2. Support Details (支持細節): 包含數據、指標 (TPS, TVL, Q-ID) 或技術標準。 (必須包裹在 <strong class="dsr-label">[Support Details]</strong>)
+                        3. Reinforcement (語義強化): 將技術細節轉化為投資價值或風險判斷。 (不需標籤，直接寫入段落)
+                        
+                        ⚠️ 佈局注意事項 (Layout Standards):
+                        - 隱藏標籤: 務必使用 class="dsr-label" 以確保前端不直接顯示。
+                        - 段落間距: 所有 <p> 標籤必須顯式添加 class="mb-8" (或 mb-6) 以維持呼吸感。
+                        - 清單化原則: 當 Support Details 超過 3 個並列項時，強制使用 <ul> 以替代長段落。
+                    -->
+                    <!-- ── Lead Paragraph (前導引言) ── -->
+                    <!-- AI GUIDANCE (撰寫前提):
+                         1. 分析架構：先識別全文的 H2/H3 大綱與論證結構。
+                         2. 深度閱讀：完整理解文章中的證據與數據支持。
+                         3. 整合輸出：在掌握全局邏輯後，方於導言中清楚提出問題與假設。
+                         
+                         撰寫目標 (WHAT-HOW-WHY):
+                         - WHAT (觀察): 現實中發生了什麼？定義核心現象。
+                         - HOW (分析): 此事態如何發展？梳理邏輯順序。
+                         - WHY (推論): 底層原因為何？提出待驗證的關鍵假設。
+                    -->
+                    <div
+                        class="not-prose lead mb-16 px-8 py-10 theme-bg-body dark:bg-slate-900/10 border-l-4 border-slate-400 rounded-r-2xl">
+                        <p class="text-xl text-slate-700 dark:text-slate-200 font-bold leading-relaxed mb-6">
+                            隨著比特幣完成 2026 年最新一次減半，傳統礦企正處於從單一比特幣挖礦向多元化『AI 算力基礎設施商』轉型的估值重塑奇點；與此同時，微策略 (MSTR) 的高槓桿持幣代理人模式正遭受優先股剛性利息流動性緊縮的嚴峻拷問。
+                        </p>
+                        <ul class="space-y-4 text-lg text-slate-600 dark:text-slate-300">
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">WHAT</span>
+                                <span class="italic">比特幣減半導致區塊獎勵驟降，傳統礦企單一收入模式面臨嚴峻挑戰，而 AI 大模型與代理型 AI 爆發引起了全球極度嚴峻的電力與算力飢荒。</span>
+                            </li>
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">HOW</span>
+                                <span class="italic">掌控龐大電力容量與電網協議的礦企（如 MARA 斥資 15 億美元收購 Long Ridge 發電廠以掌控自有電力，並與 Starwood 合作開發 1GW+ 數據中心）正開啟輕資產轉型；同時 IREN 與 NVIDIA 簽訂 34 億美元 AI 雲端合約，WULF 實現 HPC 營收實質反超。相比之下，純持幣的微策略 (MSTR) 則因永續優先股 STRC 的剛性利息壓力，正面臨首次被迫賣幣的流動性惡性反射性迴圈風險。</span>
+                            </li>
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">WHY</span>
+                                <span class="italic">資本市場正逐步將『穩定性溢價』賦予擁有實體 AI 合約與真實現金流的算力基礎設施股，導致轉型礦企與純加密資產走勢正式脫鉤，推動板塊估值模型由傳統週期性礦業的 EV/Production 轉向以 EV/EBITDA 與經常性收入乘數 (ARR Multiple) 為核心的估值乘數擴張。</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- ── 5W1H 核心架構與 SEO 提問解析 (首屏前置佈局) ── -->
+                    <!-- AI GUIDANCE (寫作指引): 
+                         此區塊為文章首屏戰略核心。左欄必須使用完整長尾自然問句 (如 WHO / 誰在買誰在賣？)，以精準覆蓋長尾 RAG 檢索與使用者真實搜尋意圖。
+                    -->
+                    <!-- CHAPTER 0 (TOC Hierarchy Anchor) -->
+                    <h2 id="chapter-0" class="not-prose indicator-h2">
+                        <span class="number-circle">0</span>
+                        <span class="title-main">執行摘要與 5W1H 核心認知架構</span>
+                    </h2>
+                    <h3 id="section-5w1h-core" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">比特幣挖礦股轉型 AI 算力的 5W1H 核心認知架構</h3>
+                    <div id="content-5w1h" class="not-prose my-12">
+                                <!-- Grid Layout -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                                    <!-- WHO -->
+                                    <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+                                        <div class="flex items-center gap-3 mb-4">
+                                            <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-500/20 transition-transform group-hover:scale-110">
+                                                <span class="font-bold text-lg">W</span>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Who / 參與主體</span>
+                                        </div>
+                                        <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                                            主體為 MARA Holdings、IREN、TeraWulf、Riot、CleanSpark 等大型上市礦企，以及純加密貨幣資產代理商微策略 (MSTR)；其買盤正轉向尋求真實現金流支撐的 AI 科技基金，賣盤則主要出清缺乏穩定現金流、面臨減半壓力或高槓桿的純代理資產。
+                                        </p>
+                                    </div>
+
+                                    <!-- WHAT -->
+                                    <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+                                        <div class="flex items-center gap-3 mb-4">
+                                            <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500 text-white shadow-lg shadow-orange-500/20 transition-transform group-hover:scale-110">
+                                                <span class="font-bold text-lg">W</span>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">What / 核心事件</span>
+                                        </div>
+                                        <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                                            比特幣減半導致全網挖礦難度飆升，MARA 拋售 20,880 枚比特幣變現 15 億美元進行去槓桿與 Long Ridge 收購；IREN 簽約 NVIDIA 34 億美元 GPU 託管合約，WULF 的 HPC 營收占比達到 60% 實現反超；而微策略面臨季度 125 億美元未實現帳面減損並承認可能需要賣幣付息。
+                                        </p>
+                                    </div>
+
+                                    <!-- WHEN -->
+                                    <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+                                        <div class="flex items-center gap-3 mb-4">
+                                            <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-yellow-500 text-white shadow-lg shadow-yellow-500/20 transition-transform group-hover:scale-110">
+                                                <span class="font-bold text-lg">W</span>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">When / 關鍵時點</span>
+                                        </div>
+                                        <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                                            爆發於 2026 年第一季財報季（5 月初），觀測節點為 2026 年底前各家礦企 AI 數據中心長期租賃合約的簽約率、MARA 於 2027 年上半年 Long Ridge 200MW 的動工進度、以及 MSTR STRC 股息支付日的流動性狀況。
+                                        </p>
+                                    </div>
+
+                                    <!-- WHERE -->
+                                    <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+                                        <div class="flex items-center gap-3 mb-4">
+                                            <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500 text-white shadow-lg shadow-red-500/20 transition-transform group-hover:scale-110">
+                                                <span class="font-bold text-lg">W</span>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Where / 影響範圍</span>
+                                        </div>
+                                        <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                                            風暴源頭在於美國電網容量與 GPU 資料中心空間的物理稀缺性，資金正從純加密貨幣代理資產 (MSTR) 流向位於 PJM、ERCOT 或核能/水力綠電樞紐 (如 NY Lake Mariner) 具備吉瓦級電力互連協議的算力板塊。
+                                        </p>
+                                    </div>
+
+                                    <!-- WHY -->
+                                    <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+                                        <div class="flex items-center gap-3 mb-4">
+                                            <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-500 text-white shadow-lg shadow-zinc-500/20 transition-transform group-hover:scale-110">
+                                                <span class="font-bold text-lg">W</span>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Why / 驅動邏輯</span>
+                                        </div>
+                                        <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                                            算力定價權已從「比特幣獎勵」轉向「AI 合約經常性收入 (ARR)」。市場開始賦予算力硬體以「公用事業估值」，而非高波動的週期性大宗商品估值，這迫使投資人對缺乏實體電力設施的純代理資產執行反射性懲罰。
+                                        </p>
+                                    </div>
+
+                                    <!-- HOW -->
+                                    <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+                                        <div class="flex items-center gap-3 mb-4">
+                                            <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition-transform group-hover:scale-110">
+                                                <span class="font-bold text-lg">H</span>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">How / 執行建議</span>
+                                        </div>
+                                        <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                                            投資人應果斷執行「非對稱配置」：超配擁有真實現金流 (FCF) 與自有電網設施的轉型礦企 (TeraWulf、Core Power)，並對以高利率負債堆疊、無對沖存量比特幣的槓桿代理資產進行空頭套期保值。
+                                        </p>
+                                    </div>
+
+                                </div>
+                    </div>
+
+
+                    <!-- CHAPTER 1 -->
+                    <h2 id="chapter-1" class="not-prose indicator-h2">
+                        <span class="number-circle">1</span>
+                        <span class="title-main">第一章：產業典範轉移與宏觀經濟背景</span>
+                    </h2>
+
+                    <p class="mb-8">
+                        進入 2026 年 5 月，全球加密貨幣生態系與高效能運算（High-Performance Computing, HPC）市場正處於一場史無前例的歷史性交匯點。在比特幣網絡完成最新一次減半（Halving）後，區塊獎勵的驟降從根本上顛覆了傳統比特幣礦企的單一收入模型。與此同時，人工智慧（AI）產業的爆發性成長、大語言模型（LLM）的快速迭代，以及「代理型 AI（Agentic AI）」技術的成熟，使全球陷入了極度嚴峻的「算力與能源飢荒」。在這樣的宏觀背景下，傳統被資本市場視為高波動性（High Beta）比特幣代理資產的挖礦股，正迎來一場深刻且劇烈的估值重塑（Valuation Re-rating）。
+                    </p>
+
+                    <h3 id="section-1-1" class="not-prose analysis-h3 font-noto tracking-tight">1.1 AI 算力飢渴與基礎電力設施的絕對稀缺性</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>當前 AI 產業發展的最大瓶頸已從圖形處理器（GPU）的晶片產能限制，轉移至「基礎電力容量（Power Capacity）」與「數據中心空間（Data Center Space）」的絕對稀缺性。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>AI 模型訓練（Training）階段需要極其穩定的基載電力來支撐龐大的運算叢集；而隨著具備自主執行任務能力的代理型 AI 普及，AI 推論（Inference）階段的電力需求預計將呈現千倍以上的爆炸性增長，這類應用產生的 Token 消耗量是標準聊天介面的數個數量級之上。在這種困境下，掌握大量電網互連協議（Interconnection）、並具備吉瓦（GW）級別電力調度能力的比特幣礦企，瞬間成為了全球科技巨頭（Hyperscalers）眼中最具戰略價值的稀缺基礎資產。
+                    </p>
+                    <p class="mb-8">
+                        比特幣礦場所擁有的不僅是廣袤的土地與現成的廠房，更核心的價值在於其已經獲得政府審批、具備環境許可，且正在實體運行的龐大電力資源。這使傳統被資本市場視為高波動性比特幣代理資產的挖礦股，瞬間轉化為具備防禦性護城河的能源合作夥伴，開啟了板塊重估的宏觀基礎。
+                    </p>
+
+                    <h3 id="section-1-2" class="not-prose analysis-h3 font-noto tracking-tight">1.2 能源套利機制的深化與「算力即服務」的物理融合</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>比特幣挖礦本質上始終是一種「能源套利（Energy Arbitrage）」業務，其最大特徵在於具備極高的能源消耗靈活性（Energy Flexibility），這能與 AI 數據中心的不靈活負載形成物理上的混合部署融合。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>一份來自杜克大學（Duke University）的最新研究指出，美國傳統電網其實擁有高達 76 GW 的可用容量，但由於 AI 數據中心需要 24 小時無間斷的「不靈活負載（Inflexible Load）」，因此根本無法有效利用這些閒置電力。這正是轉型中的大型礦企展現其第二層次商業價值的所在：透過將比特幣礦機與 AI 伺服器進行實體混合部署（Co-location），礦企能夠創造出一種具備高度彈性的能源負載曲線。
+                    </p>
+                    <p class="mb-8">
+                        當電網面臨尖峰用電壓力或 AI 運算需求飆升時，礦企可透過自動化系統瞬間關閉比特幣礦機（卸載），將多餘的電力釋放回電網或專供 AI 叢集使用；反之，在電價低廉的離峰時段，則火力全開進行挖礦。這種「削峰填谷」的電網級別調度能力，不僅最大化了自有電網與資產的利用率，更使轉型中的礦企從單純的「電力消耗者」晉升為具備防禦性護城河的「能源合作夥伴」與「數位資產基礎設施商」。
+                    </p>
+
+                    <h3 id="section-1-3" class="not-prose analysis-h3 font-noto tracking-tight">1.3 資本支出鴻溝與物理基礎設施的挑戰</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>然而，從粗放型的比特幣挖礦轉型為高階 AI 數據中心，並非僅是更換運算晶片那麼簡單，其背後隱藏著高達 20 倍的資本支出（CapEx）差距與物理基礎設施的巨大門檻。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>首先是硬體設施的不可兼容性。傳統比特幣挖礦機房的設計初衷是追求極致的建置速度與低成本，通常採用模組化貨櫃、簡易通風系統，缺乏嚴格的備援機制。然而，支援 NVIDIA Blackwell 或 H100 等高階 GPU 的 AI 基礎設施（如 Tier 3 級別的數據中心）需要極高的機櫃密度、液冷或浸沒式冷卻基礎設施（Immersion Cooling），以及嚴格的服務級別協議（SLA）保障。產業界專家在 2026 年比特幣大會上指出，將舊有礦場直接翻新往往是不切實際的，多數情況下必須將原址推平重新建設。
+                    </p>
+                    <p class="mb-8">
+                        其次是資本支出的天文數字差距。比特幣礦場的建置成本約為每兆瓦（MW） 30 萬至 60 萬美元；而符合 AI 需求的數據中心，每兆瓦的建置成本則暴增至 800 萬甚至 1200 萬美元。這項殘酷的現實說明，缺乏強大融資能力、資產負債表脆弱的礦企將在這場轉型淘汰賽中出局，而這也正是檢驗各家礦企真實底蘊的試金石。
+                    </p>
+
+                    <!-- CHAPTER 2 -->
+                    <h2 id="chapter-2" class="not-prose indicator-h2">
+                        <span class="number-circle">2</span>
+                        <span class="title-main">第二章：MARA 核心轉型策略解析——「加密與 AI 雙引擎」佈局</span>
+                    </h2>
+
+                    <p class="mb-8">
+                        作為曾經的純比特幣挖礦巨頭，MARA Holdings（NASDAQ: MARA）在 2026 年第一季度的財報與一系列激進的戰略佈局，清晰地展現了其跳脫單一挖礦框架、向多元化「數位資產基礎設施商」轉型的決心。這不僅是應對減半週期的生存策略，更是追求更高估值乘數（Multiple Expansion）的資本運作。
+                    </p>
+
+                    <h3 id="section-2-1" class="not-prose analysis-h3 font-noto tracking-tight">2.1 算力垂直整合與 Long Ridge 能源中樞收購案</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>MARA 展現了極具攻擊性的資產併購策略，斥資 15 億美元收購 Long Ridge Energy，以實現底層能源的自主掌控，並獲取龐大的 AI 基礎設施擴展示地。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>2026 年 4 月 30 日，MARA 宣布收購 Long Ridge Energy & Power LLC，交易總值達 15 億美元（包含承接 7.85 億美元債務，由巴克萊銀行提供過橋貸款支援）。Long Ridge 擁有俄亥俄州 505 MW 聯合循環燃氣輪機（CCGT）發電廠，營運成本低於 15 美元/MWh，每年可穩定貢獻約 1.44 億美元的年化調整後 EBITDA。此併購使 MARA 總營運與開發容量達到 2.2 GW，且包含 1,600 英畝土地，可供開發高達 600 MW 的 AI/HPC 專用臨界負載空間。
+                    </p>
+                    <p class="mb-8">
+                        MARA 已規劃於 2027 年上半年啟動初步 200 MW AI 數據中心改建，預計 2028 年中正式上線。這項直接獲取「即插即用」物理資源的作法，大幅降低了平地起建（Greenfield）的執行風險，為其轉型奠定了穩固的物理基礎。
+                    </p>
+
+                    <h3 id="section-2-2" class="not-prose analysis-h3 font-noto tracking-tight">2.2 Starwood 資本合資：打通高階 AI 算力的財務通道</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>面對高密度 AI 數據中心每兆瓦高達 1,200 萬美元的天文數字資本支出，MARA 與 Starwood Capital Group 建立合資企業，打通「輕資產化」的資金融通渠道。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>在此合資（JV）架構下，MARA 僅需提供具備電力優勢的站點並保留 10% 至 50% 股權，而 Starwood（包括 Starwood Digital Ventures）則負責主導設計、招商、EPC 建設及核心注資，預計近期交付 1 GW 容量（有潛力擴展至 2.5 GW）。管理層透露，一個標準的 200 MW 合資項目每年可為 MARA 帶來 5,000 萬至 1 億美元的穩定淨現金流，投入資本報酬率（Yield-on-cost）達 9% 至 15%。
+                    </p>
+                    <p class="mb-8">
+                        透過這種輕資產合資擴張模式，MARA 成功避免了大規模股本稀釋，並在極短時間內將電力儲備變現為穩定的經常性租金收益，這也是向科技巨頭提供「算力即服務」的財務保護網。
+                    </p>
+
+                    <h3 id="section-2-3" class="not-prose analysis-h3 font-noto tracking-tight">2.3 併購 Exaion：掌握核心冷卻與雲端編排技術</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>除了電力與資本，MARA 以 1.68 億美元估值收購法國國家電力公司（EDF）子公司 Exaion 64% 股權，以獲取高階 AI 雲端編排與浸沒式冷卻等底層工程技術。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>Exaion 專注於提供安全、環保的 HPC 與 AI 雲端基礎設施，並與 NVIDIA、Deloitte、2CRSI 等科技巨頭有深厚合作。透過此次交易（MARA France SAS 主導，保留 2027 年增持至 75% 的選擇權），MARA 直接獲取了營運複雜 AI 雲端與先進浸沒式冷卻技術（Immersion Cooling）的工程團隊。
+                    </p>
+                    <p class="mb-8">
+                        這項收購不僅使 MARA 補齊了軟體編排短板，更使其商業觸角延伸至歐洲受高度監管的「主權數據中心」市場，完成了技術轉移與全球化佈局的雙重目標。
+                    </p>
+
+                    <h3 id="section-2-4" class="not-prose analysis-h3 font-noto tracking-tight">2.4 財務陣痛與比特幣儲備戰略的重大妥協</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>儘管戰略宏大，但轉型的財務陣痛使 MARA 在 2026 年第一季度認列 13 億美元淨虧損，被迫妥協「全額保留比特幣（HODL）」的傳統信仰，大舉拋售 20,880 枚比特幣變現 15 億美元。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>根據第一季財報，MARA 營收衰退 18% 至 1.746 億美元，且因比特幣回調認列高達 10 億美元的未實現公允價值減損，加上 4,590 萬美元的人力精簡重組費用（裁員 15%），致使淨虧損達 13 億美元（每股虧損 3.31 美元）。在此壓力下，MARA 變現了持有的 20,880 枚比特幣（變現 15 億美元），將 11 億美元折價回購註銷 30% 在外流通可轉債（消除 9% 的潛在股權稀釋風險），其餘償還信用額度並充實 AI 資本儲備。持幣量降至 35,303 枚。
+                    </p>
+                    <p class="mb-8">
+                        雖然全球上市公司持幣排名從第二名滑落至第四名，但管理層深刻體會到：將不產生現金流的加密貨幣儲備，轉化為具備穩定法幣現金流的 AI 實體基礎設施，才是實現長期估值翻轉的唯一出路。
+                    </p>
+
+                    <h3 id="section-2-5" class="not-prose analysis-h3 font-noto tracking-tight">2.5 本業挖礦的防禦性擴張與 50 EH/s 目標</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>MARA 並未完全放棄挖礦，而是將其定位為防禦性營運底座與吸收電網剩餘電力的海綿，未來戰略性收縮盲目的礦機軍備競賽。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>第一季度末，MARA 已通電算力達到破紀錄的 72.2 EH/s（年增 33%），開採 2,247 枚比特幣，每日每 Petahash 的營運成本降至 27.6 美元（11 季內降幅達 42%）。但隨著全網難度攀升，自有站點的每枚比特幣挖礦能源成本已升至 40,047 美元。
+                    </p>
+                    <p class="mb-8">
+                        管理層明確表示，未來硬體升級將基於極嚴格的經濟回報標準，不再進行無節制的 ASIC 礦機採購，資源已全面轉向 HPC 與 AI。
+                    </p>
+
+                    <!-- CHAPTER 3 -->
+                    <h2 id="chapter-3" class="not-prose indicator-h2">
+                        <span class="number-circle">3</span>
+                        <span class="title-main">第三章：資本結構脆弱性與純加密代理商的困境：以微策略 (MSTR) 為例</span>
+                    </h2>
+
+                    <p class="mb-8">
+                        要深刻理解為何礦企急於轉型，我們必須從純加密代理商微策略（MicroStrategy, NASDAQ: MSTR）在 2026 年面臨的資本結構困境中尋找深層邏輯。MSTR 的現狀完美詮釋了「高槓桿 Beta」模型的脆弱性，這也是推動基礎設施板塊與純加密資產脫鉤的核心驅動力。
+                    </p>
+
+                    <h3 id="section-3-1" class="not-prose analysis-h3 font-noto tracking-tight">3.1 鉅額帳面虧損與「不賣幣」神話的破滅</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>微策略一直以來堅持「絕不賣幣」的企業國庫儲備信條，在 2026 年第一季度創紀錄的 125 億美元季度淨虧損壓力下宣告破滅，公司首次公開承認可能需要出售比特幣來支付股息。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>截至 2026 年 5 月 3 日，MSTR 累積持有 818,334 枚比特幣（佔總供應量的 3.9%），總購入成本達 618.1 億美元，平均成本為每枚 75,537 美元。然而其第一季財報因比特幣市價回調，認列高達 144.6 億美元的未實現公允價值減損，導致單季淨虧損達 125.4 億美元（其軟體本業營收僅微幅成長至 1.243 億美元）。Michael Saylor 與執行長 Phong Le 首次坦承需要出售部分持幣以支付優先股的固定股息，Polymarket 上預測其年底前賣幣的合約機率瞬間飆升至 48%，吸引超過 2,300 萬美元的交易量。
+                    </p>
+                    <p class="mb-8">
+                        這項歷史性的聲明徹底擊碎了 MSTR 自我建構的「永不拋售」神話，並向市場敲響了警鐘：在缺乏足夠主營業務現金流的支持下，純資產代理人模式在下行週期將面臨剛性法幣支出的致命威脅。
+                    </p>
+
+                    <h3 id="section-3-2" class="not-prose analysis-h3 font-noto tracking-tight">3.2 優先股 STRC 的雙面刃與流動性緊縮的反射性迴圈</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>迫使微策略做出妥協的催化劑，在於其發行的 85 億美元高息永續優先股（STRC），這類剛性現金流支出義務在幣價回調時形成了流動性緊縮的惡性反射性迴圈。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>STRC 優先股在 9 個月內膨脹至 85 億美元市值，且附帶高達 11.5% 的年化股息殖利率。當比特幣價格下跌、MSTR 普通股溢價縮水時，若發行新普通股籌資將嚴重稀釋現有股東的「每股比特幣含量 (BTC per share)」。為避免稀釋，公司被迫出售底層資產（比特幣）變現以支付利息，這種被迫拋售反過來向加密市場注入龐大賣壓，進一步打擊幣價並形成向下螺旋。雖然 MSTR 於 5 月中旬透過 ATM 計畫拋售 20 億美元普通股以回補 24,869 枚比特幣維持帳面 BTC Yield 增長，但已無法掩蓋其資本結構的高風險本質。
+                    </p>
+                    <p class="mb-8">
+                        市場對此洞若觀火，這也合理解釋了為何機構資金開始撤出純高槓桿加密代理資產，轉而流入如 IREN、WULF 等具備實體 AI 資料中心合約、能產生真實現金流支撐的算力基礎設施股。
+                    </p>
+
+
+                    <!-- CHAPTER 4 -->
+                    <h2 id="chapter-4" class="not-prose indicator-h2">
+                        <span class="number-circle">4</span>
+                        <span class="title-main">第四章：同業競爭格局與 AI 算力板塊的 Alpha 收益驗證</span>
+                    </h2>
+
+                    <p class="mb-8">
+                        在 2026 年 5 月的資本市場中，投資者對於加密資產相關股票的定價邏輯發生了決定性的分裂。過去，比特幣礦企的股價走勢與比特幣本體（Spot BTC）及 MSTR 呈現高度的同質性連動（High Beta）。但最新的市場數據強烈證實，「積極轉型 AI 算力的基礎設施商」正在創造顯著的 Alpha 收益，並與純加密資產正式脫鉤。
+                    </p>
+
+                    <h3 id="section-4-1" class="not-prose analysis-h3 font-noto tracking-tight">4.1 基礎資產盤整與「算力溢價」的強烈背離</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>2026 年 5 月的最新市場數據強烈證實，積極轉型 AI 算力的算力基礎設施商正在創造顯著的 Alpha 收益，走勢與陷入盤整的純加密資產產生強烈的「算力溢價」背離。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>觀察 2026 年 5 月底的市場交易數據，兩大板塊呈現截然不同的走勢。在基礎資產端：比特幣（BTC-USD）近 6 個月內下跌約 7.80%（報價 77,642 美元），微策略（MSTR）近 6 個月下跌 7.93%（報價 164.85 美元）；而在 AI 算力與基礎設施端：WULF 近 6 個月漲幅高達 81.47%（報價 22.75 美元），RIOT 漲幅達 76.30%（報價 24.49 美元），CLSK 漲幅達 37.28%（報價 15.99 美元），IREN 市值則在百億級合約加持下突破 200 億美元。MARA 雖受財報巨虧拖累，但近半年仍繳出 20.87% 的正報酬（報價 13.81 美元）。
+                    </p>
+                    <p class="mb-8">
+                        這種表現的分歧，強烈暗示華爾街正透過實質資金投票，將「穩定性溢價（Stability Premium）」賦予這些轉型企業，從而改變了該板塊的估值錨點。
+                    </p>
+
+                    <h3 id="section-4-2" class="not-prose analysis-h3 font-noto tracking-tight">4.2 IREN：NVIDIA 34億美元合約加持的新世代雲端巨頭</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>在所有轉型礦企中，Iris Energy（NASDAQ: IREN）執行最為徹底，其藉由與 NVIDIA 簽訂的 34 億美元 AI 雲端合約，成功轉型為實質意義上的新世代雲端供應商（Neo-cloud）。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>2026 年 5 月 7 日，IREN 宣布與 NVIDIA 簽訂為期 5 年、總值 34 億美元的 AI 基礎設施託管合約，在德州 Childress 數據中心部署 60 MW 的 Blackwell 液冷系統。此合約並非單純電力租賃，IREN 透過與 Mirantis 合作提供全託管 GPU 雲端服務。作為交易一部分，NVIDIA 獲贈 5 年期 3,000 萬股認股權證（履約價 70 美元，約折合 21 億美元潛在注資）。IREN 單季 AI 雲端營收已達 3,360 萬美元，預估 2026 年底其年度經常性收入（ARR）將達到 37 億美元（31 億已簽約），市值隨之飆升至 202.9 億美元，本益比達 195 倍。
+                    </p>
+                    <p class="mb-8">
+                        此合約的落地使得 IREN 在經常性收入（ARR）的支撐下，完全脫離了傳統挖礦股的波動估值泥淖，被市場完全定價為高成長的 AI 科技股。
+                    </p>
+
+                    <h3 id="section-4-3" class="not-prose analysis-h3 font-noto tracking-tight">4.3 TeraWulf (WULF)：HPC 營收實質反超本業的高利潤典範</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>TeraWulf（NASDAQ: WULF）則是當下已實現收益轉型的最強典範，其 HPC 基礎設施租賃營收佔比已正式反超傳統挖礦業務，高達 60% 的營收貢獻證明了該模式的利潤率。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>根據 WULF 2026 年第一季財報，公司總營收 3,400 萬美元中，HPC 基礎設施租賃營收達 2,100 萬美元（季增 117%，佔比達 60%），而數位資產挖礦收入則降至 1,300 萬美元。WULF 位於紐約州的 Lake Mariner 園區採用零碳排的核能與水力發電，成功為 Core42 交付 60 MW 臨界 IT 容量。由於 HPC 業務在運作時能帶來高達 80% 至 85% 的站點級利潤率（Site-level profit margins），WULF 市值已穩定在 113.1 億美元，近半年股價漲幅高達 81.47%。
+                    </p>
+                    <p class="mb-8">
+                        這項財報數據標誌著 WULF 在實質財務意義上完成了從比特幣礦企向 AI 數據中心營運商的質變，成為高利潤綠能數據中心的板塊龍頭。
+                    </p>
+
+                    <h3 id="section-4-4" class="not-prose analysis-h3 font-noto tracking-tight">4.4 RIOT 與 CleanSpark：產能擴張與估值分歧的觀望者</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>相對於 IREN 與 WULF 的迅速合約變現，Riot Platforms（RIOT）與 CleanSpark（CLSK）則依靠其龐大的「潛在電力與站點容量儲備」來維持估值，正處於重估的分水分嶺。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>CleanSpark 目前擁有北美第二大的可轉換電力容量（1,175 MW），規模僅次於 MARA，市值約 41 億美元（報價 15.99 美元），但因尚未公布大額已落地 AI 合約，重估動能相對溫和。Riot Platforms 則憑藉龐大基礎設施規模，分析師預計其 HPC 服務將在 2026 年底貢獻總營收的 13%，市值達 92.6 億美元（報價 24.49 美元），近半年漲幅達 76.30%。
+                    </p>
+                    <p class="mb-8">
+                        對於這些觀望者而言，掌握電力是未來談判的籌碼，但在華爾街全面依賴已簽約 Arr 進行定價的當下，沒有實質合約落地的企業在估值上將面臨分層壓力。
+                    </p>
+
+                    <h3 id="section-4-5" class="not-prose analysis-h3 font-noto tracking-tight">4.5 2026 年 5 月大型礦企財務與市場估值對比矩陣</h3>
+                    <div class="responsive-table-wrapper not-prose mb-16 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-xl overflow-hidden theme-bg-card dark:bg-slate-900/40 backdrop-blur-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
+                                    <th class="py-4 px-6 w-1/6">企業名稱與代碼</th>
+                                    <th class="py-4 px-6 w-1/12 text-center">市值 (億美元)</th>
+                                    <th class="py-4 px-6 w-1/12 text-center">近半年股價</th>
+                                    <th class="py-4 px-6 w-1/12 text-center">Q1 26 淨損 (百萬)</th>
+                                    <th class="py-4 px-6 w-1/3">關鍵 AI / HPC 佈局與合約進展</th>
+                                    <th class="py-4 px-6 w-1/4">板塊定位與市場評價</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-700/80 text-sm md:text-base">
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                        IREN (IREN)
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top text-center font-semibold">
+                                        202.9
+                                    </td>
+                                    <td class="py-5 px-6 text-emerald-600 dark:text-emerald-400 align-top text-center font-semibold">
+                                        強勢爆發
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-500 dark:text-slate-400 align-top text-center">
+                                        -
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        獲 NVIDIA 34億美元合約 (60MW)，採用 Blackwell 系統，目標年底 ARR 達 37 億美元。
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        新世代 AI 雲端供應商 (Neo-cloud)
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                        TeraWulf (WULF)
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top text-center font-semibold">
+                                        113.1
+                                    </td>
+                                    <td class="py-5 px-6 text-emerald-600 dark:text-emerald-400 align-top text-center font-semibold">
+                                        +81.47%
+                                    </td>
+                                    <td class="py-5 px-6 text-rose-600 dark:text-rose-400 align-top text-center">
+                                        (427.6)
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        Q1 HPC 營收 2,100萬美元 (占比 60%)，已為 Core42 交付 60MW 容量。
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        高利潤率綠能數據中心營運商
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                        RIOT (RIOT)
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top text-center font-semibold">
+                                        92.6
+                                    </td>
+                                    <td class="py-5 px-6 text-emerald-600 dark:text-emerald-400 align-top text-center font-semibold">
+                                        +76.30%
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-500 dark:text-slate-400 align-top text-center">
+                                        -
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        預計 2026 年底 HPC 營收佔比達 13%，以龐大基礎設施規模與轉型潛力支撐。
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        大型綜合算力基礎設施商
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                        MARA (MARA)
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top text-center font-semibold">
+                                        52.7
+                                    </td>
+                                    <td class="py-5 px-6 text-emerald-600 dark:text-emerald-400 align-top text-center font-semibold">
+                                        +20.87%
+                                    </td>
+                                    <td class="py-5 px-6 text-rose-600 dark:text-rose-400 align-top text-center">
+                                        (1,300.0)
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        15億美元收購 Long Ridge，啟動 200MW AI 擴建，Starwood 合資 1GW+。
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        具龐大重估潛力的多元基礎設施巨頭
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                        CleanSpark (CLSK)
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top text-center font-semibold">
+                                        41.0
+                                    </td>
+                                    <td class="py-5 px-6 text-emerald-600 dark:text-emerald-400 align-top text-center font-semibold">
+                                        +37.28%
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-500 dark:text-slate-400 align-top text-center">
+                                        -
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        擁有 1,175 MW 轉換潛力，規模巨大，但目前尚無大型 AI 落地合約。
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        具備電力儲備潛力的觀望者
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                        微策略 (MSTR)
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top text-center font-semibold">
+                                        560.4
+                                    </td>
+                                    <td class="py-5 px-6 text-rose-600 dark:text-rose-400 align-top text-center font-semibold">
+                                        -7.93%
+                                    </td>
+                                    <td class="py-5 px-6 text-rose-600 dark:text-rose-400 align-top text-center">
+                                        (12,540.0)
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        無 (純加密貨幣資產代理)，持有 818,334 BTC，承受優先股 STRC 利息壓力。
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                        陷於資本結構挑戰的高槓桿代理商
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- CHAPTER 5 -->
+                    <h2 id="chapter-5" class="not-prose indicator-h2">
+                        <span class="number-circle">5</span>
+                        <span class="title-main">第五章：MARA 估值模型轉換與未來向上重估 (Re-rating) 空間</span>
+                    </h2>
+
+                    <p class="mb-8">
+                        結合知名分析師 Mason Yang 的投資分析報告與最新市場發展，MARA 正處於估值模型轉換的「奇點（Singularity）」。專業投資機構不應再使用衡量週期性礦業板塊的「企業價值/比特幣產量（EV/Production）」或單純的「股價淨值比（P/B）」來為 MARA 估值，而必須逐步導入衡量傳統數據中心與雲端 SaaS 企業的「企業價值/EBITDA（EV/EBITDA）」與「經常性收入乘數（ARR Multiple）」。
+                    </p>
+
+                    <h3 id="section-5-1" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">5.1 從高 Beta 挖礦股到數據中心基礎設施的 Multiple Expansion</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>推動 MARA 估值邏輯徹底改變、實現重塑的最重要因素，在於由穩定合約收益帶來的「穩定性溢價（Stability Premium）」注入，這將促使其擺脫高 Beta 挖礦股的定位，轉向數據中心基礎設施的估值體系。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>當 MARA 成功將其龐大的電力資源轉化為支援 AI 的高密度數據中心時，其與科技巨頭或雲端營運商簽訂的將是長達 3 至 5 年甚至更久的服務級別協議（SLA）。這些合約的租金收益完全不受比特幣價格波動的影響，能產生極其穩定的法幣現金流。一旦資本市場確認這部分現金流的持續性與增長性，MARA 業務結構中的「類基礎設施」比重將大幅上升。在美股市場中，傳統數據中心營運商（如 Equinix, Digital Realty）通常享有遠高於週期性礦企的 P/E 與 EV/EBITDA 估值倍數。
+                    </p>
+                    <p class="mb-8">
+                        這種板塊定位的轉移，將觸發估值乘數擴張（Multiple Expansion），使 MARA 的資產屬性從純週期性加密貨幣代理，晉升為具備高可預測性現金流的科技基礎設施，從而帶來股價的結構性重估與躍升。
+                    </p>
+
+                    <h3 id="section-5-2" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">5.2 2026 年底 AI 營收佔比達標路徑與財務貢獻預測</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>根據分析與最新研究預測，MARA 正處於財務轉型的奇點，預期在 2026 年底實現 AI 營收的實質性增長，顯著改善其利潤結構的穩定性。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>具體的財務結構預測與轉型路徑 include：
+                    </p>
+                    <ul class="mb-8 space-y-4 text-slate-700 dark:text-slate-300 list-disc pl-6">
+                        <li><strong>營收佔比預測</strong>：預計到 2026 年底，MARA 的 AI 算力相關服務營收佔比將達到總營收的 12% 至 18%。</li>
+                        <li><strong>EBITDA 穩定性貢獻</strong>：由於 AI 算力合約（SLA）產生穩定的法幣現金流且利潤率較高，預計該業務對公司整體 EBITDA 的穩定性貢獻將超過 25%。</li>
+                        <li><strong>Long Ridge 200MW 擴建啟動</strong>：預計 2027 年上半年啟動針對 NVIDIA Blackwell 晶片的高密度機房建設，為 2028 年及以後的經常性收入奠定物理基礎。</li>
+                        <li><strong>Starwood 合資項目落地</strong>：目前已對其 90% 自有站點進行租戶洽談，預期在 2026 年底前簽署多份長期租賃合約，以「輕資產」模式拉升租金收入。</li>
+                        <li><strong>Exaion 技術協同效應</strong>：整合 Exaion 的雲端編排與浸沒式冷卻技術，預期縮短 30% 以上的機房交付時程，加速商業化變現。</li>
+                    </ul>
+                    <p class="mb-8">
+                        若 MARA 能如期在 2026 年底達成 12%-18% 的 AI 營收佔比目標，並持續朝 25% 的 EBITDA 貢獻邁進，對標 RIOT 甚至傳統數據中心類股的估值水平，MARA 目前約 52.7 億美元的市值，將享有極為廣闊的向上 Multiple Expansion 重估空間。
+                    </p>
+
+                    <h3 id="section-5-3" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">5.3 潛在風險：資本支出、SLA 違約與監管壓力</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>在樂觀的估值重塑預期之外，投資人必須正視 MARA 在硬體供應鏈延遲、高規格營運合約與電力政策不確定性上所面臨的結構性挑戰。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>這三大核心風險因子具體如下：
+                    </p>
+                    <ul class="mb-8 space-y-4 text-slate-700 dark:text-slate-300 list-disc pl-6">
+                        <li><strong>巨大的資本支出（CapEx）與供應鏈壓力</strong>：儘管 MARA 變現了 15 億美元比特幣，但在全球 AI 軍備競賽下，變壓器、高階冷卻設備與 NVIDIA GPU 的交期大幅拉長，成本持續高企，若後續現金流斷裂，可能面臨股權大幅稀釋的二階稀釋風險。</li>
+                        <li><strong>嚴格的 SLA 違約風險與法律賠償地雷</strong>：AI 運算合約多要求 99.99% 以上的可用性（Uptime）。這與挖礦「隨時可斷電套利」的容錯率不同，一旦因冷卻失效或電網波動導致運算中斷，將面臨天文數字的合約賠償。</li>
+                        <li><strong>2026 年電力監管政策變動</strong>：隨著 AI 數據中心與加密挖礦雙重擠壓電網負載，美國監管機構可能收緊容量配額與環保審查。MARA 雖收購 Long Ridge CCGT 電廠，但在擴建至 600 MW 的過程中仍面臨 PJM 互連協議審查延遲的政策風險。</li>
+                    </ul>
+                    <p class="mb-8">
+                        這些風險的存在意謂著轉型絕非坦途，任何關於 SLA 履約的負面事件或供應鏈斷裂，都將迅速對其估值產生壓制，是投資人在計算非對稱性收益時必須納入的下行變數。
+                    </p>
+
+                    <!-- CHAPTER 6 -->
+                    <h2 id="chapter-6" class="not-prose indicator-h2">
+                        <span class="number-circle">6</span>
+                        <span class="title-main">第六章：總結與投資建議</span>
+                    </h2>
+
+                    <h3 id="section-6-1" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">6.1 能源、算力與資本的終極角力</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>2026 年全球算力產業的競爭本質已從傳統的「ASIC 礦機規模與廉價電力獲取」，演變為以「併網發電量掌控、輕資產合資融資與 AI-SLA 高規營運」為核心的能源與資本的終極角力。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>當前產業呈現「能源套利優化」與「算力混合部署」的雙引擎物理融合。在 2026 年的最新架構下，AI 基礎設施端負責創造高倍數、高利潤且不受幣價波動影響的經常性收入（ARR），為公司資產負債表提供穩定的法幣現金流底盤；而保留的 ASIC 比特幣挖礦產能，則發揮「電力調度彈性」的作用，在電價谷值時全開套利、峰值時關機釋放電力給 AI 叢集。這徹底取代了傳統單向、無彈性的粗放型加密貨幣挖礦模式。
+                    </p>
+                    <p class="mb-8">
+                        這不僅是一場硬體設備的升級，更是公司資本結構與全球電網靈活調度的深度重塑，投資市場對此類結合穩定法幣現金流與高 Beta 選擇權的雙引擎架構給予了清晰的結構性溢價。
+                    </p>
+
+                    <h3 id="section-6-2" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">6.2 雙重投資邏輯與戰略研判</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>針對 MARA 的投資研判應奠基於「估值轉換潛力」與「轉型執行力風險」的雙重評估邏輯，切忌盲目將其與純加密代理資產混為一談。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>這套雙重邏輯具體拆解如下：
+                    </p>
+                    <ul class="mb-8 space-y-4 text-slate-700 dark:text-slate-300 list-disc pl-6">
+                        <li><strong>估值轉換與重估選擇權</strong>：MARA 在 2026 年第一季度的財務陣痛（包括大舉出售 20,880 枚比特幣、認列 13 億美元虧損）本質上是為了去槓桿並回購 30% 可轉債，從而為後續 200MW AI 機房建設與 2.2 GW 儲備電力變現清理資產負債表通道。年底若 AI 營收佔比順利達到 12%-18% 目標，其估值模型將迎來顯著的 EV/EBITDA Multiple Expansion。</li>
+                        <li><strong>密切監控執行力與競爭壁壘</strong>：相較於 IREN 已落地 34 億美元 NVIDIA 雲端合約以及 WULF 高達 60% 的 HPC 營收占比，MARA 目前仍處於前期基礎建設階段。投資人需實時追蹤其與 Starwood 的 1 GW+ 數據中心合約簽署進度、可轉債再融資成本（維持在 7% 左右的利率區間），以及各州電力監管配額的變化。</li>
+                    </ul>
+                    <p class="mb-8">
+                        總結來說，MARA 龐大的 2.2 GW 電力容量儲備是其在 2026 年下半場轉型角力的核心武器。只要能順利跨越前期龐大的 CapEx 門檻並證明長期 SLA 的履約可用性，公司將有望在 AI 算力經濟的重塑期中，實現極具爆發力的估值重塑與資產溢價。
+                    </p>
+
+                    <!-- Part 2: 文章分析 (Article Analysis) -->
+                    <div class="not-prose mt-16 border-t-2 border-slate-100 dark:border-slate-700 pt-10">
+                        <div
+                            class="not-prose text-2xl font-bold text-slate-900 dark:text-slate-100 mb-8 border-l-4 border-blue-600 pl-4" role="heading" aria-level="2">
+                            文章分析
+                        </div>
+
+                        <!-- Part 2.1: 推論邏輯分析 (Inference Logic) -->
+                        <div id="article-inference-logic" class="mt-20">
+                            <h3 id="文章推論邏輯分析" class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto">文章推論邏輯分析</h3>
+
+                            <h4 id="分析面向-比特幣減半週期下的算力資產定價重構" class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4">分析面向：比特幣減半週期下的算力資產定價重構</h4>
+                            <p class="mb-6 text-slate-700 dark:text-slate-300">
+                                作者從 2026 年比特幣減半後傳統礦企所面臨的生存危機出發，結合全球 AI/HPC 吉瓦級的「能源與電力容量」飢荒，提出了一個核心假設：<strong>掌握電網互連特權與物理基載電力的比特幣礦企，其估值邏輯正從高波動性的「加密貨幣週期股」向「AI 基礎設施服務商」進行根本性轉移（Multiple Expansion）</strong>。推論起點是「電力與空間的絕對物理稀缺性」，並以微策略（MSTR）優先股付息危機作為反面教材，對比 IREN 和 TeraWulf 的轉型成功實踐，最終導向 MARA 正在進行的重估路徑。
+                            </p>
+
+                            <div class="space-y-8 pl-4 border-l-2 border-slate-100 dark:border-slate-700">
+                                <div>
+                                    <h5 class="font-bold text-slate-800 dark:text-slate-200 mb-3 text-base">關鍵推論鏈條一：能源稀缺性與礦場資產重組</h5>
+                                    <ul class="space-y-2 text-slate-700 dark:text-slate-300 list-disc pl-5">
+                                        <li><strong>事實前提</strong>：AI 推論與訓練引發了吉瓦級的電力容量需求，而 Tier 3 以上高規格 HPC 資料中心建設成本高達每兆瓦 1,200 萬美元（比挖礦機房高出 20 倍），且面臨極長期的變壓器與電網協議審查交期。</li>
+                                        <li class="mt-2 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">↳ <strong>邏輯結論</strong>：擁有現成電力互連協議與大面積土地的大型礦企（如 MARA 擁有的 2.2 GW 開發容量）成為科技巨頭唯一的速效電力來源。礦企可以藉由與地產/基建資本（如 Starwood）建立「輕資產合資企業」模式，在不嚴重稀釋股權的情況下，將電力儲備轉化為長期的經常性法幣租賃收益。</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-slate-800 dark:text-slate-200 mb-3 text-base">關鍵推論鏈條二：經常性收入（ARR）主導的估值分層</h5>
+                                    <ul class="space-y-2 text-slate-700 dark:text-slate-300 list-disc pl-5">
+                                        <li><strong>事實前提</strong>：IREN 與 NVIDIA 簽署 34 億美元 AI 雲端託管合約後，市值飆升至 200 億美元（ARR 預期達 37 億美元），WULF 的 HPC 營收占比達到 60% 實現利潤反超；相比之下，純持幣的 MSTR 因無經常性法幣收入，其 85 億美元的永續優先股 STRC 面臨 11.5% 剛性利息壓力，被迫首次考慮賣幣。</li>
+                                        <li class="mt-2 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">↳ <strong>邏輯結論</strong>：資本市場正逐步揚棄純週期性的 EV/Production 或單純 P/B 估值法，轉而對擁有真合約、穩定經常性法幣收入（ARR）的轉型礦企給予高倍數的 EV/EBITDA 重估，導致 AI 轉型算力股與純加密資產正式脫鉤。</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Part 2.2: 敘事邊界與關鍵變數補充 -->
+                        <div id="logic-blindspots"
+                            class="my-8 p-6 theme-bg-body dark:bg-slate-900/20 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                            <h3 id="敘事邊界與關鍵變數補充"
+                                class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2 font-noto">
+                                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                    </path>
+                                </svg>
+                                敘事邊界與關鍵變數補充
+                            </h3>
+                            <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                                <li class="flex gap-2">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 shrink-0">SLA 的剛性營運懲罰</span>
+                                    <span>比特幣挖礦是「隨時可斷電」的極高容錯率業務；而 AI/HPC 的 Uptime 通常要求 99.99% 以上，且伴隨極為苛刻的數據隱私與安全條款。礦企若無專業 HPC 營運團隊（如 MARA 收購 Exaion 的主因），容易在營運初期因技術故障面臨巨額合約罰款。</span>
+                                </li>
+                                <li class="flex gap-2">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 shrink-0">電網互連審查行政時延</span>
+                                    <span>儘管 MARA 收購了 Long Ridge 505 MW 發電廠以實現電力自主，但在將該站點轉化為 600 MW 超級數據中心時，仍然需要與 PJM 互連網絡進行協議變更。美國各區域電網（PJM, ERCOT）對數據中心新設及增容負載的審查隊列已積壓長達數年。電力容量在「帳面上」與「實際通電上」存在巨大的時間差（至少 18-36 個月），這會極大推遲營收兌現時程。</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- CONCLUSION BLOCK (Mason Yang 的觀察) -->
+                        <!-- ==========================================================================
+                             🚀 AI GUIDANCE: 終極 Actionable Intelligence 寫作與資料映射 SOP
+                             ==========================================================================
+                             ⚠️ 寫作底線 (Hard Rule)：絕對禁止憑空生成結論。寫作者或 Agent 必須嚴格遵守思考與原料映射規範。
+                             📖 詳細寫作指引與推導公式，請強制參閱單一真實來源指南：
+                             [writing-style-guide.md](../core/writing-style-guide.md)
+                             (特別是 [3.2 思考與演化三階段](../core/writing-style-guide.md#3.2-思考與演化三階段) 與 [3.5 實戰：Actionable Intelligence 寫作與原料映射 SOP](../core/writing-style-guide.md#3.5-實戰：actionable-intelligence-寫作與原料映射-sop))。
+                             
+                             【前置原料映射矩陣 (參閱 [SOP 第 3.2 節](../core/writing-style-guide.md#3.2-思考與演化三階段))】：
+                             1. 讀取 #section-5w1h-core (L394-L515)：提取 WHO 與 WHY，作為激勵與權力分析起點。
+                             2. 讀取 #article-inference-logic (L532-L559)：提取推論前提與正反饋動能，作為核心命題起點。
+                             3. 讀取 #logic-blindspots (L560-L583)：提取忽略變數與尾部風險，作為引爆因子起點。
+                             
+                             📜 寫作人格與節律 (參閱 [1. 核心人物設定](../core/writing-style-guide.md#1-核心人物設定-persona--core-philosophy) 與 [7.3 D-S-R 擴張協議](../core/writing-style-guide.md#7.3-內容擴張與語意擴展-content-expansion))：
+                             - 哲學型資本家視角 (Paul Graham & ARK Invest)。首句強制給出硬核 TL`DR 結論。
+                             - 執行 D-S-R 節律：直接斷言 -> 客觀數據支持 -> 投資決策定見強化。
+                             ========================================================================== -->
+                        <div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-700">
+                            <div class="flex items-center gap-2 mb-6">
+                                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h2 id="mason-yang-observation" class="not-prose text-xl text-slate-900 dark:text-slate-100 m-0 font-bold font-noto">Mason
+                                    Yang
+                                    的觀察 (Actionable Intelligence)</h2>
+                            </div>
+
+                            <div
+                                class="p-6 theme-bg-body dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 rounded-sm space-y-6">
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">1. 核心命題 (Core Proposition)</strong>
+                                    <p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-lg">
+                                        比特幣減半週期引起的傳統礦業產能出清，在本質上引發了算力資產從週期性「Beta 代理工具」向「AI/HPC 電力基礎設施特權」的定價奇點轉換；在 AI 大模型及代理型 AI 引發的能源飢荒下，擁有實體電網互連協議與發電量控制權的企業，將享有長期的穩定性溢價與估值擴張（Multiple Expansion）。
+                                    </p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">2. 激勵錨點 (Incentive Anchor)</strong>
+                                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                                        這場估值重塑背後的利益主體激勵十分明確：對轉型礦企（如 MARA）管理層而言，在毛利遭物理壓制下，拋售無息比特幣資產（變現 15 億美元）去槓桿並與 Starwood 等基建資本建立合資平台，是套現電力特權以獲取穩定法幣現金流、實現估值乘數擴張的最優路徑；對科技巨頭而言，支付高額「電力溢價」包下現成站點是規避電網審查、搶佔 GPU 份額的唯一方式；而微策略（MSTR）等純加密代理商則被困於以永續優先股（STRC）付息的剛性義務中，在幣價回調時面臨被迫賣幣以支付 11.5% 剛性利息的反射性流動性危機。
+                                    </p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">3. 引爆/反轉因子 (Trigger Factor)</strong>
+                                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                                        觀測二階轉向三階的關鍵變數包含：一是 **MARA 在 2026 年底 AI 營收佔比是否能突破 12% 至 18%** 臨界線，且是否有第一筆與 Hyperscaler 簽署的 SLA 託管合約落地；二是其債務回購後的剩餘可轉債融資成本能否穩定在 **7% 以下** 的再融資利差區間；三是 PJM 等電網互連協議變更審查時程是否被拖延超過 **24 個月**，這將直接推遲 ARR 現金流的兌現時點。
+                                    </p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">4. 演化劇本 (Evolution Scenarios)</strong>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <div
+                                            class="p-3 bg-white/50 dark:bg-slate-800/50 rounded border border-slate-100 dark:border-slate-700">
+                                            <span
+                                                class="block font-bold text-slate-800 dark:text-slate-200 mb-1 text-sm">路徑 A (預期內)</span>
+                                            <p class="text-xs text-slate-500">MARA 在 2026 年底前順利簽署數份 200MW 以上的合資租賃合約，Exaion 技術順利融入 Long Ridge 園區，AI 營收占比達到 15% 臨界點，市場逐步將其估值向 EV/EBITDA 的 15-20x 傳統數據中心倍數重估，股價與 BTC 脫鉤，享有穩定性溢價。</p>
+                                        </div>
+                                        <div
+                                            class="p-3 bg-white/50 dark:bg-slate-800/50 rounded border border-slate-100 dark:border-slate-700">
+                                            <span
+                                                class="block font-bold text-slate-800 dark:text-slate-200 mb-1 text-sm">路徑 B (黑天鵝)</span>
+                                            <p class="text-xs text-slate-500">PJM 電網協議審查因政策干預大幅受阻，且 Blackwell 供應鏈交期延遲，導致 Long Ridge 動工受挫。挖礦毛利被高成本蠶食，MARA 被迫再次大量拋售比特幣，甚至發行高息債券，導致稀釋股權與重估故事破滅。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">5. 行動策略 (Action Strategy)</strong>
+                                    <p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold">
+                                        投資人應採取「分層配置、以真 ARR 為核心」的非對稱性防禦配置：首選已實現 HPC 營收占比超 60% 且利潤率高達 80% 的 TeraWulf (WULF) 及獲 NVIDIA 34 億美元託管合約的 IREN 作為高確定性 AI 算力的底倉；對於 MARA 則採取「階段性驗證建倉」，在 2026 年底前，利用比特幣回調與挖礦板塊超跌的時序，於 Starwood 合資租賃合約簽約率得到確認時分批買入，捕捉其估值模型從 EV/Production 轉換至數據中心 EV/EBITDA 帶來的 50% 以上估值擴張空間，同時避開高槓桿的純持幣代理資產。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- References & Disclaimer -->
+                    <div
+                        class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">參考資料 (References)</p>
+                        <ol class="list-decimal pl-4 space-y-1 mb-4">
+                            <li>MARA (MARA) Q1 2026 Earnings Call Transcript | The Motley Fool, 檢索日期：2026年5月26日, <a href="https://www.fool.com/earnings/call-transcripts/2026/05/11/mara-mara-q1-2026-earnings-call-transcript/" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>MARA Advances Its Optimized Digital Infrastructure Strategy with Acquisition of Long Ridge Energy | MARA Insights, 檢索日期：2026年5月26日, <a href="https://www.mara.com/posts/mara-agreement-to-acquire-long-ridge-energy-power" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>MARA Announces Strategic Partnership with Starwood on 1 GW+ AI-ready data centers | MARA Insights, 檢索日期：2026年5月26日, <a href="https://www.mara.com/posts/mara-announces-strategic-partnership-with-starwood" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Will Strategy Sell Bitcoin? Q1 Earnings Highlights | Investing.com, 檢索日期：2026年5月26日, <a href="https://www.investing.com/analysis/will-strategy-sell-bitcoin-q1-earnings-highlights-200679970" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>IREN lands $3.4B NVIDIA AI cloud deal as neocloud battle intensifies | EdgeIR, 檢索日期：2026年5月26日, <a href="https://www.edgeir.com/iren-lands-3-4b-nvidia-ai-cloud-deal-as-neocloud-battle-intensifies-20260520" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>TeraWulf Reports First Quarter 2026 Financial Results Surging HPC Revenue | TeraWulf Investor Relations, 檢索日期：2026年5月26日, <a href="https://investors.terawulf.com/news-events/press-releases/detail/140/terawulf-reports-first-quarter-2026-results" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                        </ol>
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本網頁所有內容僅供學術交流與投資研究參考，不構成任何證券、期貨、數位資產之買賣邀約或投資建議。讀者在做出任何投資決策前，應尋求專業財務顧問之意見，並自行承擔市場交易之所有風險。</p>
+
+                    </div>
+
+                    <!-- ========================================================================== -->
+                    <!-- ⚠️ CRITICAL BOUNDARY: END OF ARTICLE CONTENT ⚠️ -->
+                    <!-- 任何內文修改絕不可越過或刪除以下閉合標籤，否則將導致右側邊欄佈局崩塌 -->
+                    <!-- ========================================================================== -->
+                    </div> <!-- /END main-content-area -->
+
+
+            </article>
+
+            <!-- Related Articles (Mobile bottom) -->
+            <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+        </div>
+        <!-- /END Center Column -->
+
+        <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+        <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+            <div class="sticky top-24 space-y-6 sidebar-scroll">
+
+                <!-- A. Article Meta Card -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            文章資訊</p>
+                    </div>
+                    <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                        <div class="flex justify-between items-center px-4 py-2.5">
+                            <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                            <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-05-26</dd>
+                        </div>
+                        <div class="flex justify-between items-center px-4 py-2.5">
+                            <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                            <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">數位資產與 Web3</dd>
+                        </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">閱讀時間</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">約 117 分鐘</dd>
+                            </div>
+                    </dl>
+                </div>
+
+                <!-- B. Key Findings Card -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            核心結論</p>
+                    </div>
+                    <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                比特幣減半後，大型礦企正從「週期性週期股」重塑為「AI 基礎設施商」，享有穩定 ARR 與估值乘數擴張。
+                            </p>
+                        </li>
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                MARA 拋售 15 億美元比特幣去槓桿回購 30% 可轉債，並與 Starwood 合作 1GW+，旨在輕資產轉向 AI 數據中心。
+                            </p>
+                        </li>
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                微策略 (MSTR) 面臨 STRC 永續優先股 11.5% 剛性利息支出，在幣價回調時面臨被迫賣幣的流動性緊縮風險。
+                            </p>
+                        </li>
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                投資人配置首選已落地真 ARR 的 TeraWulf (WULF) 與 IREN，對 MARA 採取階段性合約落地的防守建倉策略。
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- C. Keywords -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            關鍵字</p>
+                    </div>
+                    <div class="px-4 py-3 flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">MARA Holdings</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">AI 算力</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">估值重塑</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">微策略 (MSTR)</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">IREN</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">TeraWulf (WULF)</span>
+                    </div>
+                </div>
+
+                <!-- D. Related Articles (Desktop sidebar) -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            延伸閱讀</p>
+                    </div>
+                    <div id="related-articles-sidebar"></div>
+                </div>
+
+            </div>
+        </aside>
+        <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button (fixed, bottom-right) -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core-taxonomy.js"></script>
+    <script src="../assets/js/core-articles-data.js"></script>
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+    <script src="../assets/js/widget-related-articles.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. Layout Shell ───────────────────────────────────
+            const header = new HeaderComponent();
+            header.setHomeUrl('../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // ── 3. Mobile TOC ──────────────────────────────────────
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // ── Related Articles (Common) ──────────────────────────
+            if (window.RelatedArticlesComponent) {
+                // Related Articles - Bottom
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-container')
+                    .setLimit(3)
+                    .init();
+
+                // Related Articles - Sidebar
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-sidebar')
+                    .setLayout('list')
+                    .setShowHeader(false)
+                    .setLimit(5)
+                    .init();
+            }
+
+            // ── 4. Scroll Events ───────────────────────────────────
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                // Progress bar
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+
+                // Back to top (show after 500px)
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+
+        });
+    </script>
+
+
+    <!-- Knowledge Tooltip (Injected) -->
+</body>
+
+</html>

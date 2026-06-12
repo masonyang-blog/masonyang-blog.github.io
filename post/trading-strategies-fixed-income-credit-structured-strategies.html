@@ -1,0 +1,1096 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>投資策略｜2026固定收益投資策略深度解析（下）：信用套利、MBS與結構化金融量化機制</title>
+    <meta name="description" content="[TL;DR] 2026年全球利率「Higher for Longer」環境下，結構化信用策略正經歷板塊移動。本文深度解構信用利差套利、CDS基差、可轉債Gamma交易及MBS負凸性異象，揭示金融工程如何將風險拆解並轉化為絕對報酬。">
+    <meta name="keywords" content="固定收益策略, 信用利差套利, CDS-現金基差, 可轉換債券套利, MBS, ABS, 負凸性, Gamma 交易, 私人信用市場, SLR, 系統性風險, 信用增級, 提前還款選擇權, Delta 中立, 2026 宏觀經濟">
+    <link rel="canonical" href="https://masonyang-blog.github.io/post/trading-strategies-fixed-income-credit-structured-strategies.html">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+    </style>
+    <!-- 
+        ==========================================================================
+        🤖 ADVANCED JSON-LD SCHEMA (AI 搜尋時代的實體消岐)
+        ==========================================================================
+        - {sameAs}: 連結權威 ID (Wikipedia/Wikidata) 實現實體消歧。
+        - {about/mentions}: 明確宣告內容核心主題與文中提及的次要實體。
+        - {FAQPage}: 嵌入問答模組，增加 AI 答案片段抓取機率。
+        - {Nested}: 嵌套 Organization、Person 與 Article 建立信譽鏈條。
+        ==========================================================================
+    -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [{
+          "@type": "AnalysisNewsArticle",
+          "@id": "https://masonyang-blog.github.io/post/trading-strategies-fixed-income-credit-structured-strategies.html#article",
+          "isPartOf": {
+            "@id": "https://masonyang-blog.github.io/#website"
+          },
+          "author": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "headline": "投資策略｜2026固定收益投資策略深度解析（下）：信用套利、MBS與結構化金融量化機制",
+          "description": "[TL;DR] 2026年全球利率「Higher for Longer」環境下，結構化信用策略正經歷板塊移動。本文深度解構信用利差套利、CDS基差、可轉債Gamma交易及MBS負凸性異象，揭示金融工程如何將風險拆解並轉化為絕對報酬。",
+          "datePublished": "2026-05-20",
+          "dateModified": "2026-05-20",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://masonyang-blog.github.io/post/trading-strategies-fixed-income-credit-structured-strategies.html"
+          },
+          "about": [
+            {
+              "@type": "Thing",
+              "name": "Fixed Income Strategy",
+              "sameAs": "https://www.wikidata.org/wiki/Q380186"
+            }
+          ],
+          "mentions": [
+            {
+              "@type": "Thing",
+              "name": "Federal Reserve",
+              "sameAs": "https://www.wikidata.org/wiki/Q154018"
+            },
+            {
+              "@type": "Thing",
+              "name": "Mortgage-backed security",
+              "sameAs": "https://www.wikidata.org/wiki/Q1318469"
+            },
+            {
+              "@type": "Thing",
+              "name": "Credit default swap",
+              "sameAs": "https://www.wikidata.org/wiki/Q581223"
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://masonyang-blog.github.io/post/trading-strategies-fixed-income-credit-structured-strategies.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "首頁",
+              "item": "https://masonyang-blog.github.io/index.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "傳統金融與市場",
+              "item": "https://masonyang-blog.github.io/post/archive.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "投資策略｜2026固定收益投資策略深度解析（下）：信用套利、MBS與結構化金融量化機制",
+              "item": "https://masonyang-blog.github.io/post/trading-strategies-fixed-income-credit-structured-strategies.html"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://masonyang-blog.github.io/post/trading-strategies-fixed-income-credit-structured-strategies.html#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "[核心問題 1]？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "[精簡且權威的答案摘要，增加精選摘要命中率]"
+              }
+            }
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://masonyang-blog.github.io/#author",
+          "name": "Mason Yang",
+          "url": "https://masonyang-blog.github.io",
+          "jobTitle": "Investment Researcher",
+          "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://masonyang-blog.github.io/logo.png"
+          },
+          "sameAs": [
+            "https://x.com/MasonYang16"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://masonyang-blog.github.io/#website",
+          "url": "https://masonyang-blog.github.io",
+          "name": "Mason Yang Blog",
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="trading-strategies-fixed-income-credit-structured-strategies">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : {Left TOC} {Article} {Right Sidebar}
+         <lg  : Single column
+    ========================================================= -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+
+                    <!-- ArticleTOC renders here -->
+                    <div id="toc-desktop-host">
+                        
+                    </div>
+
+                    <!-- Back to top (sidebar) -->
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">經濟時事分析</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">投資策略｜固定收益策略（下）</li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header ── -->
+                <header
+                    class="theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <!-- Category + Date -->
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            傳統金融與市場
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            <time datetime="2026-05-20">2026-05-20</time>
+                        </span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 15 分鐘閱讀</span>
+                    </div>
+
+                    <!-- H1 -->
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">投資策略｜2026固定收益投資策略深度解析（下）：信用套利、MBS與結構化金融量化機制</h1>
+
+                    <!-- Subtitle / Hook -->
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        從信用利差、CDS基差到MBS負凸性異象：在2026年高利率常態化環境下，解構金融工程的獲利引擎與系統性風險防線。
+                    </p>
+
+                </header>
+
+                <!-- Part 1 系列導覽 -->
+                <div class="not-prose mb-6 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 theme-bg-card dark:bg-slate-800/60 shadow-sm">
+                    <div class="flex flex-col gap-4">
+                        <span class="px-2.5 py-1 bg-slate-500/10 text-slate-600 dark:text-slate-400 rounded-full text-xs font-bold uppercase tracking-wider w-fit">專題上集 (PART 1)</span>
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-slate-50 font-noto">利率曲線與國債基準交易（上）</h3>
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">建議先閱讀上集：PCA 三因子、OTR/OFR 流動性溢酬、基差交易與 2026 空頭平坦化，再進入本篇信用與結構化策略。</p>
+                        <a href="trading-strategies-fixed-income-interest-rate-strategies.html" class="inline-flex items-center justify-center px-5 py-2.5 bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500 text-white font-bold rounded-xl transition-all w-fit text-sm">閱讀 Part 1 上集</a>
+                    </div>
+                </div>
+
+                <!-- ── Mobile TOC Target (行動版) ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- ── Article Body ── -->
+                <article
+                    class="article-body theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <!-- 
+                        📌 D-S-R PROTOCOL INDICATOR (寫作引導)
+                        1. Direct Answer (直接斷言): 段落首句點破核心問題與結論。 (必須包裹在 <strong class="dsr-label">[Direct Answer]</strong>)
+                        2. Support Details (支持細節): 包含數據、指標 (TPS, TVL, Q-ID) 或技術標準。 (必須包裹在 <strong class="dsr-label">[Support Details]</strong>)
+                        3. Reinforcement (語義強化): 將技術細節轉化為投資價值或風險判斷。 (不需標籤，直接寫入段落)
+                        
+                        ⚠️ 佈局注意事項 (Layout Standards):
+                        - 隱藏標籤: 務必使用 class="dsr-label" 以確保前端不直接顯示。
+                        - 段落間距: 所有 <p> 標籤必須顯式添加 class="mb-8" (或 mb-6) 以維持呼吸感。
+                        - 清單化原則: 當 Support Details 超過 3 個並列項時，強制使用 <ul> 以替代長段落。
+                    -->
+                    <!-- ── Lead Paragraph (前導引言) ── -->
+                    <!-- AI GUIDANCE (撰寫前提):
+                         1. 分析架構：先識別全文的 H2/H3 大綱與論證結構。
+                         2. 深度閱讀：完整理解文章中的證據與數據支持。
+                         3. 整合輸出：在掌握全局邏輯後，方於導言中清楚提出問題與假設。
+                         
+                         撰寫目標 (WHAT-HOW-WHY):
+                         - WHAT (觀察): 現實中發生了什麼？定義核心現象。
+                         - HOW (分析): 此事態如何發展？梳理邏輯順序。
+                         - WHY (推論): 底層原因為何？提出待驗證的關鍵假設。
+                    -->
+                    <div
+                        class="not-prose lead mb-16 px-8 py-10 theme-bg-body dark:bg-slate-900/10 border-l-4 border-slate-400 rounded-r-2xl">
+                        <p class="text-xl text-slate-700 dark:text-slate-200 font-bold leading-relaxed mb-6">
+                            本文實測解析 2026 年固定收益市場的深層邏輯，指出在「Higher for Longer」環境下，結構化策略已成為對抗系統性重定價的核心工具。
+                        </p>
+                        <ul class="space-y-4 text-lg text-slate-600 dark:text-slate-300">
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">WHAT</span>
+                                <span class="italic">2026年全球經濟在供應鏈重組與持續通膨壓力下，呈現「較高且持久」的利率環境，傳統公債面臨重定價，推動私人信用與結構化金融市場規模爆發。</span>
+                            </li>
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">HOW</span>
+                                <span class="italic">透過精確解構信用利差、利用CDS與現貨債券的負基差、執行可轉債Delta中立避險以及監測MBS提前還款風險，投資者能跨越傳統資產類別獲取Alpha。</span>
+                            </li>
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">WHY</span>
+                                <span class="italic">在流動性與監管資本稀缺的時代，利差不僅是風險補償，更是資產負債表空間的函數。唯有深度理解量化模型與融資穩定性，方能在複雜市場中確保資本安全。</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- ── 5W1H 核心架構與 SEO 提問解析 (首屏前置佈局) ── -->
+                    <!-- AI GUIDANCE (寫作指引): 
+                         此區塊為文章首屏戰略核心。左欄必須使用完整長尾自然問句 (如 WHO / 誰在買誰在賣？)，以精準覆蓋長尾 RAG 檢索與使用者真實搜尋意圖。
+                    -->
+                    <!-- CHAPTER 0 (TOC Hierarchy Anchor) -->
+                    <h2 id="chapter-0" class="not-prose indicator-h2">
+                        <span class="number-circle">0</span>
+                        <span class="title-main">執行摘要與 5W1H 核心認知架構</span>
+                    </h2>
+                    <h3 id="section-5w1h-core" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">固定收益與結構化策略的 5W1H
+                        核心認知架構</h3>
+                    <div class="responsive-table-wrapper">
+                        <table class="w-full text-left border-collapse not-prose">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+                                    <th class="py-4 px-6 text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 w-1/3 md:w-5/12">
+                                    分析維度與核心提問 (Dimension &amp; SEO Query)</th>
+                                    <th class="py-4 px-6 text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
+                                    核心要素與定價傳導機制 (Pricing Mechanism &amp; Impact)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-700/80 text-sm md:text-base">
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                    WHO / 誰在買誰在賣？這場事件衝擊了哪些主要市場參與者與利害關係人？
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                    全球總體對沖基金、私人信用提供者（AUM 達 2.3 兆美元）及受巴塞爾協議 III 補充槓桿率 (SLR) 規範的大型交易商。
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                    WHAT / 究竟發生了什麼重大破壞性創新或罕見的市場洗盤崩盤事件？
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                    2026 年「較高且持久」的利率環境導致傳統債券重定價壓力，推動私人信用爆炸性成長，並產生 MBS 歷史性的負凸性消失等異象。
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                    WHEN / 這場變革的關鍵爆發時間點為何？未來何時會是止跌反轉或大規模爆發的重要契機？
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                    2026 年第一季美國核心 PCE 仍高於 3%，確認 Higher for Longer 共識；2024-2026 年 MBS 市場因鎖定效應出現凸性異象。
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                    WHERE / 風暴的核心源頭在哪裡？避險或創新資金正在向哪些板塊與協議轉移？
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                    資金正從公開債券市場轉向私人信用、資產基礎融資 (ABF) 以及受惠於供應鏈重組的拉丁美洲資源型新興市場。
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                    WHY / 為什麼這些資產會同時產生劇烈波動？背後的深層次驅動與定價重構原因是什麼？
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                    信用利差已演化為監管資本稀缺性與融資流動性的函數，而非純違約風險；系統性風險的內生性放大了市場恐慌時的集體拋售。
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors duration-150">
+                                    <td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top leading-snug">
+                                    HOW / 投資人現在該如何操作？面對多重變數與不確定性，該如何制定分批進場或避險策略？
+                                    </td>
+                                    <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top leading-relaxed">
+                                    運用信用利差拆解模型、負基差交易、可轉債 Gamma 避險及 MBS 凸性管理，在掌握融資穩定性的前提下獲取結構化 Alpha。
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- CHAPTER 2 -->
+                    <h2 id="chapter-2" class="not-prose indicator-h2">
+                        <span class="number-circle">2</span>
+                        <span class="title-main">4.2.1 信用利差套利 (Credit Spread Arbitrage)</span>
+                    </h2>
+
+                    <h3 id="section-credit-spread-arb" class="not-prose analysis-h3">利差的微觀解構：從名目利差中剝離純粹的套利空間</h3>
+                    
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        信用利差套利的核心邏輯在於精確解構「名目利差」(Nominal Spread) 的組成要素。量化分析師必須從利差中剝離出稅務溢酬、流動性溢酬與預期違約損失，從而識別出由市場無效率導致的定價錯誤，並透過建立存續期間中立的相對部位獲取絕對利潤。
+                    </p>
+
+                    <div class="responsive-table-wrapper">
+                        <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700 not-prose">
+                            <thead>
+                                <tr class="theme-bg-body dark:bg-slate-900/50">
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">利差組成因子</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">AA 級債券</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">BBB 級債券</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">經濟意涵</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100">預期違約損失</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">3.5% - 8.0%</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">20.9% - 34.7%</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">純粹信用風險成本，評級越低佔比越高。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100">稅務溢酬</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">58.0% - 72.6%</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">28.4% - 29.0%</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">補償企業債相對於公債的稅負差異。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100">風險溢酬</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">17.9% - 19.4%</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">26.2% - 33.0%</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">補償系統性市場風險與週期波動。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100">流動性溢酬</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">21.7% - 25.0%</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">13.8% - 16.9%</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">反映次級市場買賣價差與交易成本。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        在策略執行層面，套利者利用以下量化模型與路徑：
+                    </p>
+
+                    <ul class="mb-8 space-y-4">
+                        <li><strong>信用曲線套利 (Curve Arb)</strong>：利用同一發行人不同到期日債券的利差曲線錯位，建立存續期間中立部位。</li>
+                        <li><strong>資本結構套利 (Capital Structure Arb)</strong>：開發同一公司優先債與次順位債、甚至債券與股票間的定價速度差。</li>
+                        <li><strong>Altman Z-score 與槓桿控制</strong>：模型引入 Z-score (中位數 2.37) 與總負債資產比率 (31%) 作為破產機率的邊界條件。</li>
+                    </ul>
+
+                    <p class="mb-10">
+                        <strong class="dsr-label">[Reinforcement]</strong>
+                        儘管旨在追求市場中立，但信用利差套利面臨「非線性尾部風險」。在系統性恐慌爆發時，投資人對流動性的極度渴求會導致利差出現脫離模型的暴增 (Widening)，若無充足融資支持，收斂交易 (Convergence Trade) 可能演變為災難性的清算。
+                    </p>
+
+                    <!-- CHAPTER 3 -->
+                    <h2 id="chapter-3" class="not-prose indicator-h2">
+                        <span class="number-circle">3</span>
+                        <span class="title-main">4.2.2 CDS-現金基差交易 (CDS-Cash Basis)</span>
+                    </h2>
+
+                    <h3 id="section-cds-cash-basis" class="not-prose analysis-h3">基差動態與監管資本：信用市場的流動性摩擦定價</h3>
+                    
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        CDS-現金基差交易是信用衍生性商品市場中最具深度的套利機制。其核心在於剝削 CDS 利差與現貨債券資產交換利差 (ASW) 之間的暫時性背離。這種背離本質上反映了金融市場的流動性摩擦、保證金要求以及巴塞爾協議 III 下「補充槓桿率」(SLR) 對交易商資產負債表空間的約束。
+                    </p>
+
+                    <div class="theme-bg-body dark:bg-slate-900/40 p-6 rounded-xl border border-slate-100 dark:border-slate-800 mb-8 font-mono text-center text-lg">
+                        Basis = CDS Spread - Asset Swap Spread
+                    </div>
+
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        在實務運作中，負基差交易 (Negative Basis Trade) 的獲利能力受制於以下融資與監管變數：
+                    </p>
+
+                    <ul class="mb-8 space-y-4">
+                        <li><strong>負基差套利邏輯</strong>：當 Basis < 0 時，投資人買入現貨債券並同時買入 CDS 信用保護，鎖定違約風險後獲取正向現金流。</li>
+                        <li><strong>成本解構 (以 5 年期交易為例)</strong>：現貨端依賴 Repo 市場融資 (折扣率約 5%)；衍生性商品端需繳交初始保證金 (IM 約 4%)。</li>
+                        <li><strong>SLR 監管衝擊</strong>：大型金融機構必須將 CDS 名目本金與 Repo 交易計入槓桿率分母，極大增加了提供套利空間的「機會成本」。</li>
+                        <li><strong>2020 歷史印證</strong>：聯準會針對 SLR 的豁免 (Exemption) 迅速釋放了銀行資產負債表，使 CDS-現金基差瞬間收斂至無套利水準。</li>
+                    </ul>
+
+                    <p class="mb-10">
+                        <strong class="dsr-label">[Reinforcement]</strong>
+                        這表明現代信用市場的利差大小，在很大程度上是金融機構「監管資本稀缺性」的函數。投資者在執行基差交易時，必須具備宏觀視角，監測 Repo 市場的融資穩定性 (Special 程度) 以及全球監管政策的鬆緊轉向。
+                    </p>
+
+                    <!-- CHAPTER 4 -->
+                    <h2 id="chapter-4" class="not-prose indicator-h2">
+                        <span class="number-circle">4</span>
+                        <span class="title-main">4.2.3 可轉換債券套利 (Convertible Arbitrage)</span>
+                    </h2>
+
+                    <h3 id="section-convertible-arb" class="not-prose analysis-h3">Gamma 交易：將市場波動率轉化為現金流的貨幣化引擎</h3>
+                    
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        可轉換債券套利的本質是建立一個對股市方向性免疫 (Delta Neutral)，但對股票波動率與信用利差高度敏感的投資組合。其核心獲利機制在於透過動態避險 (Dynamic Hedging) 執行「Gamma 交易」，利用標的股價的波動不斷調整對沖部位，從而將市場的「實現波動率」直接轉化為實質利潤。
+                    </p>
+
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        套利策略的量化架構與收益結構如下：
+                    </p>
+
+                    <ul class="mb-8 space-y-4">
+                        <li><strong>定價模型</strong>：標的股價動態遵循包含跳躍擴散 (Jump Diffusion) 的幾何布朗運動，並引入由 Poisson 過程驅動的違約強度參數，以模擬尾部跳躍風險。</li>
+                        <li><strong>收益與成本</strong>：收入來源為債券票息與放空股票的現金孳息 (Rebate)；成本則為融券費用與補償股借方的現金股利。</li>
+                    </ul>
+
+                    <div class="responsive-table-wrapper">
+                        <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700 not-prose">
+                            <thead>
+                                <tr class="theme-bg-body dark:bg-slate-900/50">
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">市場情境</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">標的股價</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Delta 值</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">動態避險動作</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">獲利邏輯</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100">初始建倉</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">$530</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">0.5</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">放空 500k 股</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">建立初始中立防護網</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100">股價暴跌</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">$370</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">0.3</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">買回 200k 股</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">鎖定高位放空的價差利潤</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100">股價狂飆</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">$800</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">1.0</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">再次放空 700k 股</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">在高位儲備下跌時的彈藥</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="mb-10">
+                        <strong class="dsr-label">[Reinforcement]</strong>
+                        Gamma 交易賦予了投資組合「低買高賣」的機械性優勢。然而，1998 年 LTCM 的案例警告現代套利者：在流動性枯竭的極端市場中，標的 Beta 會突然飆升，隱含波動率與信用利差的脫鉤將摧毀純粹的量化避險模型。
+                    </p>
+
+                    <!-- CHAPTER 5 -->
+                    <h2 id="chapter-5" class="not-prose indicator-h2">
+                        <span class="number-circle">5</span>
+                        <span class="title-main">4.2.4 抵押貸款支持證券 (MBS)</span>
+                    </h2>
+
+                    <h3 id="section-mbs-convexity" class="not-prose analysis-h3">提前還款風險與負凸性：2026 年的鎖定效應異象</h3>
+                    
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        抵押貸款支持證券 (MBS) 的定價靈魂在於「提前還款選擇權」(Prepayment Option) 的估值。與普通債券不同，MBS 具有顯著的「負凸性」(Negative Convexity) 特徵：當市場利率下降時，借款人傾向於重新貸款，導致債券存續期間縮短並面臨再投資風險；而當利率上升時，存續期間反而拉長，放大價格跌幅。
+                    </p>
+
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        在 2026 年的宏觀背景下，MBS 市場呈現出與歷史常規不同的結構性異象：
+                    </p>
+
+                    <ul class="mb-8 space-y-4">
+                        <li><strong>分類差異</strong>：機構 MBS (Agency MBS) 具備政府隱性擔保，流動性極高；非機構 MBS (Private-Label) 則需承擔底層房貸的實質違約風險。</li>
+                        <li><strong>2024-2026 鎖定效應 (Lock-in Effect)</strong>：由於 2020-2021 年大量房貸鎖定在 3% 以下的歷史低位，即便 2026 年利率從高點回落，借款人也缺乏重新融資動力，導致提前還款率依然極低。</li>
+                        <li><strong>負凸性消失</strong>：在目前的利率區間內，MBS 的價格表現罕見地趨近於普通政府公債的「正凸性」，這為結構化投資者提供了優異的防禦性利差。</li>
+                    </ul>
+
+                    <p class="mb-10">
+                        <strong class="dsr-label">[Reinforcement]</strong>
+                        投資 MBS 的成敗不完全取決於利率方向預測，更取決於對借款人微觀經濟行為的模擬。在 2026 年「高利率、低流動」的房地產市場中，捕捉因鎖定效應導致的凸性異象，是固定收益經理人獲取超額報酬的關鍵路徑。
+                    </p>
+
+                    <!-- CHAPTER 6 -->
+                    <h2 id="chapter-6" class="not-prose indicator-h2">
+                        <span class="number-circle">6</span>
+                        <span class="title-main">4.2.5 資產支持證券 (ABS)</span>
+                    </h2>
+
+                    <h3 id="section-abs-structure" class="not-prose analysis-h3">信用增級與分層機制：資產負債表的工程化重塑</h3>
+                    
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        資產支持證券 (ABS) 是將缺乏流動性的多元化資產池（如信用卡、車貸、企業貸款 CLO）透過金融工程轉化為標準化證券的過程。其核心競爭力在於「信用增級」(Credit Enhancement)，透過結構性的風險重新分配，使頂層證券 (Senior Tranche) 能夠獲得高於基礎資產平均信用水準的評級。
+                    </p>
+
+                    <div class="responsive-table-wrapper">
+                        <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700 not-prose">
+                            <thead>
+                                <tr class="theme-bg-body dark:bg-slate-900/50">
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">增級類別</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">具體機制</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">2026 年執行現狀</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100" rowspan="2">內部增級 (Internal)</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">超額抵押 (OC)</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">資產池規模普遍高於發行規模 105%-110%。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">次順位結構 (Tranching)</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">由 Equity/Junior 層率先吸收首損。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100" rowspan="2">外部增級 (External)</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">銀行信用狀 (L/C)</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">由高評級銀行提供第三方信用支持。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">保證保險 (Surety Bonds)</td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">由專業保險公司擔保本息支付。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        在策略應用上，ABS 提供了以下獨特的價值維度：
+                    </p>
+
+                    <ul class="mb-8 space-y-4">
+                        <li><strong>現金流可預測性</strong>：不同於企業債依賴單一實體，ABS 的多元化特性降低了特徵風險 (Idiosyncratic Risk)。</li>
+                        <li><strong>利差溢酬</strong>：由於 ABS 結構複雜且流動性稍遜，同評級 ABS 通常較企業債具備 50-150bps 的額外利差收益。</li>
+                        <li><strong>2026 趨勢</strong>：隨著消費信貸壓力增加，資產發起商已普遍提升超額利差 (Excess Spread) 的預留比例。</li>
+                    </ul>
+
+                    <p class="mb-10">
+                        <strong class="dsr-label">[Reinforcement]</strong>
+                        ABS 是金融工程最純粹的展現，它證明了「風險不會消失，只會被重新分配」。在 2026 年的高利率週期末端，識別具備強大內部增級保護且底層資產分散度高的 ABS 部位，是固定收益組合增厚收益的核心戰術。
+                    </p>
+
+                    <!-- CHAPTER 7 -->
+                    <h2 id="chapter-7" class="not-prose indicator-h2">
+                        <span class="number-circle">7</span>
+                        <span class="title-main">系統性風險 (Systemic Risk) 與危機時期的策略反饋</span>
+                    </h2>
+
+                    <h3 id="section-systemic-risk" class="not-prose analysis-h3">內生性風險與流動性螺旋：當所有策略的相關性趨於 1</h3>
+                    
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        系統性風險並非僅由外部衝擊（如戰爭或疫情）引起，更多時候是金融系統內部產生的「內生性風險」(Endogenous Risk)。在市場劇烈波動時期，不同策略（如信用套利、基差交易與 Gamma 避險）的防禦性行為會產生負向回饋循環，導致原本不相關的資產類別在短時間內出現同步崩跌。
+                    </p>
+
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        2026 年固定收益市場面臨的系統性傳導機制包含：
+                    </p>
+
+                    <ul class="mb-8 space-y-4">
+                        <li><strong>流動性螺旋 (Liquidity Spiral)</strong>：當可轉債套利者因股價暴跌面臨保證金追繳，被迫平倉債券部位，這會收緊市場整體的 Repo 融資流動性，進而衝擊 CDS 基差交易的穩定性。</li>
+                        <li><strong>2024-2026 特有因子</strong>：AI 算力基礎設施的過度投資 (CAPEX Overshoot) 可能引發科技業信用降級，觸發結構化產品的連鎖評級下調。</li>
+                        <li><strong>反身性模型 (Reflexivity)</strong>：市場參與者對風險的預期本身就會改變資產的內在價值。當止損機制被大規模觸發，市場將進入非線性的「去槓桿」階段。</li>
+                    </ul>
+
+                    <p class="mb-10">
+                        <strong class="dsr-label">[Reinforcement]</strong>
+                        歷史一再證明，分散投資在平時是藝術，在危機時是幻覺。在 2026 年的高債務、高利率背景下，投資者必須具備「尾部風險對沖」意識，確保組合中保留足夠比例的現金與 T-Bills，作為在流動性黑洞出現時唯一的生存防線。
+                    </p>
+
+                    <!-- CHAPTER 8 -->
+                    <h2 id="chapter-8" class="not-prose indicator-h2">
+                        <span class="number-circle">8</span>
+                        <span class="title-main">總結與 2026 年戰略展望</span>
+                    </h2>
+
+                    <h3 id="section-conclusion" class="not-prose analysis-h3">從利差捕捉到風險重塑：固定收益的工程化時代</h3>
+                    
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        固定收益投資已徹底告別「買入並持有」(Buy and Hold) 的簡單時代，轉而進入深度的「結構化工程」時期。在 2026 年通膨僵固、利率 Higher for Longer 的宏觀背景下，投資者必須具備跨資產量化建模能力，將信用、流動性與波動率作為獨立因子進行分離與定價，方能在系統性重定價的浪潮中獲取真正的阿爾法。
+                    </p>
+
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        展望 2026 年下半年，固定收益戰略應聚焦以下三大支柱：
+                    </p>
+
+                    <ul class="mb-8 space-y-4">
+                        <li><strong>信用利差的精確拆解</strong>：透過 OAS 模型剝離非信用雜訊，專注於捕捉受監管資本稀缺性驅動的定價錯誤。</li>
+                        <li><strong>波動率 Gamma 的貨幣化</strong>：利用可轉債與衍生性商品工具，將市場的不確定性轉化為穩定的現金流收益。</li>
+                        <li><strong>凸性異象的戰術捕捉</strong>：在 MBS 市場鎖定效應持續期間，利用其罕見的正凸性特徵進行防禦性配置。</li>
+                    </ul>
+
+                    <p class="mb-10">
+                        <strong class="dsr-label">[Reinforcement]</strong>
+                        在 2026 年，流動性的戰略地位將遠高於名目殖利率。投資者不應盲目追求高利差，而應深究利差背後的融資穩定性與資本結構安全性。記住，在結構化金融的世界裡，每一次劇烈的風險重新定價，本質上都是一場資本分配權力的接力與重組。
+                    </p>
+
+                    <!-- Part 2: 文章分析 (Article Analysis) -->
+                    <div class="not-prose mt-16 border-t-2 border-slate-100 dark:border-slate-700 pt-10">
+                        <h2 id="文章分析"
+                            class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-8 border-l-4 border-blue-600 pl-4">
+                            文章分析
+                        </h2>
+
+                                                <!-- Part 2.1: 推論邏輯分析 (Inference Logic) -->
+                        <div id="article-inference-logic" class="mt-20">
+                            <h3 id="文章推論邏輯分析" class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto">文章推論邏輯分析</h3>
+
+                            <h4 id="固定收益市場的工程化轉型解析" class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4">固定收益市場的工程化轉型解析</h4>
+                            <p class="mb-6 text-slate-700 dark:text-slate-300">本文透過解構各類複雜信用資產的底層獲利機制，揭示了 2026 年固定收益投資的核心假設：在流動性稀缺的時代，獲利源自於對「資產負債表空間」的定價，而非單純的違約預測。</p>
+
+                            <div class="space-y-8 pl-4 border-l-2 border-slate-100 dark:border-slate-700">
+                                <div>
+                                    <h5 class="font-bold text-slate-800 dark:text-slate-200 mb-3 text-base">信用利差的非風險特徵化
+                                    </h5>
+                                    <ul class="space-y-2 text-slate-700 dark:text-slate-300 list-disc pl-5">
+                                        <li><strong>[事實前提]</strong>：2026 年 Higher for Longer 環境下，利差組成中「監管資本溢酬」佔比大幅提升（BBB 級債券流動性溢酬達 16.9%）。</li>
+                                        <li
+                                            class="mt-2 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">
+                                            ↳ <strong>[邏輯結論]</strong>：單純依賴債息的被動投資失效，套利者必須透過解構利差（OAS 模型）剝離雜訊，捕捉由交易商資產負債表約束導致的無效率定價。</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-slate-800 dark:text-slate-200 mb-3 text-base">凸性異象與資本結構板塊移動
+                                    </h5>
+                                    <ul class="space-y-2 text-slate-700 dark:text-slate-300 list-disc pl-5">
+                                        <li><strong>[事實前提]</strong>：MBS 因鎖定效應展現正凸性，且私人信用市場 AUM 突破 2.3 兆美元。</li>
+                                        <li
+                                            class="mt-2 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">
+                                            ↳ <strong>[邏輯結論]</strong>：結構化金融正從邊緣工具轉變為核心戰略資產，成為機構投資者管理長端存續期間風險與獲取溢酬的主戰場。</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- AI GUIDANCE: 
+                                 此段落作為「批判性思考」的補充，由 Mason Yang 視角進行補充。
+                                 補充原文沒有考慮到的觀點、變數、風險。目前的敘事邏輯在何種邊界下會發生轉向？
+                            -->
+                        <div id="logic-blindspots"
+                            class="my-8 p-6 theme-bg-body dark:bg-slate-900/20 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                            <h3 id="敘事邊界與關鍵變數補充"
+                                class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2 font-noto">
+                                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                    </path>
+                                </svg>
+                                敘事邊界與關鍵變數補充
+                            </h3>
+                            <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                                <li class="flex gap-2">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 shrink-0">[不可忽視變數]</span>
+                                    <span>補充原文尚未充分考慮的觀點、變數或風險預警。</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                                                <div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-700">
+                            <div class="flex items-center gap-2 mb-6">
+                                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <strong class="text-xl text-slate-900 dark:text-slate-100 m-0 font-bold font-noto">Mason
+                                    Yang
+                                    的觀察 (Actionable Intelligence)</strong>
+                            </div>
+
+                            <div
+                                class="p-6 theme-bg-body dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 rounded-sm space-y-6">
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">1. 核心命題
+                                        (Core Proposition)</strong>
+                                    <p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-lg">
+                                        2026 年固定收益的獲利核心已從「信用預測」徹底轉向「資產負債表管理」。利差的大小不再純粹反映違約風險，而是大型交易商受監管約束後釋出的流動性容量定價。</p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">2. 激勵錨點
+                                        (Incentive Anchor)</strong>
+                                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                                        Price Makers（大型銀行）受限於巴塞爾協議 III 的資本成本，正被迫放棄低收益但高資本佔用的套利空間，將這部分「結構化溢酬」拱手讓給具備長線資金且無監管槓桿限制的私人信用基金與對沖基金。</p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">3. 引爆/反轉因子
+                                        (Trigger Factor)</strong>
+                                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                                        監控 Repo 市場 10 年期美債的「Special」程度。若 Repo 利率與 OIS 偏離超過 25bps 並持續一週，代表系統性融資鏈條出現斷裂風險，結構化產品將迎來強平潮導致的非線性崩潰。</p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">4. 演化劇本
+                                        (Evolution Scenarios)</strong>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <div
+                                            class="p-3 bg-white/50 dark:bg-slate-800/50 rounded border border-slate-100 dark:border-slate-700">
+                                            <span
+                                                class="block font-bold text-slate-800 dark:text-slate-200 mb-1 text-sm">路徑
+                                                A (預期內)</span>
+                                            <p class="text-xs text-slate-500">利率維持高位震盪，私人信用市場規模持續吸納公開市場份額，結構化利差保持在歷史均值上方緩步收斂。</p>
+                                        </div>
+                                        <div
+                                            class="p-3 bg-white/50 dark:bg-slate-800/50 rounded border border-slate-100 dark:border-slate-700">
+                                            <span
+                                                class="block font-bold text-slate-800 dark:text-slate-200 mb-1 text-sm">路徑
+                                                B (黑天鵝)</span>
+                                            <p class="text-xs text-slate-500">監管層意外重啟強硬的槓桿率審查，引發「基差崩塌」，高槓桿套利者集體平倉導致各類資產相關性瞬時趨 1，流動性黑洞重現。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">5. 行動策略
+                                        (Action Strategy)</strong>
+                                    <p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold">
+                                        採用「核心-衛星」配置：70% 佈局具備強大內部信用增級保護的 Senior ABS/MBS 以獲取防禦性利差；衛星 30% 執行可轉債 Delta 中立 Gamma 交易，將預期的市場高波動直接貨幣化。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- References & Disclaimer -->
+                    <div
+                        class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">參考資料 (References)</p>
+                        <ol class="list-decimal pl-4 space-y-1 mb-4">
+                            <li>IMF World Economic Outlook, 檢索日期：2026-04, 2026, <a href="https://www.imf.org" class="hover:text-blue-500 underline">Link</a></li>
+                            <li>Basel III: Finalising post-crisis reforms, BIS, <a href="https://www.bis.org" class="hover:text-blue-500 underline">Link</a></li>
+                            <li>Federal Reserve Flow of Funds (Z.1), 2026, <a href="https://www.federalreserve.gov" class="hover:text-blue-500 underline">Link</a></li>
+                        </ol>
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。</p>
+
+                    </div>
+
+                    <!-- ========================================================================== -->
+                    <!-- ⚠️ CRITICAL BOUNDARY: END OF ARTICLE CONTENT ⚠️ -->
+                    <!-- 任何內文修改絕不可越過或刪除以下閉合標籤，否則將導致右側邊欄佈局崩塌 -->
+                    <!-- ========================================================================== -->
+</article>
+
+            <!-- Related Articles (Mobile bottom) -->
+            <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+        </div>
+        <!-- /END Center Column -->
+
+        <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+        <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+            <div class="sticky top-24 space-y-4 sidebar-scroll">
+
+                <!-- A. Article Meta Card -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            文章資訊</p>
+                    </div>
+                    <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                        <div class="flex justify-between items-center px-4 py-2.5">
+                            <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                            <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-05-20</dd>
+                        </div>
+                        <div class="flex justify-between items-center px-4 py-2.5">
+                            <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                            <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">傳統金融與市場</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <!-- B. Key Findings Card -->
+                <!-- AI GUIDANCE: 
+                         此區塊為右側資訊面板的核心結論。
+                         內容應從「Part 2.1: 5W1H 深度邏輯總結」中提取精華，特別是聚焦於「How / 執行建議」與「Why / 驅動邏輯」，為讀者提供最終的價值總結與決策定見。
+                    -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            核心結論</p>
+                    </div>
+                    <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">2026 年固定收益投資已轉向「資產負債表管理」，利差大小取決於監管資本稀缺性，結構化套利策略已成為對抗 Higher for Longer 環境的核心工具。</p>
+                        </li>
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">透過 OAS 拆解、CDS 負基差與可轉債 Delta 中立，可將信用、流動性與波動率分離定價，捕捉監管資本約束下的定價錯誤。</p>
+                        </li>
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">實務配置建議「核心-衛星」：Senior ABS/MBS 承擔防禦性利差，Gamma 交易將高波動環境貨幣化；須監控 Repo Special 作為融資鏈斷裂警報。</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- C. Keywords -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            關鍵字</p>
+                    </div>
+                    <div class="px-4 py-3 flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">固定收益</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">信用套利</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">MBS/ABS</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">CDS基差</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">Gamma交易</span>
+                    </div>
+                </div>
+
+                <!-- D. Related Articles (Desktop sidebar) -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            延伸閱讀</p>
+                    </div>
+                    <div id="related-articles-sidebar"></div>
+                </div>
+
+            </div>
+        </aside>
+        <!-- /END Right Sidebar -->
+
+        </div>
+
+                    <!-- auto_linker_start -->
+                    <div class="not-prose auto-linker-container" style="margin-top: 3rem; border-top: 1px solid var(--c-border, #e2e8f0); padding-top: 2rem; font-family: system-ui, -apple-system, sans-serif;">
+                        <h4 id="延伸探索-related-research" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--c-text-primary, #1e293b); display: flex; align-items: center; gap: 0.5rem; margin-top: 0;">
+                            延伸探索 / Related Research
+                        </h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+            <a href="../news/20260330-jpy-exchange-rate-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: arbitrage]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026 日圓匯率走勢深度解析：中東衝突、實質利差與套利交易的系統性危機</span>
+            </a>
+            <a href="../news/20260401-jpy-systemic-risk-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: arbitrage]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026 日圓系流動性危機深度研究：套利交易、美債共生與全球金融系統性破口</span>
+            </a>
+            <a href="../news/20260514-global-stagflation-crisis-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: macro-analysis]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026 全球滯脹危機深度查核：地緣衝突、能源通膨與利率陷阱</span>
+            </a>
+            <a href="../news/20260521-amd-valuation-deception.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: macro-analysis]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">華爾街的估值幻象：拆解投資銀行調高 AMD 目標價的敘事騙局與供需失衡真相</span>
+            </a>
+            <a href="../news/20260521-clarity-act-legislative-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: arbitrage]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">《數位資產市場清晰法案》(CLARITY Act) 深度解析：2026年美國金融監管框架與地緣政治博弈</span>
+            </a>
+            <a href="../news/news-20260327-invest-research-handbook.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: arbitrage]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">投資研究專業知識：機構級深度操作與實戰手冊 (2026)</span>
+            </a>
+                        </div>
+                    </div>
+                    <!-- auto_linker_end -->
+</main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button (fixed, bottom-right) -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core-taxonomy.js"></script>
+    <script src="../assets/js/core-articles-data.js"></script>
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+    <script src="../assets/js/widget-related-articles.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. Layout Shell ───────────────────────────────────
+            const header = new HeaderComponent();
+            header.setHomeUrl('../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // ── 3. Mobile TOC ──────────────────────────────────────
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // ── Related Articles (Common) ──────────────────────────
+            if (window.RelatedArticlesComponent) {
+                // Related Articles - Bottom
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-container')
+                    .setLimit(3)
+                    .init();
+
+                // Related Articles - Sidebar
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-sidebar')
+                    .setLayout('list')
+                    .setShowHeader(false)
+                    .setLimit(5)
+                    .init();
+            }
+
+            // ── 4. Scroll Events ───────────────────────────────────
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                // Progress bar
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+
+                // Back to top (show after 500px)
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>

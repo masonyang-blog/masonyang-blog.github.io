@@ -1,0 +1,1520 @@
+/* 
+ * 相依性說明：本檔案與 doc/core/tech-ui-library.md 及 doc/core/ui-components-library-display.html 聯動。
+ * 若在此新增 CSS 樣式，必須同步更新至 library（規格說明）與 display（視覺驗證）。
+ * 
+
+ * Architecture: CSS Variables + Dark Mode Overrides
+ * Reference: doc/ui-components-library.md
+ */
+
+html {
+    scroll-behavior: smooth;
+}
+
+:root {
+    /* 1. Base Colors (Slate) */
+    --c-bg-body: #f8fafc;
+    /* slate-50 */
+    --c-bg-card: #ffffff;
+    /* white */
+    --c-text-primary: #0f172a;
+    /* slate-900 */
+    --c-text-secondary: #475569;
+    /* slate-600 */
+    --c-text-tertiary: #94a3b8;
+    /* slate-400 */
+    --c-border: #e2e8f0;
+    /* slate-200 */
+    --c-divider: #cbd5e1;
+    /* slate-300 */
+
+    /* 2. Brand Colors */
+    --c-primary: #f97316;
+    /* orange-500 */
+    --c-primary-hover: #ea580c;
+    /* orange-600 */
+    --c-accent: #8b5cf6;
+    /* violet-500 */
+
+    /* 3. Functional Colors (TradingView Standard) */
+    --c-bull: #089981;
+    --c-bull-bg: rgba(8, 153, 129, 0.1);
+    --c-bear: #F23645;
+    --c-bear-bg: rgba(242, 54, 69, 0.1);
+
+    /* 4. Alert Colors */
+    --c-alert-info-bg: #eff6ff;
+    /* blue-50 */
+    --c-alert-info-border: #3b82f6;
+    /* blue-500 */
+    --c-alert-info-text: #1e3a8a;
+    /* blue-900 */
+
+    --c-alert-warn-bg: #fffbeb;
+    /* amber-50 */
+    --c-alert-warn-border: #f59e0b;
+    /* amber-500 */
+    --c-alert-warn-text: #92400e;
+    /* amber-800 */
+
+    --c-alert-error-bg: #fef2f2;
+    /* red-50 */
+    --c-alert-error-border: #f6465d;
+    /* red-500 */
+    --c-alert-error-text: #991b1b;
+    /* red-800 */
+
+    --c-alert-alpha-bg: #f0fdf4;
+    /* green-50 */
+    --c-alert-alpha-border: #0ecb81;
+    /* green-500 */
+    --c-alert-alpha-text: #14532d;
+    /* green-900 */
+
+    /* 5. Soft Accent Colors (for cards/sections) */
+    --c-bg-soft-orange: #fff7ed;   /* orange-50 */
+    --c-border-soft-orange: #ffedd5; /* orange-100 */
+    --c-text-soft-orange: #9a3412;   /* orange-900 */
+    
+    --c-bg-soft-violet: #f5f3ff;   /* violet-50 */
+    --c-border-soft-violet: #ede9fe; /* violet-100 */
+    --c-text-soft-violet: #5b21b6;   /* violet-900 */
+
+    --c-bg-soft-blue: #eff6ff;     /* blue-50 */
+    --c-border-soft-blue: #dbeafe;   /* blue-100 */
+    --c-text-soft-blue: #1e3a8a;     /* blue-900 */
+
+    --c-bg-soft-slate: #f8fafc;    /* slate-50 */
+    --c-border-soft-slate: #f1f5f9;  /* slate-100 */
+    --c-text-soft-slate: #475569;    /* slate-600 */
+
+    /* 6. Layout Components (Header & Footer) */
+    --c-bg-header: rgba(255, 255, 255, 0.9);
+    --c-border-header: rgba(226, 232, 240, 0.8);
+    --c-bg-footer: #0f172a;
+    --c-text-footer: #94a3b8;
+    --c-text-footer-dim: rgba(148, 163, 184, 0.6);
+    --c-text-footer-decline: rgba(148, 163, 184, 0.4);
+    --c-border-footer: rgba(255, 255, 255, 0.12);
+    --c-text-footer-hover: #ffffff;
+    --c-divider-footer: rgba(255, 255, 255, 0.12);
+
+    /* 7. Icon Display State (for Shadow DOM components) */
+    --c-display-sun: none;
+    --c-display-moon: block;
+}
+
+/* Dark Mode Overrides */
+html.dark {
+    /* TradingView Dark Theme Palette */
+    --c-bg-body: #131722;
+    /* TV Main BG */
+    --c-bg-card: #1E222D;
+    /* TV Card BG */
+    --c-text-primary: #D1D4DC;
+    /* TV Primary Text */
+    --c-text-secondary: #787B86;
+    /* TV Secondary Text */
+    --c-text-tertiary: #50535E;
+    --c-border: #2A2E39;
+    /* TV Border */
+    --c-divider: #2A2E39;
+
+    --c-primary: #fdba74;
+    /* orange-300 */
+    --c-primary-hover: #ffedd5;
+    /* orange-100 */
+    --c-accent: #a78bfa;
+    /* violet-400 */
+
+    --c-alert-info-bg: rgba(41, 98, 255, 0.1);
+    --c-alert-info-border: #2962FF;
+    --c-alert-info-text: #D1D4DC;
+
+    --c-alert-warn-bg: rgba(245, 158, 11, 0.1);
+    --c-alert-warn-border: #F59E0B;
+    --c-alert-warn-text: #D1D4DC;
+
+    --c-alert-error-bg: rgba(242, 54, 69, 0.1);
+    --c-alert-error-border: #F6465D;
+    --c-alert-error-text: #D1D4DC;
+
+    --c-alert-alpha-bg: rgba(14, 203, 129, 0.1);
+    --c-alert-alpha-border: #0ECB81;
+    --c-alert-alpha-text: #D1D4DC;
+
+    /* 5. Soft Accent Colors (Dark Mode Overrides) */
+    --c-bg-soft-orange: rgba(251, 146, 60, 0.15);  /* orange-400 at 15% opacity */
+    --c-border-soft-orange: rgba(251, 146, 60, 0.2);
+    --c-text-soft-orange: #fdba74;    /* orange-300 */
+
+    --c-bg-soft-violet: rgba(167, 139, 250, 0.15); /* violet-400 at 15% opacity */
+    --c-border-soft-violet: rgba(167, 139, 250, 0.2);
+    --c-text-soft-violet: #ddd6fe;    /* violet-200 */
+
+    --c-bg-soft-blue: rgba(96, 165, 250, 0.15);   /* blue-400 at 15% opacity */
+    --c-border-soft-blue: rgba(96, 165, 250, 0.2);
+    --c-text-soft-blue: #bfdbfe;     /* blue-200 */
+
+    --c-bg-soft-slate: rgba(148, 163, 184, 0.1);
+    --c-border-soft-slate: rgba(148, 163, 184, 0.2);
+    --c-text-soft-slate: #94a3b8;    /* slate-400 */
+
+    /* 6. Layout Components (Header & Footer) - Dark Mode */
+    --c-bg-header: rgba(19, 23, 34, 0.9);
+    --c-border-header: rgba(42, 46, 57, 0.8);
+    --c-bg-footer: #131722;
+    --c-text-footer: #787B86;
+    --c-text-footer-dim: rgba(120, 123, 134, 0.6);
+    --c-text-footer-decline: rgba(120, 123, 134, 0.4);
+    --c-border-footer: #2A2E39;
+    --c-text-footer-hover: #D1D4DC;
+    --c-divider-footer: rgba(255, 255, 255, 0.06);
+
+    /* 7. Icon Display State (for Shadow DOM components) */
+    --c-display-sun: block;
+    --c-display-moon: none;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--c-bg-body);
+    color: var(--c-text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- Semantic Theme Classes --- */
+.theme-bg-body {
+    background-color: var(--c-bg-body);
+    border-color: var(--c-border);
+}
+
+.theme-bg-card {
+    background-color: var(--c-bg-card);
+    border-color: var(--c-border);
+}
+
+/* --- Legacy Component Support --- */
+.article-card,
+.topic-card,
+.info-cards>div,
+.factor-card {
+    background-color: var(--c-bg-card);
+    border-color: var(--c-border);
+}
+
+/* Dark Mode Border Enhancement */
+html.dark .theme-bg-card,
+html.dark .theme-bg-body,
+html.dark .article-card,
+html.dark .topic-card,
+html.dark .info-cards>div,
+html.dark .factor-card {
+    border: 1px solid var(--c-border);
+}
+
+/* --- Global Tailwind Color Mappings (Dark Mode) --- */
+html.dark .bg-orange-50 { background-color: var(--c-bg-soft-orange); }
+html.dark .border-orange-100 { border-color: var(--c-border-soft-orange); }
+html.dark .text-orange-800, 
+html.dark .text-orange-900 { color: var(--c-text-soft-orange); }
+
+html.dark .bg-violet-50 { background-color: var(--c-bg-soft-violet); }
+html.dark .border-violet-100 { border-color: var(--c-border-soft-violet); }
+html.dark .text-violet-800,
+html.dark .text-violet-900 { color: var(--c-text-soft-violet); }
+
+html.dark .bg-blue-50 { background-color: var(--c-bg-soft-blue); }
+html.dark .border-blue-100 { border-color: var(--c-border-soft-blue); }
+html.dark .text-blue-800,
+html.dark .text-blue-900 { color: var(--c-text-soft-blue); }
+
+html.dark .bg-slate-50, 
+html.dark .bg-slate-100,
+html.dark .bg-slate-200 { background-color: var(--c-bg-body); }
+html.dark .border-slate-100,
+html.dark .border-slate-200 { border-color: var(--c-border); }
+html.dark .text-slate-600,
+html.dark .text-slate-700,
+html.dark .text-slate-800,
+html.dark .text-slate-900 { color: var(--c-text-soft-slate); }
+
+/* --- Grid System for Info Cards --- */
+.info-cards,
+.risk-group-cards {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+@media (min-width: 640px) {
+
+    .info-cards,
+    .risk-group-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* --- Typography --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+b {
+    color: var(--c-text-primary);
+    scroll-margin-top: 5rem;
+    /* Sticky header offset */
+}
+
+p,
+li,
+blockquote {
+    color: var(--c-text-secondary);
+}
+
+.prose blockquote {
+    border-left-color: var(--c-border);
+    color: var(--c-text-secondary);
+}
+
+hr,
+.border-slate-100,
+.border-slate-200 {
+    border-color: var(--c-border) !important;
+}
+
+/* --- Dark Mode Prose Overrides --- */
+/* Fixes Tailwind's overly bright prose-invert default colors */
+html.dark .prose.dark\:prose-invert h1,
+html.dark .prose.dark\:prose-invert h2,
+html.dark .prose.dark\:prose-invert h3,
+html.dark .prose.dark\:prose-invert h4,
+html.dark .prose.dark\:prose-invert th,
+html.dark .prose.dark\:prose-invert strong,
+html.dark .prose.dark\:prose-invert b {
+    color: var(--c-text-primary);
+}
+
+html.dark .prose.dark\:prose-invert p,
+html.dark .prose.dark\:prose-invert td,
+html.dark .prose.dark\:prose-invert li,
+html.dark .prose.dark\:prose-invert blockquote {
+    color: var(--c-text-secondary);
+}
+
+html.dark .prose.dark\:prose-invert table {
+    background-color: var(--c-bg-card) !important;
+}
+
+html.dark .prose.dark\:prose-invert thead {
+    border-bottom-color: var(--c-border) !important;
+}
+
+html.dark .prose.dark\:prose-invert th {
+    background-color: var(--c-bg-body) !important;
+}
+
+html.dark .prose.dark\:prose-invert tbody tr {
+    border-bottom-color: var(--c-border) !important;
+}
+
+/* --- UI Component: Alert --- */
+.alert {
+    border: 1px solid var(--c-border);
+    padding: 1.25rem 1.5rem;
+    border-radius: 1rem;
+    margin: 2rem 0;
+    transition: all 0.3s ease;
+    background-color: var(--c-bg-card);
+}
+
+.alert:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transform: translateY(-1px);
+}
+
+.alert-analyst {
+    background-color: var(--c-bg-soft-blue);
+    border-color: var(--c-border-soft-blue);
+    color: var(--c-text-soft-blue);
+}
+
+.alert-warning {
+    background-color: var(--c-alert-warn-bg);
+    border-color: var(--c-alert-warn-border);
+    color: var(--c-alert-warn-text);
+}
+
+.alert-risk,
+.alert-error {
+    background-color: var(--c-alert-error-bg);
+    border-color: var(--c-alert-error-border);
+    color: var(--c-alert-error-text);
+}
+
+.alert-alpha {
+    background-color: var(--c-alert-alpha-bg);
+    border-color: var(--c-alert-alpha-border);
+    color: var(--c-alert-alpha-text);
+}
+
+.alert h4,
+.alert strong {
+    color: inherit !important;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* --- UI Component: Bull/Bear Analysis --- */
+.bull-bear-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+    .bull-bear-container {
+        flex-direction: row;
+    }
+}
+
+.case-bull,
+.case-bear {
+    flex: 1;
+    background-color: var(--c-bg-card);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--c-border);
+    transition: all 0.3s ease;
+}
+
+/* 移除硬性頂部邊框，改採柔和色調或直接透明 */
+.case-bull {
+    background-color: var(--c-alert-alpha-bg);
+    border-color: var(--c-alert-alpha-border);
+}
+
+.case-bear {
+    background-color: var(--c-alert-error-bg);
+    border-color: var(--c-alert-error-border);
+}
+
+/* --- UI Component: Cards --- */
+.info-card {
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    border-radius: 0.75rem;
+    /* rounded-xl */
+    padding: 1.5rem;
+    /* p-6 */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    /* shadow-sm */
+}
+
+/* --- UI Component: Tables --- */
+.responsive-table-wrapper {
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    border: 1px solid var(--c-border);
+    margin: 1.5rem 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.responsive-table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--c-bg-card);
+}
+
+@media (max-width: 768px) {
+    .responsive-table-wrapper table {
+        width: max-content;
+        min-width: 100%;
+    }
+    /* 為行動端增加捲軸視覺引導 */
+    .responsive-table-wrapper {
+        border-bottom: 2px solid var(--c-border-soft-blue);
+    }
+}
+
+/* --- UI Component: Table Scrollbar Style --- */
+.responsive-table-wrapper::-webkit-scrollbar {
+    height: 5px;
+}
+
+.responsive-table-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.responsive-table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--c-divider);
+    border-radius: 10px;
+}
+
+html.dark .responsive-table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--c-border);
+}
+
+th {
+    background-color: var(--c-bg-body);
+    color: var(--c-text-primary);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid var(--c-border);
+}
+
+td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--c-border);
+    color: var(--c-text-secondary);
+}
+
+/* Table Row Highlights */
+.tr-success { background-color: var(--c-alert-alpha-bg) !important; }
+.tr-primary { background-color: var(--c-alert-info-bg) !important; }
+.tr-danger  { background-color: var(--c-alert-error-bg) !important; }
+.tr-muted   { background-color: var(--c-bg-soft-slate) !important; }
+
+/* Invert text colors for row highlights if needed in dark mode */
+html.dark .tr-success, 
+html.dark .tr-primary,
+html.dark .tr-danger {
+    color: var(--c-text-primary);
+}
+
+/* --- Interactive Elements --- */
+.filter-btn {
+    transition: all 0.2s;
+    background-color: var(--c-bg-card);
+    /* was #fff */
+    color: var(--c-text-secondary);
+    /* was #334155 */
+}
+
+.filter-btn.active,
+.active-filter {
+    background-color: var(--c-primary) !important;
+    color: white !important;
+}
+
+/* --- Animations --- */
+#rocket {
+    animation: fly 5s linear infinite;
+    offset-path: path('M 150 200 Q 250 50, 400 100 T 650 200');
+}
+
+@keyframes fly {
+    0% {
+        offset-distance: 0%;
+    }
+
+    100% {
+        offset-distance: 100%;
+    }
+}
+
+.factor-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.factor-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Micro-interactions */
+button,
+.filter-btn,
+summary {
+    transition: transform 0.1s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+button:active,
+.filter-btn:active {
+    transform: scale(0.98);
+}
+
+/* --- UI Component: Unlock Schedule --- */
+.unlock-schedule-container {
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+/* --- UI Component: Professional Insight --- */
+.professional-insight-card {
+    background-color: var(--c-bg-card);
+    border: 1px dashed var(--c-accent);
+    /* Dashed border for insight */
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.professional-insight-card[open] {
+    border-style: solid;
+    /* Solid when open */
+    background-color: var(--c-alert-info-bg);
+    /* Slight tint when open */
+}
+
+/* --- TradingView Utilities --- */
+.text-up,
+.text-green-600 {
+    color: var(--c-bull) !important;
+}
+
+.text-down,
+.text-red-600 {
+    color: var(--c-bear) !important;
+}
+
+/* --- Special Sections --- */
+.section-divider {
+    display: flex;
+    align-items: center;
+    color: var(--c-divider);
+}
+
+.section-divider::before,
+.section-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--c-border);
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    max-height: 55vh;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 500px;
+    }
+}
+
+/* --- UI Component: Comparison Table --- */
+.comparison-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 1rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.comparison-table thead th {
+    font-weight: 600;
+    color: var(--c-text-secondary);
+}
+
+.comparison-table tbody tr {
+    background-color: var(--c-bg-body);
+}
+
+.comparison-table tbody tr td:first-child {
+    text-align: left;
+    font-weight: 500;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+.comparison-table tbody tr td:last-child {
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.tick-mark {
+    color: var(--c-bull);
+}
+
+.cross-mark {
+    color: var(--c-bear);
+}
+
+/* Image Filter for Dark Mode */
+.dark img:not([src*=".svg"]) {
+    filter: brightness(0.85) contrast(1.1);
+}
+
+.dark .dark-invert {
+    filter: invert(1);
+}
+
+/* --- UI Component: Magazine Editorial Style (.magazine-card) --- */
+.magazine-card {
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    border-radius: 0;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.magazine-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+html.dark .magazine-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.magazine-kicker {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid currentColor;
+}
+
+.magazine-title {
+    font-size: 1.75rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: var(--c-text-primary);
+    letter-spacing: -0.025em;
+}
+
+.magazine-divider {
+    height: 1px;
+    background-color: var(--c-border);
+    margin: 1.5rem 0;
+    width: 40px;
+}
+
+/* --- UI Component: The Duel Breakdown (.magazine-duel) --- */
+.magazine-duel {
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .magazine-duel {
+        grid-template-columns: 1fr 1px 1fr;
+    }
+    .magazine-duel-divider {
+        background-color: var(--c-border);
+        width: 1px;
+        height: 100%;
+    }
+}
+
+.duel-panel {
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.duel-bg-label {
+    position: absolute;
+    font-size: 8rem;
+    font-weight: 900;
+    opacity: 0.03;
+    bottom: -1rem;
+    right: -1rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.05em;
+}
+
+.duel-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.duel-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--c-border);
+    font-size: 0.875rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.duel-item:last-child {
+    border-bottom: none;
+}
+
+.duel-item::before {
+    content: "—";
+    color: var(--c-text-tertiary);
+}
+
+/* Standard Magazine Colors */
+.text-magazine-red { color: var(--c-bear); }
+.text-magazine-green { color: var(--c-bull); }
+
+.bg-magazine-red-soft { background-color: rgba(242, 54, 69, 0.02); }
+.bg-magazine-green-soft { background-color: rgba(8, 153, 129, 0.02); }
+
+html.dark .bg-magazine-red-soft { background-color: rgba(242, 54, 69, 0.05); }
+html.dark .bg-magazine-green-soft { background-color: rgba(8, 153, 129, 0.05); }
+
+/* --- UI Component: Article Heading Hierarchy --- */
+.indicator-h2 {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    grid-template-rows: auto auto;
+    gap: 0.25rem 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f97316; /* Orange H2 */
+    margin: 3rem 0 1.5rem 0 !important;
+    scroll-margin-top: 6rem;
+    word-break: break-word;
+}
+
+@media (min-width: 640px) {
+    .indicator-h2 {
+        gap: 0.35rem 1rem;
+    }
+}
+
+.indicator-h2 .number-circle {
+    grid-column: 1;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background-color: #f97316; /* Orange H2 */
+    color: white !important;
+    font-size: 1.125rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    align-self: start;
+    margin-top: 0.15rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.indicator-h2 .title-main {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 1.5rem;
+    /* 2xl equivalent */
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--c-text-primary);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+.indicator-h2 .title-sub {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 1.125rem;
+    /* xl */
+    color: var(--c-text-tertiary);
+    font-weight: 500;
+}
+
+.indicator-h3 {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 2.5rem 0 1.25rem 0 !important;
+    scroll-margin-top: 6rem;
+    word-break: break-word;
+}
+
+.indicator-h3 .number-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background-color: #3b82f6; /* Deep Blue H3 */
+    color: white !important;
+    font-size: 0.875rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 0.2rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.indicator-h3 .title-main {
+    font-size: 1.25rem;
+    /* xl */
+    font-weight: 700;
+    letter-spacing: -0.0125em;
+    color: var(--c-text-primary);
+    flex: 1;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+.analysis-h2 {
+    font-weight: 800;
+    font-size: 1.5rem;
+    /* 2xl */
+    color: var(--c-text-primary);
+    border-left: 6px solid var(--c-primary);
+    padding-left: 1.25rem;
+    margin: 4rem 0 2rem 0 !important;
+    line-height: 1.3;
+}
+
+.analysis-h3 {
+    font-weight: 700;
+    font-size: 1.25rem;
+    /* xl */
+    color: var(--c-text-primary);
+    border-bottom: 2px solid #3b82f6; /* Deep Blue H3 */
+    padding-bottom: 0.25rem;
+    margin: 3.5rem 0 1.5rem 0 !important;
+}
+
+.analysis-h4 {
+    font-weight: 700;
+    font-size: 1.125rem;
+    /* lg */
+    color: var(--c-text-primary);
+    border-left: 3px solid var(--c-divider);
+    padding-left: 0.75rem;
+    margin: 2.5rem 0 1rem 0 !important;
+    line-height: 1.4;
+}
+
+html.dark .analysis-h4 {
+    border-left-color: var(--c-text-tertiary);
+}
+
+/* --- UI Component: Semantic Tags --- */
+.analysis-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem; /* text-xs */
+    font-weight: 500;
+    border-radius: 0.25rem;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+}
+
+.analysis-tag svg {
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+.analysis-tag-blue {
+    background-color: var(--c-bg-soft-blue);
+    border-color: var(--c-border-soft-blue);
+    color: var(--c-text-soft-blue);
+}
+
+.analysis-tag-blue:hover {
+    background-color: #dbeafe; /* blue-100 */
+}
+
+.analysis-tag-purple {
+    background-color: var(--c-bg-soft-violet);
+    border-color: var(--c-border-soft-violet);
+    color: var(--c-text-soft-violet);
+}
+
+.analysis-tag-green {
+    background-color: var(--c-bg-soft-blue); /* Fallback to blue-tinted green if needed, or defined */
+    border-color: #dcfce7;
+    color: #166534;
+}
+html.dark .analysis-tag-green {
+    background-color: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+}
+
+/* Premium CSS Added */
+/* Premium UI Patterns */
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--c-border);
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--c-text-tertiary);
+}
+
+/* --- UI Component: Sticky Sidebar Container --- */
+.sticky-sidebar-container {
+    position: sticky;
+    top: 6rem; /* Equivalent to top-24 */
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    padding-right: 0.5rem; /* Space for scrollbar to prevent layout shift */
+}
+
+/* Premium scrollbar for sticky sidebars (Standardized across news/) */
+.sticky-sidebar-container::-webkit-scrollbar,
+.toc-sidebar::-webkit-scrollbar,
+.sidebar-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+.sticky-sidebar-container::-webkit-scrollbar-track,
+.toc-sidebar::-webkit-scrollbar-track,
+.sidebar-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+.sticky-sidebar-container::-webkit-scrollbar-thumb,
+.toc-sidebar::-webkit-scrollbar-thumb,
+.sidebar-scroll::-webkit-scrollbar-thumb {
+    background: var(--c-divider);
+    border-radius: 4px;
+}
+.sticky-sidebar-container::-webkit-scrollbar-thumb:hover,
+.toc-sidebar::-webkit-scrollbar-thumb:hover,
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--c-text-tertiary);
+}
+
+html.dark .sticky-sidebar-container::-webkit-scrollbar-thumb,
+html.dark .toc-sidebar::-webkit-scrollbar-thumb,
+html.dark .sidebar-scroll::-webkit-scrollbar-thumb {
+    background: var(--c-border);
+}
+
+/* Sidebar scroll behavior utilities */
+.sidebar-scroll,
+.toc-sidebar {
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-divider) transparent;
+}
+
+html.dark .sidebar-scroll,
+html.dark .toc-sidebar {
+    scrollbar-color: var(--c-border) transparent;
+}
+
+/* --- UI Component: Strategy Advice Card --- */
+.strategy-advice-card {
+    background-color: var(--c-bg-soft-slate);
+    border: 1px solid var(--c-border);
+    border-left: 4px solid var(--c-primary);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.strategy-advice-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+}
+
+/* Decorative background safe for all modes */
+.strategy-advice-card::after {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: -5%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--c-primary) 0%, transparent 70%);
+    opacity: 0.03;
+    pointer-events: none;
+}
+
+.strategy-advice-card h4 {
+    color: var(--c-primary) !important;
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-top: 0 !important;
+    margin-bottom: 1.5rem !important;
+    border-bottom: 2px solid var(--c-border);
+    padding-bottom: 0.75rem;
+    display: inline-block;
+}
+
+.strategy-advice-card ol, 
+.strategy-advice-card ul {
+    margin-bottom: 0 !important;
+}
+
+.strategy-advice-card li {
+    color: var(--c-text-primary);
+    margin-bottom: 1rem !important;
+    line-height: 1.7;
+}
+
+.strategy-advice-card li:last-child {
+    margin-bottom: 0 !important;
+}
+
+.strategy-advice-card strong {
+    color: var(--c-primary) !important;
+    font-weight: 800;
+}
+
+/* Glassmorphism enhancement for dark mode */
+html.dark .strategy-advice-card {
+    background-color: rgba(30, 34, 45, 0.6);
+    backdrop-filter: blur(12px);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Premium CSS Added */
+/* Premium UI Patterns */
+/* --- Dual-Folding System Layout --- */
+aside.hidden.lg\:block {
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;
+}
+
+.sidebar-collapsed aside.hidden.lg\:block {
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.sidebar-collapsed main {
+    max-width: 1300px !important; /* Expansion for better reading width when sidebar is gone */
+    transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Expansion Trigger (Floating on the left) */
+.sidebar-expand-trigger {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 60px;
+    background: var(--c-primary);
+    color: white;
+    border-radius: 0 8px 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.sidebar-collapsed .sidebar-expand-trigger {
+    opacity: 0.8;
+    visibility: visible;
+}
+
+.sidebar-expand-trigger:hover {
+    width: 28px;
+    opacity: 1;
+}
+
+.sidebar-expand-trigger svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar-expand-trigger:hover svg {
+    opacity: 1;
+}
+
+/* Dark Mode Overrides for Trigger */
+html.dark .sidebar-expand-trigger {
+    background: var(--c-primary);
+    box-shadow: 2px 0 15px rgba(0,0,0,0.4);
+}
+
+/* --- UI Component: Series Context Box (.series-context-box) --- */
+.series-context-box {
+    margin: 2.5rem 0;
+    padding: 1.5rem;
+    background-color: var(--c-bg-soft-blue);
+    border: 1px solid var(--c-border-soft-blue);
+    border-radius: 1.25rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.series-context-box::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, var(--c-primary) 0%, transparent 70%);
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+.series-context-box h4 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--c-text-soft-blue);
+    margin-bottom: 1.25rem !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: -0.01em;
+}
+
+.series-context-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+    .series-context-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.series-item {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    text-decoration: none !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.series-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    border-color: var(--c-primary);
+}
+
+.series-item .part-label {
+    font-size: 0.625rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--c-text-tertiary);
+    margin-bottom: 0.25rem;
+}
+
+.series-item .article-title {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--c-text-primary);
+    line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+}
+
+.series-item.active {
+    border: 2px solid var(--c-primary);
+    background-color: var(--c-bg-card);
+    box-shadow: 0 0 0 4px var(--c-bull-bg);
+}
+
+.series-item.active .part-label {
+    color: var(--c-primary);
+}
+
+/* Premium Dark Mode for Series Box */
+html.dark .series-context-box {
+    background-color: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+html.dark .series-item {
+    background-color: rgba(30, 41, 59, 0.3);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .series-item.active {
+    background-color: rgba(30, 41, 59, 0.6);
+    border-color: var(--c-primary);
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.15);
+}
+
+html.dark .series-item .article-title {
+    color: var(--c-text-primary);
+}
+
+/* --- D-S-R Protocol Labels --- */
+/* These labels are for structure/AI/SEO but should not be visible to readers */
+.dsr-label {
+    display: none !important;
+}
+
+/* --- Docs Layout (Three-Column Navigation) --- */
+.docs-layout main {
+    max-width: 1700px;
+}
+
+.docs-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-divider) transparent;
+}
+
+.docs-sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.docs-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.docs-sidebar::-webkit-scrollbar-thumb {
+    background: var(--c-divider);
+    border-radius: 10px;
+}
+
+html.dark .docs-sidebar::-webkit-scrollbar-thumb {
+    background: var(--c-border);
+}
+
+/* Right TOC Sidebar Adjustments */
+aside .border-l {
+    border-color: var(--c-border);
+}
+
+@media (max-width: 1023px) {
+    .docs-layout .lg\:hidden {
+        display: block;
+    }
+}
+
+/* --- Responsive Card Table for Long-Text (行動端長尾文字表格轉卡片佈局) --- */
+@media (max-width: 767px) {
+    .responsive-card-table table,
+    .responsive-card-table thead,
+    .responsive-card-table tbody,
+    .responsive-card-table th,
+    .responsive-card-table td,
+    .responsive-card-table tr {
+        display: block;
+        width: 100% !important;
+    }
+    
+    /* 隱藏原生表頭 */
+    .responsive-card-table thead {
+        display: none;
+    }
+    
+    /* 每一列轉為卡片 */
+    .responsive-card-table tr {
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid var(--c-border);
+    }
+    
+    /* 左欄：作為標題呈現 */
+    .responsive-card-table td:first-child {
+        font-weight: 800;
+        color: #2563eb; /* text-blue-600 */
+        margin-bottom: 0.75rem;
+        padding: 0 0 0.5rem 0 !important;
+        border-bottom: 1px dashed var(--c-border);
+    }
+    
+    html.dark .responsive-card-table td:first-child {
+        color: #60a5fa; /* text-blue-400 */
+    }
+    
+    /* 右欄：長篇文字敘述 */
+    .responsive-card-table td:last-child {
+        padding: 0 !important;
+        color: var(--c-text-primary);
+    }
+}
+
+/* --- Sticky First Column for Data Tables (多欄數據表格行動端首欄鎖定) --- */
+@media (max-width: 767px) {
+    .responsive-table-wrapper.sticky-first-col th:first-child,
+    .responsive-table-wrapper.sticky-first-col td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 10;
+        background-color: #ffffff; /* Light bg */
+        box-shadow: 2px 0 5px -2px rgba(0,0,0,0.1);
+    }
+    
+    html.dark .responsive-table-wrapper.sticky-first-col th:first-child,
+    html.dark .responsive-table-wrapper.sticky-first-col td:first-child {
+        background-color: #1e293b; /* Dark bg (slate-800) */
+        box-shadow: 2px 0 5px -2px rgba(0,0,0,0.5);
+    }
+}
+
+/* ==========================================================================
+ * 🚀 Visual-First Series Hub / 專題導讀展示廳專用樣式
+ * ========================================================================== */
+
+/* Macro Dashboard 數據看板 */
+.macro-dashboard {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 640px) {
+    .macro-dashboard {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.macro-card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    backdrop-filter: blur(12px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.dark .macro-card {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(51, 65, 85, 0.8);
+}
+
+.macro-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -8px rgba(6, 182, 212, 0.2);
+    border-color: rgba(6, 182, 212, 0.5);
+}
+
+.macro-value {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0.5rem 0 0.25rem 0;
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+html.dark .macro-value {
+    background: linear-gradient(135deg, #22d3ee 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Bento Card 系統 */
+.bento-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    background: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+html.dark .bento-card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bento-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 0 0 2px rgba(6, 182, 212, 0.4);
+}
+
+html.dark .bento-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(34, 211, 238, 0.5);
+}
+
+/* Sticky Navigator */
+.sticky-navigator {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--c-border);
+    transition: all 0.3s ease;
+}
+
+html.dark .sticky-navigator {
+    background: rgba(15, 23, 42, 0.85);
+    border-bottom: 1px solid rgba(51, 65, 85, 0.8);
+}
+
+.nav-pill {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--c-text-secondary);
+    transition: all 0.2s ease;
+}
+
+.nav-pill:hover {
+    color: var(--c-text-primary);
+    background: var(--c-bg-soft-slate);
+}
+
+.nav-pill.active {
+    background: #06b6d4;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+html.dark .nav-pill.active {
+    background: #0891b2;
+}
+
+/* --- Related Pulse/Briefs Widget Unhydrated Fallback Styles --- */
+related-pulse-widget:not(:defined),
+related-briefs-widget:not(:defined) {
+    display: block;
+    margin: 40px 0;
+    font-family: 'Inter', 'Noto Sans TC', sans-serif;
+}
+
+
