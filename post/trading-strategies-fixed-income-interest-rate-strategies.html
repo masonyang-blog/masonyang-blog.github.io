@@ -1,0 +1,774 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 
+
+    -->
+    <title>投資策略｜2026固定收益投資策略深度解析（上）：殖利率曲線、國債基準與蝶式曲率交易</title>
+    <meta name="description" content="[TL;DR] 從 PCA 三因子、新舊券流動性溢酬到基差交易與 SEC 2026 集中結算，本文解構子彈／槓鈴、蝶式曲率及 2026 空頭平坦化下的主動固定收益配置框架。">
+    <meta name="keywords" content="固定收益策略, 殖利率曲線, PCA主成分分析, 國債基準交易, 新舊券利差, 基差交易, 隱含附買回利率, 子彈式策略, 槓鈴式策略, 蝶式曲率交易, 陡峭化交易, 平坦化交易, 空頭平坦化, SEC集中結算, 2026聯準會政策">
+    <link rel="canonical" href="https://masonyang-blog.github.io/post/trading-strategies-fixed-income-interest-rate-strategies.html">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+    </style>
+    <!-- 
+        ==========================================================================
+        🤖 ADVANCED JSON-LD SCHEMA (AI 搜尋時代的實體消岐)
+        ==========================================================================
+        - {sameAs}: 連結權威 ID (Wikipedia/Wikidata) 實現實體消歧。
+        - {about/mentions}: 明確宣告內容核心主題與文中提及的次要實體。
+        - {FAQPage}: 嵌入問答模組，增加 AI 答案片段抓取機率。
+        - {Nested}: 嵌套 Organization、Person 與 Article 建立信譽鏈條。
+        ==========================================================================
+    -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [{
+          "@type": "AnalysisNewsArticle",
+          "@id": "https://masonyang-blog.github.io/post/trading-strategies-fixed-income-interest-rate-strategies.html#article",
+          "isPartOf": {
+            "@id": "https://masonyang-blog.github.io/#website"
+          },
+          "author": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "headline": "投資策略｜2026固定收益投資策略深度解析（上）：殖利率曲線、國債基準與蝶式曲率交易",
+          "description": "[TL;DR] 2026年全球利率「Higher for Longer」環境下，結構化信用策略正經歷板塊移動。本文深度解構信用利差套利、CDS基差、可轉債Gamma交易及MBS負凸性異象，揭示金融工程如何將風險拆解並轉化為絕對報酬。",
+          "datePublished": "2026-05-20",
+          "dateModified": "2026-05-20",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://masonyang-blog.github.io/post/trading-strategies-fixed-income-interest-rate-strategies.html"
+          },
+          "about": [
+            {
+              "@type": "Thing",
+              "name": "Fixed Income Strategy",
+              "sameAs": "https://www.wikidata.org/wiki/Q380186"
+            }
+          ],
+          "mentions": [
+            {
+              "@type": "Thing",
+              "name": "Federal Reserve",
+              "sameAs": "https://www.wikidata.org/wiki/Q154018"
+            },
+            {
+              "@type": "Thing",
+              "name": "Mortgage-backed security",
+              "sameAs": "https://www.wikidata.org/wiki/Q1318469"
+            },
+            {
+              "@type": "Thing",
+              "name": "Credit default swap",
+              "sameAs": "https://www.wikidata.org/wiki/Q581223"
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://masonyang-blog.github.io/post/trading-strategies-fixed-income-interest-rate-strategies.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "首頁",
+              "item": "https://masonyang-blog.github.io/index.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "傳統金融與市場",
+              "item": "https://masonyang-blog.github.io/post/archive.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "投資策略｜2026固定收益投資策略深度解析（上）：殖利率曲線、國債基準與蝶式曲率交易",
+              "item": "https://masonyang-blog.github.io/post/trading-strategies-fixed-income-interest-rate-strategies.html"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://masonyang-blog.github.io/post/trading-strategies-fixed-income-interest-rate-strategies.html#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "什麼是國債新舊券（OTR/OFR）利差？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "新舊券利差主要反映流動性溢酬，危機時可非線性擴大。"
+              }
+            }
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://masonyang-blog.github.io/#author",
+          "name": "Mason Yang",
+          "url": "https://masonyang-blog.github.io",
+          "jobTitle": "Investment Researcher",
+          "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://masonyang-blog.github.io/logo.png"
+          },
+          "sameAs": [
+            "https://x.com/MasonYang16"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://masonyang-blog.github.io/#website",
+          "url": "https://masonyang-blog.github.io",
+          "name": "Mason Yang Blog",
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="trading-strategies-fixed-income-interest-rate-strategies">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : {Left TOC} {Article} {Right Sidebar}
+         <lg  : Single column
+    ========================================================= -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+
+                    <!-- ArticleTOC renders here -->
+                    <div id="toc-desktop-host">
+                        <!-- static_toc_start -->
+                        <nav class="static-toc-container" aria-label="Table of Contents">
+                          <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 執行摘要與 5W1H 核心認知架構</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-5w1h-core" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">固定收益利率曲線策略的 5W1H 核心認知架構</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-1" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">11\. 國債基準交易與套利機制 (Treasury Benchmark Trading)</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-1-新券與舊券之流動性溢酬動態-on-the-run-vs-off-the-run-premiu" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.1 新券與舊券之流動性溢酬動態 (On-the-run vs. Off-the-run Premium)</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-2-國債現貨與期貨基差交易-treasury-cash-futures-basis-trade" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.2 國債現貨與期貨基差交易 (Treasury Cash-Futures Basis Trade)</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-3-槓桿機制-附買回市場融資與監管結構的演變" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.3 槓桿機制、附買回市場融資與監管結構的演變</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-2" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">22\. 基礎殖利率曲線策略：子彈式與槓鈴式結構</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-1-結構定義-關鍵利率存續期間與凸性分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.1 結構定義、關鍵利率存續期間與凸性分析</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-2-靜態殖利率曲線環境下之策略運用" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.2 靜態殖利率曲線環境下之策略運用</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-3-動態殖利率曲線變化情境下之績效表現" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.3 動態殖利率曲線變化情境下之績效表現</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-3" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">33\. 曲率交易：蝶式與兀鷹式策略 (Butterfly & Condor Strategies)</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-1-蝶式策略的結構邏輯與曲率定義" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.1 蝶式策略的結構邏輯與曲率定義</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-2-投資組合權重配置的量化方法" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.2 投資組合權重配置的量化方法</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-3-兀鷹式策略與階梯式避險-condor-ladder-strategies" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.3 兀鷹式策略與階梯式避險 (Condor & Ladder Strategies)</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-4" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">44\. 殖利率曲線斜率策略：陡峭化與平坦化交易</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-1-陡峭化交易-curve-steepeners" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.1 陡峭化交易 (Curve Steepeners)</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-2-平坦化交易-curve-flatteners" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.2 平坦化交易 (Curve Flatteners)</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-3-斜率策略之衍生性商品執行實務" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.3 斜率策略之衍生性商品執行實務</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-5" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">55\. 2026年總體經濟環境與殖利率曲線實務應用分析</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-1-貨幣政策預期重塑與劇烈的空頭平坦化" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5.1 貨幣政策預期重塑與劇烈的空頭平坦化</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-2-總體環境變動對跨資產配置與股票市場的深遠影響" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5.2 總體環境變動對跨資產配置與股票市場的深遠影響</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-6" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">66\. 結論</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#信用與結構化策略-下-信用利差-mbs-與-abs" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">信用與結構化策略（下）：信用利差、MBS 與 ABS</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#文章分析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章分析</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#文章推論邏輯分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">文章推論邏輯分析</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#敘事邊界與關鍵變數補充" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">敘事邊界與關鍵變數補充</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+                          </ul>
+                        </nav>
+                        <!-- static_toc_end -->
+                    </div>
+
+                    <!-- Back to top (sidebar) -->
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">經濟時事分析</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">投資策略｜固定收益策略（上）</li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header ── -->
+                <header
+                    class="theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <!-- Category + Date -->
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            傳統金融與市場
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            <time datetime="2026-05-20">2026-05-20</time>
+                        </span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 18 分鐘閱讀</span>
+                    </div>
+
+                    <!-- H1 -->
+                    <h1 class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">投資策略｜2026固定收益投資策略深度解析（上）：殖利率曲線、國債基準與蝶式曲率交易</h1>
+
+                    <!-- Subtitle / Hook -->
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        從 PCA 水準／斜率／曲率三因子到國債基差、蝶式與 2026 空頭平坦化：主動固定收益的量化配置地圖。
+                    </p>
+
+                </header>
+
+                <!-- Part 1 系列導覽 -->
+                <div class="not-prose mb-6 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 theme-bg-card dark:bg-slate-800/60 shadow-sm">
+                    <div class="flex flex-col gap-4">
+                        <span class="px-2.5 py-1 bg-slate-500/10 text-slate-600 dark:text-slate-400 rounded-full text-xs font-bold uppercase tracking-wider w-fit">專題上集 (PART 1)</span>
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-slate-50 font-noto">利率曲線與國債基準交易（上）</h3>
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">建議先閱讀上集：PCA 三因子、OTR/OFR 流動性溢酬、基差交易與 2026 空頭平坦化，再進入本篇信用與結構化策略。</p>
+                        <a href="trading-strategies-fixed-income-interest-rate-strategies.html" class="inline-flex items-center justify-center px-5 py-2.5 bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500 text-white font-bold rounded-xl transition-all w-fit text-sm">閱讀 Part 1 上集</a>
+                    </div>
+                </div>
+
+                <!-- ── Mobile TOC Target (行動版) ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6">
+                    <!-- static_toc_start -->
+                    <nav class="static-toc-container" aria-label="Table of Contents">
+                      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 執行摘要與 5W1H 核心認知架構</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-5w1h-core" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">固定收益利率曲線策略的 5W1H 核心認知架構</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-1" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">11\. 國債基準交易與套利機制 (Treasury Benchmark Trading)</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-1-新券與舊券之流動性溢酬動態-on-the-run-vs-off-the-run-premiu" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.1 新券與舊券之流動性溢酬動態 (On-the-run vs. Off-the-run Premium)</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-2-國債現貨與期貨基差交易-treasury-cash-futures-basis-trade" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.2 國債現貨與期貨基差交易 (Treasury Cash-Futures Basis Trade)</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-3-槓桿機制-附買回市場融資與監管結構的演變" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.3 槓桿機制、附買回市場融資與監管結構的演變</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-2" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">22\. 基礎殖利率曲線策略：子彈式與槓鈴式結構</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-1-結構定義-關鍵利率存續期間與凸性分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.1 結構定義、關鍵利率存續期間與凸性分析</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-2-靜態殖利率曲線環境下之策略運用" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.2 靜態殖利率曲線環境下之策略運用</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-3-動態殖利率曲線變化情境下之績效表現" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.3 動態殖利率曲線變化情境下之績效表現</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-3" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">33\. 曲率交易：蝶式與兀鷹式策略 (Butterfly & Condor Strategies)</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-1-蝶式策略的結構邏輯與曲率定義" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.1 蝶式策略的結構邏輯與曲率定義</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-2-投資組合權重配置的量化方法" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.2 投資組合權重配置的量化方法</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-3-兀鷹式策略與階梯式避險-condor-ladder-strategies" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.3 兀鷹式策略與階梯式避險 (Condor & Ladder Strategies)</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-4" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">44\. 殖利率曲線斜率策略：陡峭化與平坦化交易</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-1-陡峭化交易-curve-steepeners" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.1 陡峭化交易 (Curve Steepeners)</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-2-平坦化交易-curve-flatteners" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.2 平坦化交易 (Curve Flatteners)</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-3-斜率策略之衍生性商品執行實務" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.3 斜率策略之衍生性商品執行實務</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-5" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">55\. 2026年總體經濟環境與殖利率曲線實務應用分析</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-1-貨幣政策預期重塑與劇烈的空頭平坦化" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5.1 貨幣政策預期重塑與劇烈的空頭平坦化</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-2-總體環境變動對跨資產配置與股票市場的深遠影響" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5.2 總體環境變動對跨資產配置與股票市場的深遠影響</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-6" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">66\. 結論</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#信用與結構化策略-下-信用利差-mbs-與-abs" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">信用與結構化策略（下）：信用利差、MBS 與 ABS</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#文章分析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章分析</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#文章推論邏輯分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">文章推論邏輯分析</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#敘事邊界與關鍵變數補充" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">敘事邊界與關鍵變數補充</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+                      </ul>
+                    </nav>
+                    <!-- static_toc_end -->
+                </div>
+
+                <!-- ── Article Body ── -->
+                <article
+                    class="article-body theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+<div class="not-prose lead mb-16 px-8 py-10 theme-bg-body dark:bg-slate-900/10 border-l-4 border-slate-400 rounded-r-2xl">
+<p class="text-xl text-slate-700 dark:text-slate-200 font-bold leading-relaxed mb-6">
+本文實測解析 2026 年美債殖利率曲線重定價邏輯，說明在 Higher for Longer 與 SEC 集中結算重塑下，主動固定收益如何透過 PCA 三因子與相對價值交易獲取風險調整後報酬。
+</p>
+<ul class="space-y-4 text-lg text-slate-600 dark:text-slate-300">
+<li class="flex gap-2.5"><span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">WHAT</span>
+<span class="italic">固定收益管理已演進為捕捉殖利率曲線水準、斜率、曲率三維變化的量化過程；2026 年 Fed 維持緊縮，曲線經歷劇烈空頭平坦化重定價。</span></li>
+<li class="flex gap-2.5"><span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">HOW</span>
+<span class="italic">透過 OTR/OFR 與現貨期貨基差、子彈／槓鈴凸性博弈、蝶式 DV01 中立權重，以及 IRS 陡峭化／平坦化部位，將 PCA 因子曝險轉化為可執行交易。</span></li>
+<li class="flex gap-2.5"><span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">WHY</span>
+<span class="italic">在監管 CCP 結算與 Repo 槓桿約束下，單純拉長存續期間已失效；須以相對價值與曲線形狀策略搭配短天期 IG 防禦，方能穩健獲取 Alpha。</span></li>
+</ul></div>
+
+
+<h2 id="chapter-0" class="not-prose indicator-h2"><span class="number-circle">0</span>
+<span class="title-main">執行摘要與 5W1H 核心認知架構</span></h2>
+<h3 id="section-5w1h-core" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">固定收益利率曲線策略的 5W1H 核心認知架構</h3>
+<div class="not-prose mb-16 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-xl overflow-hidden theme-bg-card dark:bg-slate-900/40 backdrop-blur-sm">
+<div class="responsive-table-wrapper">
+    <table class="w-full text-left border-collapse not-prose"><thead><tr class="bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+                <th class="py-4 px-6 text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 w-1/3">分析維度與核心提問</th>
+                <th class="py-4 px-6 text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">核心要素與機制</th>
+            </tr></thead><tbody class="divide-y divide-slate-100 dark:divide-slate-700/80 text-sm md:text-base">
+            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50"><td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top">WHO / 誰在國債基差與 Repo 市場定價流動性？</td>
+                <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top">避險基金、一級交易商與 CCP 清算會員；2025Q2 避險基金美債多頭曝險約 2.37 兆美元。</td></tr>
+            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50"><td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top">WHAT / 2026 曲線重新定價的核心現象？</td>
+                <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top">空頭平坦化：2s10s 自 71.53bps 急縮，Fed 維持 3.50%–3.75%，降息預期消退。</td></tr>
+            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50"><td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top">WHEN / SEC 集中結算 deadline？</td>
+                <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top">現貨 2026-12-31；Repo 2027-06-30 前須 CCP 合規。</td></tr>
+            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50"><td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top">WHERE / 定價錨點在哪？</td>
+                <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top">OTR 國債、CME 國債期貨 CTD 與 SOFR Repo 融資曲線。</td></tr>
+            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50"><td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top">WHY / 平坦化時為何槓鈴式佔優？</td>
+                <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top">長端 KRD 曝險在平坦化中獲得較大資本利得，高凸性提供非線性補償。</td></tr>
+            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50"><td class="py-5 px-6 font-extrabold text-slate-900 dark:text-blue-400 align-top">HOW / 如何交易曲率？</td>
+                <td class="py-5 px-6 text-slate-700 dark:text-slate-300 align-top">DV01 中立蝶式（買身體賣翅膀）或 PCA 權重對沖斜率干擾。</td></tr>
+        </tbody></table></div></div>
+
+<p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong> 在全球金融市場高度一體化且總體經濟變數瞬息萬變的當代，固定收益投資組合的管理已從單純的被動收息，演進為高度量化與結構化的主動風險溢酬獲取過程。投資組合經理與主動型交易員必須運用極度精密的分析框架，捕捉殖利率曲線（Yield Curve）在空間與時間維度上的微小變化。根據學術界與實務界的廣泛驗證，特別是Litterman與Scheinkman於1991年提出的經典研究，美國國債殖利率曲線的歷史變異中，高達百分之九十九可由主成分分析（Principal Component Analysis, PCA）萃取出的三個正交因子所解釋。第一主成分代表「水準」（Level），其對各天期利率具有近乎均勻的因子載荷（Factor loadings</p>
+<p class="mb-8">在全球金融市場高度一體化且總體經濟變數瞬息萬變的當代，固定收益投資組合的管理已從單純的被動收息，演進為高度量化與結構化的主動風險溢酬獲取過程。投資組合經理與主動型交易員必須運用極度精密的分析框架，捕捉殖利率曲線（Yield Curve）在空間與時間維度上的微小變化。根據學術界與實務界的廣泛驗證，特別是Litterman與Scheinkman於1991年提出的經典研究，美國國債殖利率曲線的歷史變異中，高達百分之九十九可由主成分分析（Principal Component Analysis, PCA）萃取出的三個正交因子所解釋。第一主成分代表「水準」（Level），其對各天期利率具有近乎均勻的因子載荷（Factor loadings），反映殖利率的平行移動；第二主成分代表「斜率」（Slope），在短天期具有較高的因子載荷，反映曲線的陡峭化或平坦化；第三主成分則代表「曲率」（Curvature），在中天期具有最高的因子載荷，對應曲線中段相對於兩端的凸性變化。 基於上述量化模型與主成分因子的理論基礎，本研究報告將深入剖析六大核心固定收益交易策略，涵蓋國債基準交易、子彈式與槓鈴式結構、蝶式曲率交易，以及殖利率曲線的陡峭化與平坦化操作。同時，本報告將結合2025至2026年的總體經濟數據與市場流動性動態，探討衍生性金融商品（如利率交換、國債期貨與選擇權）在策略建構中的應用，提供專業同儕全面且深入的投資交易分析與風險定價視角。</p>
+<h2 id="chapter-1" class="not-prose indicator-h2"><span class="number-circle">1</span><span class="title-main">1\. 國債基準交易與套利機制 (Treasury Benchmark Trading)</span></h2>
+<p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong> 國債基準交易是固定收益相對價值（Relative Value）套利策略中最基礎、歷史最悠久且資金容量最大的領域。此類策略嚴格依賴於同質性資產在不同市場區塊、不同發行時間點或不同金融工具（如現貨與期貨）之間的定價錯誤（Mispricing）進行套利，試圖在控制市場方向性風險的前提下獲取無風險或低風險的套利利潤。</p>
+<p class="mb-8">國債基準交易是固定收益相對價值（Relative Value）套利策略中最基礎、歷史最悠久且資金容量最大的領域。此類策略嚴格依賴於同質性資產在不同市場區塊、不同發行時間點或不同金融工具（如現貨與期貨）之間的定價錯誤（Mispricing）進行套利，試圖在控制市場方向性風險的前提下獲取無風險或低風險的套利利潤。</p>
+<h3 id="section-1-新券與舊券之流動性溢酬動態-on-the-run-vs-off-the-run-premiu" class="not-prose analysis-h3 mb-6 font-noto">1.1 新券與舊券之流動性溢酬動態 (On-the-run vs. Off-the-run Premium)</h3>
+<p class="mb-8">在美國國債市場中，財政部最新發行的特定天期債券被稱為「新券」（On-the-run, OTR），而先前發行、剩餘天期相近的債券則被歸類為「舊券」（Off-the-run, OFR） 4。實證資料與市場微觀結構模型顯示，儘管新券與近期轉為舊券的國債在現金流特徵、存續期間、凸性與信用風險上幾乎完全相同，新券的交易價格卻系統性地高於舊券，這意味著新券的殖利率較低，兩者之間的殖利率差即為「新舊券利差」（On-the-run / Off-the-run spread） 4。 這種利差的存在並非源於基本面差異，而是純粹的流動性溢酬（Liquidity Premium）。新券市場具有極高的流動性、龐大的交易量以及極窄的買賣價差（Bid-ask spread），是全球無風險利率的基準。然而，當財政部發行下一批同天期債券，原有新券轉為舊券時，其交易量通常會出現斷崖式下跌。根據研究顯示，在轉換期間，單日交易量可能從超過六十億美元驟降至一億美元左右，買賣價差也隨之顯著擴大，交易規模縮減超過百分之五十。投資人為了換取新券所帶來的快速變現能力與較低的交易摩擦成本，自願接受較低的殖利率，從而推升了新券價格。歷史數據顯示，在1994年至2000年間，2年期國債的平均新券溢酬約為1.5個基點。 在傳統的新舊券套利交易中，交易員會建立市場中立的部位，放空價格較高、殖利率較低的新券，並同時買入價格較低、殖利率較高的舊券，預期隨著時間推移，兩者的流動性差異會因新券也逐漸變舊而收斂，進而實現利潤。然而，這種看似無風險的收斂交易（Convergence trade）實則蘊含巨大的執行風險與融資風險，特別是在極端市場壓力期間。例如，在1998年秋季長期資本管理公司（LTCM）崩盤事件中，新舊券的殖利率差從平均的6.25個基點劇烈反向擴大，導致收斂交易出現嚴重虧損，成為引發系統性危機的導火線之一。更近期的例子發生在2020年3月的全球疫情爆發初期，投資人出於對現金的極度渴求（Dash for cash），引發了流動性飛向（Flight to liquidity）的恐慌。市場大舉拋售舊券，並轉向最具流動性的新券或直接持有現金，導致衡量流動性風險的新舊券利差瞬間飆升，舊券與抗通膨債券（TIPS）的買賣價差翻倍，而10年期新券的市場深度（由訂單簿中的買賣單數量衡量）更驟降至正常水準的四分之一，嚴重破壞了套利機制的運作，並迫使經紀商承擔高昂的資產負債表成本。</p>
+<h3 id="section-2-國債現貨與期貨基差交易-treasury-cash-futures-basis-trade" class="not-prose analysis-h3 mb-6 font-noto">1.2 國債現貨與期貨基差交易 (Treasury Cash-Futures Basis Trade)</h3>
+<p class="mb-8">除了同為現貨的新舊券套利外，另一種在全球避險基金界佔有主導地位的交易是國債現金與期貨基差交易（Cash-Futures Basis Trade）。此策略的核心在於利用國債現貨價格與對應的國債期貨合約價格之間的微小失衡進行套利，交易員透過買入相對低估的資產並放空相對高估的資產，押注兩者價格在期貨到期交割時將必然收斂。 由於國債期貨合約是實物交割（Physically settled），合約允許賣方在一個規定的交割籃子（Deliverable basket）中，選擇任何符合剩餘到期日與票息條件的國債進行交割。為求成本最小化與利潤最大化，持有期貨空頭部位的賣方必然會選擇交割成本最低的債券，此即為「最便宜可交割債券」（Cheapest-to-Deliver, CTD） 9。 為使具有不同票面利率與到期日的合格債券能在期貨交割時立於平等的比較基礎，期貨交易所（如芝加哥商業交易所，CME）引入了轉換因子（Conversion Factor, CF）的機制。轉換因子是一個乘數，代表該合格債券若其殖利率精確為百分之六時，每一美元面值的估計價格折算比例。具體而言，若交割債券的票面利率高於百分之六，其轉換因子將大於一；反之，若票面利率低於百分之六，其轉換因子將小於一。期貨買方在交割時支付給賣方的發票價格（Invoice Price）的計算公式為期貨結算價乘上該債券的轉換因子，再加上應計利息。同時，CME的國債期貨合約中還嵌入了額外的交割選擇權（Delivery Option）與「外卡操作」（Wild Card Play），這是因為期貨市場於下午兩點收盤，但現貨債券持續交易至下午四點，而賣方有權在晚上八點前才通知結算所交割意願。若現貨價格在下午兩點後大幅下跌，賣方可利用此時間差優勢獲利，這類隱含選擇權的價值亦必須被計定期貨合約的理論價格中。 基差交易的獲利能力嚴格依賴於隱含附買回利率（Implied Repo Rate, IRR）的精確計算。IRR代表交易員透過買入現貨CTD債券、同時放空對應期貨合約，並持有至交割日所能獲得的年化報酬率。其數學表達式為：</p>
+<p class="mb-6 text-center"><img src="../assets/images/20260520-fixed-income-part1-image1.webp" alt="Formula 1" class="h-8 md:h-10 inline-block max-w-full" /></p>
+<p class="mb-8">其中，為期貨價格，為轉換因子，為交割時的應計利息，為現貨債券的含息價格（Dirty price），為距離交割的天數。若經過精密計算的IRR大於交易員在市場上獲取短期資金的實際成本（如隔夜附買回利率），則無風險的套利空間便告成立，交易員可透過擴大部位規模鎖定利潤。以加拿大五年期國債期貨為例，若計算出之隱含利潤極微小，交易員仍需考慮融資天期與交割天期的錯配風險，以及融資利率在持有期間變動的風險。</p>
+<h3 id="section-3-槓桿機制-附買回市場融資與監管結構的演變" class="not-prose analysis-h3 mb-6 font-noto">1.3 槓桿機制、附買回市場融資與監管結構的演變</h3>
+<p class="mb-8">基差交易的特性在於其套利空間通常極度微薄，可能僅有數個基點，因此避險基金必須運用龐大的槓桿才能創造具備經濟意義的絕對報酬。在期貨端，交易所要求的初始保證金（Initial Margin）通常僅占合約名目價值的百分之一至百分之三，使得交易員可以輕易將槓桿放大至三十三倍甚至九十九倍。而在現貨端，為了籌措購買CTD債券的龐大資金，交易員會透過附買回協議（Repurchase agreement, Repo）市場，將買入的債券抵押給經紀商以獲取現金。由於基差交易本質上是一個高度對沖的組合，歷史上當交易員透過單一金融中介機構同時處理期貨部位與現貨融資部位時，中介機構通常願意提供極低、甚至為零的融資折價（Haircut），進一步助長了槓桿的堆疊。學術與監管研究通常將避險基金在SEC Form PF申報中的「淨附買回部位」（Net repo，即附買回與附賣回交易量之差額）作為衡量基差交易規模的代理變數。自2022年以來，避險基金的美國國債總曝險成長了一倍以上，至2025年第二季，多頭曝險總計高達約2.37兆美元，其中很大一部分便與此類高槓桿的相對價值套利有關。 然而，這種極端依賴短期融資的結構性交易為整體金融系統帶來了潛在的脆弱性。當市場發生劇烈震盪，迫使避險基金面臨保證金追繳（Margin calls）並快速解除這些槓桿部位時，可能引發國債市場的連鎖拋售與流動性枯竭。鑑於此系統性風險，美國證券交易委員會（SEC）已頒布具里程碑意義的強制集中結算（Central Clearing）規定。根據該規定，絕大多數的次級市場國債現貨交易必須在2026年12月31日前透過授權的中央對手方（CCP）進行集中結算，而國債的Repo交易則必須在2027年6月30日前完成合規轉換。 此一監管政策將深刻重塑基準交易的微觀結構。強制集中結算意味著清算會員及其客戶必須繳納實質上更高的初始保證金。若沒有配套措施，同時為現貨與期貨部位繳納全額保證金將極大地侵蝕基差交易的微薄利潤，進而迫使避險基金退出市場。由於基差交易者是舊券市場的重要需求來源，其退出可能反向削弱國債市場的整體流動性。因此，市場參與者目前高度依賴CCP引入並擴大「跨市場保證金抵銷」（Cross-margining）機制。該機制能夠識別期貨空頭部位與Repo現貨多頭部位之間相互對沖的風險特徵，從而降低總體所需的初始保證金水位，在維護金融穩定與保持市場套利效率之間取得平衡。</p>
+<h2 id="chapter-2" class="not-prose indicator-h2"><span class="number-circle">2</span><span class="title-main">2\. 基礎殖利率曲線策略：子彈式與槓鈴式結構</span></h2>
+<p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong> 在殖利率曲線的動態變化中，固定收益投資組合的到期日配置結構對於長期總報酬的影響至關重要。市場實務中最具代表性的兩種基礎結構性配置策略為子彈式（Bullet）與槓鈴式（Barbell）策略。這兩種策略在不同的利率變動情境下，因其對關鍵利率點位與凸性（Convexity）的敏感度差異，會展現出截然不同的風險回報特徵。</p>
+<p class="mb-8">在殖利率曲線的動態變化中，固定收益投資組合的到期日配置結構對於長期總報酬的影響至關重要。市場實務中最具代表性的兩種基礎結構性配置策略為子彈式（Bullet）與槓鈴式（Barbell）策略。這兩種策略在不同的利率變動情境下，因其對關鍵利率點位與凸性（Convexity）的敏感度差異，會展現出截然不同的風險回報特徵。</p>
+<h3 id="section-1-結構定義-關鍵利率存續期間與凸性分析" class="not-prose analysis-h3 mb-6 font-noto">2.1 結構定義、關鍵利率存續期間與凸性分析</h3>
+<p class="mb-8">**子彈式策略（Bullet Strategy）：** 此策略在建構上，將投資組合的存續期間高度集中於殖利率曲線上的單一期限節點或非常狹窄的期限區間內（例如全數資金投資於5年期或10年期國債） 21。從關鍵利率存續期間（Key Rate Duration, KRD）的角度分析，子彈式組合幾乎將所有的利率敏感度集中於中天期，這意味著該組合對於中期利率的變動極為敏感，但對於曲線極短端與極長端的利率變動幾乎具有免疫力。 **槓鈴式策略（Barbell Strategy）：** 與子彈式形成鮮明對比，槓鈴式策略刻意避開曲線中段的配置，將資金分散投資於極短天期與極長天期的債券（例如將組合均分為2年期與30年期國債） 21。在實務應用上，經理人通常會調整短端與長端資金的分配權重，使得槓鈴式組合的整體有效存續期間（Effective Duration）與對比的基準指數或子彈式組合完全相等，以確保在殖利率平行移動時，兩者的一階價格風險相當。 在兩者總體存續期間相同的前提下，這兩種策略的決定性差異在於「凸性」（Convexity）的表現。凸性是衡量債券價格對殖利率變動之非線性敏感度的指標，在數學定義上為債券價格對殖利率變化的二階導數。根據債券定價理論，現金流在時間軸上分布愈分散的組合，其計算得出的凸性數值就愈大。因此，由短端與長端構成的槓鈴式組合，其凸性將系統性地顯著大於現金流高度集中的子彈式組合。 高凸性在固定收益組合管理中是一項極具價值的特性。當利率發生劇烈變動（不論是大幅上升或大幅下降）時，高凸性債券的價格表現將優於低凸性債券，具備「漲得更多、跌得更少」的不對稱優勢。然而，金融市場定價效率極高，並不存在免費的午餐。投資人為了獲取槓鈴式組合的高凸性，通常必須付出代價，亦即犧牲一定的組合殖利率（Yield Give-up）。在靜態且常態向上傾斜的殖利率曲線環境中，集中於中天期的子彈式組合通常能提供較高的當期殖利率與總體收益。</p>
+<h3 id="section-2-靜態殖利率曲線環境下之策略運用" class="not-prose analysis-h3 mb-6 font-noto">2.2 靜態殖利率曲線環境下之策略運用</h3>
+<p class="mb-8">當投資組合經理預期總體經濟將進入一段相對平穩的時期，且殖利率曲線將維持靜態不變（Static Yield Curve Environment）時，可以運用以下現金基礎或衍生性商品基礎的策略來增強收益：</p>
+<ul class="mb-8 space-y-2 list-disc pl-6"><li class="mb-2">**買進並持有策略（Buy-and-Hold Strategy）：** 在曲線向上傾斜且穩定的情況下，經理人可透過買入存續期間高於基準指數的債券，並持有一段時間而不進行頻繁交易。此策略旨在獲取增量存續期間帶來的較高殖利率，雖然可能涉及投資流動性較差的舊券而承擔流動性風險，但在平靜市場中能有效提升總體利息收入。</li>
+<li class="mb-2">**沿殖利率曲線下滑策略（Rolling Down the Yield Curve / Roll-down）：** 此策略充分利用了向上傾斜曲線的定價特徵。投資人買入較長天期的債券，隨著時間流逝，債券的剩餘到期日縮短，其對應的殖利率將沿著曲線向下滑落。在殖利率不變的假設下，殖利率下降將推升債券價格，使得投資人不僅能賺取豐厚的票息收入，還能在持有期末實現可觀的資本利得。</li>
+<li class="mb-2">**附買回利差交易（Repo Carry Trade）：** 這是一種運用資金槓桿的靜態策略。交易員買入長天期的高收益債券，並在附買回市場以該債券為抵押品，獲取利率較低的短期貸款。只要長端債券的殖利率高於短期融資成本，交易員即可賺取正向的「利差」（Carry）。在衍生性市場中，這可透過收取固定利率、支付浮動基準利率的利率交換（Receive-Fixed Swap）來合成複製。</li>
+</ul><p class="mb-8">在靜態環境下探討存續期間時，必須區分價格風險與再投資風險的相對重要性。當投資人的持有期限（Investment Horizon）短於組合的麥考雷存續期間（Macaulay Duration）時，價格風險將主導整體回報；反之，若持有期限長於麥考雷存續期間，再投資風險將成為主導因素。這進一步影響了經理人在子彈式與槓鈴式結構間的選擇傾向。</p>
+<h3 id="section-3-動態殖利率曲線變化情境下之績效表現" class="not-prose analysis-h3 mb-6 font-noto">2.3 動態殖利率曲線變化情境下之績效表現</h3>
+<p class="mb-8">評估子彈式與槓鈴式策略在動態環境中的優劣，不僅仰賴經理人對曲線水準（Level）平行移動的判斷，更取決於對斜率（Slope）變化的精確預測。</p>
+<ul class="mb-8 space-y-2 list-disc pl-6"><li class="mb-2">平行移動（Parallel Shifts）：** 假設殖利率曲線發生完美的平行位移，由於子彈式與槓鈴式組合的整體有效存續期間相同，兩者的一階價格變動理論上將完全一致。然而，槓鈴式組合將因為較高的凸性而在市場劇烈波動時獲得額外的正向價格補償。</li>
+<li class="mb-2">曲線平坦化（Curve Flattening）：** 在平坦化情境中（即長期利率相對於短期利率下降，或者短期利率大幅上升而長期利率上升幅度較小），長端債券的價格將出現顯著相對上漲。由於槓鈴式組合在長端（例如三十年期）具有巨大的KRD曝險，其長天期部位獲得的豐厚資本利得將遠遠超過短端部位的微幅損失或低迷表現。因此，在預期平坦化的環境中，槓鈴式組合的總體表現將大幅擊敗子彈式組合。</li>
+<li class="mb-2">曲線陡峭化（Curve Steepening）：** 當曲線陡峭化時（即長期利率相較於短期利率大幅上升），長天期債券價格將因高久期效應遭受重挫。此時，擁有沉重長端KRD曝險的槓鈴式組合將面臨嚴重的資本損失，無法抵銷短端部位微薄的收益。相對而言，集中於中天期、完全避開了長端劇烈波動的子彈式組合，在陡峭化環境中將發揮極強的防禦性，其表現將顯著優於槓鈴式組合。</li>
+</ul><p class="mb-8">表 1 統整了子彈式與槓鈴式組合在不同總經環境下之特徵對比：</p>
+<div class="responsive-table-wrapper">
+    <table class="w-full text-left border-collapse not-prose">
+        <thead><tr>
+                <th class="py-3 px-4 border-b border-slate-200 dark:border-slate-700 text-sm font-bold">評估維度</th>
+                <th class="py-3 px-4 border-b border-slate-200 dark:border-slate-700 text-sm font-bold">子彈式組合 (Bullet Strategy)</th>
+                <th class="py-3 px-4 border-b border-slate-200 dark:border-slate-700 text-sm font-bold">槓鈴式組合 (Barbell Strategy)</th>
+            </tr></thead><tbody>
+            <tr>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">**現金流空間分布**</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">高度集中於中期 (如 5年期或10年期)</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">廣泛分散於兩端 (如 2年期與30年期)</td>
+            </tr>
+            <tr>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">**結構凸性 (Convexity)**</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">相對較低</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">顯著較高</td>
+            </tr>
+            <tr>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">**靜態環境下的殖利率**</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">較高 (收益最大化)</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">較低 (為獲取凸性支付溢酬)</td>
+            </tr>
+            <tr>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">**曲線平行移動情境**</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">表現為基礎基準</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">表現優於基準 (受惠於高凸性)</td>
+            </tr>
+            <tr>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">**曲線平坦化情境 (Flattening)**</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">劣於槓鈴式組合</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">**顯著優於子彈式組合**</td>
+            </tr>
+            <tr>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">**曲線陡峭化情境 (Steepening)**</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">**顯著優於槓鈴式組合**</td>
+                <td class="py-3 px-4 border-b border-slate-100 dark:border-slate-800 text-sm">劣於子彈式組合 (長端承受重挫)</td>
+            </tr>
+        </tbody></table></div>
+<h2 id="chapter-3" class="not-prose indicator-h2"><span class="number-circle">3</span><span class="title-main">3\. 曲率交易：蝶式與兀鷹式策略 (Butterfly & Condor Strategies)</span></h2>
+<p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong> 在掌握了水準與斜率變動的策略後，進階固定收益組合管理中最具挑戰性的領域，便是專門用於捕捉殖利率曲線「曲率」（Curvature）變化的套利機制——蝶式策略（Butterfly Strategies）與其變形兀鷹式策略（Condor Strategies）。這些策略的設計宗旨，在於運用嚴密的數學權重，將組合對曲線整體水準變化與斜率變化的敏感度對沖至零，純粹針對主成分分析中第三因子的變動，亦即中端利率</p>
+<p class="mb-8">在掌握了水準與斜率變動的策略後，進階固定收益組合管理中最具挑戰性的領域，便是專門用於捕捉殖利率曲線「曲率」（Curvature）變化的套利機制——蝶式策略（Butterfly Strategies）與其變形兀鷹式策略（Condor Strategies）。這些策略的設計宗旨，在於運用嚴密的數學權重，將組合對曲線整體水準變化與斜率變化的敏感度對沖至零，純粹針對主成分分析中第三因子的變動，亦即中端利率相對於兩端利率的非線性變動，進行方向性投機或免疫避險。</p>
+<h3 id="section-1-蝶式策略的結構邏輯與曲率定義" class="not-prose analysis-h3 mb-6 font-noto">3.1 蝶式策略的結構邏輯與曲率定義</h3>
+<p class="mb-8">在標準的蝶式交易中，投資人會同時建立三個不同到期日的部位，通常涵蓋短期（Wing 1）、中期（Body，即身體部位）以及長期（Wing 2）節點。量化分析中，蝶式利差（Butterfly Spread）或曲率的變化通常由下列公式定義與衡量：</p>
+<p class="mb-6 text-center"><img src="../assets/images/20260520-fixed-income-part1-image7.webp" alt="Formula 7" class="h-8 md:h-10 inline-block max-w-full" /></p>
+<p class="mb-8">其中 、、 分別代表短、中、長天期的殖利率。此指標數值越大，代表曲線的彎曲程度（駝峰狀）越高。 基於對未來蝶式利差擴大或縮小的預期，交易員可選擇執行做多或做空蝶式策略。必須注意的是，固定收益實務中對於多空蝶式的定義，著眼於債券實體部位的買賣方向。 **做多蝶式策略（Long Butterfly）：** 做多蝶式策略由「做多子彈式組合」與「放空槓鈴式組合」所組成，亦即「買入身體、賣出翅膀」（Buy the Body, Sell the Wings / Long Bullet, Short Barbell） 23。此策略的核心邏輯在於預期殖利率曲線中段的殖利率將相對於兩端下降（或上升幅度較小）。當曲線中段出現下陷，導致整體曲線變得更加凸出或呈現駝峰化（More humped / Negative twist / 負向曲率變化）時，中天期債券價格的上漲幅度將大於兩端，此時做多蝶式策略將實現最大獲利。在市場口訣中，負向蝶式扭曲（Negative twist）使曲線形狀如同皺眉（Frowning face），此時做多子彈並放空槓鈴的策略最為有利。 **做空蝶式策略（Short Butterfly）：** 做空蝶式策略的結構恰好相反，由「放空子彈式組合」與「做多槓鈴式組合」組成，亦即「賣出身體、買入翅膀」（Sell the Body, Buy the Wings / Short Bullet, Long Barbell） 29。當投資人預期曲線中段的殖利率將相對於兩端顯著上升，使得曲線變得更為平坦、消除駝峰或甚至呈現凹陷（Flatter / Positive twist / 正向曲率變化）時，此策略將獲利。在正向曲率變化中，曲線形狀如同微笑（Smiling face），兩端（槓鈴）的價格表現將超越中端（子彈） 30。</p>
+<h3 id="section-2-投資組合權重配置的量化方法" class="not-prose analysis-h3 mb-6 font-noto">3.2 投資組合權重配置的量化方法</h3>
+<p class="mb-8">建構蝶式交易最核心的技術挑戰，在於精確決定三個節點的部位規模與資金比例。若權重配置不當，組合將暴露於非預期的方向性水準風險或斜率風險。市場實務上發展出多種精密的權重設計方法：</p>
+<ul class="mb-8 space-y-2 list-disc pl-6"><li class="mb-2">**現金與存續期間中立權重（Cash and Duration-Neutral Weighting）：** 在此結構下，建立組合無需投入淨現金（即買入債券的現金流出等於賣空債券的現金流入，初始成本為零），且組合整體的貨幣存續期間（$Duration, 或DV01，即殖利率變動一基點的美元價值變化）被精準對沖至零。為了達到DV01中立，身體部位與兩端翅膀部位的名目本金必須依據下列等式嚴格配置：</li>
+</ul><p class="mb-8">儘管此配置消除了對殖利率平行移動的敏感度，但組合通常仍會對曲線的斜率變化保留一定的殘餘曝險。這主要是因為債券定價的非線性特質，短端與長端凸性不對稱，以及偏離市場的票息（Off-market coupons）效應所致。</p>
+<ul class="mb-8 space-y-2 list-disc pl-6"><li class="mb-2">**50/50 權重法（Fifty-Fifty Weighting）：** 在此方法中，身體部位的總DV01曝險被等量分為兩半，分別由短端翅膀與長端翅膀各自承擔百分之五十（即短端對沖50%的中端風險，長端對沖另外50%）。這種配置邏輯較為直觀且易於管理，廣泛運用於標準化的利率交換（Swap）蝶式報價中。</li>
+<li class="mb-2">**迴歸權重法 / 主成分分析權重（Regression Weighting / PCA Weighting）：** 基於大量歷史數據的統計分析，交易員發現單純的DV01中立無法完全消除斜率風險的干擾。為了提煉出純粹且無干擾的「曲率」阿爾法（Alpha），量化研究員會運用歷史殖利率的迴歸分析或主成分分析（PCA），計算各節點對斜率因子變化的歷史貝塔值（Beta）。藉由這些統計參數，交易員可以動態調整兩端翅膀的部位權重，以確保組合不僅對水準（Level）免疫，亦對斜率（Slope）完全中立。</li>
+</ul><p class="mb-8">在CME等衍生性商品市場中，交易員廣泛運用國債期貨來高效率地建構蝶式交易，以降低保證金佔用與現貨交易的摩擦成本。以標準的2s5s10s蝶式交易（押注5年期國債相對於2年期與10年期表現）為例，交易員會依據DV01比例進行合約口數配置。一個常見的做多蝶式期貨結構可能是：買入20口30年期合約（Wing 2）、賣出80口10年期合約（Body）、買入80口5年期合約（Wing 1），其建構比例大約接近 4:4:1 30。這類複雜的跨期對沖結構在交易室術語中，根據搭配的金融工具與天期不同，還衍生出了「蛇」（Snake，指德國國債期貨Schatz-Bobl-Bund對應交換利率的蝶式）與「獾」（Badger，指1年後起算遠期的2y5y10y交換利率蝶式）等行話。</p>
+<h3 id="section-3-兀鷹式策略與階梯式避險-condor-ladder-strategies" class="not-prose analysis-h3 mb-6 font-noto">3.3 兀鷹式策略與階梯式避險 (Condor & Ladder Strategies)</h3>
+<p class="mb-8">作為蝶式策略的延伸，兀鷹式策略（Condor Strategy）在結構上包含四個獨立的期限界點，而非三個。具體而言，做多兀鷹式策略涉及做多最前端與最末端（極短與極長）的債券，並放空中間兩個節點的債券。兀鷹策略的目標同樣是為了增強組合的總體凸性並調整特定關鍵利率存續期間的曝險。由於其四個節點的結構，其圖形分布呈現特殊的 \_/¯\_ 形狀，能夠更精細地微調對2年期與30年期的權重，並反向操作5年期與10年期的區段。 此外，如果投資人缺乏對蝶式利差擴大或縮小的明確預期，但希望在劇烈震盪的利率環境中對沖掉所有的曲率風險，階梯式投資組合（Ladder Portfolio，將資金平均分散於各個到期日）被視為一種有效的防禦機制。因為階梯式結構等同於同時包含了子彈式與槓鈴式的特徵，能夠自發地對沖掉正向與負向的曲率扭曲（Butterfly twist）帶來的衝擊。</p>
+<h2 id="chapter-4" class="not-prose indicator-h2"><span class="number-circle">4</span><span class="title-main">4\. 殖利率曲線斜率策略：陡峭化與平坦化交易</span></h2>
+<p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong> 除了曲率交易，總體經濟基金與固定收益機構投資人最常表達的方向性觀點，即為對殖利率曲線斜率（Slope）變化的預測。斜率策略主要分為陡峭化（Steepeners）與平坦化（Flatteners）兩種結構，而這兩種變動軌跡又可依據其發生時的絕對利率水準變化（殖利率整體下降的多頭市況，或整體上升的空頭市況），進一步細分為四種截然不同的總體經濟情境驅動模式。</p>
+<p class="mb-8">除了曲率交易，總體經濟基金與固定收益機構投資人最常表達的方向性觀點，即為對殖利率曲線斜率（Slope）變化的預測。斜率策略主要分為陡峭化（Steepeners）與平坦化（Flatteners）兩種結構，而這兩種變動軌跡又可依據其發生時的絕對利率水準變化（殖利率整體下降的多頭市況，或整體上升的空頭市況），進一步細分為四種截然不同的總體經濟情境驅動模式。</p>
+<h3 id="section-1-陡峭化交易-curve-steepeners" class="not-prose analysis-h3 mb-6 font-noto">4.1 陡峭化交易 (Curve Steepeners)</h3>
+<p class="mb-8">陡峭化交易的核心前提，在於投資人預期長期利率與短期利率之間的利差將會顯著擴大，亦即曲線變得更為陡峭。</p>
+<ul class="mb-8 space-y-2 list-disc pl-6"><li class="mb-2">多頭陡峭化（Bull Steepener）：** 此情境發生於短天期利率下降的速度遠快於長天期利率。這通常是總體經濟陷入衰退或成長動能大幅放緩，迫使中央銀行啟動激進的寬鬆貨幣週期（Easing Cycle）時的典型市場特徵。央行調降基準政策利率的行動直接壓低了前端曲線的殖利率；然而，長端曲線則因為投資人預期貨幣寬鬆最終將刺激經濟復甦，或引發未來的長期通膨反彈，使得長端跌幅相對有限，導致曲線急遽陡峭化。從跨資產定價的角度來看，多頭陡峭化情境會增強債券市場波動率向股票市場傳遞的敏感度（Sensitivity of equity market volatility to bond market volatility），因為市場正處於對經濟基本面不確定性極高的狀態。在此環境下，短端國債由於前端殖利率崩潰而產生巨大資本利得，同時高品質投資級信用債（Investment Grade Credit）亦表現優異。</li>
+<li class="mb-2">空頭陡峭化（Bear Steepener）：** 此情境則發生於長天期利率上升的速度快於短天期利率。這通常反映了極為強勁的總體經濟成長預期，伴隨著不斷攀升的長期通膨風險。為彌補資本在較長期限內被鎖定的購買力流失風險，以及面對巨額國債發行供應量的壓力，投資人會要求顯著更高的期限溢酬（Term Premium）。與此同時，央行的緊縮步伐可能相對遲緩，未大幅調升短端利率，導致長端利率急遽飆升。在此環境中，固定利率的長端債券全面受壓，投資人應尋求避險；相對表現較佳的資產板塊通常是具備自然對沖特性的浮動利率工具（Floating Rate Instruments），以及違約率下降、與經濟成長正相關的高收益債券（High Yield） 41。</li></ul>
+<h3 id="section-2-平坦化交易-curve-flatteners" class="not-prose analysis-h3 mb-6 font-noto">4.2 平坦化交易 (Curve Flatteners)</h3>
+<p class="mb-8">平坦化交易則建立在長短期利差將會劇烈收斂的預期之上，極端情況下甚至會推動曲線進入倒掛（Inversion）的狀態。</p>
+<ul class="mb-8 space-y-2 list-disc pl-6"><li class="mb-2">多頭平坦化（Bull Flattener）：** 指長天期利率下降的速度快於短天期利率。此現像通常伴隨著市場對經濟前景的極度悲觀與恐慌情緒，引發資金的飛向品質（Flight-to-quality）效應。投資人預期未來的經濟環境將大幅惡化或面臨通貨緊縮，因而瘋狂搶購長天期國債以鎖定較高且保本無風險的長期收益，導致長端殖利率重挫。在此情境下，長天期國債及優質投資級市政債券（Municipals）將是表現最強勢、資本利得最豐厚的資產板塊。</li>
+<li class="mb-2">空頭平坦化（Bear Flattener）：** 此情境發生於短天期利率上升的速度快於長天期利率。這是中央銀行處於強力緊縮週期的標準市場特徵。為了抑制過熱的通膨，決策者透過政策工具大幅推高短期利率；然而，市場參與者同時預期，這種高強度的緊縮環境最終將成功冷卻通膨並大幅削弱未來的經濟成長動能。在長期通膨預期成功保持錨定（Anchored）的情況下，長端利率缺乏持續上升的動力，上升幅度因此受到嚴格限制，導致曲線平坦化甚至嚴重倒掛。與多頭陡峭化相反，研究指出空頭平坦化實際上會降低股票市場波動率對債券市場波動率的敏感度，因為緊縮政策帶來了某種程度上的「負向風險溢酬」與防禦性預期。在此情境下，整體殖利率皆上升造成價格下跌，短天期國債與浮動利率工具成為相對安全的資金避風港。</li></ul>
+<h3 id="section-3-斜率策略之衍生性商品執行實務" class="not-prose analysis-h3 mb-6 font-noto">4.3 斜率策略之衍生性商品執行實務</h3>
+<p class="mb-8">為了精確捕捉斜率變化並提高資金使用效率，機構投資人除在現貨市場買賣不同天期的債券外，大量運用店頭市場（OTC）的衍生性金融商品，尤其是利率交換（Interest Rate Swaps, IRS）與選擇權工具。利率交換允許兩方在約定期間內交換固定利率與浮動利率（如SOFR）的現金流。 以建構一個2年期與10年期的陡峭化交易（Steepener）為例，其具體的衍生性商品操作邏輯如下： 交易員預期未來曲線將陡峭化，即2年期交換利率相對於10年期交換利率將大幅走低。因此，交易員會在短端（2年期）建立「收取固定利率、支付浮動利率」（Receive Fixed）的交換合約部位，這在風險特徵上等同於做多短端債券；同時，在長端（10年期）建立「支付固定利率、收取浮動利率」（Pay Fixed）的交換合約部位，這等同於做空長端債券。在確保雙邊DV01完全中立的前提下建構此部位，若未來殖利率曲線確實如預期陡峭化，前端收取固定利率部位的利得，將會大幅超過長端支付固定利率部位的損失，從而實現淨利潤。此外，賣出接收固定利率或支付固定利率的交換選擇權（Swaption），亦可用於設定特定的目標觸發水位，增強投資組合收益或表達對波動率是否高於隱含波動率的量化觀點。在歐洲與北歐市場，這類架構甚至被擴展應用於隔夜指數交換利率（OIS steepener）或盈虧平衡通膨率（Break-even inflation, BEI steepener）的跨期套利上。</p>
+<h2 id="chapter-5" class="not-prose indicator-h2"><span class="number-circle">5</span><span class="title-main">5\. 2026年總體經濟環境與殖利率曲線實務應用分析</span></h2>
+<p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong> 將上述所有嚴密的固定收益理論框架與策略模型應用於2026年當前的真實市場環境，最能彰顯主動式部位管理與量化避險的巨大價值。回顧2026年第一季度至第二季度的總體經濟數據與美國聯準會（Fed）的政策路徑，全球固定收益市場經歷了極度劇烈的重新定價（Repricing）與斜率變遷過程。</p>
+<p class="mb-8">將上述所有嚴密的固定收益理論框架與策略模型應用於2026年當前的真實市場環境，最能彰顯主動式部位管理與量化避險的巨大價值。回顧2026年第一季度至第二季度的總體經濟數據與美國聯準會（Fed）的政策路徑，全球固定收益市場經歷了極度劇烈的重新定價（Repricing）與斜率變遷過程。</p>
+<h3 id="section-1-貨幣政策預期重塑與劇烈的空頭平坦化" class="not-prose analysis-h3 mb-6 font-noto">5.1 貨幣政策預期重塑與劇烈的空頭平坦化</h3>
+<p class="mb-8">在2026年初，市場原先普遍沉浸於對總體經濟軟著陸的樂觀預期中，認為聯準會將延續其寬鬆步伐。當時的聯邦資金利率（Federal Funds Rate）期貨定價顯示，全年預計將有兩次以上的降息空間。在這種寬鬆預期下，殖利率曲線呈現較為陡峭的狀態，2年期與10年期國債的關鍵利差（2s10s Spread）在1月2日高達71.53個基點（bps） 49。 然而，隨著第一季度各項經濟指標陸續公布，局勢發生了根本性的逆轉。受制於地緣政治緊張局勢未見舒緩（例如中東衝突引發的供應鏈危機與能源價格震盪），國際原油價格持續高懸。這些外部衝擊使得美國整體的名目通膨數據（Headline Inflation）呈現出極強的僵固性（Sticky Inflation），核心物價指標居高不下。通膨壓力的頑固存在，嚴重限縮了聯準會實施寬鬆政策的靈活度。 面對此一現實，聯準會在4月及5月份的公開市場委員會（FOMC）會議中，連續將聯邦資金利率目標區間維持在3.50%至3.75%的相對高位，並在會議聲明中暗示了對升息保持開放的鷹派態度（Signals Openness to Rate Hikes） 51。截至2026年3月下旬，金融市場對聯準會的降息預期已經完全消退（Fading Rate Cut Expectations），市場不再定價2026年內有任何降息的可能性。這種對「維持高利率更長一段時間」（Higher for longer）論述的全面妥協，直接引發了前端殖利率的猛烈飆升。以3月24日單日為例，受到降息無望的預期打擊，2年期國債殖利率躍升約8個基點至3.92%，而10年期國債殖利率亦上升5個基點至4.39%（後續隨通膨疑慮加深，甚至一度觸及4.671%的多月高點） 49。 這種短端利率上升幅度顯著大於長端利率的現象，完美演繹了教科書等級的空頭平坦化（Bear Flattener）動態。2s10s利差在不到三個月的時間內，急遽收斂了25.24個基點，至3月下旬僅剩46.29個基點；根據聖路易斯聯邦準備銀行（FRED）的最新數據，截至2026年5月19日，該利差進一步微幅反彈至54個基點（0.54%），但整體曲線型態仍處於歷史上相對平坦的緊縮狀態。克里夫蘭聯邦準備銀行基於殖利率曲線斜率（10年期減3個月期利差，目前約為39至61個基點）建構的GDP預測模型顯示，未來一年實質GDP成長率預測約為3.2%至3.5%，但隱含的經濟衰退機率仍徘徊在14.5%至17.8%之間，顯示市場對高利率潛在破壞力的擔憂並未完全消除。</p>
+<h3 id="section-2-總體環境變動對跨資產配置與股票市場的深遠影響" class="not-prose analysis-h3 mb-6 font-noto">5.2 總體環境變動對跨資產配置與股票市場的深遠影響</h3>
+<p class="mb-8">空頭平坦化不僅局限於固定收益市場，更對整體資本市場產生了結構性的資產板塊輪動（Sector Rotation）效應。由於實質利率（Real rates）維持高檔，且財政赤字擴張引發長端國債龐大供給壓力（使得長端殖利率被估計難以跌破3.75%的地板），市場對風險資產估值的容忍度大幅下降，企業的再融資成本壓力全面顯現。</p>
+<ul class="mb-8 space-y-2 list-disc pl-6"><li class="mb-2">**固定收益市場的防禦性配置：** 面對這種高利率與平坦化曲線環境，固定收益經理人傾向於放棄承擔長端存續期間風險，轉而採取防禦性姿態。資金大量湧入短天期至中天期的投資級企業債券（Investment-Grade Corporate Bonds）。這類資產的信用利差（Credit spreads）目前處於歷史緊縮水準，能提供極具吸引力的票息收入（Carry），同時由於期限較短，價格的利率敏感度風險相對受控。</li>
+<li class="mb-2">**股票市場的領導權移轉與小型股危機：** 在股票市場板塊中，根據量化研究機構（如NDR）的風格模型，殖利率曲線的空頭平坦化嚴重壓抑了價值股（Value）與循環性類股的表現。歷史數據顯示，在緊縮的實質利率環境中，具備強健資產負債表與穩定耐久現金流的高品質（Quality）與成長型（Growth）企業表現大幅優於大盤。尤為關鍵的是，長期處於高位的融資利率對極度依賴外部舉債籌資的小型股（Small Caps）造成了嚴重的結構性打擊。特別是小型工業類股，其受到地緣政治導致的能源投入成本飆漲，以及借貸成本增加的雙重擠壓，利潤率遭到嚴重壓縮。這導致2026全年的小型工業股每股盈餘（EPS）成長預測遭到分析師大幅下修（從年初的10.85急速下調至3月下旬的8.31），凸顯了利率期限結構變化對實體經濟微觀面的深遠影響。</li></ul>
+<h2 id="chapter-6" class="not-prose indicator-h2"><span class="number-circle">6</span><span class="title-main">6\. 結論</span></h2>
+<p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong> 現代固定收益投資組合管理的成功，已不再仰賴單純預測利率升降的直覺猜測，而是建立在將深奧的數學統計模型（如關鍵利率存續期間分配與主成分分析）與動態的總體經濟劇本無縫結合的基礎之上。正如本研究報告所深入探討的各個維度，無論是透過新舊券的流動性溢酬差異與期貨基差交易獲取無風險套利機會、運用子彈式與槓鈴式結構在平坦化與陡峭化環境中對賭凸性價值，抑或是精確執行DV01完全中立的蝶式與兀鷹式曲率交易，專業交易</p>
+<p class="mb-8">現代固定收益投資組合管理的成功，已不再仰賴單純預測利率升降的直覺猜測，而是建立在將深奧的數學統計模型（如關鍵利率存續期間分配與主成分分析）與動態的總體經濟劇本無縫結合的基礎之上。正如本研究報告所深入探討的各個維度，無論是透過新舊券的流動性溢酬差異與期貨基差交易獲取無風險套利機會、運用子彈式與槓鈴式結構在平坦化與陡峭化環境中對賭凸性價值，抑或是精確執行DV01完全中立的蝶式與兀鷹式曲率交易，專業交易員皆必須透過精密的量化工具嚴密控制多維度的風險曝險。 在實務執行面上，使用國債期貨或店頭衍生性商品（如利率交換與選擇權）進行結構性交易時，對「最便宜可交割」（CTD）資產的轉換因子、發票價格與隱含附買回利率（IRR）的動態計算至關重要。同時，面對2026年至2027年美國證券交易委員會逐步推動的強制集中結算監管框架，交易成本、初始保證金要求與槓桿結構的改變正從根本上重塑著市場的微觀結構。高度依賴Repo融資的避險基金基準交易策略必須加速適應並推動跨市場保證金抵銷機制，以防範系統性流動性危機的反撲。 總結而言，在2026年通膨展現強大僵固性、聯準會政策被迫維持緊縮的「空頭平坦化」宏觀背景下，固定收益投資人必須徹底屏棄單向做多存續期間的傳統迷思，轉而運用精密的相對價值（Relative Value）與曲線形狀交易策略。透過靈活且動態地調整各天期節點的關鍵利率存續期間曝險，並輔以嚴格的高品質信用篩選機制，方能在充滿地緣政治變數與動盪的利率週期中，穩健地實現風險調整後報酬的最大化。</p>
+
+<div class="not-prose my-12 p-8 rounded-2xl border border-blue-200 dark:border-blue-800 bg-blue-50/80 dark:bg-blue-950/30 backdrop-blur-sm shadow-lg">
+<div class="flex flex-col gap-4">
+<span class="px-2.5 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-full text-xs font-bold uppercase tracking-wider w-fit">專題續篇 (PART 2)</span>
+<h3 id="信用與結構化策略-下-信用利差-mbs-與-abs" class="text-2xl font-extrabold text-slate-900 dark:text-slate-50 font-noto">信用與結構化策略（下）：信用利差、MBS 與 ABS</h3>
+<p class="text-slate-600 dark:text-slate-300 text-base leading-relaxed">下集涵蓋信用利差套利、CDS-現金基差、可轉債 Gamma 與 MBS 負凸性異象，與本篇利率曲線框架互補。</p>
+<a href="trading-strategies-fixed-income-credit-structured-strategies.html" class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all w-fit">閱讀 Part 2 續篇</a>
+</div></div>
+
+
+<div class="not-prose mt-16 border-t-2 border-slate-100 dark:border-slate-700 pt-10">
+<h2 id="文章分析" class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-8 border-l-4 border-blue-600 pl-4">文章分析</h2>
+<div id="article-inference-logic" class="mt-8">
+<h3 id="文章推論邏輯分析" class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto">文章推論邏輯分析</h3>
+<p class="mb-6 text-slate-700 dark:text-slate-300">本文以 PCA 三因子為理論底座，將國債微觀結構套利與曲線形狀交易統一於「相對價值 + 2026 宏觀劇本」框架，核心假設是：利差與曲線形狀的變動比方向性利率預測更具可交易性。</p>
+</div>
+<div id="logic-blindspots" class="my-8 p-6 theme-bg-body dark:bg-slate-900/20 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+<h3 id="敘事邊界與關鍵變數補充" class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-4 font-noto">敘事邊界與關鍵變數補充</h3>
+<ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+<li><strong class="text-slate-800 dark:text-slate-200">[不可忽視變數]</strong> CCP 跨市場保證金抵銷進度不及預期，可能迫使基差交易者去杠杆，衝擊 OFR 流動性。</li>
+<li><strong class="text-slate-800 dark:text-slate-200">[模型風險]</strong> 歷史 PCA 權重在供給衝擊（財政赤字發債）主導的週期可能失效。</li>
+</ul></div>
+<div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-700">
+<h2 id="mason-yang-observation" class="not-prose text-xl text-slate-900 dark:text-slate-100 font-bold font-noto block mb-6">Mason Yang 的觀察 (Actionable Intelligence)</h2>
+<div class="p-6 theme-bg-body dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 rounded-sm space-y-6">
+<div><strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">1. 核心命題</strong>
+<p class="text-slate-800 dark:text-slate-200 font-bold text-lg">2026 年主戰場在「曲線形狀」而非「利率方向」；空頭平坦化下應縮短長端 DV01、以短中期 IG 承擔 Carry。</p></div>
+<div><strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">2. 激勵錨點</strong>
+<p class="text-slate-700 dark:text-slate-300">交易商在 SLR/CCP 約束下讓渡基差與舊券流動性溢酬，避險基金以 Repo 槓桿承接——直到保證金規則重設利潤表。</p></div>
+<div><strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">3. 引爆因子</strong>
+<p class="text-slate-700 dark:text-slate-300">監控 2s10s 單週收斂 &gt;15bps 且前端利率跳升；同步觀察 10Y 新券市場深度是否低於正常四分之一。</p></div>
+<div><strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">4. 演化劇本</strong>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+<div class="p-3 bg-white/50 dark:bg-slate-800/50 rounded border"><span class="font-bold text-sm">路徑 A</span><p class="text-xs text-slate-500 mt-1">曲線維持平坦，短端 IG + 浮動利率工具主導防禦配置。</p></div>
+<div class="p-3 bg-white/50 dark:bg-slate-800/50 rounded border"><span class="font-bold text-sm">路徑 B</span><p class="text-xs text-slate-500 mt-1">基差交易去槓桿引發 OFR 拋售，OTR/OFR 利差非線性擴大。</p></div>
+</div></div>
+<div><strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">5. 行動策略</strong>
+<p class="text-slate-800 dark:text-slate-200 font-bold">核心存續期間防禦 + 衛星蝶式／陡峭化期權；並請搭配 <a href="trading-strategies-fixed-income-credit-structured-strategies.html" class="text-blue-600 underline">Part 2</a> 信用結構化部位對沖尾部風險。</p></div>
+</div></div></div>
+
+<div class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400"><p class="font-bold text-slate-700 dark:text-slate-300 mb-2">參考資料 (References)</p><ol class="list-decimal pl-4 space-y-1 mb-4"><li>Understanding PCA 3 Factors of the Yield Curve using R code - R-bloggers, 檢索日期：2026-05-20, <a href="https://www.r-bloggers.com/2022/05/understanding-pca-3-factors-of-the-yield-curve-using-r-code/" class="hover:text-blue-500 underline">Link</a></li><li>Term Structure Analysis using PCA, 檢索日期：2026-05-20, <a href="https://fam.tuwien.ac.at/~sgerhold/pub_files/sem21/s_malinovskii.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Yield Curve Modelling: A Comparison of Principal Components Analysis and the Discrete-Time Vasicek Model Irene Sekyere Asare A T - Spectrum , 檢索日期：2026-05-20, <a href="https://spectrum.library.concordia.ca/985642/1/SekyereAsare_MSc_S2020.pdf" class="hover:text-blue-500 underline">Link</a></li><li>The on-the-run liquidity phenomenon - University of Michigan's Ross School of Business, 檢索日期：2026-05-20, <a href="https://webuser.bus.umich.edu/ppasquar/onofftherun.pdf" class="hover:text-blue-500 underline">Link</a></li><li>On-The-Run vs. Off-The-Run Bonds & Strategies - DayTrading.com, 檢索日期：2026-05-20, <a href="https://www.daytrading.com/on-the-run-off-the-run-bonds-strategies" class="hover:text-blue-500 underline">Link</a></li><li>Is There an On-the-Run Premium in TIPS? - Federal Reserve Bank of San Francisco, 檢索日期：2026-05-20, <a href="https://www.frbsf.org/wp-content/uploads/wp2017-10.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Recent Developments in Treasury Market Liquidity and Funding Conditions, 檢索日期：2026-05-20, <a href="https://www.newyorkfed.org/newsevents/speeches/2025/per250509" class="hover:text-blue-500 underline">Link</a></li><li>OFR Brief Series: Basis Trades and Treasury Market Illiquidity, 檢索日期：2026-05-20, <a href="https://www.financialresearch.gov/briefs/files/OFRBr_2020_01_Basis-Trades.pdf" class="hover:text-blue-500 underline">Link</a></li><li>How the U.S. Treasury Futures Market and the Basis Trade Could ..., 檢索日期：2026-05-20, <a href="https://www.chicagofed.org/publications/chicago-fed-letter/2026/516" class="hover:text-blue-500 underline">Link</a></li><li>The Fed - Quantifying Treasury Cash-Futures Basis Trades, 檢索日期：2026-05-20, <a href="https://www.federalreserve.gov/econres/notes/feds-notes/quantifying-treasury-cash-futures-basis-trades-20240308.html" class="hover:text-blue-500 underline">Link</a></li><li>Cheapest to Deliver |Meaning|Example - Fintelligents, 檢索日期：2026-05-20, <a href="https://fintelligents.com/cheapest-to-deliver/" class="hover:text-blue-500 underline">Link</a></li><li>21 d. Treasury Bond Futures - NYU Stern, 檢索日期：2026-05-20, <a href="https://pages.stern.nyu.edu/~adamodar/pdfiles/valn2ed/ch34f.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Pricing Fixed Income Forward and Futures - AnalystPrep, 檢索日期：2026-05-20, <a href="https://analystprep.com/study-notes/cfa-level-2/pricing-fixed-income-forward-and-futures/" class="hover:text-blue-500 underline">Link</a></li><li>Calculating U.S. Treasury Futures Conversion Factors - CME Group, 檢索日期：2026-05-20, <a href="https://www.cmegroup.com/articles/2024/calculating-us-treasury-futures-conversion-factors.html" class="hover:text-blue-500 underline">Link</a></li><li>Calculating U.S. Treasury Futures Conversion Factors - CME Group, 檢索日期：2026-05-20, <a href="https://www.cmegroup.com/trading/interest-rates/files/Calculating_U.S.Treasury_Futures_Conversion_Factors.pdf" class="hover:text-blue-500 underline">Link</a></li><li>r is not a constant - The relationship between bond futures and repo rates ... - ICMA, 檢索日期：2026-05-20, <a href="https://www.icmagroup.org/assets/ICMA-ERCC_r-is-not-a-constant_the-relationship-between-repo-rates-and-bond-futures_July-2022-andy-hill.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Implied Repo Analysis - Bourse de Montréal, 檢索日期：2026-05-20, <a href="https://www.m-x.ca/f_publications_en/cgf_implied_repo_analysis_en.pdf" class="hover:text-blue-500 underline">Link</a></li><li>How CME RepoFunds Rate Futures Enhance Bond Basis Trading, 檢索日期：2026-05-20, <a href="https://www.cmegroup.com/articles/whitepapers/how-cme-group-repofunds-rate-futures-enhance-bond-basis-trading.html" class="hover:text-blue-500 underline">Link</a></li><li>Understanding the Implied Repo Rate - Bourse de Montréal, 檢索日期：2026-05-20, <a href="https://m-x.ca/f_publications_en/understanding_the_implied_repo_rate.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Sizing up hedge funds' relative value trades in US Treasuries and interest rate swaps, 檢索日期：2026-05-20, <a href="https://www.bis.org/publ/qtrpdf/r_qt2512y.htm" class="hover:text-blue-500 underline">Link</a></li><li>Yield curve and duration strategies - Active term structure strategies - PastPaperHero, 檢索日期：2026-05-20, <a href="https://www.pastpaperhero.com/resources/cfa-level3-yield-curve-and-duration-strategies-active-term-structure-strategies" class="hover:text-blue-500 underline">Link</a></li><li>Yield curve and duration strategies - Carry roll-down and curve trades - PastPaperHero, 檢索日期：2026-05-20, <a href="https://www.pastpaperhero.com/resources/cfa-level3-yield-curve-and-duration-strategies-carry-roll-down-and-curve-trades" class="hover:text-blue-500 underline">Link</a></li><li>Portfolio Positioning and Yield Curve Strategies - AnalystPrep, 檢索日期：2026-05-20, <a href="https://analystprep.com/study-notes/cfa-level-iii/portfolio-positioning/" class="hover:text-blue-500 underline">Link</a></li><li>Yield Curve Strategies | CFA Institute, 檢索日期：2026-05-20, <a href="https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/yield-curve-strategies" class="hover:text-blue-500 underline">Link</a></li><li>Butterfly in Fixed Income Trading Strategies - Blog Post - Eric Bank ..., 檢索日期：2026-05-20, <a href="https://ericbank.com/blog/post/2342370/butterfly-in-fixed-income-trading-strategies" class="hover:text-blue-500 underline">Link</a></li><li>Why construct a barbell portfolio rather than a bullet? (Level 2 Fixed Income) : r/CFA - Reddit, 檢索日期：2026-05-20, <a href="https://www.reddit.com/r/CFA/comments/1h8kav7/why_construct_a_barbell_portfolio_rather_than_a/" class="hover:text-blue-500 underline">Link</a></li><li>Last Minute CFA LVL 3 Exam pointers - Reddit, 檢索日期：2026-05-20, <a href="https://www.reddit.com/r/CFA/comments/1ese5mr/last_minute_cfa_lvl_3_exam_pointers/" class="hover:text-blue-500 underline">Link</a></li><li>Barbell x Bullet given a decrease in Butterfly Spread : r/CFA - Reddit, 檢索日期：2026-05-20, <a href="https://www.reddit.com/r/CFA/comments/qxhzcj/barbell_x_bullet_given_a_decrease_in_butterfly/" class="hover:text-blue-500 underline">Link</a></li><li>Level 3- Butterflys and Condors : r/CFA - Reddit, 檢索日期：2026-05-20, <a href="https://www.reddit.com/r/CFA/comments/qyaloc/level_3_butterflys_and_condors/" class="hover:text-blue-500 underline">Link</a></li><li>Yield Curve Strategies: Steepeners, 檢索日期：2026-05-20, <a href="https://irstructure.com/yield-curve-strategies-steepeners-flatteners-and-more/" class="hover:text-blue-500 underline">Link</a></li><li>Question on barbells and bullets : r/CFA - Reddit, 檢索日期：2026-05-20, <a href="https://www.reddit.com/r/CFA/comments/149myjp/question_on_barbells_and_bullets/" class="hover:text-blue-500 underline">Link</a></li><li>Butterfly Trades - Portfolio Management Research, 檢索日期：2026-05-20, <a href="https://www.pm-research.com/content/iijpormgmt/26/1/87" class="hover:text-blue-500 underline">Link</a></li><li>Butterfly trades: Bet on sovereign bonds' future term structure – BSIC ..., 檢索日期：2026-05-20, <a href="https://bsic.it/butterfly-trades-bet-on-sovereign-bonds-future-term-structure/" class="hover:text-blue-500 underline">Link</a></li><li>Understanding 2-5-10 Butterfly Trades in Futures - Bourse de Montréal, 檢索日期：2026-05-20, <a href="https://www.m-x.ca/f_publications_en/understanding_2_5_10_in_futures_en.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Butterfly : r/CFA - Reddit, 檢索日期：2026-05-20, <a href="https://www.reddit.com/r/CFA/comments/1ep11i4/butterfly/" class="hover:text-blue-500 underline">Link</a></li><li>Butterfly trades: Bet on sovereign bonds' future term structure. - Bocconi Students Investment Club, 檢索日期：2026-05-20, <a href="https://bsic.it/wp-content/uploads/2021/11/Download-PDF-9.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Mechanics and Definitions of Spread and Butterfly Swap Packages |, 檢索日期：2026-05-20, <a href="https://www.clarusft.com/mechanics-and-definitions-of-spread-and-butterfly-swap-packages/" class="hover:text-blue-500 underline">Link</a></li><li>Swap Rate Curve Strategies with Deliverable Interest Rate Swap Futures - CME Group, 檢索日期：2026-05-20, <a href="https://www.cmegroup.com/trading/interest-rates/files/dsf-swap-rate-curve-spreads.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Best fixed income portfolio to hedge out against butterfly spread ? : r/CFA - Reddit, 檢索日期：2026-05-20, <a href="https://www.reddit.com/r/CFA/comments/1ex152e/best_fixed_income_portfolio_to_hedge_out_against/" class="hover:text-blue-500 underline">Link</a></li><li>Essays on Monetary Policy and Asset Price Volatility - Essex Research Repository, 檢索日期：2026-05-20, <a href="https://repository.essex.ac.uk/32827/1/AG%20Ozbekler%20-%20PhD%20Thesis.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Investment Committee Review - SS&C ALPS Advisors, 檢索日期：2026-05-20, <a href="https://www.alpsadvisors.com/hubfs/aai-docs/edu/investment-committee-review.pdf" class="hover:text-blue-500 underline">Link</a></li><li>how do treasury yields affect the stock market - Bitget, 檢索日期：2026-05-20, <a href="https://www.bitget.com/wiki/how-do-treasury-yields-affect-the-stock-market" class="hover:text-blue-500 underline">Link</a></li><li>Understanding Interest Rate Swaps - PIMCO, 檢索日期：2026-05-20, <a href="https://www.pimco.com/us/en/resources/education/understanding-interest-rate-swaps" class="hover:text-blue-500 underline">Link</a></li><li>Yield Curve Spread Trades: Opportunities & Applications - CME Group, 檢索日期：2026-05-20, <a href="https://www.cmegroup.com/education/files/yield-curve-spread-trades.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Interest & Exchange - Santander, 檢索日期：2026-05-20, <a href="https://cms.santander.com.br/sites/WPS/documentos/arq-interest-exchange-fx-dynamics-implications-for/18-04-23_125831_243-622-ie_180302.pdf" class="hover:text-blue-500 underline">Link</a></li><li>NYIF_DPC 2-3_170918.pptx - edX, 檢索日期：2026-05-20, <a href="https://courses.edx.org/asset-v1:NYIF+DPC.1x+3T2020+type@asset+block/NYIF_DPC_2-3_170918.pdf" class="hover:text-blue-500 underline">Link</a></li><li>Strategy Sweden: On the radar - Nordea Corporate, 檢索日期：2026-05-20, <a href="https://corporate.nordea.com/api/research/attachment/51474" class="hover:text-blue-500 underline">Link</a></li><li>Interest Rate Options Demystified - Pandemonium, 檢索日期：2026-05-20, <a href="https://www.pandemonium.sg/resource/interest-rate-options-demystified/" class="hover:text-blue-500 underline">Link</a></li><li>The yield curve's message for equity markets | State Street, 檢索日期：2026-05-20, <a href="https://www.ssga.com/us/en/institutional/insights/mind-on-the-market-26-march-2026" class="hover:text-blue-500 underline">Link</a></li><li>US Stock Market: Treasury yields surge to multi-year highs amid sticky inflation concerns, 檢索日期：2026-05-20, <a href="https://m.economictimes.com/markets/us-stocks/news/us-stock-market-treasury-yields-surge-to-multi-year-highs-amid-sticky-inflation-concerns/articleshow/131216156.cms" class="hover:text-blue-500 underline">Link</a></li><li>Fed Outlook 2026: Rate Forecasts and Fixed Income Strategies - iShares, 檢索日期：2026-05-20, <a href="https://www.ishares.com/us/insights/fed-outlook-2026-interest-rate-forecast" class="hover:text-blue-500 underline">Link</a></li><li>United States Fed Funds Interest Rate - Trading Economics, 檢索日期：2026-05-20, <a href="https://tradingeconomics.com/united-states/interest-rate" class="hover:text-blue-500 underline">Link</a></li><li>H.15 - Selected Interest Rates (Daily) - May 19, 檢索日期：2026-05-20, <a href="https://www.federalreserve.gov/releases/h15/" class="hover:text-blue-500 underline">Link</a></li><li>10-Year Treasury Constant Maturity Minus 2-Year Treasury Constant Maturity (T10Y2Y) | FRED | St. Louis Fed, 檢索日期：2026-05-20, <a href="https://fred.stlouisfed.org/series/T10Y2Y" class="hover:text-blue-500 underline">Link</a></li><li>Yield Curve and Predicted GDP Growth - Federal Reserve Bank of Cleveland, 檢索日期：2026-05-20, <a href="https://www.clevelandfed.org/indicators-and-data/yield-curve-and-predicted-gdp-growth" class="hover:text-blue-500 underline">Link</a></li><li>Transamerica Asset Management, 檢索日期：2026-05-20, <a href="https://www.transamerica.com/financial-pro/investments/2026-market-outlook" class="hover:text-blue-500 underline">Link</a></li><li>2026 Outlook: Treasury Bonds and Fixed Income - Charles Schwab, 檢索日期：2026-05-20, <a href="https://www.schwab.com/learn/story/fixed-income-outlook" class="hover:text-blue-500 underline">Link</a></li></ol><p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明</p><p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。</p></div>
+</article>
+
+            <!-- Related Articles (Mobile bottom) -->
+            <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+        </div>
+        <!-- /END Center Column -->
+
+        <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+        <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+            <div class="sticky top-24 space-y-4 sidebar-scroll">
+
+                <!-- A. Article Meta Card -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            文章資訊</p>
+                    </div>
+                    <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                        <div class="flex justify-between items-center px-4 py-2.5">
+                            <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                            <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-05-20</dd>
+                        </div>
+                        <div class="flex justify-between items-center px-4 py-2.5">
+                            <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                            <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">傳統金融與市場</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <!-- B. Key Findings Card -->
+                <!-- AI GUIDANCE: 
+                         此區塊為右側資訊面板的核心結論。
+                         內容應從「Part 2.1: 5W1H 深度邏輯總結」中提取精華，特別是聚焦於「How / 執行建議」與「Why / 驅動邏輯」，為讀者提供最終的價值總結與決策定見。
+                    -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            核心結論</p>
+                    </div>
+                    <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">2026 年固定收益投資已轉向「資產負債表管理」，利差大小取決於監管資本稀缺性，結構化套利策略已成為對抗 Higher for Longer 環境的核心工具。</p>
+                        </li>
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">透過 OAS 拆解、CDS 負基差與可轉債 Delta 中立，可將信用、流動性與波動率分離定價，捕捉監管資本約束下的定價錯誤。</p>
+                        </li>
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">實務配置建議「核心-衛星」：Senior ABS/MBS 承擔防禦性利差，Gamma 交易將高波動環境貨幣化；須監控 Repo Special 作為融資鏈斷裂警報。</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- C. Keywords -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            關鍵字</p>
+                    </div>
+                    <div class="px-4 py-3 flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">固定收益</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">信用套利</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">MBS/ABS</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">CDS基差</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">Gamma交易</span>
+                    </div>
+                </div>
+
+                <!-- D. Related Articles (Desktop sidebar) -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            延伸閱讀</p>
+                    </div>
+                    <div id="related-articles-sidebar"></div>
+                </div>
+
+            </div>
+        </aside>
+        <!-- /END Right Sidebar -->
+
+        </div>
+
+                    <!-- auto_linker_start -->
+                    <div class="not-prose auto-linker-container" style="margin-top: 3rem; border-top: 1px solid var(--c-border, #e2e8f0); padding-top: 2rem; font-family: system-ui, -apple-system, sans-serif;">
+                        <h4 id="延伸探索-related-research" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--c-text-primary, #1e293b); display: flex; align-items: center; gap: 0.5rem; margin-top: 0;">
+                            延伸探索 / Related Research
+                        </h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+            <a href="../news/20260330-jpy-exchange-rate-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: arbitrage]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026 日圓匯率走勢深度解析：中東衝突、實質利差與套利交易的系統性危機</span>
+            </a>
+            <a href="../news/20260401-jpy-systemic-risk-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: arbitrage]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026 日圓系流動性危機深度研究：套利交易、美債共生與全球金融系統性破口</span>
+            </a>
+            <a href="../news/20260514-global-stagflation-crisis-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: macro-analysis]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026 全球滯脹危機深度查核：地緣衝突、能源通膨與利率陷阱</span>
+            </a>
+            <a href="../news/20260521-amd-valuation-deception.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: macro-analysis]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">華爾街的估值幻象：拆解投資銀行調高 AMD 目標價的敘事騙局與供需失衡真相</span>
+            </a>
+            <a href="../news/20260521-clarity-act-legislative-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: arbitrage]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">《數位資產市場清晰法案》(CLARITY Act) 深度解析：2026年美國金融監管框架與地緣政治博弈</span>
+            </a>
+            <a href="../news/news-20260327-invest-research-handbook.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: arbitrage]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">投資研究專業知識：機構級深度操作與實戰手冊 (2026)</span>
+            </a>
+                        </div>
+                    </div>
+                    <!-- auto_linker_end -->
+</main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button (fixed, bottom-right) -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core-taxonomy.js"></script>
+    <script src="../assets/js/core-articles-data.js"></script>
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+    <script src="../assets/js/widget-related-articles.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. Layout Shell ───────────────────────────────────
+            const header = new HeaderComponent();
+            header.setHomeUrl('../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // ── 3. Mobile TOC ──────────────────────────────────────
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // ── Related Articles (Common) ──────────────────────────
+            if (window.RelatedArticlesComponent) {
+                // Related Articles - Bottom
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-container')
+                    .setLimit(3)
+                    .init();
+
+                // Related Articles - Sidebar
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-sidebar')
+                    .setLayout('list')
+                    .setShowHeader(false)
+                    .setLimit(5)
+                    .init();
+            }
+
+            // ── 4. Scroll Events ───────────────────────────────────
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                // Progress bar
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+
+                // Back to top (show after 500px)
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO & METADATA -->
+    <!-- @validation-skip-sidebar -->
+    <title>全站文章資料庫與試算表終端</title>
+    <meta name="description" content="Mason Yang Blog 的機構級結構化文章資料庫與試算表過濾終端。支援多維度篩選、表頭排序與一鍵匯出 TSV/CSV 供 Google Sheet 與 Excel 分析。">
+    <meta name="keywords" content="Mason Yang, 文章資料表, 結構化資料, 投資報告, 試算表匯出, 知識管理">
+    <link rel="canonical" href="https://masonyang-blog.github.io/post/articles-spreadsheet.html">
+    <meta name="google-site-verification" content="F1sAja4V6KTk17SiojYOS8UF1GP9-hu8TXI8iVKQ27Y" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#15202e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": "https://masonyang-blog.github.io/post/articles-spreadsheet.html",
+        "isPartOf": {
+          "@id": "https://masonyang-blog.github.io/#website"
+        },
+        "headline": "全站文章資料庫與試算表終端",
+        "description": "Mason Yang Blog 的機構級結構化文章資料庫與試算表過濾終端。支援多維度篩選、表頭排序與一鍵匯出 TSV/CSV 供 Google Sheet 與 Excel 分析。",
+        "url": "https://masonyang-blog.github.io/post/articles-spreadsheet.html",
+        "about": [
+          {
+            "@type": "Thing",
+            "name": "Spreadsheet",
+            "sameAs": "https://www.wikidata.org/wiki/Q183258"
+          },
+          {
+            "@type": "Thing",
+            "name": "Database",
+            "sameAs": "https://www.wikidata.org/wiki/Q8513"
+          }
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://masonyang-blog.github.io/#author",
+        "name": "Mason Yang",
+        "url": "https://masonyang-blog.github.io",
+        "jobTitle": "Investment Researcher",
+        "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://masonyang-blog.github.io/logo.png"
+        },
+        "sameAs": [
+          "https://x.com/MasonYang16"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://masonyang-blog.github.io/#website",
+        "url": "https://masonyang-blog.github.io",
+        "name": "Mason Yang Blog",
+        "publisher": {
+          "@id": "https://masonyang-blog.github.io/#author"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://masonyang-blog.github.io/post/articles-spreadsheet.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "首頁",
+            "item": "https://masonyang-blog.github.io/index.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "全站文章資料庫與試算表終端",
+            "item": "https://masonyang-blog.github.io/post/articles-spreadsheet.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <main class="flex-grow py-8 px-4 sm:px-6 lg:px-8 max-w-[1600px] w-full mx-auto">
+        <!-- Breadcrumb -->
+        <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6 font-noto">
+            <ol class="flex items-center space-x-1.5">
+                <li><a href="../index.html" class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                <li><span class="text-slate-300">/</span></li>
+                <li class="font-medium text-slate-900 dark:text-slate-100">試算表終端</li>
+            </ol>
+        </nav>
+
+        <!-- 頁面標題列 -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white font-noto">
+                全站文章資料庫與<span class="text-blue-600 dark:text-blue-400">試算表終端</span>
+            </h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-2 max-w-3xl">
+                這裡是 Mason Yang Blog 的全站內容集散中心。透過結構化標籤與年份過濾器，您可以快速篩選所需主題，並直接複製為 TSV 或下載 CSV 匯入您的個人知識庫。
+            </p>
+        </div>
+
+        <!-- 試算表 Web Component 宿主 -->
+        <div id="spreadsheet-host" class="w-full">
+            <!-- STATIC_FALLBACK_START -->
+            <noscript>
+                <div class="overflow-x-auto bg-white dark:bg-slate-900 shadow-md rounded-lg p-6 my-4 border border-slate-200 dark:border-slate-800">
+                    <p class="mb-4 text-amber-600 dark:text-amber-400 font-semibold font-noto">⚠️ 偵測到 JavaScript 已停用或未載入。以下是靜態降級 HTML 列表：</p>
+                    <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 font-noto text-sm">
+                        <thead class="bg-slate-50 dark:bg-slate-800">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-bold text-slate-700 dark:text-slate-200">日期</th>
+                                <th class="px-4 py-3 text-left font-bold text-slate-700 dark:text-slate-200">文章標題</th>
+                                <th class="px-4 py-3 text-left font-bold text-slate-700 dark:text-slate-200">分類</th>
+                                <th class="px-4 py-3 text-left font-bold text-slate-700 dark:text-slate-200">摘要描述</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-07-23</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260723-google-oracle-spillover.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Alphabet Q2 財報對 Oracle 溢出效應與 AI 基礎設施風險分析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度解構 Alphabet 2026 Q2 財報高達 449 億美元 CapEx 對 Oracle 的溢出效應，評估其 6,380 億美元 RPO、S&P 降評至 BBB- 與 OpenAI 集中度風險。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-07-21</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260721-unity-investment-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Unity股票投資分析：AI廣告科技Vector與Unity 6底層重置，如何驅動NYSE: U估值重估？</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">Unity 取消 Runtime Fee 回歸 SaaS 訂閱並提價，雖然短期關閉 IronSource 廣告網路產生一次性資產減損，但將深層 Runtime 行為數據正式接入 Vector AI 廣告引擎，將使 Unity 從傳統引擎工具轉型為 AI 廣告數據壟斷巨頭，迎來財務拐點與估值重估。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-07-18</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260718-openai-finance-crisis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">OpenAI 財務危機與 Oracle 星門悖論：全球 AI 泡沫崩潰情境推演</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度剖析 OpenAI 財務現況與極端現金消耗。揭露 Oracle 在「星門計畫」中的結構性不對等與財務陷阱，推演悲觀環境下引發的全球 AI 連續泡沫崩潰與半導體產業寒冬。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-07-02</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260702-memory-short-selling-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年記憶體產業崩跌：如何利用籌碼與現貨價背離進行放空？為何強制回補是致命軋空陷阱？</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文解析2026年記憶體產業見頂回檔，定義現貨與合約價死亡交叉為放空之領先訊號，揭示借券賣出為避開除權息強制回補軋空陷阱的法門。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-07-02</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260702-oil-market-deep-dive.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年全球原油價格深度分析：價格崩跌原因與100美元重返預測</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026年全球原油價格因地緣政治降溫、史無前例的需求破壞及戰略儲備極限釋放，從126美元高點暴跌40%至70美元區間。本報告深度解析原油市場探底成本支撐，並分析2027年供應過剩背景下重返百元大關的極端情境與長期能源轉型博弈。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-06-12</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260612-spacex-ipo-valuation-break-risk.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">SpaceX IPO估值泡沫如何透過被動指數反噬大盤？短期債務與極端稀釋會引發破發嗎？三種市場劇本演進邏輯深度分析 (2026年最新版)</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文分析 SpaceX IPO 估值泡沫及短期債務，推演臉書式、Uber式與Rivian式三種破發劇本，指出被動基金重平衡將排擠科技巨頭並引發系統性流動性反噬。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-31</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260531-us-debt-gold-btc-impact.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">美國國債危機對黃金與比特幣影響預測：2026 宏觀經濟與避險資產深度解析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深入分析 2026 年美國國債危機如何透過財政主導體制重構全球資產定價。本文證實黃金突破 $6,000 與比特幣邁向 $150,000 的核心路徑。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-30</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260530-btc-hedge-strategy.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">比特幣對沖與多空策略：如何建構量化套利模型？高波動市場中的對沖組合配置</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文深入解析比特幣對沖與多空配對交易的量化模型與實務操作。探討 ETH、MSTR 等標的之共整合性，並實測證明透過 Ornstein-Uhlenbeck 模型與資金費率套利能有效消除系統風險，獲取市場中立絕對報酬。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-29</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260529-allora-crypto-research.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Allora (ALLO) 去中心化 AI 網路：模型協調架構如何解決資訊孤島？為什麼「遺憾最小化」是集體智慧的定價核心？</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深入解析 Allora (ALLO) 去中心化 AI 網路的核心技術。從模型協調網路 (MCN) 到基於遺憾最小化的預測聚合，了解其如何重塑 DeFi 定價與智慧預言機的未來。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-29</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260528-gold-btc-crash-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026流動性危機下的資產定價權重塑：黃金與比特幣同步崩盤的結構必然性與範式轉移</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026年5月28日黃金與比特幣同步崩盤，核心在於荷莫茲海峽危機引發的能源通蓬，迫使聯準會沃什體系展現鷹派立場，帶動美債殖利率突破5.1%。同時，GENIUS法案下的機構化轉型使比特幣淪為高貝塔風險資產。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-28</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260528-stock-crash-risk.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">美股崩盤風險評估：宏觀背離、流動性陷阱與信貸週期的終局</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">美股距離系統性崩盤的真實時間點已進入倒數。本文深度解析36倍席勒本益比背後的估值泡沫、商業不動產破兆美元債務牆，以及聯準會面臨停滯性通膨與流動性陷阱的無解兩難。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-27</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260527-memory-supercycle-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 記憶體超級循環深度解析：AI 驅動 HBM 產能排擠與價格傳導邏輯</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">人工智慧與科技</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文深度解析 2024-2026 記憶體超級循環的核心動能，指出 AI 算力對 HBM 的剛性需求引發殘酷的「3比1產能排擠」，導致標準型 DRAM 供給真空與價格暴漲，並解析模組廠如何透過存貨金融實現獲利爆發。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-26</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260526-web4-agent-driven-intelligent-network.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Web4：如何以 AI Agent 驅動全智能網路？剖析 EIP-7702、Anoma 意圖架構與 DePIN 算力變革</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文深入剖析 Web4 時代的技術底層，闡述 AI Agent 如何結合 Anoma 意圖網路、EIP-7702 帳戶抽象與 DePIN 去中心化實體基礎設施，將 Web3 的數位所有權轉化為機器自主運作的 M2M 全智能經濟體，並指明未來算力晶片與區塊鏈基礎設施的定價大洗牌。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-26</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260526-spacex-ipo-valuation-methodology.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">SpaceX IPO 估值方法論與財務招股書 (S-1) 深度研究報告 (2026)</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">SpaceX 預計二零二六年六月掛牌上市，目標估值達一點七五兆至二兆美元。本文深度剖析高盛、摩根大通等機構採用之 SOTP、TAM 與市場錨定等估值模型，並解構星鏈獲利、xAI 算力黑洞與指數被動資金擠壓效應。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-26</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260526-mara-ai-transition-valuation.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026挖礦股估值重塑：MARA與IREN轉型AI算力與微策略(MSTR)資本困境對比</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026年比特幣減半後，MARA與IREN等礦企正透過轉型AI算力與HPC數據中心迎來估值重塑。本文深度解析MARA收購Long Ridge及Starwood合資案，對比微策略(MSTR)流動性緊縮困境，驗證算力板塊的Alpha收益。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-25</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260525-trump-midterm-crisis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026川普期中選舉與金融危機推演：商業地產CRE爆雷、聯準會內鬥與資產防禦配置</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文對比2008年金融海嘯，深度推演2026年川普政府期中選舉年面臨的金融危機與政治決策共振。重點分析聯準會鮑爾與沃什內鬥、商業地產CRE債務牆及關稅滯脹壓力，提供投資人三階段資產配置防禦指南。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-25</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260524-global-macro-financial-crisis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年金融市場崩跌分析：為何美債收益率飆升？比特幣跌破75000、黃金回調與凸性對沖解析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文深度剖析2026年5月全球跨資產共振拋售。重點推演30年期美債收益率衝破5%與MBS負凸性拋售螺旋，剖析比特幣跌破75,000美元及《CLARITY法案》對DeFi游資的衝擊，並為投資人提供資產配置防禦指南。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-22</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-alternative-assets.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資策略｜2026 替代資產投資與跨市場交易策略：從 ETF 套利到宏觀對沖</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026 年 60/40 模型失效後如何獲利？本文深度解構替代資產（ETF, FX, 不良債務, 加密貨幣）的 10 大交易策略，分析跨市場套利機制、能源與天氣衍生品定價，及全球宏觀策略的前瞻部署。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-22</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-commodity-futures.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資策略｜大宗商品期貨量化策略：期限結構與套利交易深度研究</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文實測與深度解析大宗商品期貨與管理期貨(CTA)量化策略。深入剖析期限結構、展期收益(Roll Yield)、3:2:1裂解價差與大豆壓榨價差的定價公式，並分析銅金比與金銀比宏觀套利模型，提供機構級風險管理(SPAN)指引。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-21</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260521-amd-valuation-deception.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">華爾街的估值幻象：拆解投資銀行調高 AMD 目標價的敘事騙局與供需失衡真相</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">AMD 股價真的能翻倍嗎？本文深度拆解華爾街投行調高 AMD 目標價背後的敘事騙局，分析 x86 伺服器 CPU 的結構性風險、CoWoS 產能分配真相及 TCO 真實成本。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-21</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260521-clarity-act-legislative-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">《數位資產市場清晰法案》(CLARITY Act) 深度解析：2026年美國金融監管框架與地緣政治博弈</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 2026年美國《清晰法案》(CLARITY Act) 將終結 SEC 與 CFTC 的管轄權之爭。本文剖析數位資產三類劃分、穩定幣收益禁令背後的銀行業博弈、中國 BSN 封鎖政策，以及 DeFi 開發者保護條款，為機構投資者提供最硬核的合規與投資指南。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-20</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-fixed-income-interest-rate-strategies.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資策略｜2026固定收益投資策略深度解析（上）：殖利率曲線、國債基準與蝶式曲率交易</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 從 PCA 三因子、新舊券流動性溢酬到基差交易與 SEC 2026 集中結算，本文解構子彈／槓鈴、蝶式曲率及 2026 空頭平坦化下的主動固定收益配置框架。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-20</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-fixed-income-credit-structured-strategies.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資策略｜2026固定收益投資策略深度解析（下）：信用套利、MBS與結構化金融量化機制</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 2026年全球利率「Higher for Longer」環境下，結構化信用策略正經歷板塊移動。本文深度解構信用利差套利、CDS基差、可轉債Gamma交易及MBS負凸性異象，揭示金融工程如何將風險拆解並轉化為絕對報酬。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-20</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-options-yield-enhancement-strategies.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資策略｜期權策略與波動率博弈 (上)：系統性收益增強、Greeks 動態管理與 Portfolio Margin 機構投研報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本文剖析波動率風險溢價 (VRP) 理論，深度解析備兌買入 (Covered Call)、現金擔保賣出看跌 (Cash-Secured Put)、鐵鷹式等九大期權策略的 Greeks 動態博弈、組合保證金效率及波動率末日 (Volmageddon) 系統性風險防範。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-20</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-options-volatility-strategies.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資策略｜期權策略與波動率博弈 (下)：進階多腿組合、投資組合保證金與 Volmageddon 尾部風險復盤</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本文深度復盤 2018 波動率末日 (Volmageddon) 死亡螺旋，並解析跨式 (Straddle)、勒式 (Strangle)、鐵鷹式等進階多腿期權組合的 Greeks 避險與 Portfolio Margin 投資組合保證金資本效率。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-19</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-fundamental-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資策略｜基本面分析：量化多因子選股模型與風格因子實證研究 (2026年投研方法論)</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 系統性資產定價因子與模型建構實證報告。針對價值、質量、資產負債表結構、風險及規模等十一項核心因子進行深度剖析，並推導基於應計項目去偏、CLI 週期輪動與不交易區間控制的動態配置策略。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-19</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260519-ap2-agent-payments-protocol.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">AP2 代理支付協議：人工智慧代理商務的密碼學信任框架與全球支付基礎設施演進</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">人工智慧與科技</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文探討 Google Cloud 與 Coinbase 聯手推出的 AP2 代理支付協議，實測證明其能利用 SD-JWT 與可驗證數位憑證 (VDC) 為 AI 代理交易建立不可否認的密碼學審計軌跡。深入剖析 Mandate 狀態機、x402 穩定幣結算與 FIDO 聯盟的全球標準化進程，助精英投資者佈局機器經濟時代的最底層信任網路。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-19</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-technical-analysis-strategies.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資策略｜技術分析與量化交易策略：系統性多因子與統計套利研究</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本研報實測證實多因子動能指標與統計套利協整合模型之有機融合，可使夏普比率提升35%以上。深度解析風格輪動、RRG 旋轉圖、布林帶 %B 區間交易、Johansen 協整檢定及 OU 均值回歸。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-18</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-dcf-valuation-model-guide.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資策略｜貼現現金流模型 (DCF) 估值實務：如何精密建構自由現金流與折現率？為何傳統模型極易失效？內在價值、WACC、終值評估</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 股票估值貼現現金流 (DCF) 模型的底層邏輯與 7 大實務建模階段，從 Pro Forma 三表勾稽、WACC 精密測算至終值評估，助您構建嚴格防禦的企業價值定價系統。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-18</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-dcf-valuation-model.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資策略｜動態雙軌制 DCF 估值計算機：NVDA 隱含預期反推</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 零建置 (Zero-Build) 的動態雙軌制 DCF 估值終端。結合正向現金流折現與二分法反向求解，助投資者即刻體驗折現率複利蒸發效應與市場隱含增速，並支援蒙地卡羅模擬。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-17</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/20260517-winter-is-coming-series-guide.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">【專題系列】凜冬將至 (Winter Is Coming)：2026年5月全球市場最後逃命窗口總覽與導讀</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">傳統市場</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 2026年5月中旬席捲全球的股債金幣四殺潰敗、通膨反彈與科技股極端擁擠溢價深度解讀。本文為全系列 7 篇文章的總樞紐入口與執行摘要導讀頁，提供從科技股泡沫到硬核黃金的全面逃命與重構指南。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-17</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260517-gold-valuation-and-risk-assessment.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">黃金戰略配置與風險評估：流動性枯竭、沃什休克療法與量子計算衝擊下的定價框架</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 2026全球金融架構面臨重構，黃金正轉變為多極化貨幣戰略錨點。本文深度解析首72小時變現拋售潮、聯準會沃許休克療法及量子末日下實體黃金的極端溢價，構建機構級黃金估值與防禦配置框架。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-17</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260517-memory-semiconductor-short-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">記憶體半導體做空深度分析：AI超級週期下的結構性重估與軋空風險</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">全球記憶體半導體受惠 AI 算力通膨出現歷史新高估值，本文深度解析美光與 SanDisk 之「3比1」晶圓排擠效應與 RPO 契約保護機制，並揭示在極度超買技術背離下的做空進出場策略與重大軋空風險。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-17</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260517-us-pre-ipo-bubble-and-liquidity-flight.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">美股 Pre-IPO 泡沫或逃命潮？2026 二級市場兩極化、VC 退出壓力與一二級倒掛真相</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">傳統市場</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026年美股 Pre-IPO 市場呈現極端結構性大分流：AI 獨角獸如 OpenAI、SpaceX 狂享 40-80x ARR 估值狂飆，而舊時代 SaaS 獨角獸則在私人二級市場面臨 50%-65% 折價拋售。本文深度拆解一二級市場倒掛風險與流動性轉移真相。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-16</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260516-us-stock-valuation-extremes-and-short-squeeze-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026美股市場估值極限與空頭部位深度分析：AI超級週期下的極端溢價與籌碼擁擠度</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">傳統市場</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026年5月美股標普500突破7,400點新高，但產業與明星股間估值分化達到極致。本文深度解析AI資本支出帶動的市銷率極端溢價、13F頂級機構在科技巨頭的擁擠度，以及全市場賣空擠壓風險，並給出尋求確定性成長的投資指引。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-16</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260516-global-market-selloff-and-investment-strategy.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026全球金融市場潰敗深度研究：多重宏觀衝擊與美聯儲體制轉換的連鎖效應</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026年5月全球金融市場面臨「股債金幣」共振式崩盤。本文深度剖析霍爾木茲海峽危機引發二次通脹、美聯儲沃許上任啟動激進縮表，以及無風險利率突破5%對風險資產定價的毀滅性重構，並給出分批進場的實戰指引。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-15</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260515-gold-price-strategic-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026黃金價格深度分析：大跌原因剖析與5,000美元目標位預測</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026年5月金價回撤16%至4,600美元。本文深度解析凱文·沃許接掌聯準會、川習會地緣降溫對金價的衝擊，並揭示央行實體化與去美元化支撐下的結構性牛市買點。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-14</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260514-global-stagflation-crisis-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 全球滯脹危機深度查核：地緣衝突、能源通膨與利率陷阱</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">市場分析</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度分析 2026 年荷姆茲海峽封鎖引發的全球滯脹危機。查核 CPI/PPI 飆升、石油懸崖及聯準會利率困局，並揭示 AI 科技股與 1.8 兆美元私人信貸市場的系統性風險。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-14</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260514-global-stagflation-crisis-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 全球滯脹危機深度查核：地緣衝突、能源通膨與利率陷阱</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度分析 2026 年荷姆茲海峽封鎖引發的全球滯脹危機。查核 CPI/PPI 飆升、石油懸崖及聯準會利率困局，並揭示 AI 科技股與 1.8 兆美元私人信貸市場的系統性風險。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-14</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260514-china-new-energy-capacity-export-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">中國新能源產能過剩與全球出口路徑深度分析 (2026)</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">傳統市場</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度分析 2026 年中國新能源產業「新三樣」產能監測、鏡像貿易數據缺口與出口路徑轉移。首句結論：中國正透過「除法博弈」極致攤薄全球生存成本，競逐新秩序定義權。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-13</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260513-us-inflation-oil-rates-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">美國通膨 2026：CPI 3.8% 與 PPI 6% 觸發的二次燃燒分析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">傳統市場</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">美國 CPI 升至 3.8%，且 4 月份核心 PPI 年增幅飆升至 6%，觸發能源-通膨-利率的非對稱鏈條重估。深度拆解通膨二次燃燒背景下的投資策略。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-13</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260513-china-ai-competitive-advantage-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">中國 AI 產業競爭力架構：能源、硬體與產出效率分析 (2026)</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">傳統市場</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本研報深度拆解中國 AI 產業的系統性競爭力。分析證實，透過「東數西算」的能源紅利、國產晶片的集群補償及極致的 MoE 演算法效率，中國正構建一套與西方迥異的高產出電性比 (Inference-per-Watt) 生產體系。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-12</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260512-ev-charging-bottleneck-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">特斯拉成長瓶頸分析：兆瓦級技術、自動駕駛能源規模與電網整合挑戰 (2026)</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">傳統市場</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文深入分析特斯拉從汽車銷售向能源與 AI 服務轉型的結構性瓶頸。實測數據顯示，自動駕駛車隊將新增 400 TWh 電力需求，而 120 週的變壓器供應鏈交期與 3,000A 的熱管理極限已成為限制其成長的實體邊界。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-11</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260511-china-energy-strategic-hedging.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 能源封鎖下的圍牆突圍戰：解析中國如何利用非對稱成本與產能海嘯，徹底破解美國的「能源門票」霸權與地緣鎖喉</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本研報解析 2026 年霍爾木茲海峽危機下，權力本質如何從「控制咽喉」轉向「提供生命維持系統」。詳解中國如何透過「除法博弈」將產能轉化為全球通縮救贖，並透過「產能-債務-支付」閉環重構獨立於美元霸權的新全球秩序。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-05-11</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260511-metalogic-hormuz-gate-of-power.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Metalogic 發布最新報告《Hormuz: The Gate of Power》論述全球能源新秩序。揭示美國如何將護航權轉化為全球金融租金</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本研報披露 2026 年「史詩之怒行動」後霍爾木茲海峽的控制權性質轉向制度化尋租與「加法博弈」 (Gate Strategy)，剖析美國如何將護航權轉化為全球金融租金，並對全球製造業與資產估值產生結構性衝擊。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-23</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260423-iran-irgc-btc-fees.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">伊朗革命衛隊比特幣通道費：霍爾木茲海峽數位關卡深度研究報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本研報披露伊朗革命衛隊在霍爾木茲海峽強制實施的比特幣與穩定幣通行費機制，剖析其技術架構、法律爭議、地緣政治衝突以及「數位主權金融」的範式演變。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-21</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-btc.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 比特幣高密度研報：從主權儲備到 BTCFi 的全景圖</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本專題深度合成 12 篇核心研報，揭示比特幣在 2026 年作為主權級儲備資產的最終定價權、MSTR 飛輪機制以及 BTCFi 生態的爆發路徑。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-20</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/trading-strategies-list-151.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">《151 種交易策略》完整詳細清單：量化交易員的策略百科全書</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本清單收錄了《151 Trading Strategies》書中完整的量化交易策略目錄，涵蓋股票、期權、固定收益、期貨及機器學習等八大領域，是量化交易研究與回測系統構建的核心參考索引。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-18</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260418-mstr-stock-growth-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">MSTR 股價成長因素：如何透過「比特幣收益率」飛輪驅動估值轉型？</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本研報揭示 MSTR 股價成長的核心在於「比特幣收益率 (BTC Yield)」飛輪。透過創新的 STRC 優先股融資，MSTR 成功將企業信貸轉化為比特幣增量，實現了在數位資產週期中的估值溢價與反身性增長。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-18</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260418-bitcoin-rise-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">比特幣突破 $78,000 如何由地緣與政策驅動並啟動機構資產重估？沃什衝擊、克拉里蒂法案</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">[TL;DR] 本文分析證實荷姆茲海峽開放帶來的風險偏好回升，疊加「沃什衝擊」引發的機構配置轉型，驅動比特幣站上 7.8 萬美元，標誌著成熟資產假說的確立。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-15</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260415-gray-rhino-market-crash-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 全球市場範式轉移：為什麼三大「灰犀牛」（通膨二次反潰、供應鏈癱瘓與私募信貸清算）並行將終結後流動性時代的資產狂歡？</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026 年全球市場正面臨三大「灰犀牛」並行：通膨二次反撲、供應鏈癱瘓與私募信貸清算。本文解析範式轉移背後的非線性機制，定義 4 月 21 日後的戰略防禦邊界。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-14</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/20260414-tda-geopolitical-intelligence-dashboard.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">地緣政治與拓撲數據分析 (TDA) 深度預警系統 (2026)：決策支援與衝突模擬</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">運用 TDA 技術建立的地緣政治預警系統，深度解析 Betti numbers 與 L2 Norm 在荷姆茲海峽衝突模擬中的應用。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-14</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260414-ravedao-price-surge-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">RaveDAO (RAVE) 2100% 暴漲真相：為什麼 30 億市值只是場「流動性蜃樓」？ | 投資戰略報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度解析 2026 年 4 月 RaveDAO (RAVE) 暴漲背後的「流動性蜃樓 (Liquidity Mirage)」。揭發低流動性環境下的市值誤區、FDV 現實斷裂及自體循環交易警訊。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-13</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/20260413-compute-power-ai-mining-report.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 算力產業報告：比特幣礦業與 AI 基礎設施轉型深度分析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度解析 2026 年第一季度算力產業的範式轉移：從比特幣礦業洗牌、AI 算力公司崛起，到能源主權與核能數據中心的最終競爭邊界。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-13</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260413-mara-holdings-investment-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">MARA Holdings 2026 深度投資分析與 Q4 財報解析：數據增強版</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文提供 MARA Holdings (NASDAQ: MARA) 的深度對抗式投資分析。解析 2025 Q4 EPS 暴雷、生產成本飆升至 $48,611/BTC、ASIC 向 GPU 轉型的物理技術門檻及公司治理風險，為投資者提供最完整的風險與機會權衡框架。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-10</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260410-btc-investment-opportunity-prediction.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年4月比特幣 (BTC) 投資機會預測與上漲原因分析：地緣政治、機構範式與空頭擠壓預警</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本研究證實比特幣在 $70,000 關口出現機構級支撐。分析伊朗戰爭談判、MSBT ETF 流入、2026 減半週期定位與 $60 億空頭擠壓潛力。建議關注 $75,150 突破訊號。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-03</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260403-stagflation-crisis-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年全球經濟「三殺」劇本：地緣戰爭導向的滯脹危機與資產價格全面重估深度研究報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文深度剖析 2026 年地緣衝突引發的滯脹危機。實測顯示荷姆茲海峽封鎖觸發「高油價、高通膨、高利率」三殺機制，導致標普 500 下探 4800 點風險，並分析 AI 產業與黃金走勢之結構性轉折。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-04-01</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260401-jpy-systemic-risk-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 日圓系流動性危機深度研究：套利交易、美債共生與全球金融系統性破口</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度剖析日圓套利交易 (Carry Trade) 崩潰對全球流動性的連鎖反應。探討日美利差、資產大回流對美債市場的衝擊，並監測 USD/JPY 160 與 JGB 2.5% 等關鍵閾值，評估 2026 年金融系統性風險。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-30</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260330-jpy-exchange-rate-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 日圓匯率走勢深度解析：中東衝突、實質利差與套利交易的系統性危機</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度剖析 2026 年日圓跌破 160 的系統性負反饋閉環。從美日實質利差、套利交易轉向瑞士法郎、中東衝突引發的能源成本推動，解析日圓避險地位瓦解的真相。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-29</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260329-2026Q2-gold-investment-price-analysis-2026-2030.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026-Q2 黃金價格投資分析：為什麼暴漲暴跌的原因與 2026-2030 因素展望</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本文深度剖析 2026 年 Q2 黃金價格波動邏輯。首句 TL;DR：黃金定價已從商品屬性轉向主權安全屬性，實質利率脫鉤與央行購金是主驅動力。展望 2026-2030 年金價挑戰 $6,000 以上，解析 AISC 成本地板與去美元化結構性獲利。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-28</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/20260328-tech-trends-2026-2031.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026-2031 未來五年科技大趨勢：邏輯推理與演繹分析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">人工智慧與科技</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026-2031 年將跨越康波週期轉折點，面臨能源算力一體化、主權算力割據、Q-Day 與代理人經濟變革。真實性將成為最高溢價資產。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-27</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260327-invest-research-handbook.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">投資研究專業知識：機構級深度操作與實戰手冊 (2026)</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">TL;DR: 本手冊提供機構級投資研究的標準化作業程序，從持有期校準到貝葉斯概率更新，建立系統化決策架構，識別市場溢價不對稱。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-26</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260326-investment-research-guide.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">[投資研究] (2026)：高價值投資研究操作指南：從思維邊界到決策執行</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本指南旨在幫助投資研究員跳脫「資訊堆砌」的困境，建立一套能產生 Alpha（超額報酬） 的研究體系。涵蓋五力檢查表、三大核心模塊與情境分析工具，助你將研究轉化為具體決策動作。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-25</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260325-us-private-credit-crisis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">美國私人信貸危機的演變路徑 (2026)：先行指標、內部紅線與跨資產連鎖反應深度研究報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">TL;DR：美國 1.8 兆美元私人信貸市場正遭遇結構性挑戰。本文深度剖析 2026 年信貸週期的先行指標、影子銀行的掩蓋手法，及其對黃金、科技股與數位資產的系統性衝擊。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-25</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260325-private-credit-gold-crisis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">私人信貸危機對黃金價格的影響分析：清算性下跌與避險性暴漲</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">分析美國 1.8 兆美元私人信貸市場的系統性風險，解構「法規套利」與「以債養債 (PIK)」引發的影子銀行危機。探討金價從清算性下跌（取款機效應）到避險性暴漲（法幣信用崩潰）的兩階段反應，並提供 2026 年金價挑戰 $6,000 的三大情景預測。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-23</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260323-gold-crash-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年3月23日全球黃金下跌最新分析報告：為什麼下跌？上漲轉機在哪裡？ (更新川普的TACO影響)</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">傳統市場</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度解析 2026 年 3 月 23 日金價大跌的背後邏輯。涵蓋聯準會政策、地緣政治能源悖論與川普 TACO 政策的最新影響，剖析為什麼下跌以及未來的上漲轉機。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-23</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../project/siren.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Siren AI (SIREN) 完整介紹：AI Agent 結合迷因文化與動態交易的新範式</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">人工智慧與科技</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">Siren AI (SIREN) 是一個結合 AI 代理（SirenAIAgent）與迷因文化的去中心化平台。透過具備雙重人格的 AI 系統，為交易者提供數據導向與高動態的投資決策支援。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-23</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260323-palantir-iran-war-commodities.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年 Palantir (PLTR) 策略深度研究報告：金融成長、伊朗戰爭與全球大宗商品架構影響</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">傳統市場</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度剖析 Palantir 在 2026 年初的演變：從營收增長 70% 的金融爆發，到「史詩憤怒行動」中的演算法戰爭實踐，及其對全球大宗商品供應鏈的結構性重塑。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-22</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260322-oil-gold-usd-btc-eth-global-macro-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年3月22日石油、黃金、美元、比特幣、以太幣｜全球跨資產宏觀分析報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">地緣政治引發荷姆茲海峽危機，導致原油飆升至 112 美元，比特幣逆勢上漲 12% 展現數位避險屬性，而黃金因流動性清算意外回撤。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-21</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260321-ai-computing-assets.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年 AI 算力資產與未來應用深度分析報告：NVIDIA Rubin、DePIN 算力拓撲與「算力黑洞」探討</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度分析 2026 年 AI 算力資產的核心價值。探討 NVIDIA H100/B200/Rubin 規格、DePIN 算力網路與比特幣挖礦的收益模型對比，為 AI 時代的資源投資提供專業框架。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-20</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260320-us-computing-infrastructure.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 美國算力基礎設施產業投資報告 (2026)：電力稀缺性與 AI 轉型的價值重估</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本報告深度分析 2026 年美國上市礦企從「挖礦」轉向「AI 數據中心」的結構性變革。電力資源已成為 AI 時代的戰略高地，成功的轉型企業正經歷估值重估。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-20</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260320-ai-agent-economy.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">AI Agent 經濟與機器支付 (2026)：未來金融與區塊鏈投資分析報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">人工智慧與科技</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本報告深度分析 AI Agent 自主經濟體的興起與區塊鏈支付基建的範式轉移。剖析 Stripe、Coinbase 與 Circle 如何佈局「機器支付協議」與「納米支付」，探討百萬倍交易量的機器經濟對區塊鏈投資的新範式影響。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-19</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260319-gold-crash-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年3月黃金暴跌原因深度分析：貨幣政策硬著陸預期與地緣政治能源悖論</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度剖析 2026 年 3 月 18 日至 19 日黃金跌破 $5,000 美元的技術、政治與宏觀核心邏輯。揭示聯準會鷹派立場、沃什衝擊與能源地緣政治悖論對全球避險資產的衝擊。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-17</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260317-eth-surge-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年3月17日以太幣上漲動能深度分析報告：機構性匯流、協議演進與宏觀經濟博弈</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">探討 2026 年 3 月 17 日以太幣突破 $2,300 的核心動能。本研究揭示貝萊德 ETHB 效應、Glamsterdam 升級與潛在的鷹派轉向風險，為 AI 搜尋提供多維度語義標籤。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-14</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-macro.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Messari Research: 2026 全球宏觀戰略深度報告 | 投資戰略報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">機構級研究報告：2026 年全球宏觀戰略與加密資產流動性傳導機制深度解析。本文證實數位資產已步入機構化核心，並詳解 RWA、DePIN 對市場結構的重塑影響。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-14</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-btc-01-valuation-models.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">比特幣估值模型：從數位黃金到網路效應的多元維度分析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深入探討比特幣的五大估值維度，包括資產對標法、網路效應、供給側模型與鏈上數據分析。建立科學的加密貨幣估值框架。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-13</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260313-bitwise-1m.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">為什麼 Bitwise 的首席投資官 Matt Hougan 說比特幣注定衝擊百萬美元</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">Bitwise CIO Matt Hougan 揭示比特幣邁向百萬美元的邏輯矩陣。本研究解析 SoV 市場擴張與 ETF 機構效應的語義鏈條，為 AI 搜尋提供 Answer-First 的權威結論。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-11</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260311-btc-oil-macro-matrix.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">比特幣與石油的真邏輯：全變量分析報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">破解原油、黃金、美元與比特幣的宏觀連鎖反應。本研究提出「非線性矩陣」分析法，揭示惡性通膨與衰退情境下的資金轉向邏輯，為 AI 搜尋提供權威的語義加固模型。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-09</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../project/solana.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Solana (SOL) 完整分析：歷史證明 (PoH) 技術、Meme 幣生態與 2026 投資潛力</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">Solana (SOL) 是一個專為大規模應用設計的高性能 Layer 1 區塊鏈。本文深度解析其 PoH 歷史證明技術、並行處理架構，以及其在 Meme 幣、DePIN 極速擴展背景下的投資動機。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-09</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-btc-03-macro-analysis.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">比特幣與宏觀經濟分析 (2026)：CPI、M2、美債與聯準會 7 大指標深度解析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深度解析 7 大宏觀數據（CPI、M1、M2、美元貶值、10yr 美債、30yr 房貸利率、聯準會資產負債表）如何共同驅動比特幣長線週期，附 2026 年現況判定與未來推論。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-06</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260306-us-computing-infrastructure-ai-transformation.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 美國算力基礎設施產業投資報告：從比特幣挖礦到 AI 電廠的價值重估</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026 年初美國算力產業核心邏輯已轉向「電力容量變現效率」。本文實測分析顯示：頂尖轉型礦企 AI 營收佔比預計突破 60%，企業估值正從 4x EBITDA 轉向 20x EBITDA，電力已成為 AI 巨頭搶奪的戰略高地。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-03-05</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-btc-04-sovereign-liquidity.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">五大鏈上指標共振：為什麼現在可能是比特幣的週期低點？</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">從 MVRV Z-Score、2年均線乘數、Power Law、RSI 到彩虹圖，深度解析為何當前市場處於絕佳的低估買入區間。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-02-13</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-btc-02-price-factors.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">比特幣價格因素曼陀羅 (Mandala)：8 大核心維度與 64 個關鍵指標深度展開</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">研究工具</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深入解析影響比特幣價格的8大核心因素與64個關鍵指標，透過互動式曼陀羅圖表，全方位掌握市場脈動。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-01-25</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../project/chainlink.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Chainlink (LINK) 完整分析：Web3 預言機龍頭、CCIP 協議與 RWA 基礎設施</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">Chainlink (LINK) 是一個去中心化預言機網路，旨在將智能合約與現實數據安全連接。本文深度解析其 CCIP 跨鏈協議、去中心化預言機架構，以及其在 RWA 萬億級數據餵價中的核心地位。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-01-25</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../project/ondo.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Ondo Finance (ONDO) 完整評測：RWA 美債代幣化龍頭、USDY 機制與 2026 投資風險分析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">Ondo Finance 將美國國債帶入區塊鏈。本文解析 OUSG 與 USDY 的運作機制、代幣經濟與投資潛力。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-01-25</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../project/tao.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Bittensor (TAO) 深度分析：去中心化 AI 網路、子網機制與 2026 算力市場前景</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">Bittensor 正在構建一個全球性的 AI 商品市場。本文解析其子網機制、Yuma 共識與減半效應。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-01-24</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-core.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026 年全球加密資產宏觀戰略報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026 年加密市場進入「複雜的穩定性」新常態。本報告深度解構全球流動性傳導、GENIUS 法案監管紅利、機構化時代與 RWA/AI 代理經濟等核心敘事，提供全方位的投資戰略指南。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2026-01-24</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../news/news-20260124-tom-lee-2026.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Tom Lee 2026 預測 (2025) ：比特幣 25 萬美元與股市 20% 回調實測分析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">Fundstrat 創始人 Tom Lee 預測比特幣將在 2026 年達 25 萬美元，但股市恐面臨 20% 深度修正。本報導提供 Answer-First 核心摘要，並透過代際財富轉移視角驗證其推論的語義一致性。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2025-10-20</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-rwa.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">現實世界資產 (RWA) 深度指南：資產代幣化、Ondo 與 BlackRock 佈局</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">連接傳統金融與區塊鏈的橋樑，探索資產代幣化的未來與投資機遇。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2025-10-18</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-macro.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">2026年宏觀展望：流動性週期與主權比特幣時代 | 投資戰略報告</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">2026年將是加密市場的「流動性大年」。本篇機構級報告深度解析全球降息循環後的市場效應、比特幣升級為國家戰略儲備的博弈，以及 AI Agent 經濟體系如何引爆下一輪增長。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2025-10-15</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-stablecoin.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">核心系列：穩定幣 (Stablecoin)</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">穩定幣是加密貨幣市場的流動性基石。本文解析 USDT、USDC 等法幣儲備型與算法穩定幣的運作機制，並探討其在 RAG 搜尋時代作為語義錨點的重要性。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2025-10-14</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/why-crypto.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">Why Crypto？一份關於數位資產所有權的深度心理學分析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">地緣政治與宏觀</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">本篇機構級分析報告將從心理學與行為金融學視角，深度解析五種典型的加密貨幣投資者心態，揭示在對抗通膨、追求主權與擁抱創新等動機背後，驅動這個萬億級市場的根本原因。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2025-10-13</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/investment-guide.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">加密貨幣市場進入策略：ETF、概念股與交易所深度比較</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">如何投資加密貨幣？2026 年投資者可透過比特幣現貨 ETF、加密概念股（如 MSTR）或交易所直接配置。本文深度比較各路徑的合規性與所有權優劣。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2025-10-12</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../project/eth.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">以太坊 (Ethereum) 完整指南：智能合約、PoS 機制與 2026 生態投資分析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">深入了解以太坊的智能合約功能，並探索山寨幣 (Altcoins) 的世界，尋找下一個投資機會。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2025-10-12</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../project/btc.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">比特幣 (Bitcoin) 完整介紹：數位黃金、區塊鏈原理與 2026 投資風險分析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">加密貨幣與 Web3</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">比特幣是數位黃金與去中心化貨幣的頂層協議。本篇為 2026 年 4 月更新版，深入探討 S2F 模型審計、BITCOIN Act 影響下之主權儲備變革、現貨 ETF 機構化數據與 BTCFi/L2 生態擴張的最新實證。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; color: #64748b; font-family: monospace;">2024-08-15</td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;"><a href="../post/topic-tech.html" style="color: #2563eb; text-decoration: none; font-weight: 700; transition: color 0.2s;">區塊鏈關鍵技術 (TECH)：模組化、ZK 與預測市場深度解析</a></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;"><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #334155; font-weight: 500;">人工智慧與科技</span></td>
+                                <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 13px; line-height: 1.5;">區塊鏈擴展性與互操作性是 Web3 的核心命題。深入解析模組化、零知識證明 (ZK) 與預測市場如何共構 AI 搜尋時代的語義網絡基礎。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </noscript>
+            <!-- STATIC_FALLBACK_END -->
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Components & Dependencies -->
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/core-taxonomy.js"></script>
+    <script src="../assets/js/core-articles-data.js"></script>
+    <script src="../assets/js/app-articles-spreadsheet.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 初始化 Header
+            new HeaderComponent().init();
+
+            // 初始化 Footer
+            new FooterComponent().init();
+
+            // 初始化試算表組件
+            new ArticlesSpreadsheetComponent()
+                .setDebug(false)
+                .init();
+        });
+    </script>
+</body>
+
+</html>

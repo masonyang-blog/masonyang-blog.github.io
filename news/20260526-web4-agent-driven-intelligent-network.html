@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ⚠️ 標題零後綴鐵律：絕對禁止包含 | Mason Yang 等後綴 (遵循 STANDARDS_TITLE.md) -->
+    <title>Web4：如何以 AI Agent 驅動全智能網路？剖析 EIP-7702、Anoma 意圖架構與 DePIN 算力變革</title>
+    <meta name="description" content="本文深入剖析 Web4 時代的技術底層，闡述 AI Agent 如何結合 Anoma 意圖網路、EIP-7702 帳戶抽象與 DePIN 去中心化實體基礎設施，將 Web3 的數位所有權轉化為機器自主運作的 M2M 全智能經濟體，並指明未來算力晶片與區塊鏈基礎設施的定價大洗牌。">
+    <meta name="keywords" content="Web4, AI Agent, 意圖網路, Anoma, EIP-7702, 帳戶抽象, ERC-4337, DePIN, 邊緣運算, NPU, EIP-8004, EIP-8183, 穩定幣, TEE, 機器對機器經濟 (M2M)">
+    <link rel="canonical" href="https://masonyang-blog.github.io/news/20260526-web4-agent-driven-intelligent-network.html">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+    </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "AnalysisNewsArticle",
+          "@id": "https://masonyang-blog.github.io/news/20260526-web4-agent-driven-intelligent-network.html#article",
+          "isPartOf": {
+            "@id": "https://masonyang-blog.github.io/#website"
+          },
+          "author": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "headline": "Web4：如何以 AI Agent 驅動全智能網路？剖析 EIP-7702、Anoma 意圖架構與 DePIN 算力變革",
+          "description": "本文深入剖析 Web4 時代的技術底層，闡述 AI Agent 如何結合 Anoma 意圖網路、EIP-7702 帳戶抽象與 DePIN 去中心化實體基礎設施，將 Web3 的數位所有權轉化為機器自主運作的 M2M 全智能經濟體。",
+          "datePublished": "2026-05-26",
+          "dateModified": "2026-05-26",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://masonyang-blog.github.io/news/20260526-web4-agent-driven-intelligent-network.html"
+          },
+          "about": [
+            {
+              "@type": "Thing",
+              "name": "AI Agent",
+              "sameAs": "https://www.wikidata.org/wiki/Q116616428"
+            }
+          ],
+          "mentions": [
+            {
+              "@type": "Thing",
+              "name": "Anoma",
+              "sameAs": "https://anoma.net/"
+            },
+            {
+              "@type": "Thing",
+              "name": "EIP-7702",
+              "sameAs": "https://eips.ethereum.org/EIPS/eip-7702"
+            },
+            {
+              "@type": "Thing",
+              "name": "DePIN",
+              "sameAs": "https://www.wikidata.org/wiki/Q123512965"
+            },
+            {
+              "@type": "Thing",
+              "name": "MediaTek Dimensity 9400",
+              "sameAs": "https://www.mediatek.com/dimensity-9400"
+            },
+            {
+              "@type": "Thing",
+              "name": "io.net",
+              "sameAs": "https://io.net"
+            },
+            {
+              "@type": "Thing",
+              "name": "Aethir",
+              "sameAs": "https://aethir.com"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://masonyang-blog.github.io/news/20260526-web4-agent-driven-intelligent-network.html#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "什麼是 Web4 的意圖網路？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "意圖網路 (Intent-Centric) 允許用戶僅需用自然語言表達期望的最終狀態（如最便宜的跨鏈交易），由網路中的 Agent (求解器) 自動規劃與執行最佳路徑，免除繁瑣的手動操作。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "EIP-7702 升級如何保障 AI Agent 代理錢包的安全性？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "EIP-7702 允許外部擁有帳戶 (EOA) 在不改變地址的前提下，暫時獲得智慧合約屬性。用戶可設定會話密鑰 (Session Keys) 與細粒度授權限制，例如限定 AI Agent 僅能在限額內、一小時內、特定合約上執行高頻重平衡，而無需提供最高級私鑰，從而實現安全託管。"
+              }
+            }
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://masonyang-blog.github.io/#author",
+          "name": "Mason Yang",
+          "url": "https://masonyang-blog.github.io",
+          "jobTitle": "Investment Researcher",
+          "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://masonyang-blog.github.io/logo.png"
+          },
+          "sameAs": [
+            "https://x.com/MasonYang16"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://masonyang-blog.github.io/#website",
+          "url": "https://masonyang-blog.github.io",
+          "name": "Mason Yang Blog",
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          }
+        },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://masonyang-blog.github.io/news/20260526-web4-agent-driven-intelligent-network.html#breadcrumb",
+      "itemListElement": [
+            {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "首頁",
+                  "item": "https://masonyang-blog.github.io/index.html"
+            },
+            {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "數位資產與 Web3",
+                  "item": "https://masonyang-blog.github.io/post/archive.html?category=macro-finance-crypto"
+            },
+            {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Web4：如何以 AI Agent 驅動全智能網路？剖析 EIP-7702、Anoma 意圖架構與 DePIN 算力變革",
+                  "item": "https://masonyang-blog.github.io/news/20260526-web4-agent-driven-intelligent-network.html"
+            }
+      ]
+}
+  ]
+}
+    </script>
+</head>
+
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="20260526-web4-agent-driven-intelligent-network">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+
+                    <!-- ArticleTOC renders here -->
+                    <div id="toc-desktop-host">
+                        <!-- static_toc_start -->
+                        <nav class="static-toc-container" aria-label="Table of Contents">
+                          <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 執行摘要與 5W1H 核心認知架構</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-5w1h-core" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Web4 時代 AI 智能網路的 5W1H 核心認知架構</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-1" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1 一、 引言：網路演進的終局與 Web4 的真實樣貌</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-1-summary" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">網路典範轉移：機器人自主營運經濟體的偉大跨越</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-2" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2 二、 Web3 的未竟之業：有了所有權，然後呢？</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-2-summary" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">反人類體驗與高摩擦力：Web3 走向大眾市場的結構性瓶頸</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-3" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3 三、 Web4 的靈魂：Agent 驅動的意圖網路 (Intent-Centric)</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-3-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1. 意圖架構的底層機制與 Anoma 協議的顛覆</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-3-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2. 技術橋樑：帳戶抽象 (ERC-4337) 與 EIP-7702 的典範轉移</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-4" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4 四、 支撐 Web4 的實體巨獸：算力、邊緣運算與物聯網 (硬體與科技股視角)</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-4-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1. 雲端大腦：AI 算力基礎設施與超級電腦的爆發</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-4-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2. 神經反射：邊緣運算 (Edge AI) 與終端晶片的革命</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-4-3" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3. 感覺器官與手腳：物聯網 (IoT) 與抗衡壟斷的 DePIN 網路</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-5" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">5 五、 Web4 的金融血液：為什麼代幣經濟與穩定幣是必然？</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-5-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1. Agent 的去權限化身份 (Permissionless) 與雙鑰匙錢包架構</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-5-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2. 金錢的 API 化：微交易與穩定幣結算軌道</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-5-3" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3. Agentic Commerce：EIP-8004 與 EIP-8183 的商業協議革命</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-5-4" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4. AMM 隱形交換帶來無摩擦的極致體驗</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-6" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">6 六、 隱憂與挑戰：黑暗森林與安全邊界</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-6-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1. 流氓代理 (Rogue Agents) 與提示詞注入 (Prompt Injection) 的系統級災難</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-6-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2. 密碼學技術與硬體信任根的必要性</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-7" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">7 七、 結語：迎接 AI 與 Crypto 共生的新紀元</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#article-analysis-conclusion" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章分析與結論</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#文章推論邏輯分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">文章推論邏輯分析</a></li>
+                            <li style="margin-bottom: 0.2rem;"><a href="#分析面向-機器自主化與基礎設施之供需重構" style="display: block; padding: 0.2rem 0; font-size: 0.75rem; color: #94a3b8; text-decoration: none; padding-left: 2rem;">分析面向：機器自主化與基礎設施之供需重構</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#敘事邊界與關鍵變數補充" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">敘事邊界與關鍵變數補充</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#參考資料" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">參考資料 (References)</a></li>
+                          </ul>
+                        </nav>
+                        <!-- static_toc_end -->
+                    </div>
+
+                    <!-- Back to top (sidebar) -->
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="../post/archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">經濟時事分析</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">Web4 時代來臨</li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header ── -->
+                <header
+                    class="theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <!-- Category + Date -->
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            數位資產與 Web3
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            <time datetime="2026-05-26">2026-05-26</time>
+                        </span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 12 分鐘閱讀</span>
+                    </div>
+
+                    <!-- H1 -->
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        Web4 時代來臨：從「價值擁有」到 Agent 驅動的「全智能網路」與產業大洗牌
+                    </h1>
+
+                    <!-- Subtitle / Hook -->
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        AI Agent 結合 Anoma 意圖網路、EIP-7702 細粒度授權與 DePIN 算力，催生機器自主決策的 M2M 經濟與硬體基礎設施重構
+                    </p>
+
+                </header>
+
+                <!-- ── Mobile TOC Target (行動版) ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6">
+                    <!-- static_toc_start -->
+                    <nav class="static-toc-container" aria-label="Table of Contents">
+                      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 執行摘要與 5W1H 核心認知架構</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-5w1h-core" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Web4 時代 AI 智能網路的 5W1H 核心認知架構</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-1" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1 一、 引言：網路演進的終局與 Web4 的真實樣貌</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-1-summary" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">網路典範轉移：機器人自主營運經濟體的偉大跨越</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-2" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2 二、 Web3 的未竟之業：有了所有權，然後呢？</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-2-summary" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">反人類體驗與高摩擦力：Web3 走向大眾市場的結構性瓶頸</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-3" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3 三、 Web4 的靈魂：Agent 驅動的意圖網路 (Intent-Centric)</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-3-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1. 意圖架構的底層機制與 Anoma 協議的顛覆</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-3-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2. 技術橋樑：帳戶抽象 (ERC-4337) 與 EIP-7702 的典範轉移</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-4" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4 四、 支撐 Web4 的實體巨獸：算力、邊緣運算與物聯網 (硬體與科技股視角)</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-4-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1. 雲端大腦：AI 算力基礎設施與超級電腦的爆發</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-4-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2. 神經反射：邊緣運算 (Edge AI) 與終端晶片的革命</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-4-3" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3. 感覺器官與手腳：物聯網 (IoT) 與抗衡壟斷的 DePIN 網路</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-5" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">5 五、 Web4 的金融血液：為什麼代幣經濟與穩定幣是必然？</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-5-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1. Agent 的去權限化身份 (Permissionless) 與雙鑰匙錢包架構</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-5-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2. 金錢的 API 化：微交易與穩定幣結算軌道</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-5-3" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3. Agentic Commerce：EIP-8004 與 EIP-8183 的商業協議革命</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-5-4" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4. AMM 隱形交換帶來無摩擦的極致體驗</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-6" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">6 六、 隱憂與挑戰：黑暗森林與安全邊界</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-6-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1. 流氓代理 (Rogue Agents) 與提示詞注入 (Prompt Injection) 的系統級災難</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-6-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2. 密碼學技術與硬體信任根的必要性</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-7" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">7 七、 結語：迎接 AI 與 Crypto 共生的新紀元</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#article-analysis-conclusion" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章分析與結論</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#文章推論邏輯分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">文章推論邏輯分析</a></li>
+                        <li style="margin-bottom: 0.2rem;"><a href="#分析面向-機器自主化與基礎設施之供需重構" style="display: block; padding: 0.2rem 0; font-size: 0.75rem; color: #94a3b8; text-decoration: none; padding-left: 2rem;">分析面向：機器自主化與基礎設施之供需重構</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#敘事邊界與關鍵變數補充" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">敘事邊界與關鍵變數補充</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#參考資料" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">參考資料 (References)</a></li>
+                      </ul>
+                    </nav>
+                    <!-- static_toc_end -->
+                </div>
+
+                <!-- ── Article Body ── -->
+                <article
+                    class="article-body theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <div id="main-content-area">
+
+                    <!-- 
+                        📌 D-S-R PROTOCOL INDICATOR (寫作引導)
+                        1. Direct Answer (直接斷言): 段落首句點破核心問題與結論。 (必須包裹在 <strong class="dsr-label">[Direct Answer]</strong>)
+                        2. Support Details (支持細節): 包含數據、指標 (TPS, TVL, Q-ID) 或技術標準。 (必須包裹在 <strong class="dsr-label">[Support Details]</strong>)
+                        3. Reinforcement (語義強化): 將技術細節轉化為投資價值或風險判斷。 (不需標籤，直接寫入段落)
+                        
+                        ⚠️ 佈局注意事項 (Layout Standards):
+                        - 隱藏標籤: 務必使用 class="dsr-label" 以確保前端不直接顯示。
+                        - 段落間距: 所有 <p> 標籤必須顯式添加 class="mb-8" (或 mb-6) 以維持呼吸感。
+                        - 清單化原則: 當 Support Details 超過 3 個並列項時，強制使用 <ul> 以替代長段落。
+                    -->
+                    <!-- ── Lead Paragraph (前導引言) ── -->
+                    <div
+                        class="not-prose lead mb-16 px-8 py-10 theme-bg-body dark:bg-slate-900/10 border-l-4 border-slate-400 rounded-r-2xl">
+                        <p class="text-xl text-slate-700 dark:text-slate-200 font-bold leading-relaxed mb-6">
+                            隨著大型語言模型與人工智慧代理的爆發式增長，一個全新且更具顛覆性的典範正在成形，市場將其定義為 Web4。Web4 絕非單一技術的線性延伸，它是 Web3 的所有權結算層、AI Agent 的智能執行層以及硬體算力與 DePIN 基礎設施的全面交匯。
+                        </p>
+                        <ul class="space-y-4 text-lg text-slate-600 dark:text-slate-300">
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">WHAT</span>
+                                <span class="italic">AI Agent 的爆發正推動網路從 Web3 的「價值擁有」過渡到 Web4 驅動的「自動化意圖網路」，使機器成為流量與經濟活動的主體。</span>
+                            </li>
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">HOW</span>
+                                <span class="italic">透過 Anoma 意圖架構降低去中心化操作門檻，結合 EIP-7702 提供 AI 代理細粒度安全權限，並透過本地邊緣 NPU 晶片與 DePIN 網路解決算力與隱私瓶頸。</span>
+                            </li>
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">WHY</span>
+                                <span class="italic">AI 賦予了網路自主決策的靈魂，而密碼學與 Web3 則提供了無須信任的產權秩序，兩者共生形成了 M2M 智能特快車。</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- ── 5W1H 核心架構與 SEO 提問解析 (首屏前置佈局) ── -->
+                    <!-- CHAPTER 0 (TOC Hierarchy Anchor) -->
+                    <h2 id="chapter-0" class="not-prose indicator-h2">
+                        <span class="number-circle">0</span>
+                        <span class="title-main">執行摘要與 5W1H 核心認知架構</span>
+                    </h2>
+                    <h3 id="section-5w1h-core" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">Web4 時代 AI 智能網路的 5W1H 核心認知架構</h3>
+                    <div
+                        class="responsive-card-table not-prose mb-16 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-xl overflow-hidden theme-bg-card dark:bg-slate-900/40 backdrop-blur-sm">
+                        <div id="content-5w1h" class="not-prose my-12">
+    <!-- Grid Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- WHO -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">W</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Who / 參與主體</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                買盤與主力為開發自主 Agent 應用的新創與科技巨頭、佈局 GPU DePIN 的算力網路，以及追求細粒度安全授權的區塊鏈開發者。受衝擊者包括無 AI 整合能力的傳統 EOA 錢包、數據壟斷的 Web2 中心化雲端平台，以及無法克服操作複雜度的早期 Web3 生態。
+            </p>
+        </div>
+
+        <!-- WHAT -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500 text-white shadow-lg shadow-orange-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">W</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">What / 核心事件</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                AI Agent 開始具備鏈上錢包身份與自我交易能力。技術上，Anoma 的 ARM 架構實現去中心化跨鏈意圖原子結算，EIP-7702 硬分叉允許 EOA 暫時獲得智慧合約能力與細粒度授權；同時，邊緣 NPU (如聯發科 Dimensity 9400) 與 GPU DePIN 網路 (io.net, Aethir) 解決了 AI Agent 的本地推理隱私與計算飢荒。
+            </p>
+        </div>
+
+        <!-- WHEN -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-yellow-500 text-white shadow-lg shadow-yellow-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">W</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">When / 關鍵時點</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                隨著 2025 年 5 月以太坊 Pectra 升級落地，EIP-7702 正式上線。預計 2026-2027 年將進入 Agentic Commerce 爆發期，關鍵觀測點在於 EIP-8004/EIP-8183 商業合約註冊率、DePIN GPU 需求能耗效率，以及 M2M 交易額的指數型成長。
+            </p>
+        </div>
+
+        <!-- WHERE -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500 text-white shadow-lg shadow-red-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">W</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Where / 影響範圍</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                風暴源自傳統區塊鏈高摩擦力與中心化 AI 算力主權的衝突，資金正從缺乏智能執行層的早期 L1/L2，以及高能耗中心化雲端，向意圖驅動結算網路 (Anoma)、安全託管基礎設施 (Crossmint TAP) 以及去中心化邊緣與綠色算力網路 (io.net, Aethir) 轉移。
+            </p>
+        </div>
+
+        <!-- WHY -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-500 text-white shadow-lg shadow-zinc-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">W</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Why / 驅動邏輯</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                因為 Web3 的所有權機制（無須信任的結算）缺乏智能執行，而 AI 的執行（Agent）又缺乏無摩擦的支付通道與法律主權。代幣經濟與穩定幣透過雙鑰匙錢包與 AMM 交換，提供了解決這兩者鴻溝的「通用血液」，徹底重構了數位資產的定價邏輯。
+            </p>
+        </div>
+
+        <!-- HOW -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">H</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">How / 執行建議</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                投資者應將佈局重心轉移至 Web4 基礎設施贏家。優先關注：1. 先進半導體與邊緣運算 (台積電先進封裝、聯發科 NPU 平台)；2. 去中心化 GPU 算力網路 (io.net, Aethir)；3. 鏈上智能安全協議 (EIP-7702/EIP-8183 商業託管與 AVS 即時驗證服務)，避開缺乏執行力的純代幣投機資產。
+            </p>
+        </div>
+
+    </div>
+</div>
+                    </div>
+
+
+                    <!-- CHAPTER 1: 引言 -->
+                    <h2 id="chapter-1" class="not-prose indicator-h2">
+                        <span class="number-circle">1</span>
+                        <span class="title-main">一、 引言：網路演進的終局與 Web4 的真實樣貌</span>
+                    </h2>
+
+                    <h3 id="section-1-summary" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">網路典範轉移：機器人自主營運經濟體的偉大跨越</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>網路科技的發展已跨越單向資訊（Web1）、社交互動（Web2）與所有權確立（Web3），正式迎來由 AI Agent 驅動、將數位主權賦予自動化生產力的 Web4 「全智能意圖網路」新典範。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>Web4 並非單一技術的線性延伸，而是三大硬核基礎設施的全面交匯：首先，Web3 提供了無須信任的價值儲存與鏈上結算層；其次，AI Agent 提供智能決策與執行層；最後，DePIN 網路與高效能晶片提供天文數字級的算力與實體接口。在此架構下，AI Agent 不再只是對話框，而是具備鏈上經濟實體身份、能夠 24/7 全天候自主交易的獨立行為者。近期 Automaton 專案的自我維持 AI 代理代幣 CONWAY 獲得超過 600 萬次曝光，正是此趨勢的早期信號。</p>
+                    <p class="mb-8">這項典範轉移意味著互動主體將從以人類為中心轉向以 AI 為中心。機器將首次成為網路流量、經濟活動與價值創造的主要貢獻者，這將徹底重塑全球商業的利益分配格局與硬體供應鏈價值鏈。</p>
+
+                    <!-- CHAPTER 2: Web3 瓶頸 -->
+                    <h2 id="chapter-2" class="not-prose indicator-h2">
+                        <span class="number-circle">2</span>
+                        <span class="title-main">二、 Web3 的未竟之業：有了所有權，然後呢？</span>
+                    </h2>
+
+                    <h3 id="section-2-summary" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">反人類體驗與高摩擦力：Web3 走向大眾市場的結構性瓶頸</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>Web3 雖然透過去中心化網絡與智能合約確立了數據主權與 Token 價值傳遞機制，但極度反人類的使用者體驗 (UX) 與高昂的操作摩擦力，成為了限制其進入數十億用戶大眾市場的硬傷。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>當前的鏈上操作要求用戶親自管理 12 到 24 個單字的助記詞（面臨永久滅失風險）、自行配置 RPC 節點、估算 Gas 費網路波動，並手動在多鏈、Layer 2 與跨鏈橋間簽署無數次授權 (Approve) 與交易。數據顯示，在全球逾 51.9 億的網路使用者中，真正具備活躍鏈上互動能力的用戶比例微乎其微。</p>
+                    <p class="mb-8">這揭示了一個深層的經濟學與邏輯斷層：Web3 鋪設了去中心化金融的「鐵軌」，並以密碼學制定了「行車規則」，但它缺少了能夠在上面自動駕駛的「高鐵」。在缺乏智能執行層的情況下，去中心化金融的複雜性與出錯率阻礙了大規模採用，推動市場意識到必須引入 AI 代理作為超級執行者，以釋放 Web3 的基礎價值。</p>
+
+                    <!-- CHAPTER 3: 意圖與帳戶 -->
+                    <h2 id="chapter-3" class="not-prose indicator-h2">
+                        <span class="number-circle">3</span>
+                        <span class="title-main">三、 Web4 的靈魂：Agent 驅動的意圖網路 (Intent-Centric)</span>
+                    </h2>
+
+                    <p class="mb-8">為了解決 Web3 令人詬病的摩擦力，並釋放數位資產的流動性，Web4 引入了「意圖為中心 (Intent-Centric)」的革命性架構，這也是 AI Agent 得以發揮最大商業與技術價值的場域。互動邏輯在此發生了根本性的變革：在過去的 Web2 與 Web3 時代，用戶必須手動跨站搜尋並簽署每一個交易步驟；而在 Web4 時代，範式轉移為「機器服務人」，用戶只需使用自然語言下達高度抽象的「意圖 (Intent)」（例如：「用最便宜的方式幫我訂東京機票，並以 USDC 餘額支付」），剩餘的複雜邏輯則交由 Agent 自主規劃最佳路徑並執行。</p>
+
+                    <h3 id="section-3-1" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">1. 意圖架構的底層機制與 Anoma 協議的顛覆</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>Anoma 的意圖架構將交易模型從「指令執行委託」轉換為「最終狀態與約束條件聲明」，透過資源機器與去中心化求解器，抹平了多鏈資產流動性的操作摩擦。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>傳統 EVM 模型中用戶必須精確指定狀態變更路徑，而 Anoma 允許用戶使用 Juvix 語言提交未平衡意圖，廣播至意圖八卦網路 (Intent Gossip Network)，由未來將高度依賴 AI 求解器 (Solvers) 進行撮合與對手方發現。Anoma 資源機器 (ARM) 將資源視為不可變的狀態單元，結合 Namada 隱私層與 IBC 協定，確保了多方跨鏈意圖的原子級結算 (Atomic Settlement) 與隱密性。</p>
+                    <p class="mb-8">這種設計使得 Web4 的應用程式能像 1990 年代 Windows 作業系統統一 PC 體驗一樣，將跨鏈互操作性、流動性碎片化與密碼學複雜度完全向使用者隱藏，達成開發者與用戶體驗的極致雙重解放。</p>
+
+                    <h3 id="section-3-2" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">2. 技術橋樑：帳戶抽象 (ERC-4337) 與 EIP-7702 的典範轉移</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>EIP-7702 透過對外部擁有帳戶 (EOA) 進行暫時性智慧合約功能委派，為 AI Agent 自主操作資產提供了細粒度、高安全的權限隔離控制。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>相較於早期 ERC-4337 標準（需建立智慧錢包），EIP-7702 於 2025 年 5 月以太坊 Pectra 硬分叉上線。它引入交易類型 0x04 (set-code交易)，在 EOA 的 byte-code 寫入 0xef0100 前綴，使其具備類似 delegatecall 代理功能。這允許用戶簽署 authorization_list 委託子密鑰（例如：限定 1 小時內有效、上限 0.1 ETH、僅限 Uniswap 合約），使 AI Agent 能夠在凌晨 3 點自動執行高頻收益農場 (Yield Farming) 重新平衡或止損，而無需持有用戶的最高層級私鑰。</p>
+                    <p class="mb-8">透過 chain_id 設為 0 的跨鏈授權特性，AI Agent 還能無縫穿梭於所有 EVM 兼容鏈。EIP-7702 與 AI 代理的結合，正式填補了「機器自主決策」與「鏈上資金安全執行」之間長期存在的鴻溝。</p>
+
+                    <!-- CHAPTER 4: 硬體與 DePIN -->
+                    <h2 id="chapter-4" class="not-prose indicator-h2">
+                        <span class="number-circle">4</span>
+                        <span class="title-main">四、 支撐 Web4 的實體巨獸：算力、邊緣運算與物聯網 (硬體與科技股視角)</span>
+                    </h2>
+
+                    <p class="mb-8">若將 Web4 視為一個具備高度智慧與自主行為能力的超級有機體，那麼軟體協議、智能合約與代幣經濟只是它的神經傳導物質與血液，而分布於全球的龐大硬體設施，則是支撐其不間斷運行的實體骨幹。從全球科技產業的宏觀視角來看，Web4 的發展正在引發一場深度的供應鏈大洗牌與基礎設施軍備競賽，尤其凸顯了高效能半導體、邊緣運算晶片與去中心化實體基礎設施網路 (DePIN) 的絕對戰略價值。</p>
+
+                    <h3 id="section-4-1" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">1. 雲端大腦：AI 算力基礎設施與超級電腦的爆發</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>雲端算力是 Web4 運行的終極能源，其無止境的需求推動了先進製程半導體製造與吉瓦級 AI 超級電腦的爆發式成長。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>Nvidia 與鴻海 (Foxconn) 展開深度合作，在台灣打造了配備 10,000 顆 NVIDIA Blackwell 旗艦 GPU 的 AI 工廠超級電腦。作為製造推手，台積電 (TSMC) 憑藉 5nm、3nm 與即將量產的 2nm 先進製程，結合獨家 CoWoS 與 3D 先進封裝技術，解決了 GPU 記憶體頻寬與互連傳輸的物理瓶頸。</p>
+                    <p class="mb-8">台積電研發團隊亦將利用超級電腦加速次世代半導體技術的研發，形成「算力推動製程、製程反哺算力」的正向循環，使半導體龍頭成為 Web4 時代的終極贏家。</p>
+
+                    <h3 id="section-4-2" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">2. 神經反射：邊緣運算 (Edge AI) 與終端晶片的革命</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>本地邊緣運算晶片是實現隱私安全、無網路狀態下仍能即時運作 Personal Agent 的核心神經反射樞紐，避免了雲端傳輸延遲與頻寬成本瓶頸。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>聯發科 (MediaTek) 推出的 Dimensity 9400 旗艦 5G 平台內建第八代 NPU 與專屬的 Dimensity Agentic AI Engine (DAE)，能協調意圖感知與行動規劃。架構上，其深度學習加速器 (MDLA) 的能效比傳統 CPU 高出 27 倍，比典型 GPU 高出 15 倍，支援設備端檢索增強生成 (RAG) 實現本地資料隔離。</p>
+                    <p class="mb-8">這種「雲端-邊緣混合 AI (Hybrid AI)」的運算架構，確保了 Web4 終端既具備雲端的廣度，又擁有邊緣的隱私。頂尖 AI 實驗室如 OpenAI 亦與聯發科、Qualcomm 展開合作，探索專屬 AI 手機的未來藍圖。</p>
+
+                    <h3 id="section-4-3" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">3. 感覺器官與手腳：物聯網 (IoT) 與抗衡壟斷的 DePIN 網路</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>DePIN 網路利用代幣經濟激勵動員並整合全球閒置硬體資源，成為抗衡中心化雲端巨頭壟斷、支撐 Web4 自主 M2M 經濟的核心解方。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>DePIN 的核心邏輯是透過 Web3 的代幣經濟學 (Tokenomics) 激勵整合全球硬體資源：</p>
+                    <ul class="space-y-4 text-lg text-slate-600 dark:text-slate-300 mb-8 pl-6 list-disc">
+                        <li><strong>io.net：</strong> 基於 Solana 區塊鏈，整合來自獨立供應商與加密礦工的閒置硬體，透過 IO Cloud 抽象層與 Ray 框架，讓 AI 開發者能跨全球 GPU 叢集執行分散式機器學習工作負載。</li>
+                        <li><strong>Aethir：</strong> 針對 2030 年預期飆升至 945 TWh 的資料中心用電需求，透過分佈式 GPU 網路與動態工作負載分配，避免中心化過度配置。其在全球擁有超過 91,000 個檢查節點 (Checker Nodes)，極大化了 GPU 利用率。</li>
+                        <li><strong>4EVERLAND：</strong> 透過 4EVER Nodes 系統激勵分享儲存容量與頻寬，並利用「聚合挖礦 (Aggregated Mining)」機制，整合 BitPlay、Star AI 與 KiloEx 等生態系，形成儲存與頻寬的互利飛輪。</li>
+                    </ul>
+                    <p class="mb-8">透過 IoT 感測器與 DePIN 網路的結合，智慧設備如冰箱 Agent 能自主向超市 Agent 比價並利用內建錢包支付，拉開機器對機器 (M2M) 商業經濟的序幕。</p>
+
+                    <!-- CHAPTER 5: 代幣與金融 -->
+                    <h2 id="chapter-5" class="not-prose indicator-h2">
+                        <span class="number-circle">5</span>
+                        <span class="title-main">五、 Web4 的金融血液：為什麼代幣經濟與穩定幣是必然？</span>
+                    </h2>
+
+                    <p class="mb-8">要讓機器與機器之間能夠無縫地自動協作並交換資源，必須解答一個最根本的核心問題：「機器如何持有財產？機器如何進行交易？」傳統的全球金融體系是完全為人類或法人設計的，無法負荷 Agent 高頻、微型且跨國界的運作需求。因此，代幣經濟學 (Tokenomics)、密碼學錢包與加密貨幣，成為了 Web4 運作無可取代的最底層邏輯。</p>
+
+                    <h3 id="section-5-1" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">1. Agent 的去權限化身份 (Permissionless) 與雙鑰匙錢包架構</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>密碼學錢包賦予 AI Agent 無須許可的數位帳戶身份，而雙鑰匙錢包架構則在確保自主交易效率的同時，築起堅實的資金安全防線。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>透過 Coinbase AgentKit 或 GOAT SDK，開發者能為 ElizaOS 等框架下的 AI Agent 直接配備 EVM 兼容錢包，使其能自主在超過 25 條區塊鏈上收發資金與部署合約。為防範資安風險，業界廣泛採用雙鑰匙架構（如 Crossmint 方案）：</p>
+                    <ul class="space-y-4 text-lg text-slate-600 dark:text-slate-300 mb-8 pl-6 list-disc">
+                        <li><strong>擁有者密鑰 (Owner Key)：</strong> 由人類管理，在智慧合約層級設定支出規則（如每日預算、上限與白名單），可瞬間凍結錢包並撤銷 Agent 權限。</li>
+                        <li><strong>代理密鑰 (Agent Key)：</strong> 封裝於硬體級別的可信執行環境 (TEE) 中，供 Agent 進行 24/7 高頻交易簽署。即使伺服器被駭，密鑰也無法被提取，確保資金高度安全。</li>
+                    </ul>
+
+                    <h3 id="section-5-2" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">2. 金錢的 API 化：微交易與穩定幣結算軌道</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>與美元掛鉤的穩定幣結合微支付通道，實現了機器與機器之間按秒計費、極低手續費的無國界經常性結算。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>傳統信用卡網路清算延遲高且含固定費用，無法支持高頻微型交易（如購買 0.1 秒 GPU 算力或支付 0.0001 美元推理費）。穩定幣（如 USDC 與 USDT）透過鏈上微型串流支付 (Streaming Payments) 提供低於一美分的手續費與秒級結算。Visa (TAP 協定與智慧商業) 和 Mastercard (Agent Pay) 推出的代幣化基礎設施，使 AI Agent 能裝備 USDC 錢包與虛擬卡，支付 Web3 資源與 Web2 SaaS 訂閱。</p>
+                    <p class="mb-8">這種金錢 API 化的清算軌道，打破了傳統金融的地理限制與時間邊界，推動了以機器為核心的支付生態系爆發。</p>
+
+                    <h3 id="section-5-3" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">3. Agentic Commerce：EIP-8004 與 EIP-8183 的商業協議革命</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>EIP-8004 與 EIP-8183 協議為 AI Agent 的身分辨識、聲譽追蹤與鏈上商業合約互動，奠定了去信任化的標準規則架構。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>根據 CertiK 的安全分析，有三大新興標準正構築起機器經濟的主權骨幹：</p>
+                    <ul class="space-y-4 text-lg text-slate-600 dark:text-slate-300 mb-8 pl-6 list-disc">
+                        <li><strong>EIP-8004 (身分與聲譽註冊表)：</strong> 利用 NFT 為 AI 代理分配跨鏈識別碼，連結鏈下 JSON 履歷。其依賴身分註冊表、聲譽註冊表（保存回饋與評分，防洗評價）與驗證註冊表（透過 ZK 或 TEE 驗證 Agent 輸出）。截至 2026 年 5 月已在 30 多個主網上線部署。</li>
+                        <li><strong>EIP-8183 與 x402 (商業協定)：</strong> EIP-8183 作為託管內核，定義商業活動中「雇傭-交付-結算」的三方角色狀態機；x402 提供微支付 HTTP 介面協定，使 Agent 能以 API 請求直接完成鏈上商業交易結算。</li>
+                    </ul>
+
+                    <h3 id="section-5-4" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">4. AMM 隱形交換帶來無摩擦的極致體驗</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>自動化做市商 (AMM) 提供背景隱形路由，消除了跨 DePIN 生態系專屬代幣結算的操作阻力，實現了流動性無縫調度。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>在分散式的 Web4 生態系中，雖然算力幣、儲存幣、頻寬幣等代幣種類繁多，但透過 Uniswap 等 AMM 交易所，用戶只需在錢包中存入通用穩定幣（如 USDC）。Agent 在調用 A 專案或 B 專案的資源時，系統會在背景透過 AMM 路由，在 0.1 秒內自動完成兌換與支付。</p>
+                    <p class="mb-8">這種隱形交換機制抹平了跨生態系的金融摩擦力，將使用者與機器的交易體驗提升到了前所未有的極致無摩擦狀態。</p>
+
+                    <!-- CHAPTER 6: 安全與挑戰 -->
+                    <h2 id="chapter-6" class="not-prose indicator-h2">
+                        <span class="number-circle">6</span>
+                        <span class="title-main">六、 隱憂與挑戰：黑暗森林與安全邊界</span>
+                    </h2>
+
+                    <p class="mb-8">隨著 AI Agent 從單純的對話視窗走向具備完整執行能力與資金控制權的實體，Web4 將面臨人類歷史上最複雜、最具挑戰性的資訊安全威脅。區塊鏈交易的不可逆性與大模型推理的不可解釋性 (Black Box 效應) 相互疊加，形成了一片一旦失誤便會招致毀滅性財富損失的「黑暗森林」。</p>
+
+                    <h3 id="section-6-1" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">1. 流氓代理 (Rogue Agents) 與提示詞注入 (Prompt Injection) 的系統級災難</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>AI 代理面臨間接提示詞注入 (IDPI) 等新型系統級攻擊，不能僅被視為 AI 模型，而必須視為「根本不被信任的行程」並實施系統級安全防禦隔離。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>在 2026 年 5 月發表於 arXiv 的論文《Agent Security is a Systems Problem》(arXiv:2605.18991) 中，學者提出嚴厲警告：大語言模型天生缺乏將「指令」與「數據」分離的能力。例如一個 AI 交易機器人讀取到包含惡意代碼的鏈上備註時，若缺乏權限隔離，可能會被誘騙將高達 50 萬美元 of 資金轉移至攻擊者地址。因此，研究呼籲落實三大原則：系統級安全不變性 (Security Invariants)、最低權限沙盒隔離，以及禁止 Agent 未經用戶同意就將剪貼簿內容貼入終端的硬性安全邊界。</p>
+                    <p class="mb-8">區塊鏈交易的不可逆性放大了解決這些安全隱憂的迫切性，這推動安全防禦架構從軟體邏輯防護擴展到密碼學與硬體信任根的深度整合。</p>
+
+                    <h3 id="section-6-2" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">2. 密碼學技術與硬體信任根的必要性</h3>
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>可信執行環境 (TEE)、零知識證明 (ZKP) 與全同態加密 (FHE) 的深度整合，是保護個人代理隱私與執行完整性的終極技術防線。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>Web4 的隱私保護與安全防禦主要依賴以下前沿密碼學與硬體技術：</p>
+                    <ul class="space-y-4 text-lg text-slate-600 dark:text-slate-300 mb-8 pl-6 list-disc">
+                        <li><strong>可信執行環境 (TEE)：</strong> 透過晶片硬體隔離出安全區域，確保 AI 執行邏輯與密鑰簽名過程不被惡意軟體篡改。Ledger 在其 2026 年安全路線圖中明確指出將關鍵操作錨定在硬體層以提供密碼學保證。</li>
+                        <li><strong>零知識證明 (ZKP)：</strong> 允許 Agent 在不洩露真實餘額或身分的前提下，向智慧合約證明其具備支付能力，對 EIP-8004 驗冊表的實現至關重要。</li>
+                        <li><strong>全同態加密 (FHE)：</strong> 允許算力節點直接對加密密文進行運算。即便將私密資料交給去中心化的 DePIN 網路進行 AI 推理，提供算力的節點也無法窺探到原始數據，解決了隱私痛點。</li>
+                        <li><strong>即時加密經濟安全驗證：</strong> 如 PhisGuard 專案利用 EigenLayer 的主動驗證服務 (AVS) 與 EIP-7702 特性，在交易發送前即時攔截並進行風險評估，為智能帳戶加上去中心化防護網。</li>
+                    </ul>
+
+                    <!-- CHAPTER 7: 結語 -->
+                    <h2 id="chapter-7" class="not-prose indicator-h2">
+                        <span class="number-circle">7</span>
+                        <span class="title-main">七、 結語：迎接 AI 與 Crypto 共生的新紀元</span>
+                    </h2>
+
+                    <p class="mb-8"><strong class="dsr-label">[Direct Answer]</strong>Web4 作為 AI 與密碼學共生運作的終極技術疊加態，代表全球生產要素與流量主體向演算法實體的重置，其爆發將引發算力、區塊鏈與邊緣硬體的深度產業大洗牌。</p>
+                    <p class="mb-8"><strong class="dsr-label">[Support Details]</strong>Web4 架構主要由三層高度整合而成：頂層為具備感知與執行力的自主 AI Agent，為用戶提供無摩擦體驗；中間層為 Web3 智慧合約、穩定幣與 Anoma 意圖跨鏈結算架構，提供產權與價值傳輸基礎；底層則由 IoT、DePIN 網路，以及台積電、聯發科與 Nvidia 推動的雲端 GPU 與邊緣 NPU 算力構成。大洗牌下，真正價值將不可避免地流向三大贏家：</p>
+                    <ul class="space-y-4 text-lg text-slate-600 dark:text-slate-300 mb-8 pl-6 list-disc">
+                        <li><strong>第一贏家：</strong> 為數百億 Agent 提供算力的先進半導體製造商與去中心化 DePIN 算力網路運營者。</li>
+                        <li><strong>第二贏家：</strong> 構建無摩擦結算通道、制定 EIP-8183 等代理商業標準，並提供帳戶抽象安全技術的區塊鏈基礎設施建設者。</li>
+                        <li><strong>第三贏家：</strong> 打造安全實體接口與邊緣運算能力的終端設備與物聯網晶片商。</li>
+                    </ul>
+                    <p class="mb-8">在這場從「價值擁有」向「全智能自動化網路」過渡的壯闊歷史進程中，人工智慧賦予了無機的網路世界大腦與自主決策的靈魂，而區塊鏈與密碼學則賦予了這個網路不容篡改的數位產權、金融秩序與流通的血液。我們正站在一個萬物皆有智、萬物皆可交易的新紀元邊緣，而在這條由 Web4 鋪設的廣闊鐵軌上，滿載著算力與意圖的智能特快車，已經鳴笛啟程。</p>
+
+                                        <!-- Part 2: 文章分析 (Article Analysis) -->
+                    <div class="not-prose mt-16 border-t-2 border-slate-100 dark:border-slate-700 pt-10">
+                        <h2 id="article-analysis-conclusion" class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-8 border-l-4 border-blue-600 pl-4">
+                            文章分析與結論
+                        </h2>
+
+                        <!-- Part 2.1: 推論邏輯分析 (Inference Logic) -->
+                        <div id="article-inference-logic" class="mt-20">
+                            <h3 id="文章推論邏輯分析" class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto">文章推論邏輯分析</h3>
+
+                            <h4 id="分析面向-機器自主化與基礎設施之供需重構" class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4">分析面向：機器自主化與基礎設施之供需重構</h4>
+                            <p class="mb-6 text-slate-700 dark:text-slate-300">作者主要從「生產力與摩擦力」的經濟學視角切入，其核心假設在於：目前的 Web3 鋪設了金融鐵軌，但缺乏高智能、低摩擦的執行載體；而 AI Agent 的爆發雖然帶來了決策靈魂，但受限於傳統金融體系的實體身份 KYC 審查，無法擁有財產與自主支付。兩者的雙向奔赴 (Web4) 是解決彼此痛點的唯一解法。</p>
+
+                            <div class="space-y-8 pl-4 border-l-2 border-slate-100 dark:border-slate-700">
+                                <div>
+                                    <h5 class="font-bold text-slate-800 dark:text-slate-200 mb-3 text-base">關鍵推論鏈條一：所有權到意圖執行的跨越</h5>
+                                    <ul class="space-y-2 text-slate-700 dark:text-slate-300 list-disc pl-5">
+                                        <li><strong>[事實前提]</strong>：Web3 互動充滿了助記詞管理、RPC 配置、Gas 計算等高摩擦操作，導致活躍鏈上地址數與 51.9 億全球網絡用戶相比微不足道。</li>
+                                        <li class="mt-2 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">
+                                            ↳ <strong>[邏輯結論]</strong>：引入以「意圖為中心 (Intent-Centric)」的架構 (如 Anoma) 及暫時委託智慧合約功能的 EIP-7702，讓求解器與 AI Agent 代理高頻操作，是打通大規模採用的必然通道。</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-slate-800 dark:text-slate-200 mb-3 text-base">關鍵推論鏈條二：機器自主經濟 (M2M) 的閉環</h5>
+                                    <ul class="space-y-2 text-slate-700 dark:text-slate-300 list-disc pl-5">
+                                        <li><strong>[事實前提]</strong>：AI Agent 無法通過傳統金融的實體 KYC，且傳統支付手續費太高，無法負擔 0.0001 美元的微型 API 結算。</li>
+                                        <li class="mt-2 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">
+                                            ↳ <strong>[邏輯結論]</strong>：無許可的區塊鏈錢包、雙鑰匙錢包架構 (TEE + Owner Key) 與美元穩定幣，是 AI Agent 唯一可用的「數位銀行帳戶」與「通用血液」。</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Part 2.2: 敘事邊界與關鍵變數補充 -->
+                        <div id="logic-blindspots"
+                            class="my-8 p-6 theme-bg-body dark:bg-slate-900/20 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                            <h3 id="敘事邊界與關鍵變數補充" class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2 font-noto">
+                                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                    </path>
+                                </svg>
+                                敘事邊界與關鍵變數補充
+                            </h3>
+                            <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                                <li class="flex gap-2">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 shrink-0">[算力能源物理荒]</span>
+                                    <span>雖然 DePIN 與超級電腦為 Web4 提供算力，但 2030 年全球資料中心預估 945 TWh 的巨大用電荒，可能成為算力擴張的物理鐵幕，這將極大化綠色電力與動態能效分配 (如 Aethir 節點) 的定價溢價。</span>
+                                </li>
+                                <li class="flex gap-2">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 shrink-0">[間接提示注入 IDPI 風險]</span>
+                                    <span>大模型天生缺乏「數據」與「指令」的分離能力 (arXiv:2605.18991)。當 AI Agent 被賦予實體資產控制權，一旦駭客將注入指令埋在鏈上交易備註，將引發 50 萬美元以上的不可逆資產轉移。這代表安全沙盒隔離與 EigenLayer AVS 即時監控將是機器自主經濟的死生關鍵。</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- CONCLUSION BLOCK (Mason Yang 的觀察) -->
+                        <div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-700">
+                            <div class="flex items-center gap-2 mb-6">
+                                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h2 id="mason-yang-observation" class="not-prose text-xl text-slate-900 dark:text-slate-100 m-0 font-bold font-noto">Mason Yang 的觀察 (Actionable Intelligence)</h2>
+                            </div>
+
+                            <div class="p-6 theme-bg-body dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 rounded-sm space-y-6">
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">1. 核心命題 (Core Proposition)</strong>
+                                    <p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-lg">
+                                        Web4 將數位世界從人類操作工具的「靜態產權」轉化為機器自主營運的「意圖經濟體」；真正的超額收益 (Alpha) 不在於開發應用層軟體，而在於爭奪算力上游晶片製程與制定鏈上 M2M 結算標準的實體巨頭。
+                                    </p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">2. 激勵錨點 (Incentive Anchor)</strong>
+                                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                                        推動 Web4 的真實激勵來自三方利益最大化：先進半導體製造商 (如 TSMC 與 Nvidia) 賺取算力硬體溢價；DePIN 網路透過 Web3 代幣經濟降低新創的 GPU 資本門檻；而區塊鏈開發者與支付巨頭 (Visa/Mastercard)則藉由 EIP-8183/Agent Pay 與穩定幣抽成，鎖定無國界微型清算的長期流水收益。
+                                    </p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">3. 引爆/反轉因子 (Trigger Factor)</strong>
+                                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                                        觀測 Web4 能否真正成熟的硬核指標在於「間接提示注入 IDPI」的防護技術成熟度。一旦發生大規模 AI Agent 遭惡意備註誘騙、產生數百萬美元的不可逆黑客轉帳，將引發監管機構的毀滅性封殺；反之，若 TEE 與 AVS 即時攔截系統能將資安事件降至百萬分之一，M2M 交易額將會是指數級引爆的起點。
+                                    </p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">4. 演化劇本 (Evolution Scenarios)</strong>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <div class="p-3 bg-white/50 dark:bg-slate-800/50 rounded border border-slate-100 dark:border-slate-700">
+                                            <span class="block font-bold text-slate-800 dark:text-slate-200 mb-1 text-sm">路徑 A (預期內)</span>
+                                            <p class="text-xs text-slate-500">隨著 EIP-7702 會話密鑰的普及，DeFi 求解器 (Solvers) 廣泛被 AI Agent 取代，使跨鏈流動性重平衡與 M2M 穩定幣交易額在 2026 年底前增長 10 倍以上，台積電先進封裝與聯發科 DAE NPU 終端出貨量爆發。</p>
+                                        </div>
+                                        <div class="p-3 bg-white/50 dark:bg-slate-800/50 rounded border border-slate-100 dark:border-slate-700">
+                                            <span class="block font-bold text-slate-800 dark:text-slate-200 mb-1 text-sm">路徑 B (黑天鵝)</span>
+                                            <p class="text-xs text-slate-500">2030 年電力荒提前引爆，加上 IDPI 注入攻擊導致大型 AI 交易機器人出現系統性流氓轉帳，引發全球監管禁止機器持有錢包，資金向具備實體電網互連協議的綠電礦業與物理儲存硬體流動。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">5. 行動策略 (Action Strategy)</strong>
+                                    <p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold">
+                                        投資人應採取非對稱性風險回報佈局：首選先進製程晶片製造龍頭 (TSMC 先進封裝與聯發科 NPU 平台) 作為安全防禦資產；其次，分批建倉去中心化 GPU 算力網路 (io.net, Aethir) 以捕捉 Alpha 溢價；同時避開缺乏執行層、僅靠敘事推動的早期 L1/L2 代幣。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- References & Disclaimer -->
+                    <div class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+                        <h2 id="參考資料" class="font-bold text-slate-700 dark:text-slate-300 mb-1">參考資料 (References)</h2>
+                        <ol class="list-decimal pl-4 space-y-1 mb-4">
+                            <li>Criticized by Vitalik Buterin for veering off course, is Automaton's ..., 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.panewslab.com/en/articles/019c9278-239f-7698-9b71-6f78ea2f6ec6" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Demystifying the Intent-Centric Thesis, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://public.bnbstatic.com/static/files/research/demystifying-the-intent-centric-thesis.pdf" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>The world's first high-performance Ai Agents public chain makes a grand debut, building a new infrastructure for the intelligent economy | Web3 Channel on Binance Square, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.binance.com/en/square/post/306981308426770" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Intent-Centric Ecosystem Explained: Projects Worth Paying Attention To | Gate Learn, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.gate.com/learn/articles/uncovering-the-intent-centric-ecosystem/996" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Intent-Centric Architecture Explained: Prioritizing User Outcomes | Gate Learn, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.gate.com/learn/articles/quick-guide-understanding-the-intent-centric-architecture-that-prioritizes-outcomes/1289" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Anoma Protocol. 1\. Overview | by AeorysAnalytics \- Medium, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://aeorysanalytics.medium.com/anoma-protocol-af581156e2da" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>With Anoma Founder Adrian Brink: Exploring Intent-Centric Architecture and a New Paradigm for Decentralized Coordination \- WuBlockchain, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://wublockchain.medium.com/with-anoma-founder-adrian-brink-exploring-intent-centric-architecture-and-a-new-paradigm-for-1384fcd88a82" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>What Is Anoma? Intent-Centric Blockchain | Support \- Eco, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://eco.com/support/en/articles/11802990-what-is-anoma-intent-centric-blockchain" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Anoma: Redefining Web3 with Intent-Centric Blockchain Innovation \- Medium, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://medium.com/@a13xander1986/anoma-redefining-web3-with-intent-centric-blockchain-innovation-07cc2174b126" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Account abstraction on Ethereum: From ERC-4337 to EIP-7702 \- Turnkey, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.turnkey.com/blog/account-abstraction-erc-4337-eip-7702" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>How Intents Architecture in the Blockchain Works \- Web3Auth Blog, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://blog.web3auth.io/intents-blockchain-architecture/" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>EIP-7702 Explained: How Smart EOAs Work in 2026 \- Openfort, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.openfort.io/blog/eip-7702" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>EIP-7702 Session Keys: How Ethereum's Biggest Wallet Upgrade, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://blockeden.xyz/blog/2026/03/10/eip-7702-session-keys-ai-agent-defi-custody/" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Account Abstraction for Enforcing Blockchain-Based AI Agent Non-Functional Requirements, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://ieeexplore.ieee.org/document/11190297/" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Researchers urge treating AI agents as untrusted systems, warning of crypto security risks, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://cryptobriefing.com/ai-agents-untrusted-systems-crypto-security/" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Foxconn Builds AI Factory in Partnership With Taiwan and NVIDIA, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://investor.nvidia.com/news/press-release-details/2025/Foxconn-Builds-AI-Factory-in-Partnership-With-Taiwan-and-NVIDIA/default.aspx" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Foxconn Builds AI Factory in Partnership With Taiwan and NVIDIA, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://nvidianews.nvidia.com/news/foxconn-ai-factory-tsmc-taiwan-nvidia" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Taiwan Semiconductor Manufacturing Company (Taiwan) and MediaTek Inc. (Taiwan) are Leading Players in the Taiwan AI Chip Market \- MarketsandMarkets, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.marketsandmarkets.com/ResearchInsight/taiwan-ai-chip-companies.asp" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>From smart into intelligent: making AI agents work for you \- MediaTek, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.mediatek.com/tek-talk-blogs/from-smart-into-intelligent.-making-ai-agents-work-for-you" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>MediaTek Dimensity 9400 – Flagship 5G Agentic AI Platform, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.mediatek.com/dimensity-9400" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>MediaTek Edge AI, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.mediatek.com/technology/ai" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>MediaTek Edge AI, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://i.mediatek.com/ai" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>OpenAI Partners With MediaTek, Qualcomm on AI Agent Phone : r/artificial \- Reddit, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.reddit.com/r/artificial/comments/1sy52sm/openai_partners_with_mediatek_qualcomm_on_ai/" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Can DePIN and AI Work Together To Transform Decentralized Infrastructure in 2025? \- iExec, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.iex.ec/academy/depin-ai" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>io.net on Solana: The place for DePIN in 2026 and beyond, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://io.net/blog/io-net-on-solana-the-place-for-depin-in-2026-and-beyond" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>How Aethir's Decentralized GPU Cloud Powers Sustainable AI, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://ecosystem.aethir.com/blog-posts/how-aethirs-decentralized-gpu-cloud-powers-sustainable-ai" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Aethir Research Report: Decentralized GPU Cloud Computing | Gate Learn, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.gate.com/learn/articles/aethir-research-report/2137" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Deep Dive into 4EVERLAND: DePIN \+ AI Enabling Web2 to Web3 Transition | Gate Learn, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.gate.com/learn/articles/deep-dive-into-4everland-de-pin-ai-enabling-seamless-transition-from-web2-to-web3-through-one-stop-services/5878" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>How to Add Payments to Your AI Agent (Cards, Stablecoins, Wallets), 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.crossmint.com/learn/add-payments-to-ai-agents" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Welcome to AgentKit \- Coinbase Developer Documentation, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://docs.cdp.coinbase.com/agent-kit/welcome" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>GitHub \- goat-sdk/goat: The leading agentic finance toolkit for AI agents, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://github.com/goat-sdk/goat" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Introducing the Trust Wallet Agent Kit (TWAK) \- Your AI Agent Can Now Act on Crypto, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://trustwallet.com/blog/announcements/introducing-the-trust-wallet-agent-kit-twak-your-ai-agent-can-now-act-on-crypto" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Create an AI agent that can transfer and swap tokens using ElizaOS \- MetaMask, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://metamask.io/news/create-an-ai-agent-that-can-transfer-and-swap-tokens-using-elizaos" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Certik \- All News And Posts By Crowdfund Insider, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.crowdfundinsider.com/tag/certik/" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Certik Examines Agent Economy, Explains How EIP-8004, EIP-8183 ..., 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.crowdfundinsider.com/2026/05/278559-certik-examines-agent-economy-explains-how-eip-8004-eip-8183-x402-turn-ai-agents-into-sovereign-economic-actors/" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>The Rise of the Agent Economy, Part 1: How EIP-8004, EIP-8183, and x402 Turn AI Agents into Sovereign Economic Actors \- CertiK, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.certik.com/blog/the-rise-of-the-agent-economy-part-1" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Virtuals and the Ethereum Foundation Release ERC-8183: Trustless On-Chain Business Agreements | MarsBit News on Binance Square, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.binance.com/en/square/post/299953293507777" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Security for AI Agent Managers: Key Controls, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.blockchain-council.org/agentic-ai/security-for-ai-agent-managers-prompt-injection-data-leaks-abuse/" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Fooling AI Agents: Web-Based Indirect Prompt Injection Observed in the Wild, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://unit42.paloaltonetworks.com/ai-agent-prompt-injection/" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Researchers Urge Treating AI Agents as Untrusted Systems for Crypto Security | KuCoin, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://www.kucoin.com/news/flash/researchers-urge-treating-ai-agents-as-untrusted-systems-for-crypto-security" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Agent Security is a Systems Problem \- arXiv, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://arxiv.org/html/2605.18991v1" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                            <li>Phisguard EIP7702 \- ETHGlobal, 檢索日期：5月 26, 2026，檢索日期：5月 26, 2026，<a href="https://ethglobal.com/showcase/phisguard-eip7702-abbry" class="hover:text-blue-500 underline" target="_blank" rel="noopener noreferrer">Link</a></li>
+                        </ol>
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何投資建議。</p>
+                    </div>
+
+                    <!-- ========================================================================== -->
+                    <!-- ⚠️ CRITICAL BOUNDARY: END OF ARTICLE CONTENT ⚠️ -->
+                    <!-- 任何內文修改絕不可越過或刪除以下閉合標籤，否則將導致右側邊欄佈局崩塌 -->
+                    <!-- ========================================================================== -->
+                    </div> <!-- /END main-content-area -->
+
+
+            </article>
+
+            <!-- Related Articles (Mobile bottom) -->
+            <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+        </div>
+        <!-- /END Center Column -->
+
+        <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+        <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+            <div class="sticky top-24 space-y-6 sidebar-scroll">
+
+                <!-- A. Article Meta Card -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            文章資訊</p>
+                    </div>
+                    <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                        <div class="flex justify-between items-center px-4 py-2.5">
+                            <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                            <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-05-26</dd>
+                        </div>
+                        <div class="flex justify-between items-center px-4 py-2.5">
+                            <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                            <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">數位資產與 Web3
+                            </dd>
+                        </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">閱讀時間</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">約 84 分鐘</dd>
+                            </div>
+                    </dl>
+                </div>
+
+                <!-- B. Key Findings Card -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            核心結論</p>
+                    </div>
+                    <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">AI Agent 結合 Anoma 意圖網路與 EIP-7702 細粒度授權，徹底打通了 Web3 所有權與 AI 自動化執行的鴻溝，將催生機器自主決策的 M2M 經濟；這場變革的底層溢價將大幅流向上游先進半導體製造與 DePIN 分散式算力網路。</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- C. Keywords -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            關鍵字</p>
+                    </div>
+                    <div class="px-4 py-3 flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">Web4</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">AI Agent</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">意圖網路</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">EIP-7702</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">DePIN</span>
+                    </div>
+                </div>
+
+                <!-- D. Related Articles (Desktop sidebar) -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            延伸閱讀</p>
+                    </div>
+                    <div id="related-articles-sidebar"></div>
+                </div>
+
+            </div>
+        </aside>
+        <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button (fixed, bottom-right) -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core-taxonomy.js"></script>
+    <script src="../assets/js/core-articles-data.js"></script>
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+    <script src="../assets/js/widget-related-articles.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. Layout Shell ───────────────────────────────────
+            const header = new HeaderComponent();
+            header.setHomeUrl('../../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // ── 3. Mobile TOC ──────────────────────────────────────
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // ── Related Articles (Common) ──────────────────────────
+            if (window.RelatedArticlesComponent) {
+                // Related Articles - Bottom
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-container')
+                    .setLimit(3)
+                    .init();
+
+                // Related Articles - Sidebar
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-sidebar')
+                    .setLayout('list')
+                    .setShowHeader(false)
+                    .setLimit(5)
+                    .init();
+            }
+
+            // ── 4. Scroll Events ───────────────────────────────────
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                // Progress bar
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+
+                // Back to top (show after 500px)
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+
+        });
+    </script>
+
+
+    <!-- Knowledge Tooltip (Injected) -->
+</body>
+
+</html>

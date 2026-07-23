@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ⚠️ 標題零後綴鐵律：絕對禁止包含 | Mason Yang 等後綴 (遵循 STANDARDS_TITLE.md) -->
+    <title>2026 記憶體超級循環深度解析：AI 驅動 HBM 產能排擠與價格傳導邏輯</title>
+    <meta name="description"
+        content="本文深度解析 2024-2026 記憶體超級循環的核心動能，指出 AI 算力對 HBM 的剛性需求引發殘酷的「3比1產能排擠」，導致標準型 DRAM 供給真空與價格暴漲，並解析模組廠如何透過存貨金融實現獲利爆發。">
+    <meta name="keywords" content="記憶體超級循環, HBM, 產能排擠效應, AI 算力, 記憶體牆, 2026, 半導體景氣循環, 存貨金融">
+    <link rel="canonical" href="https://masonyang-blog.github.io/news/20260527-memory-supercycle-analysis.html">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+    </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [{
+          "@type": "AnalysisNewsArticle",
+          "@id": "https://masonyang-blog.github.io/news/20260527-memory-supercycle-analysis.html#article",
+          "isPartOf": {
+            "@id": "https://masonyang-blog.github.io/#website"
+          },
+          "author": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "headline": "2026 記憶體超級循環深度解析：AI 驅動 HBM 產能排擠與價格傳導邏輯",
+          "description": "本文深度解析 2024-2026 記憶體超級循環的核心動能，指出 AI 算力對 HBM 的剛性需求引發殘酷的 3:1 產能排擠，導致價格傳導至模組廠迎來獲利爆發。",
+          "datePublished": "2026-05-27",
+          "dateModified": "2026-05-27",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://masonyang-blog.github.io/news/20260527-memory-supercycle-analysis.html"
+          },
+          "about": [
+            {
+              "@type": "Thing",
+              "name": "HBM (High Bandwidth Memory)",
+              "sameAs": "https://www.wikidata.org/wiki/Q11082531"
+            }
+          ],
+          "mentions": [
+            {
+              "@type": "Thing",
+              "name": "[次要實體 (如：BOLD 協議)]",
+              "sameAs": "https://zh.wikipedia.org/zh-tw/[中文實體名稱] (亦可使用官方網站連結)"
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://masonyang-blog.github.io/news/20260527-memory-supercycle-analysis.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "首頁",
+              "item": "https://masonyang-blog.github.io/index.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "科技趨勢與 AI",
+              "item": "https://masonyang-blog.github.io/post/archive.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "2026 記憶體超級循環深度解析：AI 驅動 HBM 產能排擠與價格傳導邏輯",
+              "item": "https://masonyang-blog.github.io/news/20260527-memory-supercycle-analysis.html"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://masonyang-blog.github.io/news/20260527-memory-supercycle-analysis.html#faq",
+          "mainEntity": [
+            
+            {
+              "@type": "Question",
+              "name": "為什麼 HBM 需求會導致普通記憶體也漲價？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "核心在於「3:1 產能排擠效應」：原廠每生產 1 片 HBM 晶圓需犧牲 3 片通用 DRAM 產能，導致後者供給結構性真空。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "如何判斷本輪記憶體循環何時見頂？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "密切監測「存貨週轉天數 (DSI)」與「毛利率 (GM)」。若 DSI 止跌回升且毛利率開始下滑，即為景氣反轉的關鍵訊號。"
+              }
+            }
+
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://masonyang-blog.github.io/#author",
+          "name": "Mason Yang",
+          "url": "https://masonyang-blog.github.io",
+          "jobTitle": "Investment Researcher",
+          "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://masonyang-blog.github.io/logo.png"
+          },
+          "sameAs": [
+            "https://x.com/MasonYang16"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://masonyang-blog.github.io/#website",
+          "url": "https://masonyang-blog.github.io",
+          "name": "Mason Yang Blog",
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="20260527-memory-supercycle-analysis">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+
+                    <!-- ArticleTOC renders here -->
+                    <div id="toc-desktop-host">
+                        <!-- static_toc_start -->
+                        <nav class="static-toc-container" aria-label="Table of Contents">
+                          <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 執行摘要與 5W1H 核心認知架構</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-5w1h-core" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">記憶體超級循環的 5W1H 核心認知架構</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-1" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1 總體經濟背景與半導體產業鏈之底層架構</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-1-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.1 半導體、晶圓與積體電路的物理與工程定義</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-1-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.2 供應鏈的層次結構與地理韌性重塑</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-2" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2 記憶體產業週期性的底層邏輯與長鞭效應</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-2-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.1 產能僵固性與長鞭效應的結合</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-2-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.2 台灣供應鏈在記憶體版圖中的戰略定位</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-3" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3 超級循環的催化劑——AI算力爆發與「記憶體牆」的物理極限</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-3-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.1 突破算力瓶頸：AI時代的「記憶體牆」挑戰</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-3-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.2 HBM 的崛起與台積電的關鍵角色</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-4" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4 物理法則與市場擠壓——「產能排擠效應」的全面發酵</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#section-4-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.1 晶圓轉換的物理學：殘酷的 3 比 1 損耗率</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-5" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">5 合約市場與現貨市場的雙軌價格傳導機制</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-6" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">6 企業訂單至獲利的財務傳導鏈條與關鍵量化指標</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-7" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">7 景氣循環反轉的風險評估與「AI純度」檢驗</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-8" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">8 總結與戰略展望</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#section-analysis-title" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章深度分析與觀察</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#文章推論邏輯分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">文章推論邏輯分析</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#敘事邊界與關鍵變數補充" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">敘事邊界與關鍵變數補充</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#參考資料" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">參考資料 (References)</a></li>
+                          </ul>
+                        </nav>
+                        <!-- static_toc_end -->
+                    </div>
+
+                    <!-- Back to top (sidebar) -->
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="../post/archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">經濟時事分析</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">2026 記憶體超級循環</li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header ── -->
+                <header
+                    class="theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <!-- Category + Date -->
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            科技趨勢與 AI
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            <time datetime="2026-05-27">2026-05-27</time>
+                        </span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 25 分鐘閱讀</span>
+                    </div>
+
+                    <!-- H1 -->
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        全球記憶體產業超級循環：上漲因素、價格傳導機制與上下游獲利鏈條之深度解析
+                    </h1>
+
+                    <!-- Subtitle / Hook -->
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        從 AI 算力瓶頸到物理產能轉換，拆解半導體史上最劇烈的價格傳導與價值重估。
+                    </p>
+
+                </header>
+
+                <!-- ── Mobile TOC Target (行動版) ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6">
+                    <!-- static_toc_start -->
+                    <nav class="static-toc-container" aria-label="Table of Contents">
+                      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 執行摘要與 5W1H 核心認知架構</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-5w1h-core" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">記憶體超級循環的 5W1H 核心認知架構</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-1" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1 總體經濟背景與半導體產業鏈之底層架構</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-1-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.1 半導體、晶圓與積體電路的物理與工程定義</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-1-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.2 供應鏈的層次結構與地理韌性重塑</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-2" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2 記憶體產業週期性的底層邏輯與長鞭效應</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-2-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.1 產能僵固性與長鞭效應的結合</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-2-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.2 台灣供應鏈在記憶體版圖中的戰略定位</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-3" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3 超級循環的催化劑——AI算力爆發與「記憶體牆」的物理極限</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-3-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.1 突破算力瓶頸：AI時代的「記憶體牆」挑戰</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-3-2" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.2 HBM 的崛起與台積電的關鍵角色</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-4" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4 物理法則與市場擠壓——「產能排擠效應」的全面發酵</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#section-4-1" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.1 晶圓轉換的物理學：殘酷的 3 比 1 損耗率</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-5" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">5 合約市場與現貨市場的雙軌價格傳導機制</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-6" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">6 企業訂單至獲利的財務傳導鏈條與關鍵量化指標</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-7" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">7 景氣循環反轉的風險評估與「AI純度」檢驗</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-8" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">8 總結與戰略展望</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#section-analysis-title" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章深度分析與觀察</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#文章推論邏輯分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">文章推論邏輯分析</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#敘事邊界與關鍵變數補充" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">敘事邊界與關鍵變數補充</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#參考資料" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">參考資料 (References)</a></li>
+                      </ul>
+                    </nav>
+                    <!-- static_toc_end -->
+                </div>
+
+                <!-- ── Article Body ── -->
+                <article
+                    class="article-body theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <div id="main-content-area">
+                    <div class="not-prose lead mb-16 px-8 py-10 theme-bg-body dark:bg-slate-900/10 border-l-4 border-slate-400 rounded-r-2xl">
+                        <p class="text-xl text-slate-700 dark:text-slate-200 font-bold leading-relaxed mb-6">
+                            2026 年記憶體市場正經歷一場由 AI 算力瓶頸引發的結構性超級循環，其實質動能來自於 HBM 對傳統產能的極端擠壓，而非單純的週期性復甦。
+                        </p>
+                        <ul class="space-y-4 text-lg text-slate-600 dark:text-slate-300">
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">WHAT</span>
+                                <span class="italic">記憶體市場正處於由 AI 驅動的史上最強超級循環，DRAM 合約價出現單季翻倍的極端漲勢。</span>
+                            </li>
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">HOW</span>
+                                <span class="italic">AI 算力瓶頸（記憶體牆）迫使原廠將產能全力轉向 HBM，由於 3:1 的物理轉換損耗，劇烈排擠了標準型 DRAM 供給，造成結構性缺貨。</span>
+                            </li>
+                            <li class="flex gap-2.5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">WHY</span>
+                                <span class="italic">物理產能限制在 2027 年前無法消除，這使得本輪循環具備極強韌性，下游模組廠將受惠於低價庫存與跟漲效應迎來獲利巔峰。</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h2 id="chapter-0" class="not-prose indicator-h2">
+                        <span class="number-circle">0</span>
+                        <span class="title-main">執行摘要與 5W1H 核心認知架構</span>
+                    </h2>
+                    <h3 id="section-5w1h-core" class="not-prose analysis-h3 mb-8 font-noto tracking-tight">記憶體超級循環的 5W1H 核心認知架構</h3>
+                    <div class="responsive-card-table not-prose mb-16 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-xl overflow-hidden theme-bg-card dark:bg-slate-900/40 backdrop-blur-sm">
+                        <div id="content-5w1h" class="not-prose my-12">
+    <!-- Grid Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- WHO -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">W</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Who / 參與主體</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                記憶體原廠（三星、美光、海力士）將產能優先配置給 AI 巨頭（NVIDIA 及 CSP 業者）；下游模組廠（如威剛、十銓）受惠於傳統 DRAM 供給缺口而具備極強定價權。
+            </p>
+        </div>
+
+        <!-- WHAT -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500 text-white shadow-lg shadow-orange-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">W</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">What / 核心事件</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                AI 算力爆發引發 HBM 需求激增，觸發「3:1 產能排擠效應」，即每增產 1 片 HBM 晶圓需犧牲 3 片通用型 DRAM 產能，導致全球 DRAM 供給結構性鎖死。
+            </p>
+        </div>
+
+        <!-- WHEN -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-yellow-500 text-white shadow-lg shadow-yellow-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">W</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">When / 關鍵時點</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                2025 年下半年開啟恐慌搶貨潮，2026 年進入供給最緊俏期。新產能預計 2027 年方能大量開出，屆時需密切關注產能過剩引發的循環反轉。
+            </p>
+        </div>
+
+        <!-- WHERE -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500 text-white shadow-lg shadow-red-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">W</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Where / 影響範圍</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                核心源頭在於先進製程晶圓廠與 AI 伺服器供應鏈；資金向具備低價庫存的台系模組廠、HBM 控制 IC 設計廠轉移。
+            </p>
+        </div>
+
+        <!-- WHY -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-500 text-white shadow-lg shadow-zinc-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">W</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Why / 驅動邏輯</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                「記憶體牆」物理極限與 AI 算力軍備競賽，疊加晶圓製造長達 2-3 年的實體建設時間差，造成史上最強的供需錯配。
+            </p>
+        </div>
+
+        <!-- HOW -->
+        <div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition-transform group-hover:scale-110">
+                    <span class="font-bold text-lg">H</span>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">How / 執行建議</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                系統性追蹤「存貨週轉天數 (DSI)」與「毛利率 (GM)」的黃金交叉。優先佈局 AI 營收占比高且具備強大存貨管理韌性的模組與設計龍頭。
+            </p>
+        </div>
+
+    </div>
+</div>
+                    </div>
+
+                    <!-- CHAPTER 1 -->
+                    <h2 id="chapter-1" class="not-prose indicator-h2">
+                        <span class="number-circle">1</span>
+                        <span class="title-main">總體經濟背景與半導體產業鏈之底層架構</span>
+                    </h2>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        半導體產業作為驅動現代數位經濟運作的最核心基礎設施，其市場規模與資本密集特性決定了全球科技週期的律動。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        全球半導體市場規模已突破 4220 億美元。近年來資本瘋狂湧入，例如中國地平線機器人募得 7.5 億美元，反映了全球產能擴充競爭的激烈程度。
+                    </p>
+                    <h3 id="section-1-1" class="not-prose analysis-h3 mb-6">1.1 半導體、晶圓與積體電路的物理與工程定義</h3>
+                    <p class="mb-8">「半導體」是導電性能介於導體與絕緣體之間的材料，是製造電晶體與二極體的完美載體。</p>
+                    <h3 id="section-1-2" class="not-prose analysis-h3 mb-6">1.2 供應鏈的層次結構與地理韌性重塑</h3>
+                    <div class="responsive-table-wrapper not-prose mb-12">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800">
+                                    <th class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-left">供應鏈層級</th>
+                                    <th class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-left">核心角色與技術特徵</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 font-bold">上游 (Upstream)</td>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-sm">原物料與精密設備（CCL、PCB、晶圓清洗）。高毛利且高度依賴 R&D。</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 font-bold">中游 (Midstream)</td>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-sm">晶圓製造、封裝測試、IDM 廠。資本極度密集。</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 font-bold">下游 (Downstream)</td>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-sm">記憶體模組廠、通路分銷商。高度週期性，仰賴庫存管理。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- CHAPTER 2 -->
+                    <h2 id="chapter-2" class="not-prose indicator-h2">
+                        <span class="number-circle">2</span>
+                        <span class="title-main">記憶體產業週期性的底層邏輯與長鞭效應</span>
+                    </h2>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        記憶體產業的高波動性源於長資本支出週期與需求瞬時波動之間的錯配，並在「長鞭效應」下放大。
+                    </p>
+                    <h3 id="section-2-1" class="not-prose analysis-h3 mb-6">2.1 產能僵固性與長鞭效應的結合</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        新建一座先進製程晶圓廠需 2-3 年。當需求高峰回落而產能剛好開出時，便會引發嚴重的產能過剩與價格崩盤。
+                    </p>
+                    <h3 id="section-2-2" class="not-prose analysis-h3 mb-6">2.2 台灣供應鏈在記憶體版圖中的戰略定位</h3>
+                    <div class="responsive-table-wrapper not-prose mb-12">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800">
+                                    <th class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-left">台灣供應鏈位置</th>
+                                    <th class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-left">獲利驅動模式</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 font-bold">中上游原廠 (IDM)</td>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-sm">填補國際大廠轉向高階製程後留下的空缺。</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 font-bold">下游模組與通路</td>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-sm">高度依賴「存貨金融」管理，賺取底部庫存價差。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- CHAPTER 3 -->
+                    <h2 id="chapter-3" class="not-prose indicator-h2">
+                        <span class="number-circle">3</span>
+                        <span class="title-main">超級循環的催化劑——AI算力爆發與「記憶體牆」的物理極限</span>
+                    </h2>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        本輪超級循環的核心動能源於 AI 遭遇的「記憶體牆」物理極限，迫使儲存架構從平面轉向 3D 堆疊的 HBM 技術。
+                    </p>
+                    <h3 id="section-3-1" class="not-prose analysis-h3 mb-6">3.1 突破算力瓶頸：AI時代的「記憶體牆」挑戰</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        GPU 運算速度成長遠超 DRAM 傳輸頻寬，導致昂貴處理器頻繁處於閒置等待狀態 (Idle)。
+                    </p>
+                    <h3 id="section-3-2" class="not-prose analysis-h3 mb-6">3.2 HBM 的崛起與台積電的關鍵角色</h3>
+                    <p class="mb-8">NVIDIA GB200 將搭載高達 192GB/384GB 的 HBM3e，需求量較前代近乎倍增。台積電負責生產關鍵的邏輯控制底層晶片。</p>
+
+                    <!-- CHAPTER 4 -->
+                    <h2 id="chapter-4" class="not-prose indicator-h2">
+                        <span class="number-circle">4</span>
+                        <span class="title-main">物理法則與市場擠壓——「產能排擠效應」的全面發酵</span>
+                    </h2>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        全產業鏈漲價的關鍵在於「3比1晶圓產能轉換率」，這導致 AI 訂單暴力擠佔了傳統 DRAM 的供給基礎。
+                    </p>
+                    <h3 id="section-4-1" class="not-prose analysis-h3 mb-6">4.1 晶圓轉換的物理學：殘酷的 3 比 1 損耗率</h3>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        根據美光數據，每生產 1 片 HBM 晶圓需犧牲 3 片通用型 DRAM 產能。新晶圓廠要到 2027 年才能投產，2026 年因此成為長期的產能真空期。
+                    </p>
+
+                    <!-- CHAPTER 5 -->
+                    <h2 id="chapter-5" class="not-prose indicator-h2">
+                        <span class="number-circle">5</span>
+                        <span class="title-main">合約市場與現貨市場的雙軌價格傳導機制</span>
+                    </h2>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        本輪循環特徵在於雲端巨頭恐慌搶貨推升合約價，現貨市場則在投機狂熱後經歷劇烈洗盤。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        2026 年第一季傳統 DRAM 合約價漲幅高達 90%-95%。而現貨價在 2026 年 3 月出現閃崩，32GB DDR5 模組單月重挫 27%。
+                    </p>
+
+                    <!-- CHAPTER 6 -->
+                    <h2 id="chapter-6" class="not-prose indicator-h2">
+                        <span class="number-circle">6</span>
+                        <span class="title-main">企業訂單至獲利的財務傳導鏈條與關鍵量化指標</span>
+                    </h2>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        記憶體模組廠獲利爆發力源於「存貨金融」屬性，利用 FIFO 準則在上升週期創造極端剪刀差。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        關鍵指標為毛利率 (GM) 與存貨週轉天數 (DSI)。強勁向上週期特徵為 GM 向上且 DSI 快速下滑。
+                    </p>
+                    <div class="responsive-table-wrapper not-prose mb-12">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800">
+                                    <th class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-left">景氣循環位階</th>
+                                    <th class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-left">毛利率 (GM)</th>
+                                    <th class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-left">存貨週轉天數 (DSI)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700">強勁向上週期</td>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-blue-500 font-bold">顯著向上 (↑)</td>
+                                    <td class="py-3 px-4 border border-slate-200 dark:border-slate-700 text-green-500 font-bold">快速下滑 (↓)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- CHAPTER 7 -->
+                    <h2 id="chapter-7" class="not-prose indicator-h2">
+                        <span class="number-circle">7</span>
+                        <span class="title-main">景氣循環反轉的風險評估與「AI純度」檢驗</span>
+                    </h2>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        判斷循環終結的關鍵在於觀察「現貨報價轉弱」與「存貨水位異常拉長」，並嚴格檢驗企業的「AI 純度」。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        三道預警防線：1. 現貨價走弱；2. DSI 止跌回升；3. 管理層展望保守。理性的投資者必須緊盯離場出口。
+                    </p>
+
+                    <!-- CHAPTER 8 -->
+                    <h2 id="chapter-8" class="not-prose indicator-h2">
+                        <span class="number-circle">8</span>
+                        <span class="title-main">總結與戰略展望</span>
+                    </h2>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Direct Answer]</strong>
+                        2024-2026 年記憶體超級循環是技術架構革命與物理產能限制共同織就的價值重估。
+                    </p>
+                    <p class="mb-8">
+                        <strong class="dsr-label">[Support Details]</strong>
+                        在 2027 年新產能開出前，結構性緊俏將持續。投資者應建立量化追蹤框架，精準捕捉趨勢轉折。
+                    </p>
+
+                    <!-- Part 2: 文章分析 (Article Analysis) -->
+                    <div id="section-analysis-box" class="not-prose mt-16 border-t-2 border-slate-100 dark:border-slate-700 pt-10">
+                        <h2 id="section-analysis-title" class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-8 border-l-4 border-blue-600 pl-4">
+                            文章深度分析與觀察
+                        </h2>
+                        
+                        <div id="article-inference-logic" class="mt-20">
+                            <h3 id="文章推論邏輯分析" class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto">文章推論邏輯分析</h3>
+                            <p class="mb-6 text-slate-700 dark:text-slate-300">本文建立在「物理產能損耗」與「長鞭效應」的雙重耦合上，指出 AI 的爆發導致全產業供給的暴力重分配。</p>
+                            <div class="space-y-8 pl-4 border-l-2 border-slate-100 dark:border-slate-700">
+                                <div>
+                                    <h5 class="font-bold text-slate-800 dark:text-slate-200 mb-3 text-base">關鍵推論鏈條：AI 飢渴引發傳統供給窒息</h5>
+                                    <ul class="space-y-2 text-slate-700 dark:text-slate-300 list-disc pl-5">
+                                        <li><strong>[事實前提]</strong>：NVIDIA GB200 對 HBM 需求倍增。</li>
+                                        <li><strong>[邏輯結論]</strong>：3:1 損耗率導致傳統市場即便需求平淡也會因供給消失而暴漲。</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="logic-blindspots" class="my-8 p-6 theme-bg-body dark:bg-slate-900/20 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                            <h3 id="敘事邊界與關鍵變數補充" class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2 font-noto">
+                                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                敘事邊界與關鍵變數補充
+                            </h3>
+                            <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                                <li><span class="font-bold text-slate-800 dark:text-slate-200">[不可忽視變數]</span> 需求毀滅：價格過高可能導致 PC 市場提前崩潰。</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-700">
+                            <div class="flex items-center gap-2 mb-6">
+                                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h2 id="mason-yang-observation" class="not-prose text-xl text-slate-900 dark:text-slate-100 m-0 font-bold font-noto">Mason Yang 的觀察 (Actionable Intelligence)</h2>
+                            </div>
+                            <div class="p-6 theme-bg-body dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 rounded-sm space-y-6">
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">1. 核心命題 (Core Proposition)</strong>
+                                    <p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-lg">2026 年記憶體超級循環是一場「物理產能的暴力掠奪」。</p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">2. 激勵錨點 (Incentive Anchor)</strong>
+                                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">CSP 雲端巨頭支付極高溢價鎖定 HBM，客觀上將傳統用戶推向供給懸崖。</p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">3. 引爆/反轉因子 (Trigger Factor)</strong>
+                                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">監測 DSI：若價漲但 DSI 止跌回升，即代表「需求毀滅」發生。</p>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">4. 演化劇本 (Evolution Scenarios)</strong>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <div class="p-3 bg-white/50 dark:bg-slate-800/50 rounded border border-slate-100 dark:border-slate-700">
+                                            <span class="block font-bold text-slate-800 dark:text-slate-200 mb-1 text-sm">路徑 A (繁榮延續)</span>
+                                            <p class="text-xs text-slate-500">HBM 產能持續緊缺，傳統市場缺口擴大。</p>
+                                        </div>
+                                        <div class="p-3 bg-white/50 dark:bg-slate-800/50 rounded border border-slate-100 dark:border-slate-700">
+                                            <span class="block font-bold text-slate-800 dark:text-slate-200 mb-1 text-sm">路徑 B (景氣反轉)</span>
+                                            <p class="text-xs text-slate-500">2027 年新產能提前釋放或模型輕量化取得突破。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto">5. 行動策略 (Action Strategy)</strong>
+                                    <p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold">優先選擇 AI 純度高且具備存貨金融管理能力的模組廠，緊盯現貨報價。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- References & Disclaimer -->
+                    <div class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+                        <h2 id="參考資料" id="section-references-title" class="font-bold text-slate-700 dark:text-slate-300 mb-1">參考資料 (References)</h2>
+                        <ol class="list-decimal pl-4 space-y-1 mb-4">
+                            <li>Harnessing the power of the semiconductor value chain, Accenture, 2026.</li>
+                            <li>What is a Semiconductor? A guide to the Semiconductor Industry, LORRIC, 2026.</li>
+                            <li>Tech cycle – A top-down perspective of EM Asia, J.P. Morgan Asset Management, 2026.</li>
+                            <li>TrendForce: HBM Boom May Lead to DRAM Shortages, 2024-2026.</li>
+                        </ol>
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。</p>
+                    </div> <!-- /END main-content-area -->
+</div>
+</article>
+<!-- Related Articles (Mobile bottom) -->
+            <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+        </div>
+        <!-- /END Center Column -->
+
+        <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+        <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+            <div class="sticky top-24 space-y-6 sidebar-scroll">
+
+                <!-- A. Article Meta Card -->
+                <div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <!-- Article Info Panel (Metadata Card) -->
+                    <div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden mb-6">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                文章資訊</p>
+                        </div>
+                        <div class="p-4 space-y-4">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">發布日期</p>
+                                <time class="text-sm font-medium text-slate-700 dark:text-slate-300"
+                                    datetime="2026-05-27">2026-05-27</time>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">文章分類</p>
+                                <span
+                                      class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                      記憶體超級週期、AI</span>
+                              </div>
+                              <div>
+                                  <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">閱讀時間</p>
+                                  <span class="text-sm font-medium text-slate-700 dark:text-slate-300">30 分鐘</span>
+                              </div>
+                          </div>
+                    </div>
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700"><p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">核心結論</p></div>
+                    <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">AI 需求的「記憶體牆」瓶頸迫使原廠將產能全面轉向 HBM。</p>
+                        </li>
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">殘酷的 3:1 產能轉換損耗，導致標準型 DRAM 供給結構性斷層。</p>
+                        </li>
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">模組廠獲利受惠於 FIFO 低價庫存利益與價格「跟漲效應」。</p>
+                        </li>
+                        <li class="px-4 py-3 flex items-start gap-2">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">景氣拐點觀測指標：毛利率 (GM) 見頂與存貨週轉天數 (DSI) 回升。</p>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <!-- C. Keywords -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">關鍵字</p></div>
+                    <div class="px-4 py-3 flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">HBM</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">DRAM 缺貨</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">產能排擠</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">存貨金融</span>
+                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">2026 預測</span>
+                    </div>
+
+                </div>
+
+                <!-- D. Related Articles (Desktop sidebar) -->
+                <div
+                    class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            延伸閱讀</p>
+                    </div>
+                    <div id="related-articles-sidebar"></div>
+                </div>
+
+            </div>
+        </aside>
+        <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button (fixed, bottom-right) -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core-taxonomy.js"></script>
+    <script src="../assets/js/core-articles-data.js"></script>
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+    <script src="../assets/js/widget-related-articles.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. Layout Shell ───────────────────────────────────
+            const header = new HeaderComponent();
+            header.setHomeUrl('../../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // ── 3. Mobile TOC ──────────────────────────────────────
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // ── Related Articles (Common) ──────────────────────────
+            if (window.RelatedArticlesComponent) {
+                // Related Articles - Bottom
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-container')
+                    .setLimit(3)
+                    .init();
+
+                // Related Articles - Sidebar
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-sidebar')
+                    .setLayout('list')
+                    .setShowHeader(false)
+                    .setLimit(5)
+                    .init();
+            }
+
+            // ── 4. Scroll Events ───────────────────────────────────
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                // Progress bar
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+
+                // Back to top (show after 500px)
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+
+        });
+    </script>
+
+
+    <!-- Knowledge Tooltip (Injected) -->
+</body>
+
+</html>

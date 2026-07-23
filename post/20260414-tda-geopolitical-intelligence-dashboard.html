@@ -1,0 +1,1056 @@
+<!-- ==========================================================================
+     📄 深度好文 / 專題解析 專用樣板 v3 (Three-Column Layout)
+     使用指南：
+     1. 建立檔案：複製本檔並命名為 YYYYMMDD-[主題].html 放置於 post/ 目錄。
+     2. 綁定 ID ：在 <body> 標籤設定 data-article-id="..." (須與檔名、core-articles-data.js 內 ID 一致)。
+     3. 配置路徑：本範本預設 assets 路徑為 ../assets/ (配合範本移動至 doc/doc_template/ 等二級目錄)。
+     4. 資料註冊庫：存檔後，至 assets/js/core-articles-data.js 新增對應資料，【務必】套用 core-taxonomy.js 中定義的 Category/Tag ID。
+     5. Sitemap 更新：手動將新頁面網址加入根目錄的 sitemap.xml。
+     
+     頁面架構：
+     - 左側欄 (lg+)：[#toc-desktop-host] 桌面版 sticky 目錄。
+     - 中央主欄：[#toc-mobile-target] 行動版 TOC + 文章本體 [article-body]。
+     - 右側欄 (lg+)：文章資訊面板 (作者、日期、標籤、延伸閱讀)。
+     ========================================================================== -->
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 
+        ==========================================================================
+        🚀 AI SEO & METADATA STRATEGY (語義加固與意圖匹配)
+        ==========================================================================
+        1. [Title]: 意圖匹配標籤。關鍵字前置，並加入 2026/年份或「深度解析」等時效信號。
+        2. [Description]: 答案領先策略 (Answer-First)。第一句直接 TL;DR，作為 AI 的語義校驗碼。
+        3. [Canonical]: 鎖定事實來源。防止 RAG 系統將引用權限誤判給抓取站。
+        ==========================================================================
+    -->
+    <title>地緣政治與拓撲數據分析 (TDA) 深度預警系統 (2026)：決策支援與衝突模擬</title>
+    <meta name="description"
+        content="深度解析地緣政治壓力下的數據流形異常。本文利用拓撲工具如貝蒂數 (Betti numbers) 與 L2 範數識別市場斷裂徵兆，並針對荷姆茲海峽衝突提供物理極限模擬與對沖策略。">
+    <meta name="keywords" content="地緣政治, 拓撲數據分析, TDA, Betti numbers, L2 Norm, 荷姆茲海峽, 衝突模擬, 2026, AI SEO, RAG 優化">
+    <link rel="canonical" href="https://masonyang-blog.github.io/post/20260414-tda-geopolitical-intelligence-dashboard.html">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+<script src="../assets/js/core-theme.js"></script>
+
+<!-- Tailwind CSS -->
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    slate: { 850: '#15202e' }
+                }
+            }
+        }
+    }
+</script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Custom Styles -->
+<link rel="stylesheet" href="../assets/css/custom.css">
+
+<!-- Google Fonts -->
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+
+    h2[id],
+    h3[id],
+    section[id] {
+        scroll-margin-top: 6rem;
+    }
+
+    .toc-sidebar::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .toc-sidebar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .toc-sidebar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 2px;
+    }
+</style>
+<!-- 
+        ==========================================================================
+        🤖 ADVANCED JSON-LD SCHEMA (AI 搜尋時代的實體消岐)
+        ==========================================================================
+        - [sameAs]: 連結權威 ID (Wikipedia/Wikidata) 實現實體消歧。
+        - [about/mentions]: 明確宣告內容核心主題與文中提及的次要實體。
+        - [FAQPage]: 嵌入問答模組，增加 AI 答案片段抓取機率。
+        - [Nested]: 嵌套 Organization、Person 與 Article 建立信譽鏈條。
+        ==========================================================================
+    -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "AnalysisNewsArticle",
+            "@id": "https://masonyang-blog.github.io/post/20260414-tda-geopolitical-intelligence-dashboard.html#article",
+            "isPartOf": {
+                "@id": "https://masonyang-blog.github.io/#website"
+            },
+            "author": {
+                "@id": "https://masonyang-blog.github.io/#author"
+            },
+            "publisher": {
+                "@id": "https://masonyang-blog.github.io/#author"
+            },
+            "headline": "地緣政治與拓撲數據分析 (TDA) 深度預警系統 (2026)：決策支援與衝突模擬",
+            "description": "深度解析地緣政治壓力下的數據流形異常。本文利用拓撲工具如貝蒂數 (Betti numbers) 與 L2 範數識別市場斷裂徵兆，並針對荷姆茲海峽衝突提供物理極限模擬與對沖策略。",
+            "datePublished": "2026-04-14",
+            "dateModified": "2026-05-19",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://masonyang-blog.github.io/post/20260414-tda-geopolitical-intelligence-dashboard.html"
+            },
+            "about": [
+                {
+                    "@type": "Thing",
+                    "name": "Topological data analysis",
+                    "sameAs": "https://www.wikidata.org/wiki/Q16682613"
+                },
+                {
+                    "@type": "Thing",
+                    "name": "Geopolitics",
+                    "sameAs": "https://www.wikidata.org/wiki/Q190692"
+                }
+            ],
+            "mentions": [
+                {
+                    "@type": "Thing",
+                    "name": "Strait of Hormuz",
+                    "sameAs": "https://www.wikidata.org/wiki/Q127926"
+                }
+            ]
+        },
+        {
+            "@type": "FAQPage",
+            "@id": "https://masonyang-blog.github.io/post/20260414-tda-geopolitical-intelligence-dashboard.html#faq",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "為什麼拓撲數據分析 (TDA) 能比傳統指標更早預警地緣政治危機？",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "傳統指標專注於價格漲跌，而 TDA 關注數據在多維空間中的連通性 (Connectivity)。當數據雲發生撕裂（如貝蒂數 \\\\beta_0 \\ge 2$）時，代表市場定價邏輯已出現斷裂，預示著即將發生的非線性價格跳空與相變。"
+                    }
+                }
+            ]
+        },
+        {
+            "@type": "Person",
+            "@id": "https://masonyang-blog.github.io/#author",
+            "name": "Mason Yang",
+            "url": "https://masonyang-blog.github.io",
+            "jobTitle": "Investment Researcher",
+            "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://masonyang-blog.github.io/logo.png"
+            },
+            "sameAs": [
+                "https://x.com/MasonYang16"
+            ]
+        },
+        {
+            "@type": "WebSite",
+            "@id": "https://masonyang-blog.github.io/#website",
+            "url": "https://masonyang-blog.github.io",
+            "name": "Mason Yang Blog",
+            "publisher": {
+                "@id": "https://masonyang-blog.github.io/#author"
+            }
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "https://masonyang-blog.github.io/post/20260414-tda-geopolitical-intelligence-dashboard.html#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "首頁",
+                    "item": "https://masonyang-blog.github.io/index.html"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "經濟時事分析",
+                    "item": "https://masonyang-blog.github.io/post/archive.html"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "地緣政治與拓撲數據分析 (TDA) 深度預警系統 (2026)：決策支援與衝突模擬",
+                    "item": "https://masonyang-blog.github.io/post/20260414-tda-geopolitical-intelligence-dashboard.html"
+                }
+            ]
+        }
+    ]
+}
+    </script>
+</head>
+
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="tda-geopolitical-intelligence-dashboard">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+
+                    <!-- ArticleTOC renders here -->
+                    <div id="toc-desktop-host">
+                        <!-- static_toc_start -->
+                        <nav class="static-toc-container" aria-label="Table of Contents">
+                          <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#section-1" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1 核心矛盾 新聞噪音與拓撲信號</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#section-2" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2 拓撲指標 解讀數據的「指紋」</a></li>
+                            <li style="margin-bottom: 0.2rem;"><a href="#技術教學-為何-形狀-能預測未來" style="display: block; padding: 0.2rem 0; font-size: 0.75rem; color: #94a3b8; text-decoration: none; padding-left: 2rem;">🎓 技術教學：為何「形狀」能預測未來？</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#section-3" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3 地緣戰略情境 霍爾木茲海峽的物流死結</a></li>
+                            <li style="margin-bottom: 0.25rem;"><a href="#戰略警告註解" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">戰略警告註解</a></li>
+                            <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#section-4" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4 戰略終端 TACO 算子與對沖策略</a></li>
+                          </ul>
+                        </nav>
+                        <!-- static_toc_end -->
+                    </div>
+
+                    <!-- Back to top (sidebar) -->
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                
+                    
+                </div>
+            </aside>
+
+            <!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-1.5 flex-wrap">
+                        <li><a href="../index.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li><a href="../post/archive.html"
+                                class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">經濟時事分析</a></li>
+                        <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg></li>
+                        <li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">地緣政治 TDA 預警系統</li>
+                    </ol>
+                </nav>
+
+                <!-- ── Hero Header ── -->
+                <header
+                    class="theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <!-- Category + Date -->
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            經濟時事分析
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            <time datetime="2026-04-14">2026-04-14</time>
+                        </span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 12 分鐘閱讀</span>
+                    </div>
+
+                    <!-- H1 -->
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        地緣政治的「幾何」真相：拓撲數據分析 (TDA) 如何預警黑天鵝？
+                    </h1>
+
+                    <!-- Subtitle / Hook -->
+                    <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        當市場新聞普遍預期和平時，底層的數據流形（Manifold）正顯示出斷裂的徵兆。本報告旨在教學如何利用拓撲工具識別「黑天鵝」出現前的結構性異常。
+                    </p>
+
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#宏觀趨勢</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#拓撲數據分析</span>
+                        <span
+                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">#互動演示</span>
+                    </div>
+                </header>
+
+                <!-- ── Mobile TOC Target (行動版) ── -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6">
+                    <!-- static_toc_start -->
+                    <nav class="static-toc-container" aria-label="Table of Contents">
+                      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#section-1" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1 核心矛盾 新聞噪音與拓撲信號</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#section-2" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2 拓撲指標 解讀數據的「指紋」</a></li>
+                        <li style="margin-bottom: 0.2rem;"><a href="#技術教學-為何-形狀-能預測未來" style="display: block; padding: 0.2rem 0; font-size: 0.75rem; color: #94a3b8; text-decoration: none; padding-left: 2rem;">🎓 技術教學：為何「形狀」能預測未來？</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#section-3" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3 地緣戰略情境 霍爾木茲海峽的物流死結</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="#戰略警告註解" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">戰略警告註解</a></li>
+                        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#section-4" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4 戰略終端 TACO 算子與對沖策略</a></li>
+                      </ul>
+                    </nav>
+                    <!-- static_toc_end -->
+                </div>
+
+                <!-- ── Article Body ── -->
+                <article
+                    class="article-body theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <!-- ── Lead Paragraph (前導引言) ── -->
+                    <p
+                        class="not-prose lead text-xl text-slate-700 dark:text-slate-200 font-medium leading-relaxed border-l-4 border-red-500 pl-6 py-2 bg-red-50/50 dark:bg-red-900/10 rounded-r-lg mb-12">
+                        <strong>Answer-First Hook：</strong> 傳統分析師專注於「價格」的漲跌，而地緣政治拓撲分析則關注數據點在多維空間中的<strong>連通性 (Connectivity)</strong>。即使新聞標題是溫和的，如果支撐市場的資金結構已經分裂為孤島（$\beta_0 \ge 2$），系統崩潰的概率將會指數級上升。
+                    </p>
+
+                    <!-- SECTION 1 -->
+                    <h2 id="section-1" class="not-prose indicator-h2">
+                        <span class="number-circle">1</span>
+                        <span class="title-main">核心矛盾</span>
+                        <span class="title-sub">新聞噪音與拓撲信號</span>
+                    </h2>
+
+                    <p>
+                        本章節揭示了<strong>「路徑依賴」</strong>的盲點。傳統分析師傾向於根據最新新聞標題（如「和談進展良好」）來線性推導未來。然而，拓撲分析則關注數據點在多維空間中的連通性。
+                    </p>
+
+                    <p>
+                        即使新聞標題是溫和的，如果支撐市場的資金結構已經分裂為孤島，系統崩潰的概率將會指數級上升。我們觀察到市場正在交易「和平」，就像 2008 年初市場仍在交易「次貸已受控」一樣，這是一種典型的感性認知過載。
+                    </p>
+
+                    <div id="tda-illusion-reality-container" class="my-8">
+                        <!-- 互動容器： illusion vs reality tabs -->
+                    </div>
+
+                    <!-- SECTION 2 -->
+                    <h2 id="section-2" class="not-prose indicator-h2">
+                        <span class="number-circle">2</span>
+                        <span class="title-main">拓撲指標</span>
+                        <span class="title-sub">解讀數據的「指紋」</span>
+                    </h2>
+
+                    <div class="bg-amber-50 dark:bg-amber-900/10 border-l-4 border-amber-400 p-6 my-8 rounded-r-xl">
+                        <h4 id="技術教學-為何-形狀-能預測未來" class="font-bold text-amber-900 dark:text-amber-200 mb-2 font-noto">🎓 技術教學：為何「形狀」能預測未來？</h4>
+                        <p class="text-amber-800 dark:text-amber-300 text-sm leading-relaxed">
+                            想像市場是一塊正在被拉扯的橡皮筋。傳統分析師測量它的「長度」（價格），但拓撲學家觀察它是否出現了「裂縫」（孔洞）或是否即將「斷裂」（組件分離）。這能讓我們在橡皮筋徹底斷裂之前，就偵測到其內部的應力結構異常。
+                        </p>
+                    </div>
+
+                    <div id="tda-charts-container" class="my-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- 互動容器： Betti 0 & L2 Norm Charts -->
+                    </div>
+
+                    <p>
+                        當 $\beta_0 = 1$ 時，代表全體投資者共享同一套定價邏輯。然而當數據雲進入「撕裂區」，它分裂成兩個獨立的孤島。這意味著「價格發現」功能已經失靈，價格將直接「跳空」而不會有平滑的過渡。目前的 L2 範數數值已突破危機線，代表系統已經離開了原本所在的「穩定流形（Stable Manifold）」。這不是普通的波動，而是<strong>相變 (Phase Transition)</strong> 的開始。
+                    </p>
+
+                    <!-- SECTION 3 -->
+                    <h2 id="section-3" class="not-prose indicator-h2">
+                        <span class="number-circle">3</span>
+                        <span class="title-main">地緣戰略情境</span>
+                        <span class="title-sub">霍爾木茲海峽的物流死結</span>
+                    </h2>
+
+                    <p>
+                        傳統分析經常忽略「物理極限」。當我們談論封鎖時，我們談論的是全球每日 1/5 的原油供給。如果美軍掃雷行動與和談破裂同時發生，這暗示了美軍正準備採取<strong>「有限奪島」</strong>戰略來繞過外交僵局。
+                    </p>
+
+                    <p>
+                        霍爾木茲海峽每日運輸量穩定在 2,000 萬桶左右。這不是一個隨機數字，而是基於油輪吞吐量的物理極限。一旦封鎖，全球沒有任何儲備體系（包括 SPR）能支撐超過 40 天。
+                    </p>
+
+                    <div id="tda-simulator-container" class="my-10">
+                        <!-- 互動容器： Blockade Simulator -->
+                    </div>
+
+                    <h3 id="戰略警告註解" class="not-prose analysis-h3">戰略警告註解</h3>
+                    <ul>
+                        <li><strong>供應鏈停擺</strong>：當封鎖超過 15 天，全球煉油廠將開始因缺乏輕質原油而停工。</li>
+                        <li><strong>拓撲峰值</strong>：美軍掃雷艦的動態（Mine Countermeasures）通常在實戰前 72 小時達到拓撲峰值。</li>
+                        <li><strong>暴力回補</strong>：「有限奪島」意即美軍不追求長期佔領，而是透過控制海峽兩岸關鍵支點來恢復航道，這將導致油價發生非線性的暴力回補。</li>
+                    </ul>
+
+                    <!-- SECTION 4 -->
+                    <h2 id="section-4" class="not-prose indicator-h2">
+                        <span class="number-circle">4</span>
+                        <span class="title-main">戰略終端</span>
+                        <span class="title-sub">TACO 算子與對沖策略</span>
+                    </h2>
+
+                    <p>
+                        最後，我們探討如何操作這種背離。<strong>TACO 算子（Topological Anomaly & Correlation Operator）</strong> 專門測量不同資產類別（如油價與軍工股）之間的拓撲耦合度。
+                    </p>
+
+                    <div id="tda-vix-taco-container" class="my-10">
+                        <!-- 互動容器： VIX vs TACO Chart -->
+                    </div>
+
+                    <p>
+                        當 VIX 顯示市場冷靜，但 TACO 算子激增時，這就是最完美的對沖入倉點。這種背離區域即為我們定義的「黑天鵝獲利區間」。
+                    </p>
+
+                    <!-- CONCLUSION CARD (Mason Yang 總結) -->
+                    <div
+                        class="not-prose alert alert-analyst relative overflow-hidden my-16 shadow-lg border-l-4 border-red-500 bg-red-50/50 dark:bg-red-900/20 backdrop-blur-sm rounded-xl p-8">
+                        <div
+                            class="absolute -right-10 -top-10 text-red-100 dark:text-red-900 opacity-40 transform rotate-12 pointer-events-none">
+                            <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="relative z-10">
+                            <div
+                                class="flex items-center gap-3 mb-6 border-b border-red-200/50 dark:border-red-700/50 pb-4">
+                                <div class="p-2 bg-red-100 dark:bg-red-900/50 rounded-lg">
+                                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <strong
+                                    class="text-2xl text-red-900 dark:text-red-100 font-extrabold tracking-tight">Mason
+                                    Yang 戰略對策總結</strong>
+                            </div>
+                            <div class="space-y-4 text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+                                <p>1. <strong>鎖定波動率認購權</strong>：由於 VIX 處於虛假低位，當前 Long Volatility 的成本極低。這是對沖拓撲坍塌的最佳保險。</p>
+                                <p>2. <strong>能源看漲結構</strong>：佈局 3 個月期原油價外認購期權。若 L2 範數突破 0.5，油價將失去所有下行支撐。</p>
+                                <p>3. <strong>現金流防禦</strong>：縮減所有基於「貝塔 (Beta)」的線性策略，將資金轉入實物資產或與 TACO 算子正相關的軍工避險流。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- References & Disclaimer -->
+                    <div
+                        class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">參考資料 (References)</p>
+                        <ol class="list-decimal pl-4 space-y-1 mb-4">
+                            <li>[標題], <a href="[URL]" class="hover:text-blue-500 underline">Link</a></li>
+                        </ol>
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。</p>
+
+                    </div>
+</article>
+
+                <!-- Related Articles (Mobile bottom) -->
+                <div id="related-articles-container" class="mt-8 lg:hidden"></div>
+
+            </div>
+            <!-- /END Center Column -->
+
+            <!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4 max-h-[calc(100vh-7rem)] overflow-y-auto pr-2 custom-scrollbar">
+
+                    <!-- A. Article Meta Card -->
+                    <div
+                        class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                文章資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-04-14</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">經濟時事分析
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- B. Key Findings Card -->
+                    <div
+                        class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                核心結論</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">貝蒂數 ($\beta_0 \ge 2$) 為數據雲撕裂信號，預示市場定價邏輯發生斷裂。</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-orange-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">荷姆茲海峽封鎖物理極限：全球原油儲備僅能支撐 40 天缺口。</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">TACO 算子與 VIX 的背離區域是進行黑天鵝對沖的最佳入場區間。</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- C. Tags -->
+                    <div
+                        class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                關鍵字</p>
+                        </div>
+                        <div class="px-4 py-3 flex flex-wrap gap-1.5">
+                            <span
+                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">#[標籤]</span>
+                        </div>
+                    </div>
+
+                    <!-- D. Related Articles -->
+                    <div
+                        class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                延伸閱讀</p>
+                        </div>
+                        <div id="related-articles-sidebar"></div>
+                    </div>
+
+                </div>
+            </aside>
+            <!-- /END Right Sidebar -->
+
+        </div>
+
+                    <!-- auto_linker_start -->
+                    <div class="not-prose auto-linker-container" style="margin-top: 3rem; border-top: 1px solid var(--c-border, #e2e8f0); padding-top: 2rem; font-family: system-ui, -apple-system, sans-serif;">
+                        <h4 id="延伸探索-related-research" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--c-text-primary, #1e293b); display: flex; align-items: center; gap: 0.5rem; margin-top: 0;">
+                            延伸探索 / Related Research
+                        </h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+            <a href="../news/20260403-stagflation-crisis-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: irgc]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026年全球經濟「三殺」劇本：地緣戰爭導向的滯脹危機與資產價格全面重估深度研究報告</span>
+            </a>
+            <a href="../news/20260410-btc-investment-opportunity-prediction.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: irgc]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026年4月比特幣 (BTC) 投資機會預測與上漲原因分析：地緣政治、機構範式與空頭擠壓預警</span>
+            </a>
+            <a href="../news/20260418-bitcoin-rise-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: irgc]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">比特幣突破 $78,000 如何由地緣與政策驅動並啟動機構資產重估？沃什衝擊、克拉里蒂法案</span>
+            </a>
+            <a href="../news/20260423-iran-irgc-btc-fees.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: irgc]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">伊朗革命衛隊比特幣通道費：霍爾木茲海峽數位關卡深度研究報告</span>
+            </a>
+            <a href="../news/20260511-china-energy-strategic-hedging.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: irgc]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026 能源封鎖下的圍牆突圍戰：解析中國如何利用非對稱成本與產能海嘯，徹底破解美國的「能源門票」霸權與地緣鎖喉</span>
+            </a>
+            <a href="../news/20260511-metalogic-hormuz-gate-of-power.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: irgc]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">Metalogic 發布最新報告《Hormuz: The Gate of Power》論述全球能源新秩序。揭示美國如何將護航權轉化為全球金融租金</span>
+            </a>
+            <a href="../news/20260514-global-stagflation-crisis-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: irgc]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026 全球滯脹危機深度查核：地緣衝突、能源通膨與利率陷阱</span>
+            </a>
+            <a href="../news/news-20260319-gold-crash-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: irgc]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026年3月黃金暴跌原因深度分析：貨幣政策硬著陸預期與地緣政治能源悖論</span>
+            </a>
+            <a href="../news/news-20260323-gold-crash-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: irgc]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026年3月23日全球黃金下跌最新分析報告：為什麼下跌？上漲轉機在哪裡？ (更新川普的TACO影響)</span>
+            </a>
+            <a href="../news/news-20260323-palantir-iran-war-commodities.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: irgc]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026年 Palantir (PLTR) 策略深度研究報告：金融成長、伊朗戰爭與全球大宗商品架構影響</span>
+            </a>
+                        </div>
+                    </div>
+                    <!-- auto_linker_end -->
+</main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui-toc-desktop.js"></script>
+    <script src="../assets/js/widget-related-articles.js"></script>
+
+    <script>
+        (function() {
+            /**
+             * TopologicalIntelligenceDashboard
+             * 封裝地緣政治 TDA 深度預警系統的交互邏輯與 Chart.js 繪圖。
+             * 遵循 Shadow DOM 隔離原則，樣式與內容完全封裝。
+             */
+            class TopologicalIntelligenceDashboard {
+                constructor() {
+                    this.debug = false;
+                    this.hosts = {
+                        illusion: document.getElementById('tda-illusion-reality-container'),
+                        charts: document.getElementById('tda-charts-container'),
+                        simulator: document.getElementById('tda-simulator-container'),
+                        vix: document.getElementById('tda-vix-taco-container')
+                    };
+                    this.shadows = {};
+                    this.charts = {};
+                    this.simulatorData = { blockade: 0 };
+                }
+
+                setDebug(val) {
+                    this.debug = !!val;
+                    return this;
+                }
+
+                async init() {
+                    this._log('Initializing TDA Dashboard...');
+                    
+                    // 1. 動態載入 Chart.js (如果尚未載入)
+                    await this._loadDependencies();
+
+                    // 2. 初始化各個 Shadow DOM 容器
+                    this._initShadows();
+
+                    // 3. 渲染初始 UI
+                    this._render();
+
+                    this._log('TDA Dashboard Ready.');
+                    return this;
+                }
+
+                _log(...args) {
+                    if (this.debug) console.log('[TDA-Dashboard]', ...args);
+                }
+
+                _loadDependencies() {
+                    return new Promise((resolve) => {
+                        if (window.Chart) return resolve();
+                        this._log('Loading Chart.js...');
+                        const script = document.createElement('script');
+                        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+                        script.onload = () => {
+                            this._log('Chart.js loaded.');
+                            resolve();
+                        };
+                        document.head.appendChild(script);
+                    });
+                }
+
+                _initShadows() {
+                    Object.entries(this.hosts).forEach(([key, host]) => {
+                        if (!host) return;
+                        // 使用 closed mode 確保完全隔離
+                        this.shadows[key] = host.attachShadow({ mode: 'closed' });
+                        this._log(`Shadow Root attached for: ${key}`);
+                    });
+                }
+
+                _injectStyles(shadow) {
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        :host { display: block; font-family: 'Inter', 'Noto Sans TC', sans-serif; }
+                        .card { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+                        .dark .card { background: #1e293b; border-color: #334155; color: #f1f5f9; }
+                        canvas { width: 100% !important; height: auto !important; }
+                        .btn-group { display: flex; gap: 8px; margin-bottom: 16px; }
+                        button { padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+                        button.active { background: #3b82f6; color: white; border-color: #2563eb; }
+                        .slider-container { margin: 20px 0; }
+                        input[type="range"] { width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; outline: none; appearance: none; }
+                        input[type="range"]::-webkit-slider-thumb { appearance: none; width: 18px; height: 18px; background: #3b82f6; border-radius: 50%; cursor: pointer; }
+                        .stat-grid { display: grid; grid-cols: 2; gap: 16px; margin-top: 16px; }
+                        .stat-label { font-size: 12px; color: #64748b; }
+                        .stat-value { font-size: 18px; font-weight: bold; color: #0f172a; }
+                        .dark .stat-value { color: #f8fafc; }
+                    `;
+                    shadow.appendChild(style);
+                }
+
+                _render() {
+                    this._renderIllusion();
+                    this._renderCharts();
+                    this._renderSimulator();
+                    this._renderVixTaco();
+                }
+
+                _renderIllusion() {
+                    const shadow = this.shadows.illusion;
+                    if (!shadow) return;
+                    this._injectStyles(shadow);
+                    const container = document.createElement('div');
+                    container.className = 'card';
+                    container.innerHTML = `
+                        <div class="btn-group">
+                            <button class="tab-btn active" data-tab="illusion">感性認知 (市場幻覺)</button>
+                            <button class="tab-btn" data-tab="reality">拓撲幾何 (數據真相)</button>
+                        </div>
+                        <div id="illusion-content" style="font-size: 15px; line-height: 1.6;">
+                            <p style="color: #64748b;">市場預期掃雷行動僅為「戰略威懾」，能源價格維持區間震盪。</p>
+                            <div style="height: 10px; width: 80%; background: #e2e8f0; border-radius: 5px; margin-top: 10px; overflow: hidden;">
+                                <div style="width: 20%; height: 100%; background: #22c55e;"></div>
+                            </div>
+                            <p style="font-size: 12px; margin-top: 5px;">情緒壓力：22% (穩定)</p>
+                        </div>
+                    `;
+                    
+                    shadow.appendChild(container);
+                    
+                    container.addEventListener('click', (e) => {
+                        const btn = e.target.closest('.tab-btn');
+                        if (!btn) return;
+                        container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        const content = shadow.getElementById('illusion-content');
+                        if (btn.dataset.tab === 'reality') {
+                            content.innerHTML = `
+                                <p style="color: #ef4444; font-weight: bold;">⚠️ 拓撲警報：數據雲流形已發生撕裂 ($\beta_0 = 3$)</p>
+                                <p style="color: #64748b; margin-top: 8px;">資金連通度大幅下降，孤島化嚴重。這預示著即將發生的非線性價格相變（Breakout）。</p>
+                                <div style="height: 10px; width: 80%; background: #e2e8f0; border-radius: 5px; margin-top: 10px; overflow: hidden;">
+                                    <div style="width: 85%; height: 100%; background: #ef4444;"></div>
+                                </div>
+                                <p style="font-size: 12px; margin-top: 5px;">拓撲應力：85% (極高風險)</p>
+                            `;
+                        } else {
+                            content.innerHTML = `
+                                <p style="color: #64748b;">市場預期掃雷行動僅為「戰略威懾」，能源價格維持區間震盪。</p>
+                                <div style="height: 10px; width: 80%; background: #e2e8f0; border-radius: 5px; margin-top: 10px; overflow: hidden;">
+                                    <div style="width: 20%; height: 100%; background: #22c55e;"></div>
+                                </div>
+                                <p style="font-size: 12px; margin-top: 5px;">情緒壓力：22% (穩定)</p>
+                            `;
+                        }
+                    });
+                }
+
+                _renderCharts() {
+                    const shadow = this.shadows.charts;
+                    if (!shadow) return;
+                    this._injectStyles(shadow);
+                    
+                    const container = document.createElement('div');
+                    container.style.display = 'contents'; // 使用父層的 grid 佈局
+                    container.innerHTML = `
+                        <div class="card">
+                            <h4 style="margin: 0 0 16px 0; font-size: 14px;">Betti 0 ($\beta_0$)：連通組件數</h4>
+                            <canvas id="betti-chart"></canvas>
+                            <p style="font-size: 11px; color: #64748b; margin-top: 10px;">臨界點：$\beta_0 \ge 2$ 代表數據雲發生物理分裂。</p>
+                        </div>
+                        <div class="card">
+                            <h4 style="margin: 0 0 16px 0; font-size: 14px;">L2 Norm (流形偏離度)</h4>
+                            <canvas id="l2-chart"></canvas>
+                            <p style="font-size: 11px; color: #64748b; margin-top: 10px;">高於 0.5 時市場進入「非線性崩潰區」。</p>
+                        </div>
+                    `;
+                    shadow.appendChild(container);
+
+                    setTimeout(() => {
+                        const ctx1 = shadow.getElementById('betti-chart').getContext('2d');
+                        const ctx2 = shadow.getElementById('l2-chart').getContext('2d');
+
+                        new Chart(ctx1, {
+                            type: 'line',
+                            data: {
+                                labels: ['T-10', 'T-8', 'T-6', 'T-4', 'T-2', 'Now'],
+                                datasets: [{
+                                    label: 'Betti 0',
+                                    data: [1, 1, 1, 1, 2, 3],
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    fill: true,
+                                    tension: 0.4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: { legend: { display: false } },
+                                scales: { y: { beginAtZero: true, max: 4 } }
+                            }
+                        });
+
+                        new Chart(ctx2, {
+                            type: 'line',
+                            data: {
+                                labels: ['T-10', 'T-8', 'T-6', 'T-4', 'T-2', 'Now'],
+                                datasets: [{
+                                    label: 'L2 Norm',
+                                    data: [0.12, 0.15, 0.18, 0.25, 0.45, 0.58],
+                                    borderColor: '#f59e0b',
+                                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                    fill: true,
+                                    tension: 0.4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: { legend: { display: false } },
+                                scales: { y: { beginAtZero: true, max: 1 } }
+                            }
+                        });
+                    }, 0);
+                }
+
+                _renderSimulator() {
+                    const shadow = this.shadows.simulator;
+                    if (!shadow) return;
+                    this._injectStyles(shadow);
+                    
+                    const container = document.createElement('div');
+                    container.className = 'card';
+                    container.innerHTML = `
+                        <h4 style="margin: 0 0 16px 0;">荷姆茲海峽封鎖深度模擬</h4>
+                        <div class="slider-container">
+                            <label style="font-size: 14px; display: flex; justify-between; margin-bottom: 8px;">
+                                <span>封鎖程度 (Blockade Severity)</span>
+                                <span id="blockade-value" style="font-weight: bold; color: #3b82f6;">0%</span>
+                            </label>
+                            <input type="range" id="blockade-slider" min="0" max="100" value="0">
+                        </div>
+                        <div class="stat-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                            <div>
+                                <div class="stat-label">全球供需缺口 (每日)</div>
+                                <div id="supply-gap" class="stat-value">0 MBD</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">預期油價衝擊 (估算)</div>
+                                <div id="price-impact" class="stat-value">+0%</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">SPR 耗盡天數 (預測)</div>
+                                <div id="spr-days" class="stat-value">>365 Days</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">物流坍塌機率</div>
+                                <div id="collapse-prob" class="stat-value">5%</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px; padding: 12px; background: #f1f5f9; border-radius: 8px; font-size: 13px; color: #475569;">
+                            <p id="scenario-msg">航道通暢。目前的風險主要來自於溢價溢繳與保險費率微調。</p>
+                        </div>
+                    `;
+                    shadow.appendChild(container);
+
+                    const slider = shadow.getElementById('blockade-slider');
+                    const blockadeVal = shadow.getElementById('blockade-value');
+                    const supplyGap = shadow.getElementById('supply-gap');
+                    const priceImpact = shadow.getElementById('price-impact');
+                    const sprDays = shadow.getElementById('spr-days');
+                    const collapseProb = shadow.getElementById('collapse-prob');
+                    const scenarioMsg = shadow.getElementById('scenario-msg');
+
+                    slider.addEventListener('input', (e) => {
+                        const val = parseInt(e.target.value);
+                        blockadeVal.textContent = `${val}%`;
+                        
+                        // 簡單邏輯模擬
+                        const gap = (val * 0.2).toFixed(1); // 假設海峽佔 20%
+                        supplyGap.textContent = `${gap} MBD`;
+                        
+                        const impact = (val * 1.5).toFixed(0);
+                        priceImpact.textContent = `+${impact}%`;
+                        
+                        const days = val === 0 ? '>365' : Math.max(40, 365 - val * 3.5).toFixed(0);
+                        sprDays.textContent = `${days} Days`;
+                        
+                        const prob = val < 50 ? (val / 10 + 5).toFixed(0) : (val * 0.9).toFixed(0);
+                        collapseProb.textContent = `${prob}%`;
+
+                        if (val > 80) {
+                            scenarioMsg.textContent = "全線封鎖模式：引發全球性二級衰退。軍政合一緊急接管，能源定價邏輯徹底轉向拓撲流形斷裂點。";
+                            scenarioMsg.style.color = "#ef4444";
+                        } else if (val > 40) {
+                            scenarioMsg.textContent = "局部衝突模式：掃雷行動展開。油價震盪區間上移，物流成本激增。";
+                            scenarioMsg.style.color = "#f59e0b";
+                        } else {
+                            scenarioMsg.textContent = "航道通暢。目前的風險主要來自於溢價溢繳與保險費率微調。";
+                            scenarioMsg.style.color = "#475569";
+                        }
+                    });
+                }
+
+                _renderVixTaco() {
+                    const shadow = this.shadows.vix;
+                    if (!shadow) return;
+                    this._injectStyles(shadow);
+                    
+                    const container = document.createElement('div');
+                    container.className = 'card';
+                    container.innerHTML = `
+                        <h4 style="margin: 0 0 16px 0;">VIX vs TACO 算子：拓撲背離分析</h4>
+                        <canvas id="vix-taco-chart"></canvas>
+                        <p style="font-size: 11px; color: #64748b; margin-top: 10px;">
+                            <span style="color: #3b82f6;">●</span> VIX (市場情緒) 
+                            <span style="color: #ef4444; margin-left:10px;">●</span> TACO (拓撲異常量)
+                        </p>
+                    `;
+                    shadow.appendChild(container);
+
+                    setTimeout(() => {
+                        const ctx = shadow.getElementById('vix-taco-chart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8'],
+                                datasets: [
+                                    {
+                                        label: 'VIX',
+                                        data: [15, 14, 16, 15, 14, 15, 16, 17],
+                                        borderColor: '#3b82f6',
+                                        tension: 0.3,
+                                        pointRadius: 0
+                                    },
+                                    {
+                                        label: 'TACO',
+                                        data: [5, 4, 6, 8, 15, 35, 65, 85],
+                                        borderColor: '#ef4444',
+                                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                        fill: true,
+                                        tension: 0.3,
+                                        borderDash: [5, 5]
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: { legend: { display: false } },
+                                scales: { y: { beginAtZero: true, max: 100 } }
+                            }
+                        });
+                    }, 0);
+                }
+            }
+
+            // 初始化並掛載至全域 (或直接執行)
+            window.addEventListener('load', () => {
+                const dashboard = new TopologicalIntelligenceDashboard();
+                dashboard.setDebug(true).init();
+            });
+        })();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // ── 1. Layout Shell ───────────────────────────────────
+            const header = new HeaderComponent();
+            header.setHomeUrl('../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // ── 3. Mobile TOC ──────────────────────────────────────
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // ── 4. Scroll Events ───────────────────────────────────
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+
+            // ── 5. Related Articles ───────────────────────────────
+            if (window.RelatedArticlesComponent) {
+                new RelatedArticlesComponent()
+                    .setArticleId(document.body.dataset.articleId)
+                    .init();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

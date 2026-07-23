@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投資策略｜動態雙軌制 DCF 估值計算機：NVDA 隱含預期反推</title>
+    <meta name="description" content="零建置 (Zero-Build) 雙軌制估值系統：結合正向折現與 Bisection 數值逼近反向解題。調整滑桿即刻體驗 WACC 複利蒸發效應與市場隱含預期反推，支援蒙地卡羅波動模擬與 CSP 資本支出門檻檢驗。">
+    <meta name="keywords" content="DCF估值, 自由現金流折現, 反推估值, NVDA估值, 蒙地卡羅模擬, 估值計算機, 投資模型, Mason Yang Blog">
+    <link rel="canonical" href="https://masonyang-blog.github.io/post/trading-strategies-dcf-valuation-model.html">
+    <meta name="google-site-verification" content="F1sAja4V6KTk17SiojYOS8UF1GP9-hu8TXI8iVKQ27Y" />
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="投資策略｜動態雙軌制 DCF 估值計算機：NVDA 隱含預期反推">
+    <meta property="og:description" content="零建置雙軌制估值系統：結合正向折現與數值逼近反向解題，即刻體驗 WACC 複利蒸發效應與市場隱含預期反推。">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebApplication",
+            "@id": "https://masonyang-blog.github.io/post/trading-strategies-dcf-valuation-model.html#webapp",
+            "isPartOf": {
+                "@id": "https://masonyang-blog.github.io/#website"
+            },
+            "name": "動態雙軌制 DCF 估值計算機",
+            "headline": "投資策略｜動態雙軌制 DCF 估值計算機：NVDA 隱含預期反推",
+            "description": "零建置雙軌制估值系統：結合正向折現與 Bisection 數值逼近反向解題。調整滑桿即刻體驗 WACC 複利蒸發效應與市場隱含預期反推。",
+            "url": "https://masonyang-blog.github.io/post/trading-strategies-dcf-valuation-model.html",
+            "applicationCategory": "FinancialApplication",
+            "operatingSystem": "All",
+            "about": [
+                {
+                    "@type": "Thing",
+                    "name": "Discounted cash flow",
+                    "sameAs": "https://www.wikidata.org/wiki/Q837025"
+                }
+            ],
+            "mentions": [
+                {
+                    "@type": "Thing",
+                    "name": "Nvidia",
+                    "sameAs": "https://www.wikidata.org/wiki/Q113658599"
+                }
+            ]
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "https://masonyang-blog.github.io/post/trading-strategies-dcf-valuation-model.html#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "首頁",
+                    "item": "https://masonyang-blog.github.io/index.html"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "投資策略｜動態雙軌制 DCF 估值計算機：NVDA 隱含預期反推",
+                    "item": "https://masonyang-blog.github.io/post/trading-strategies-dcf-valuation-model.html"
+                }
+            ]
+        }
+    ]
+}
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Theme Core -->
+    <script src="../assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/custom.css">
+</head>
+
+<body class="bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200 selection:bg-orange-500 selection:text-white">
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- 頁面標題與簡介區塊 -->
+    <header class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
+        <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-1.5 flex-wrap">
+                <li><a href="../index.html" class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg></li>
+                <li class="font-medium text-slate-900 dark:text-slate-100">投資策略｜動態估值系統</li>
+            </ol>
+        </nav>
+
+        <div class="text-left max-w-4xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-600 dark:text-blue-400 text-xs font-bold mb-3 uppercase tracking-wider font-mono">
+                <span>Quantitative Valuation Engine</span>
+            </div>
+            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight font-noto font-mono">投資策略｜動態雙軌制 DCF 估值計算機：NVDA 隱含預期反推</h1>
+            <p class="mt-3 text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
+                將估值模型由「單向預測器」升級為「雙向透視鏡」。結合正向自由現金流折現與反向定價隱含增長率推導，精準錨定資產高估與低估的理性邊界。
+            </p>
+        </div>
+    </header>
+
+
+
+
+    <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <!-- 估值計算機宿主元素 -->
+        <div id="dcf-demo-host"></div>
+
+        <!-- 關聯投研指南導航卡片 -->
+        <div class="mt-12 p-8 bg-slate-900 text-slate-100 rounded-2xl border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div class="max-w-2xl">
+                <span class="text-xs font-mono text-blue-400 font-bold uppercase tracking-widest block mb-2">// 深度估值理論架構</span>
+                <h3 class="text-xl md:text-2xl font-bold text-white mb-2 leading-tight">投資策略｜貼現現金流模型 (DCF) 估值實務：如何精密建構自由現金流與折現率？為何傳統模型極易失效？內在價值、WACC、終值評估</h3>
+                <p class="text-sm text-slate-400 leading-relaxed mb-0">跨越會計政策干擾與市場情緒波動，深度拆解 7 大實務建模階段，從 Pro Forma 三表常態化清洗、WACC 去槓桿與再槓桿至終值雙軌交叉檢驗。</p>
+            </div>
+            <a href="trading-strategies-dcf-valuation-model-guide.html" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl transition shadow-lg whitespace-nowrap shrink-0 flex items-center gap-2">
+                閱讀完整投研指南 &rarr;
+            </a>
+        </div>
+
+                    <!-- auto_linker_start -->
+                    <div class="not-prose auto-linker-container" style="margin-top: 3rem; border-top: 1px solid var(--c-border, #e2e8f0); padding-top: 2rem; font-family: system-ui, -apple-system, sans-serif;">
+                        <h4 id="延伸探索-related-research" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--c-text-primary, #1e293b); display: flex; align-items: center; gap: 0.5rem; margin-top: 0;">
+                            延伸探索 / Related Research
+                        </h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+            <a href="../news/20260328-tech-trends-2026-2031.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: compute-infra]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026-2031 未來五年科技大趨勢：邏輯推理與演繹分析</span>
+            </a>
+            <a href="../news/20260410-btc-investment-opportunity-prediction.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: compute-infra]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026年4月比特幣 (BTC) 投資機會預測與上漲原因分析：地緣政治、機構範式與空頭擠壓預警</span>
+            </a>
+            <a href="../news/20260413-mara-holdings-investment-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: compute-infra]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">MARA Holdings 2026 深度投資分析與 Q4 財報解析：數據增強版</span>
+            </a>
+            <a href="../news/20260418-mstr-stock-growth-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: dcf-model]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">MSTR 股價成長因素：如何透過「比特幣收益率」飛輪驅動估值轉型？</span>
+            </a>
+            <a href="../news/20260516-global-market-selloff-and-investment-strategy.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: dcf-model]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026全球金融市場潰敗深度研究：多重宏觀衝擊與美聯儲體制轉換的連鎖效應</span>
+            </a>
+            <a href="../news/20260516-us-stock-valuation-extremes-and-short-squeeze-analysis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: dcf-model]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026美股市場估值極限與空頭部位深度分析：AI超級週期下的極端溢價與籌碼擁擠度</span>
+            </a>
+            <a href="../news/20260517-us-pre-ipo-bubble-and-liquidity-flight.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: dcf-model]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">美股 Pre-IPO 泡沫或逃命潮？2026 二級市場兩極化、VC 退出壓力與一二級倒掛真相</span>
+            </a>
+            <a href="../news/news-20260306-us-computing-infrastructure-ai-transformation.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: compute-infra, dcf-model]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026 美國算力基礎設施產業投資報告：從比特幣挖礦到 AI 電廠的價值重估</span>
+            </a>
+            <a href="../news/news-20260320-us-computing-infrastructure.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: compute-infra]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026 美國算力基礎設施產業投資報告 (2026)：電力稀缺性與 AI 轉型的價值重估</span>
+            </a>
+            <a href="../news/news-20260321-ai-computing-assets.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: compute-infra]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">2026年 AI 算力資產與未來應用深度分析報告：NVIDIA Rubin、DePIN 算力拓撲與「算力黑洞」探討</span>
+            </a>
+            <a href="../news/news-20260325-us-private-credit-crisis.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: dcf-model]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">美國私人信貸危機的演變路徑 (2026)：先行指標、內部紅線與跨資產連鎖反應深度研究報告</span>
+            </a>
+            <a href="../news/news-20260326-investment-research-guide.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: dcf-model]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">[投資研究] (2026)：高價值投資研究操作指南：從思維邊界到決策執行</span>
+            </a>
+            <a href="../project/btc.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: compute-infra]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">比特幣 (Bitcoin) 完整介紹：數位黃金、區塊鏈原理與 2026 投資風險分析</span>
+            </a>
+            <a href="../project/tao.html" style="flex: 1 1 280px; max-width: 100%; box-sizing: border-box; display: block; padding: 1.25rem; border: 1px solid var(--c-border, #e2e8f0); border-radius: 0.75rem; background-color: var(--c-bg-card, #f8fafc); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.08)'" onmouseout="this.style.borderColor='var(--c-border, #e2e8f0)';this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">[Tag: compute-infra]</span>
+                <span style="font-size: 1rem; font-weight: 600; color: var(--c-text-primary, #1e293b); line-height: 1.5; display: block;">Bittensor (TAO) 深度分析：去中心化 AI 網路、子網機制與 2026 算力市場前景</span>
+            </a>
+                        </div>
+                    </div>
+                    <!-- auto_linker_end -->
+</main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Components -->
+    <script src="../assets/js/core-header.js"></script>
+    <script src="../assets/js/core-footer.js"></script>
+    <script src="../assets/js/core-taxonomy.js"></script>
+    <script src="../assets/js/core-articles-data.js"></script>
+    <script src="../assets/js/data-dcf-registry.js"></script>
+    <script src="../assets/js/app-dcf-demo.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.HeaderComponent) new HeaderComponent().init();
+            if (window.FooterComponent) new FooterComponent().init();
+            if (window.DcfDemoComponent) new DcfDemoComponent().init();
+        });
+    </script>
+<!-- Related Briefs Widget -->
+                    <related-pulse-widget tags='["compute-infra"]'>
+        <noscript>
+            <div class="related-pulse-noscript">
+                <h4>最新相關市場瞬息</h4>
+                <ul>
+                <li><a href="../pulse.html#2026-05-27-ai"><time datetime="2026-05-27">2026-05-27</time> - 算力帝國的物理關稅：美光科技與 AI 晶片的邊界衝突</a></li>
+                <li><a href="../pulse.html#2026-05-25-amd-helios-margin-analysis"><time datetime="2026-05-25">2026-05-25</time> - AMD Helios 平台對資料中心毛利率之影響分析</a></li>
+                <li><a href="../pulse.html#2026-05-25-amd-mi400-production-update"><time datetime="2026-05-25">2026-05-25</time> - AMD Instinct MI400 系列最新產能與技術規劃</a></li>
+                </ul>
+            </div>
+        </noscript>
+    </related-pulse-widget>
+    <script src="../assets/js/pulse-data.js"></script>
+    <script src="../assets/js/widget-related-pulse.js"></script>
+</body>
+
+</html>
