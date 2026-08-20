@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>投資策略｜動態雙軌制 DCF 估值計算機：NVDA 隱含預期反推</title>
+<meta content="零建置 (Zero-Build) 雙軌制估值系統：結合正向折現與 Bisection 數值逼近反向解題。調整滑桿即刻體驗 WACC 複利蒸發效應與市場隱含預期反推，支援蒙地卡羅波動模擬與 CSP 資本支出門檻檢驗。" name="description"/>
+<meta content="DCF估值, 自由現金流折現, 反推估值, NVDA估值, 蒙地卡羅模擬, 估值計算機, 投資模型, Mason Yang Blog" name="keywords"/>
+<link href="https://masonyang-blog.github.io/post/trading-strategies-dcf-valuation-model.html" rel="canonical"/>
+<meta content="F1sAja4V6KTk17SiojYOS8UF1GP9-hu8TXI8iVKQ27Y" name="google-site-verification"/>
+<meta content="website" property="og:type"/>
+<meta content="投資策略｜動態雙軌制 DCF 估值計算機：NVDA 隱含預期反推" property="og:title"/>
+<meta content="零建置雙軌制估值系統：結合正向折現與數值逼近反向解題，即刻體驗 WACC 複利蒸發效應與市場隱含預期反推。" property="og:description">
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebApplication",
+            "@id": "https://masonyang-blog.github.io/post/trading-strategies-dcf-valuation-model.html#webapp",
+            "isPartOf": {
+                "@id": "https://masonyang-blog.github.io/#website"
+            },
+            "name": "動態雙軌制 DCF 估值計算機",
+            "headline": "投資策略｜動態雙軌制 DCF 估值計算機：NVDA 隱含預期反推",
+            "description": "零建置雙軌制估值系統：結合正向折現與 Bisection 數值逼近反向解題。調整滑桿即刻體驗 WACC 複利蒸發效應與市場隱含預期反推。",
+            "url": "https://masonyang-blog.github.io/post/trading-strategies-dcf-valuation-model.html",
+            "applicationCategory": "FinancialApplication",
+            "operatingSystem": "All",
+            "about": [
+                {
+                    "@type": "Thing",
+                    "name": "Discounted cash flow",
+                    "sameAs": "https://www.wikidata.org/wiki/Q837025"
+                }
+            ],
+            "mentions": [
+                {
+                    "@type": "Thing",
+                    "name": "Nvidia",
+                    "sameAs": "https://www.wikidata.org/wiki/Q113658599"
+                }
+            ]
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "https://masonyang-blog.github.io/post/trading-strategies-dcf-valuation-model.html#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "首頁",
+                    "item": "https://masonyang-blog.github.io/index.html"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "宏觀戰略與地緣政治",
+                    "item": "https://masonyang-blog.github.io/post/archive.html?filter=macro-geopolitics"
+                }
+            ]
+        }
+    ]
+}
+    </script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Noto+Sans+TC:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Core -->
+<script src="../assets/js/core-theme.js"></script>
+<!-- Tailwind CSS -->
+<script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        }
+    </script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="../assets/css/custom.css" rel="stylesheet"/>
+</meta></head>
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="trading-strategies-dcf-valuation-model">
+<!-- Scroll Progress Bar -->
+<div class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]" id="scroll-progress-container">
+<div class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out" id="scroll-progress-bar"></div>
+</div>
+<!-- Header Host -->
+<div id="header-host"></div>
+
+<!-- =========================================================
+     MAIN: Three-Column Layout
+     lg+  : [Left TOC] [Interactive DCF Demo] [Right Spacer]
+     <lg  : Single column
+========================================================= -->
+<main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- ─────────────────────────────────────────
+     LEFT SIDEBAR: Desktop TOC
+───────────────────────────────────────── -->
+<aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+<div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+    目錄導覽
+</p>
+<div id="toc-desktop-host">
+    <!-- static_toc_start -->
+    <nav class="static-toc-container" aria-label="Table of Contents">
+      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+        <li style="margin-bottom: 0.25rem;"><a href="#投資策略-貼現現金流模型-dcf-估值實務-如何精密建構自由現金流與折現率-為何傳統模型極易失效-內在價值-wacc-終值評估" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">投資策略｜貼現現金流模型 (DCF) 估值實務：如何精密建構自由現金流與折現率？為何傳統模型極易失效？內在價值、WACC、終值評估</a></li>
+      </ul>
+    </nav>
+    <!-- static_toc_end -->
+</div>
+<button class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5" id="back-to-top-sidebar">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+    回到頂部
+</button>
+</div>
+</aside>
+
+<!-- ─────────────────────────────────────────
+     CENTER: Main Content
+───────────────────────────────────────── -->
+<div class="flex-1 min-w-0">
+<article class="theme-bg-card dark:bg-slate-800 p-6 sm:p-10 md:p-12 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+<div class="lg:hidden mb-8" id="toc-mobile-target">
+    <!-- static_toc_start -->
+    <nav class="static-toc-container" aria-label="Table of Contents">
+      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+        <li style="margin-bottom: 0.25rem;"><a href="#投資策略-貼現現金流模型-dcf-估值實務-如何精密建構自由現金流與折現率-為何傳統模型極易失效-內在價值-wacc-終值評估" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">投資策略｜貼現現金流模型 (DCF) 估值實務：如何精密建構自由現金流與折現率？為何傳統模型極易失效？內在價值、WACC、終值評估</a></li>
+      </ul>
+    </nav>
+    <!-- static_toc_end -->
+</div>
+<!-- 估值計算機宿主元素 -->
+<div id="dcf-demo-host"></div>
+<!-- 關聯投研指南導航卡片 -->
+<div class="mt-12 p-8 bg-slate-900 text-slate-100 rounded-2xl border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<div class="max-w-2xl">
+<span class="text-xs font-mono text-blue-400 font-bold uppercase tracking-widest block mb-2">// 深度估值理論架構</span>
+<h3 id="投資策略-貼現現金流模型-dcf-估值實務-如何精密建構自由現金流與折現率-為何傳統模型極易失效-內在價值-wacc-終值評估" class="text-xl md:text-2xl font-bold text-white mb-2 leading-tight">投資策略｜貼現現金流模型 (DCF) 估值實務：如何精密建構自由現金流與折現率？為何傳統模型極易失效？內在價值、WACC、終值評估</h3>
+<p class="text-sm text-slate-400 leading-relaxed mb-0">跨越會計政策干擾與市場情緒波動，深度拆解 7 大實務建模階段，從 Pro Forma 三表常態化清洗、WACC 去槓桿與再槓桿至終值雙軌交叉檢驗。</p>
+</div>
+<a class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl transition shadow-lg whitespace-nowrap shrink-0 flex items-center gap-2" href="trading-strategies-dcf-valuation-model-guide.html">
+                閱讀完整投研指南 →
+            </a>
+</div>
+</article>
+</div>
+
+<!-- ─────────────────────────────────────────
+     RIGHT SIDEBAR: Idle Spacer / Future Widgets
+───────────────────────────────────────── -->
+<aside class="hidden xl:block w-56 xl:w-60 shrink-0">
+</aside>
+</div>
+</main>
+
+<!-- Footer Host -->
+<div id="footer-host"></div>
+
+<!-- Back to Top Button -->
+<button aria-label="回到頂部" class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="back-to-top">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</button>
+
+<!-- =========================================================
+     Scripts
+========================================================= -->
+<script src="../assets/js/core-header.js"></script>
+<script src="../assets/js/core-footer.js"></script>
+<script src="../assets/js/ui-toc-responsive.js"></script>
+<script src="../assets/js/ui-toc-desktop.js"></script>
+<script src="../assets/js/core-taxonomy.js"></script>
+<script src="../assets/js/core-articles-data.js"></script>
+<script src="../assets/js/data-dcf-registry.js"></script>
+<script src="../assets/js/app-dcf-demo.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const header = new HeaderComponent();
+        header.setHomeUrl('../index.html');
+        header.init();
+        new FooterComponent().init();
+
+        if (typeof ArticleTOC !== 'undefined') {
+            new ArticleTOC().init();
+        }
+        if (window.ResponsiveTocComponent) {
+            new ResponsiveTocComponent().init();
+        }
+        if (window.DcfDemoComponent) {
+            new DcfDemoComponent().init();
+        }
+
+        const progressBar = document.getElementById('scroll-progress-bar');
+        const bttBtn = document.getElementById('back-to-top');
+        const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+            if (progressBar) {
+                progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+            }
+
+            const isScrolled = winScroll > 400;
+            if (bttBtn) {
+                bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                bttBtn.classList.toggle('opacity-0', !isScrolled);
+                bttBtn.classList.toggle('translate-y-0', isScrolled);
+                bttBtn.classList.toggle('opacity-100', isScrolled);
+            }
+            if (bttSidebarBtn) {
+                bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+            }
+        }, { passive: true });
+
+        [bttBtn, bttSidebarBtn].forEach(btn => {
+            if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        });
+    });
+</script>
+<script src="../assets/js/widget-related-articles.js"></script>
+</body>
+</html>

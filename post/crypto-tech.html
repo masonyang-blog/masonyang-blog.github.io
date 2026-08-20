@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<!-- skip-sidebar-check -->
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+<script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4RKTYWVLXN');
+    </script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>區塊鏈關鍵技術 (TECH)：模組化、ZK 與預測市場深度解析</title>
+<meta content="區塊鏈技術的正經歷模組化與 ZK 證明的典範轉移。本文解析 Celestia、ZK-Rollup 與預測市場 (Polymarket) 的技術底層，旨在打破擴展性不可能三角，為 Web3 大規模應用提供基礎設施。" name="description"/>
+<meta content="區塊鏈技術, Modular Blockchain, ZK-Rollup, Prediction Markets, Polymarket, Layer 3, Celestia, StarkNet, AI SEO, Web3 技術, RAG 優化" name="keywords"/>
+<link href="https://masonyang-blog.github.io/post/crypto-tech.html" rel="canonical"/>
+<!-- Theme Core -->
+<script src="../assets/js/core-theme.js"></script>
+<!-- Tailwind CSS -->
+<script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#15202e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Custom Styles -->
+<link href="../assets/css/custom.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+TC:wght@400;500;600;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<!-- 
+        ==========================================================================
+        🤖 ADVANCED JSON-LD SCHEMA (AI 搜尋實體圖譜)
+        ==========================================================================
+    -->
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": "https://masonyang-blog.github.io/post/crypto-tech.html#webpage",
+          "isPartOf": {
+            "@id": "https://masonyang-blog.github.io/#website"
+          },
+          "author": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "headline": "區塊鏈關鍵技術 (TECH)：模組化、ZK 與預測市場深度解析",
+          "description": "深入解析驅動 Web3 大規模採用的核心技術。模組化、ZK 與預測市場的技術底層深度拆解。",
+          "datePublished": "2026-03-14",
+          "dateModified": "2026-08-16",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://masonyang-blog.github.io/post/crypto-tech.html"
+          },
+          "about": [
+            {
+              "@type": "Thing",
+              "name": "Blockchain",
+              "sameAs": "https://www.wikidata.org/wiki/Q311060"
+            }
+          ],
+          "mentions": [
+            {
+              "@type": "Thing",
+              "name": "Zero-knowledge proof",
+              "sameAs": "https://www.wikidata.org/wiki/Q191410"
+            },
+            {
+              "@type": "Thing",
+              "name": "Modular programming",
+              "sameAs": "https://www.wikidata.org/wiki/Q1333333"
+            },
+            {
+              "@type": "Thing",
+              "name": "Cryptography",
+              "sameAs": "https://www.wikidata.org/wiki/Q8785"
+            },
+            {
+              "@type": "Thing",
+              "name": "Rollup",
+              "sameAs": "https://www.wikidata.org/wiki/Q1066042"
+            }
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://masonyang-blog.github.io/#author",
+          "name": "Mason Yang",
+          "url": "https://masonyang-blog.github.io",
+          "jobTitle": "Investment Researcher",
+          "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://masonyang-blog.github.io/logo.png"
+          },
+          "sameAs": [
+            "https://x.com/MasonYang16"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://masonyang-blog.github.io/#website",
+          "url": "https://masonyang-blog.github.io",
+          "name": "Mason Yang Blog",
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "什麼是模組化區塊鏈 (Modular Blockchain)？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "模組化區塊鏈將傳統區塊鏈的功能（執行、結算、共識、數據可用性）拆解並由不同的專門層處理。例如 Celestia 專注於 DA（數據可用性），這種架構能顯著提升系統的擴展性與靈活性。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "零知識證明 (ZK) 技術如何幫助區塊鏈擴容？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "ZK 技術允許在一條鏈（如 Layer 2）上執行大量計算，並僅向主鏈（如以太坊）提交一個簡短的數學證明，證實這些計算是正確的。這在不犧牲安全性的前提下大幅降低了主鏈的負擔。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "為什麼預測市場 (如 Polymarket) 被視為 Web3 的重要應用？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "預測市場利用「利益相關」機制來挖掘真實世界的真相與概率。在資訊泛濫的時代，它為 AI 和人腦提供了去中心化、難以被操縱的資訊過濾與發現機制，是 Web3 最具社會價值的非金融應用之一。"
+              }
+            }
+          ],
+          "@id": "https://masonyang-blog.github.io/post/crypto-tech.html#faq"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://masonyang-blog.github.io/post/crypto-tech.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "首頁",
+              "item": "https://masonyang-blog.github.io/index.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "數位資產與 Web3",
+              "item": "https://masonyang-blog.github.io/post/archive.html?filter=crypto-web3"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "區塊鏈關鍵技術 (TECH)：模組化、ZK 與預測市場深度解析",
+              "item": "https://masonyang-blog.github.io/post/crypto-tech.html"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="topic-tech">
+<!-- Scroll Progress Bar -->
+<div class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]" id="scroll-progress-container">
+<div class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out" id="scroll-progress-bar"></div>
+</div>
+<!-- Header Host -->
+<div id="header-host"></div>
+
+<!-- =========================================================
+     MAIN: Three-Column Layout
+     lg+  : [Left TOC] [Article] [Right Spacer/Widgets]
+     <lg  : Single column
+========================================================= -->
+<main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- ─────────────────────────────────────────
+     LEFT SIDEBAR: Desktop TOC
+───────────────────────────────────────── -->
+<aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+<div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+    目錄導覽
+</p>
+<div id="toc-desktop-host">
+    <!-- static_toc_start -->
+    <nav class="static-toc-container" aria-label="Table of Contents">
+      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#blockchain-trilemma" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">擴展性的聖杯戰爭</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#模組化區塊鏈" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">模組化區塊鏈</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#零知識證明-zk" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">零知識證明 (ZK)</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#prediction-markets" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">應用層爆發：資訊發現</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#預測市場-polymarket" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">預測市場 (Polymarket)</a></li>
+      </ul>
+    </nav>
+    <!-- static_toc_end -->
+</div>
+<button class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5" id="back-to-top-sidebar">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+    回到頂部
+</button>
+</div>
+</aside>
+
+<!-- ─────────────────────────────────────────
+     CENTER: Article Content
+───────────────────────────────────────── -->
+<div class="flex-1 min-w-0">
+<article class="theme-bg-card dark:bg-slate-800 p-6 sm:p-10 md:p-12 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+<!-- Breadcrumb -->
+<nav aria-label="Breadcrumb" class="flex text-sm text-slate-500 dark:text-slate-400 mb-6">
+<ol class="flex items-center space-x-2">
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../index.html">首頁</a></li>
+<li><span class="mx-2">/</span></li>
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="archive.html">加密貨幣百科</a></li>
+<li><span class="mx-2">/</span></li>
+<li class="font-medium text-slate-900 dark:text-slate-100">關鍵技術 (TECH)</li>
+</ol>
+</nav>
+<!-- Hero Header -->
+<header class="mb-10 not-prose">
+<div class="flex items-center gap-4 mb-4">
+<span class="px-3 py-1 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-full text-xs font-bold uppercase tracking-wide">Technology
+                            Hub</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-6">
+                        關鍵技術 (TECH)：<br class="hidden md:block"/>區塊鏈創新技術與未來敘事
+                    </h1><div class="above-fold-summary bg-amber-50/80 dark:bg-slate-800/80 border-b-2 border-amber-600/40 p-4 my-4 rounded-r-xl">
+<p class="text-sm md:text-base font-medium text-slate-800 dark:text-slate-200 leading-relaxed m-0">
+<strong class="dsr-label">[Direct Answer]</strong> 區塊鏈前沿技術正經歷從「單體區塊鏈」向「模組化架構與零知識證明 (ZK)」的根本範式演進。核心架構拆解為：① 執行層、結算層、共識層與數據可用性層 (DA) 的解耦與專業化；② ZK-Rollup (ZK-EVM/ZK-VM) 的數學確定性證明與免信任擴容；③ 跨鏈通訊安全性（如 Chainlink CCIP）與 BitVM 在比特幣原生網路上的圖靈完備計算實踐。
+</p>
+</div>
+<p class="text-xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-3xl">
+                        區塊鏈技術正在經歷從「單體架構」向「模組化」與「專用型應用」的典範轉移。本專題將深度拆解模組化、ZK 與預測市場等核心技術，帶您看懂下一輪週期的核心敘事。
+                    </p>
+</header>
+<div class="mb-8 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-transparent border-l-4 border-amber-500 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div>
+<div class="text-xs font-black text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1 font-mono">⚡ 2026 前沿技術與模組化</div>
+<p class="text-sm text-slate-700 dark:text-slate-300 m-0 font-medium">模組化公鏈與 ZK 密碼學突破，建議同步參閱以太坊生態與預言機評測：</p>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<a href="../project/eth.html" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition-colors">ETH 生態</a><a href="../project/chainlink.html" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition-colors">Chainlink CCIP</a>
+</div>
+</div>
+<!-- Mobile TOC Target -->
+<div class="lg:hidden mb-6" id="toc-mobile-target">
+    <!-- static_toc_start -->
+    <nav class="static-toc-container" aria-label="Table of Contents">
+      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#blockchain-trilemma" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">擴展性的聖杯戰爭</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#模組化區塊鏈" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">模組化區塊鏈</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#零知識證明-zk" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">零知識證明 (ZK)</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#prediction-markets" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">應用層爆發：資訊發現</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#預測市場-polymarket" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">預測市場 (Polymarket)</a></li>
+      </ul>
+    </nav>
+    <!-- static_toc_end -->
+</div>
+<!-- 1. The Challenge (Hub Intro) -->
+<section class="mb-12">
+<h2 id="blockchain-trilemma">擴展性的聖杯戰爭</h2><div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm"><strong class="dsr-label">[Direct Answer]</strong><ol class="space-y-2 text-sm md:text-base mt-2"><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>擴展性的聖杯戰爭 的最關鍵觸發點與當前市場矛盾是什麼？</span></li><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>該事態的傳導路徑、核心數據支撐與演化邏輯為何？</span></li><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">3</span><span>底層假設是否存在死角？非對稱風險回報比的決策劇本是什麼？</span></li></ol></div>
+<p class="lead text-lg text-slate-600 mb-6">
+                        區塊鏈產業正經歷從「單體架構 (Monolithic)」向「模組化 (Modular)」與「專用型應用」的典範轉移。這場革命旨在解決困擾以太坊多年的「不可能三角」問題。
+                    </p>
+<div class="not-prose grid gap-6 md:grid-cols-2">
+<!-- Card 1: Modular -->
+<a class="block group" href="../knowledge/modular-blockchain.html">
+<div class="h-full p-6 theme-bg-card dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-500 transition-all">
+<span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-xs font-bold rounded uppercase mb-3 inline-block">Infrastructure</span>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" id="模組化區塊鏈">
+                                    模組化區塊鏈</h3><div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm"><strong class="dsr-label">[Direct Answer]</strong><ol class="space-y-2 text-sm md:text-base mt-2"><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>模組化區塊鏈 的具體實體運作路徑為何？核心數據如何支撐？</span></li></ol></div>
+<p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                                    像組裝樂高一樣構建區塊鏈。Celestia 如何通過拆解 DA 層來打破擴展性瓶頸？
+                                </p>
+<div class="flex items-center text-indigo-600 dark:text-indigo-400 text-sm font-medium">
+<span>閱讀深度解析</span>
+<svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</a>
+<!-- Card 2: ZK -->
+<a class="block group" href="../knowledge/zk-rollup.html">
+<div class="h-full p-6 theme-bg-card dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-purple-300 dark:hover:border-purple-500 transition-all">
+<span class="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-bold rounded uppercase mb-3 inline-block">Scaling</span>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" id="零知識證明-zk">
+                                    零知識證明 (ZK)</h3><div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm"><strong class="dsr-label">[Direct Answer]</strong><ol class="space-y-2 text-sm md:text-base mt-2"><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>零知識證明 (ZK) 的具體實體運作路徑為何？核心數據如何支撐？</span></li></ol></div>
+<p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                                    數學上的「點石成金」。如何在不洩露隱私的前提下實現無限擴容？
+                                </p>
+<div class="flex items-center text-purple-600 dark:text-purple-400 text-sm font-medium">
+<span>閱讀深度解析</span>
+<svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</a>
+</div>
+</section>
+<!-- 2. Application Layer -->
+<section class="mb-12">
+<h2 id="prediction-markets">應用層爆發：資訊發現</h2><div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm"><strong class="dsr-label">[Direct Answer]</strong><ol class="space-y-2 text-sm md:text-base mt-2"><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>應用層爆發：資訊發現 的最關鍵觸發點與當前市場矛盾是什麼？</span></li><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>該事態的傳導路徑、核心數據支撐與演化邏輯為何？</span></li><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">3</span><span>底層假設是否存在死角？非對稱風險回報比的決策劇本是什麼？</span></li></ol></div>
+<p class="text-slate-600 mb-6">
+                        基礎設施搭好後，什麼樣的應用能帶來千萬級用戶？預測市場 (Prediction Markets) 給出了第一個答案。
+                    </p>
+<div class="not-prose">
+<!-- Card 3: Prediction Markets -->
+<a class="block group" href="../knowledge/prediction-markets.html">
+<div class="p-6 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-850 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all">
+<div class="flex flex-col md:flex-row gap-6 items-center">
+<div class="flex-1">
+<span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold rounded uppercase mb-3 inline-block">Consumer
+                                            App</span>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" id="預測市場-polymarket">
+                                            預測市場 (Polymarket)</h3><div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm"><strong class="dsr-label">[Direct Answer]</strong><ol class="space-y-2 text-sm md:text-base mt-2"><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>預測市場 (Polymarket) 的具體實體運作路徑為何？核心數據如何支撐？</span></li></ol></div>
+<p class="text-slate-600 dark:text-slate-400 mb-4">
+                                            當 AI 需要真實世界的「真相」時，它們不會去問 Google，而是會查詢鏈上的概率。這是 Web3 最大的非金融敘事。
+                                        </p>
+<div class="flex items-center text-blue-600 dark:text-blue-400 font-medium">
+<span>探索資訊發現的未來</span>
+<svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Visual/Icon placeholder if needed -->
+<div class="w-16 h-16 rounded-full bg-blue-200 dark:bg-blue-900/50 flex items-center justify-center text-3xl shadow-sm">
+                                        🔮
+                                    </div>
+</div>
+</div>
+</a>
+</div>
+</section>
+<!-- Related Articles -->
+<div class="not-prose mt-12 pt-8 border-t border-slate-200" id="related-articles-container">
+<!-- JS will load articles with 'tech' goal/category -->
+</div>
+</article>
+</div>
+
+<!-- ─────────────────────────────────────────
+     RIGHT SIDEBAR: Idle Spacer / Future Widgets
+───────────────────────────────────────── -->
+<aside class="hidden xl:block w-56 xl:w-60 shrink-0">
+</aside>
+</div>
+</main>
+
+<!-- Footer Host -->
+<div id="footer-host"></div>
+
+<!-- Back to Top Button -->
+<button aria-label="回到頂部" class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="back-to-top">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</button>
+
+<!-- =========================================================
+     Scripts
+========================================================= -->
+<script src="../assets/js/core-header.js"></script>
+<script src="../assets/js/core-footer.js"></script>
+<script src="../assets/js/ui-toc-responsive.js"></script>
+<script src="../assets/js/ui-toc-desktop.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Layout Shell
+        const header = new HeaderComponent();
+        header.setHomeUrl('../index.html');
+        header.init();
+        new FooterComponent().init();
+
+        // Desktop TOC (Left Sidebar)
+        if (typeof ArticleTOC !== 'undefined') {
+            new ArticleTOC().init();
+        }
+
+        // Mobile TOC
+        if (window.ResponsiveTocComponent) {
+            new ResponsiveTocComponent().init();
+        }
+
+        // Scroll Events for Progress Bar & Back to Top
+        const progressBar = document.getElementById('scroll-progress-bar');
+        const bttBtn = document.getElementById('back-to-top');
+        const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+            if (progressBar) {
+                progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+            }
+
+            const isScrolled = winScroll > 400;
+            if (bttBtn) {
+                bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                bttBtn.classList.toggle('opacity-0', !isScrolled);
+                bttBtn.classList.toggle('translate-y-0', isScrolled);
+                bttBtn.classList.toggle('opacity-100', isScrolled);
+            }
+            if (bttSidebarBtn) {
+                bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+            }
+        }, { passive: true });
+
+        [bttBtn, bttSidebarBtn].forEach(btn => {
+            if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        });
+    });
+</script>
+<script src="../assets/js/widget-related-articles.js"></script>
+</body>
+</html>

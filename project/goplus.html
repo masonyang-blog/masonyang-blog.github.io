@@ -1,0 +1,2035 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+<script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-4RKTYWVLXN");
+    </script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!-- ⚠️ 標題零後綴鐵律：絕對禁止包含 | Mason Yang 等後綴 (遵循 STANDARDS_TITLE.md) -->
+<title>【GoPlus Security (GPS) 投資分析】 - Web3 用戶安全網絡如何構築數據護城河？為何每日調用破 3,000 萬次？解構模組化安全架構與代幣激勵模型</title>
+<meta content="深度剖析 GoPlus Security (GPS) 模組化安全層、日均 3,000 萬次 API 調用、Coinbase x402 機器微支付協議、EigenLayer AVS 去中心化架構、30% 協議收入回購銷毀與解鎖懸空風險。" name="description"/>
+<meta content="GoPlus Security, GPS, Web3 Security, AI Agent, Coinbase x402, EigenLayer, AVS, DeepScan, AgentGuard, SafeToken, Tokenomics, 代幣經濟學, 智能合約審計, 加密貨幣投資" name="keywords"/>
+<link href="https://masonyang-blog.github.io/project/goplus.html" rel="canonical"/>
+<!-- Theme Core (Must be first to prevent FOUC) -->
+<script src="../assets/js/core-theme.js"></script>
+<!-- Tailwind CSS -->
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              slate: { 850: "#15202e" },
+            },
+          },
+        },
+      };
+    </script>
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Custom Styles -->
+<link href="../assets/css/custom.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+TC:wght@400;500;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      h2[id],
+      h3[id],
+      section[id] {
+        scroll-margin-top: 6rem;
+      }
+    </style>
+<script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "AnalysisNewsArticle",
+            "@id": "https://masonyang-blog.github.io/project/goplus.html#article",
+            "isPartOf": {
+              "@id": "https://masonyang-blog.github.io/#website"
+            },
+            "author": {
+              "@id": "https://masonyang-blog.github.io/#author"
+            },
+            "publisher": {
+              "@id": "https://masonyang-blog.github.io/#author"
+            },
+            "headline": "【GoPlus Security (GPS) 投資分析】 - Web3 用戶安全網絡如何構築數據護城河？為何每日調用破 3,000 萬次？解構模組化安全架構與代幣激勵模型",
+            "description": "深度剖析 GoPlus Security (GPS) 模組化安全層、日均 3,000 萬次 API 調用、Coinbase x402 機器微支付協議、EigenLayer AVS 去中心化架構、30% 協議收入回購銷毀與解鎖懸空風險。",
+            "datePublished": "2026-08-17",
+            "dateModified": "2026-08-17",
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "https://masonyang-blog.github.io/project/goplus.html"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://masonyang-blog.github.io/project/goplus.html#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "首頁",
+                "item": "https://masonyang-blog.github.io/index.html"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "加密貨幣與區塊鏈",
+                "item": "https://masonyang-blog.github.io/post/archive.html"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "【GoPlus Security (GPS) 投資分析】 - Web3 用戶安全網絡如何構築數據護城河？為何每日調用破 3,000 萬次？解構模組化安全架構與代幣激勵模型",
+                "item": "https://masonyang-blog.github.io/project/goplus.html"
+              }
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://masonyang-blog.github.io/#author",
+            "name": "Mason Yang",
+            "url": "https://masonyang-blog.github.io",
+            "jobTitle": "Investment Researcher",
+            "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+            "image": {
+              "@type": "ImageObject",
+              "url": "https://masonyang-blog.github.io/logo.png"
+            },
+            "sameAs": ["https://x.com/MasonYang16"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://masonyang-blog.github.io/#website",
+            "url": "https://masonyang-blog.github.io",
+            "name": "Mason Yang Blog",
+            "publisher": {
+              "@id": "https://masonyang-blog.github.io/#author"
+            }
+          }
+        ]
+      }
+    </script>
+</head>
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="goplus-security-gps-wallstreet-investment-analysis">
+<!-- Scroll Progress Bar -->
+<div class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]" id="scroll-progress-container">
+<div class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out" id="scroll-progress-bar"></div>
+</div>
+<!-- Header Host -->
+<div id="header-host"></div>
+<!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+<main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+<aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+<div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+              目錄導覽
+            </p>
+<!-- ArticleTOC renders here -->
+<div data-managed="auto" id="toc-desktop-host">
+    <!-- static_toc_start -->
+    <nav class="static-toc-container" aria-label="Table of Contents">
+      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 核心框架 核心事件的 5W1H 認知架構</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#執行摘要" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1模組化安全定位：GoPlus 如何在 Web3 與 AI 交匯處構建數據護城河？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#宏觀經濟與行業賽道-網路安全估值的重新定價" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2宏觀經濟與行業賽道行業賽道重新定價：AI 代理崛起如何推動網路安全總潛在市場 (TAM) 擴張？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#web3-與-ai-代理安全的歷史性交匯" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Web3 與 AI 代理安全的歷史性交匯：為何事前運行時攔截成為剛需？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#公司歷史沿革與創始團隊背景" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">公司沿革與團隊基因：螞蟻集團高併發架構與連續創業經驗如何融合？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#資本結構與頂級戰略投資者背書" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3資本結構與戰略背書：Binance Labs 與 OKX Ventures 如何賦予不可複製的生態壁壘？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#核心技術架構與產品矩陣深度解析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4核心技術矩陣解構：AVS、x402 機器支付與 DeepScan 如何構建全生命週期防護？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#goplus-intelligence-與-deepscan-去中心化安全情報大腦" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Intelligence 與 DeepScan：如何以 9.9 美元顛覆傳統數萬美元人工審計市場？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#agentguard-與-x402-機器微支付協議-重塑-ai-代理經濟" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">x402 機器支付協議：為何 HTTP 402 微支付是 AI 代理經濟的底層標準？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#去中心化安全架構-avs-與-eigenlayer-的深度融合" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">EigenLayer AVS 融合：GoPlus 如何租用以太坊千億美元共享安全共識？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#safetoken-protocol-與-secwarex-終端模組" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">SafeToken 與 SecWareX：如何從資產發行源頭到錢包終端實現閉環保護？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#代幣經濟學-tokenomics-與極端通縮價值捕獲" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">5代幣經濟學解構：30% 協議營收剛性回購銷毀如何驅動極端通縮飛輪？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#初始代幣分配矩陣" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">初始代幣分配矩陣：60.67% 生態份額如何激勵社區與節點成長？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#解鎖時間表與-magna-智能合約託管" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Magna 第三方智能合約託管：如何以程式碼杜絕內部違規拋售疑慮？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#價值驅動-value-sinks-與極端通縮機制" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">價值捕獲三大引擎：安全 Gas 費、節點質押與營收銷毀如何協同？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#危機管理-流動性修復與收益機制重塑" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">6危機管理與流動性修復：434 萬做市商回購與 5 億安全基金如何重塑信心？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#回購銷毀與用戶補償的雙管齊下" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">回購與補償實施成效：超過 1.05 億枚 GPS 永久銷毀的市場影響</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#5-億枚-gps-安全基金-重塑-web3-價值循環" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5 億枚 GPS 安全基金：「一魚三吃」質押收益結構如何鎖定二級籌碼？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#商業模式估值對標與競爭格局分析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">7商業模式估值對標：34 倍 P/S 倍數相較 CrowdStrike 是否具備前瞻溢價？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#估值對標分析-valuation-multiples" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">橫向估值矩陣對比：CrowdStrike、SentinelOne、Forta 與 GoPlus</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#二級市場數據與定價風險深度剖析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">8二級市場數據與定價風險：如何應對每月 1.09 億枚線性解鎖的懸空拋壓 (Overhang Risk)？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#當前市場表現與籌碼面分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">籌碼與技術面解構：RSI 24.5 超賣反彈與基本面利好共振</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#結構性解鎖的懸空風險-overhang-risk" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">每月 15/16 日解鎖考驗：歷史回測 13.6% 回撤與買盤承接拉鋸戰</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#宏觀連動與競爭壁壘風險" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">宏觀流動性與競爭風險：比特幣市占率高企下的防禦策略</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#投資結論與戰略建議" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">9華爾街投資結論與戰略建議：機構級網格建倉節奏與長期價值鎖定路徑</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#article-analysis-header" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章分析</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#article-inference-logic" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">01 文章推論邏輯分析</a></li>
+        <li style="margin-bottom: 0.2rem;"><a href="#商業模式與基礎設施價值捕獲解析" style="display: block; padding: 0.2rem 0; font-size: 0.75rem; color: #94a3b8; text-decoration: none; padding-left: 2rem;">商業模式與基礎設施價值捕獲解析</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#logic-blindspots" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">02 敘事邊界與關鍵變數補充</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#參考資料" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">參考資料 (References)</a></li>
+      </ul>
+    </nav>
+    <!-- static_toc_end -->
+</div>
+<!-- Back to top (sidebar) -->
+<button class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5" id="back-to-top-sidebar">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              回到頂部
+            </button>
+</div>
+</aside>
+<!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+<div class="flex-1 min-w-0">
+<!-- Breadcrumb -->
+<nav aria-label="Breadcrumb" class="flex text-sm text-slate-500 dark:text-slate-400 mb-6">
+<ol class="flex items-center space-x-1.5 flex-wrap">
+<li>
+<a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../index.html">首頁</a>
+</li>
+<li>
+<svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path>
+</svg>
+</li>
+<li>
+<a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../post/archive.html">經濟時事分析</a>
+</li>
+<li>
+<svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path>
+</svg>
+</li>
+<li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">【GoPlus Security (GPS) 投資分析】 - Web3 用戶安全網絡如何構築數據護城河？為何每日調用破 3,000 萬次？解構模組化安全架構與代幣激勵模型</li>
+</ol>
+</nav>
+<!-- ── Hero Header ── -->
+<header class="theme-bg-card dark:bg-slate-900/40 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6 font-sans relative">
+<!-- Category + Date + Executive Badge -->
+<div class="flex flex-wrap items-center gap-3 mb-5">
+<span class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                加密貨幣與區塊鏈
+              </span>
+<span class="px-2.5 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                執行摘要
+              </span>
+<span class="text-sm text-slate-500 dark:text-slate-400">
+<time datetime="2026-08-17">2026-08-17</time>
+</span>
+<span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 15 分鐘</span>
+</div>
+<!-- H1 -->
+<h1 class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">【GoPlus Security (GPS) 投資分析】 - Web3 用戶安全網絡如何構築數據護城河？為何每日調用破 3,000 萬次？解構模組化安全架構與代幣激勵模型</h1>
+<!-- Subtitle / Hook (純段落文字) -->
+<p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+              Web3 與 AI 代理模組化安全層、x402 機器微支付、AVS
+              共識與極端通縮代幣經濟學
+            </p>
+<!-- Above-the-Fold 50字統攝性解答 (純段落文字) -->
+<p class="above-fold-summary text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+<strong class="dsr-label">[Direct Answer]</strong>
+              解構 GoPlus Security (GPS) 成為「Web3 領域
+              CrowdStrike」之平台潛力、5 億枚安全基金三重收益質押、434
+              萬做市商回購銷毀與二級市場估值對標。
+            </p>
+</header>
+<!-- ── Mobile TOC Target (行動版) ── -->
+<div class="lg:hidden mb-6" data-managed="auto" id="toc-mobile-target">
+    <!-- static_toc_start -->
+    <nav class="static-toc-container" aria-label="Table of Contents">
+      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 核心框架 核心事件的 5W1H 認知架構</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#執行摘要" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1模組化安全定位：GoPlus 如何在 Web3 與 AI 交匯處構建數據護城河？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#宏觀經濟與行業賽道-網路安全估值的重新定價" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2宏觀經濟與行業賽道行業賽道重新定價：AI 代理崛起如何推動網路安全總潛在市場 (TAM) 擴張？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#web3-與-ai-代理安全的歷史性交匯" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Web3 與 AI 代理安全的歷史性交匯：為何事前運行時攔截成為剛需？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#公司歷史沿革與創始團隊背景" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">公司沿革與團隊基因：螞蟻集團高併發架構與連續創業經驗如何融合？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#資本結構與頂級戰略投資者背書" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3資本結構與戰略背書：Binance Labs 與 OKX Ventures 如何賦予不可複製的生態壁壘？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#核心技術架構與產品矩陣深度解析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4核心技術矩陣解構：AVS、x402 機器支付與 DeepScan 如何構建全生命週期防護？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#goplus-intelligence-與-deepscan-去中心化安全情報大腦" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Intelligence 與 DeepScan：如何以 9.9 美元顛覆傳統數萬美元人工審計市場？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#agentguard-與-x402-機器微支付協議-重塑-ai-代理經濟" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">x402 機器支付協議：為何 HTTP 402 微支付是 AI 代理經濟的底層標準？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#去中心化安全架構-avs-與-eigenlayer-的深度融合" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">EigenLayer AVS 融合：GoPlus 如何租用以太坊千億美元共享安全共識？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#safetoken-protocol-與-secwarex-終端模組" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">SafeToken 與 SecWareX：如何從資產發行源頭到錢包終端實現閉環保護？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#代幣經濟學-tokenomics-與極端通縮價值捕獲" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">5代幣經濟學解構：30% 協議營收剛性回購銷毀如何驅動極端通縮飛輪？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#初始代幣分配矩陣" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">初始代幣分配矩陣：60.67% 生態份額如何激勵社區與節點成長？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#解鎖時間表與-magna-智能合約託管" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Magna 第三方智能合約託管：如何以程式碼杜絕內部違規拋售疑慮？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#價值驅動-value-sinks-與極端通縮機制" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">價值捕獲三大引擎：安全 Gas 費、節點質押與營收銷毀如何協同？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#危機管理-流動性修復與收益機制重塑" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">6危機管理與流動性修復：434 萬做市商回購與 5 億安全基金如何重塑信心？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#回購銷毀與用戶補償的雙管齊下" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">回購與補償實施成效：超過 1.05 億枚 GPS 永久銷毀的市場影響</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#5-億枚-gps-安全基金-重塑-web3-價值循環" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5 億枚 GPS 安全基金：「一魚三吃」質押收益結構如何鎖定二級籌碼？</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#商業模式估值對標與競爭格局分析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">7商業模式估值對標：34 倍 P/S 倍數相較 CrowdStrike 是否具備前瞻溢價？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#估值對標分析-valuation-multiples" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">橫向估值矩陣對比：CrowdStrike、SentinelOne、Forta 與 GoPlus</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#二級市場數據與定價風險深度剖析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">8二級市場數據與定價風險：如何應對每月 1.09 億枚線性解鎖的懸空拋壓 (Overhang Risk)？</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#當前市場表現與籌碼面分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">籌碼與技術面解構：RSI 24.5 超賣反彈與基本面利好共振</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#結構性解鎖的懸空風險-overhang-risk" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">每月 15/16 日解鎖考驗：歷史回測 13.6% 回撤與買盤承接拉鋸戰</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#宏觀連動與競爭壁壘風險" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">宏觀流動性與競爭風險：比特幣市占率高企下的防禦策略</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#投資結論與戰略建議" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">9華爾街投資結論與戰略建議：機構級網格建倉節奏與長期價值鎖定路徑</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#article-analysis-header" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章分析</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#article-inference-logic" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">01 文章推論邏輯分析</a></li>
+        <li style="margin-bottom: 0.2rem;"><a href="#商業模式與基礎設施價值捕獲解析" style="display: block; padding: 0.2rem 0; font-size: 0.75rem; color: #94a3b8; text-decoration: none; padding-left: 2rem;">商業模式與基礎設施價值捕獲解析</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#logic-blindspots" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">02 敘事邊界與關鍵變數補充</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#參考資料" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">參考資料 (References)</a></li>
+      </ul>
+    </nav>
+    <!-- static_toc_end -->
+</div>
+<!-- ── Article Body ── -->
+<article class="article-body article-body-content bg-transparent border-0 p-0 shadow-none prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+<div data-managed="auto" id="main-content-area">
+<!-- 
+                        📌 D-S-R PROTOCOL INDICATOR (寫作引導)
+                        1. Direct Answer (直接斷言): 段落首句點破核心問題與結論。 (必須包裹在 <strong class="dsr-label">[Direct Answer]</strong>)
+                        2. Support Details (支持細節): 包含數據、指標 (TPS, TVL, Q-ID) 或技術標準。 (必須包裹在 <strong class="dsr-label">[Support Details]</strong> )
+                        3. Reinforcement (語義強化): 將技術細節轉化為投資價值或風險判斷。 (不需標籤，直接寫入段落)
+                        
+                        ⚠️ 佈局注意事項 (Layout Standards):
+                        - 隱藏標籤: 務必使用 class="dsr-label" 以確保前端不直接顯示。
+                        - 段落間距: 所有 <p> 標籤必須顯式添加 class="mb-8" (或 mb-6) 以維持呼吸感。
+                        - 清單化原則: 當 Support Details 超過 3 個並列項時，強制使用 <ul> 以替代長段落。
+                    -->
+<!-- ── 5W1H 核心架構與 SEO 提問解析 (首屏前置佈局) ── -->
+<!-- CHAPTER 0 (TOC Hierarchy Anchor) -->
+<h2 class="not-prose indicator-h2" id="chapter-0">
+<span class="number-circle">0</span>
+<span class="title-main">核心框架</span>
+<span class="title-sub">核心事件的 5W1H 認知架構</span>
+</h2>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 本文透過 5W1H
+                  框架全方位拆解 GoPlus Security (GPS) 的模組化安全層、Coinbase
+                  x402 機器微支付協議、EigenLayer AVS 去中心化驗證與 30%
+                  營收回購銷毀飛輪。
+                </p>
+</div>
+<div class="not-prose my-12" id="content-chapter-0">
+<div class="relative p-1 bg-gradient-to-br from-amber-500/20 via-slate-200/50 to-orange-500/20 dark:from-amber-500/30 dark:via-slate-800 dark:to-orange-500/30 rounded-3xl overflow-hidden shadow-2xl border border-white/20 dark:border-slate-700/50 backdrop-blur-xl">
+<div class="relative bg-white/80 dark:bg-slate-900/90 rounded-[1.4rem] p-6 md:p-10">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-slate-100 dark:border-slate-800 pb-8">
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold tracking-widest uppercase mb-4">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+</span>
+                          Web3 &amp; AI Security Framework
+                        </div>
+<div class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white leading-tight font-noto" data-managed="append-only" id="section-5w1h-core">
+                          GoPlus Security (GPS) 5W1H 深度邏輯總結
+                        </div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 font-mono text-sm">
+                        Case Study: GoPlus Security (GPS)
+                      </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- WHO -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Who / 參與主體</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+                          由連續創業者 Mike 與前螞蟻集團架構師 Allen Zhang
+                          創立，獲 Binance Labs、OKX Ventures、Redpoint China
+                          等頂級資本 1,500 萬美元注資；服務 30+ 條公鏈、2,840
+                          萬用戶與自主 AI 代理。
+                        </p>
+</div>
+<!-- WHAT -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500 text-white shadow-lg shadow-orange-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">What / 核心事件</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong> GPS
+                          代幣近期暴漲 48.25% 觸及 $0.01612（FDV
+                          $1.61億）；透過日均 3,000 萬次 API 調用、Coinbase x402
+                          機器微支付（$0.001 成本、2秒結算）與 30%
+                          營收回購銷毀機制，構建「Web3 與 AI 領域
+                          CrowdStrike」。
+                        </p>
+</div>
+<!-- WHEN -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-yellow-500 text-white shadow-lg shadow-yellow-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">When / 關鍵時點</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+                          2025 年 1 月完成 TGE，6 個月 Cliff 後進入 2
+                          年月度線性歸屬；3 月化解做市商波動並累計銷毀 &gt;1.05
+                          億枚代幣；7 月推出 5 億枚安全基金；每月 15/16 日面臨約
+                          1.09 億枚代幣解鎖窗口。
+                        </p>
+</div>
+<!-- WHERE -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500 text-white shadow-lg shadow-red-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Where / 影響範圍</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+                          原生部署於 Base 並跨鏈支援 Ethereum、BNB Chain 等 30+
+                          條網路；深度整合 Etherscan、Robinhood
+                          Chain、DexScreener，並藉由 EigenLayer AVS
+                          架構租用以太坊千億安全共識。
+                        </p>
+</div>
+<!-- WHY -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-500 text-white shadow-lg shadow-zinc-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Why / 驅動動機</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+                          靜態合約審計無法防範 AI
+                          代理時代的高頻運行時（Runtime）惡意攻擊；傳統支付通道手續費扼殺微額
+                          API 調用，x402
+                          協議將微支付與身分驗證解綁創造了原生商業閉環。
+                        </p>
+</div>
+<!-- HOW -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-500 text-white shadow-lg shadow-blue-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">H</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">How / 執行建議</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+                          避免在短線暴漲 48% 高點追價；利用每月 15/16
+                          日解鎖造成的市場恐慌回撤（Overhang
+                          Dips）分批網格建倉，並存入 5
+                          億安全基金基礎質押池賺取三重收益以對沖通膨稀釋。
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<h2 class="not-prose indicator-h2 my-12" id="執行摘要">
+<span class="number-circle">1</span><span class="title-main">模組化安全定位：GoPlus 如何在 Web3 與 AI
+                  交匯處構建數據護城河？</span>
+</h2>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> GoPlus Security (GPS)
+                  將自身定位為「Web3 與 AI 領域的 CrowdStrike」，透過涵蓋 30
+                  多條區塊鏈、日均處理逾 3,000
+                  萬次安全檢測請求的龐大基礎設施，守護超過 579.9
+                  億美元資產，將安全防護由傳統靜態審計前置為運行時動態攔截。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在當前 Web3
+                與人工智慧（AI）深度融合的歷史性交匯點，去中心化安全基礎設施正經歷從「靜態代碼審計」向「動態運行時保護（Runtime
+                Protection）」的重大典範轉移。GoPlus
+                Security（代幣代碼：GPS）作為 Web3 與 AI 代理（AI
+                Agent）領域的模組化安全層，近期在二級資本市場展現出強勁的爆發力。根據
+                CoinGecko 與 CoinMarketCap 的最新行情數據，GPS
+                代幣近期強勢上漲約 48.25%，價格觸及 $0.01612
+                關卡。這一價格走勢不僅反映了市場資金的短期追捧，更深層次地揭示了資本市場對其基本面擴張、新興產品矩陣落地以及極端通縮代幣經濟學的高度認可。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                本投資研究報告旨在透過華爾街機構分析視角，全面剖析 GoPlus
+                Security
+                的宏觀行業定位、底層技術架構、商業變現模式、資本結構演進與代幣經濟學（Tokenomics）。深入研究指出，GoPlus
+                正試圖將自身打造為「Web3 與 AI 領域的
+                CrowdStrike」，透過建立涵蓋 30 多條區塊鏈、日均處理超過 3,000
+                萬次安全檢測請求的龐大基礎設施，構建了難以逾越的數據護城河。同時，透過引入
+                EigenLayer 的主動驗證服務（AVS）架構與極具顛覆性的 x402
+                機器微支付協議，GoPlus
+                成功將傳統的安全軟體服務轉化為具備強大網路效應的去中心化協議。儘管該資產在二級市場面臨早期投資者與團隊代幣解鎖帶來的結構性懸空風險（Overhang
+                Risk），但其高達 30% 協議收入的銷毀承諾、434
+                萬美元的做市商回購銷毀計畫，以及 5 億枚 GPS
+                安全基金的巨額質押沉澱，共同為其長期價值捕獲與價格支撐提供了堅實的基礎。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="宏觀經濟與行業賽道-網路安全估值的重新定價">
+<span class="number-circle">2</span><span class="title-main">宏觀經濟與行業賽道</span><span class="title-sub">行業賽道重新定價：AI 代理崛起如何推動網路安全總潛在市場 (TAM)
+                  擴張？</span>
+</h2>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 自主 AI
+                  代理代表用戶執行鏈上金融交易使得傳統事後審計失效，驅動 Web3
+                  安全支出向執行前動態情報遷移，預計全球網路安全支出將在 2030
+                  年達到 3,000 億美元規模。
+                </p>
+</div>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="web3-與-ai-代理安全的歷史性交匯">
+                Web3 與 AI 代理安全的歷史性交匯：為何事前運行時攔截成為剛需？
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong>
+                  威脅邊界已由合約漏洞擴展至惡意簽名、流動性抽離與提示詞注入，GoPlus
+                  提供跨 Web3 與 AI 環境的實時情報攔截。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong> 傳統的 Web3
+                安全市場長期被 CertiK、SlowMist
+                等提供靜態合約審計服務的公司所主導。然而，隨著鏈上交互的指數級增長與自主
+                AI 代理（Autonomous AI
+                Agents）的強勢崛起，安全威脅的邊界已發生劇烈變化。當前的攻擊載體已從單一的智能合約代碼漏洞，全面擴展至運行時（Runtime）的惡意簽名、釣魚網站攔截、憑證洩漏、動態流動性抽離（Rug
+                Pull）以及針對 AI 語言模型的提示詞注入（Prompt Injection）。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                AI
+                代理在未來的數位經濟中正扮演主動參與者的角色，它們具備代表終端使用者瀏覽網頁、調用外部
+                API
+                工具、部署智能合約甚至直接觸發大額金融交易的能力。這種「機器速度」的自動化執行能力，使得傳統的「事後攔截與分析」機制完全失效。GoPlus
+                Security
+                精準卡位此一藍海市場，將安全防護的節點前置於「執行前（Before
+                Execution）」，提供跨越 Web3 與 AI
+                代理雙重環境的實時風險情報與策略執行能力。這種從被動防禦到主動攔截的演進，正是驅動該賽道整體總潛在市場（TAM）快速擴張的核心動力。據產業預測，全球網路安全支出正以驚人速度增長，CrowdStrike
+                等巨頭預估其可尋址市場將在 2030 年達到 3,000 億美元的規模，而
+                Web3 安全作為其中增長最快的分支，正迎來價值重估的黃金窗口。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="公司歷史沿革與創始團隊背景">
+                公司沿革與團隊基因：螞蟻集團高併發架構與連續創業經驗如何融合？
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 創始團隊結合了連續創業者
+                  Mike 的商業洞察、前螞蟻集團架構師 Allen Zhang
+                  的企業級系統設計能力，以及經濟學者 Eskil Xu 的代幣經濟學架構。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                GoPlus Security 成立於 2021
+                年，總部位於新加坡，自創立之初便確立了構建 Web3
+                模組化用戶安全層的宏大願景。該企業的快速崛起與其創始團隊深厚的技術積累與商業敏銳度密不可分。創始人
+                Mike 是一位連續創業者，在此之前曾參與創辦去中心化預測市場 Delphy
+                以及區塊鏈風險分析平台 Yixuan
+                Tech，這些經歷使他深刻認知到去中心化市場對底層安全服務的迫切需求。聯合創始人兼技術長
+                Allen Zhang 則擁有螞蟻集團（Ant
+                Group）解決方案架構師的深厚背景，為 GoPlus
+                帶來了頂尖的企業級高併發系統架構設計能力。另一位聯合創始人 Eskil
+                Xu
+                具備南開大學與瑞典隆德大學的經濟學學術背景，專注於企業戰略與代幣經濟學模型的設計。三人的互補優勢，使得
+                GoPlus 能夠在技術底層、商業擴張與經濟模型上取得完美的平衡。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="資本結構與頂級戰略投資者背書">
+<span class="number-circle">3</span><span class="title-main">資本結構與戰略背書：Binance Labs 與 OKX Ventures
+                  如何賦予不可複製的生態壁壘？</span>
+</h2>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 累計獲 1,500
+                  萬美元融資，頂級交易所與公鏈資本的加持促使 GoPlus 深度整合至
+                  Etherscan、Robinhood Chain 與 DexScreener 底層。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong>
+                在流動性與資源為王的加密資產市場，早期資本結構往往決定了一個專案的資源稟賦與生態擴張速度。GoPlus
+                的融資歷程展現了極強的產業資源整合能力，其背後的股東陣容堪稱
+                Web3 安全與基礎設施領域的「夢幻隊」。
+              </p>
+<div class="responsive-table-wrapper my-8 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<table class="not-prose w-full text-sm text-left text-slate-700 dark:text-slate-200">
+<thead>
+<tr>
+<th>融資輪次</th>
+<th>時間節點</th>
+<th>融資金額</th>
+<th>核心領投與參投機構</th>
+<th>戰略意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>天使輪 (Angel)</td>
+<td>2021年8月</td>
+<td>未披露</td>
+<td>SevenX Ventures, Mask Network, Quantstamp CEO等</td>
+<td>完成早期產品驗證與市場啟動</td>
+</tr>
+<tr>
+<td>私募輪 (Private)</td>
+<td>2022年4月</td>
+<td>數百萬美元</td>
+<td>Crypto.com, KuCoin, Huobi Incubator, Avalanche等</td>
+<td>獲得多條頭部公鏈與交易所的生態接入</td>
+</tr>
+<tr>
+<td>戰略融資 (Private II)</td>
+<td>2022年12月</td>
+<td>未披露</td>
+<td>Binance Labs 領投</td>
+<td>奠定幣安生態深度合作，為後續上幣鋪路</td>
+</tr>
+<tr>
+<td>私募輪 (Private II+)</td>
+<td>2024年3月</td>
+<td>400萬美元</td>
+<td>
+                        Binance Labs, Redpoint China, OKX Ventures, HashKey
+                      </td>
+<td>擴展至 AI 安全層，總融資額達到 1,500萬美元</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                這套由頂級公鏈、一線交易所投資部與傳統矽谷美元基金（如紅點中國）組成的混合資本結構，為
+                GoPlus 帶來了不可複製的戰略綜效。Binance Labs 與 OKX Ventures
+                的雙重加持，不僅為 GPS 代幣順利進入幣安 HODLer Airdrops 計畫與
+                OKX 深度整合提供了背書，更促使 GoPlus
+                得以無縫接入各主要公鏈與開發者工具生態，例如成為 Etherscan
+                的首發安全檢測合作夥伴、為 Robinhood Chain
+                提供原生風險檢測、以及被 DexScreener
+                全面整合為代幣安全指標底層。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="核心技術架構與產品矩陣深度解析">
+<span class="number-circle">4</span><span class="title-main">核心技術矩陣解構：AVS、x402 機器支付與 DeepScan
+                  如何構建全生命週期防護？</span>
+</h2>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 透過 DeepScan 10分鐘 AI
+                  審計 ($9.9/次)、AgentGuard 策略攔截、Coinbase x402
+                  機器微支付協議與 EigenLayer AVS
+                  去中心化驗證，打造全維度安全護城河。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong> GoPlus
+                的估值溢價源於其建立的極具擴展性的模組化安全層。該架構打破了傳統安全軟體單點防禦的侷限，構建了一個涵蓋從底層數據節點、合約審計、流動性管理到終端用戶應用的全生命週期防護網。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="goplus-intelligence-與-deepscan-去中心化安全情報大腦">
+                Intelligence 與 DeepScan：如何以 9.9
+                美元顛覆傳統數萬美元人工審計市場？
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> DeepScan 採用 LLM
+                  與圖計算在 10 分鐘內完成語法與金融語義掃描，大幅降低長尾 Web3
+                  專案的安全門檻。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                GoPlus Intelligence 是整個網路的風險分析引擎，為 AI
+                代理、錢包、去中心化應用（dApp）與公鏈提供實時的威脅情報。該引擎每日處理高達
+                3,000 萬至 3,940 萬次的 API 請求，全面覆蓋以太坊、BNB
+                Chain、Solana 等 30 多條主流區塊鏈，保護了超過 2,840
+                萬名用戶，並成功偵測超過 2,870 萬種代幣，守護的資產價值高達
+                579.9 億美元。其功能模組涵蓋了釣魚網站攔截、惡意地址追蹤、NFT
+                來源分析以及複雜的 ABI 簽名解析。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在此強大的情報庫基礎上，GoPlus 推出了
+                DeepScan——一款面向開發者與專業投資者的 AI
+                驅動智能合約審計工具。有別於傳統審計公司動輒數萬美元且耗時數週的人工審計流程，DeepScan
+                採用大語言模型（LLM）、圖計算分析與金融語義建模，能夠在短短 10
+                分鐘內對代碼語法、業務邏輯漏洞、權限控制缺陷以及潛在的貔貅盤（Honeypot）風險進行深度掃描，並生成結構化報告。其定價僅為每次
+                9.9 美元，這種高度自動化、極低摩擦成本的 SaaS
+                模式，不僅顛覆了傳統審計的定價邏輯，更極大地降低了 Web3
+                長尾專案的安全合規門檻。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="agentguard-與-x402-機器微支付協議-重塑-ai-代理經濟">
+                x402 機器支付協議：為何 HTTP 402 微支付是 AI
+                代理經濟的底層標準？
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 復刻 HTTP 402 狀態碼，透過
+                  USDC 實現單次調用成本 $0.001、結算時間 2 秒的無 Gas
+                  機器微支付，徹底解決 Web2 高額手續費摩擦。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                針對 AI 代理領域獨特的安全需求，GoPlus 推出了
+                AgentGuard。該產品能夠在 AI 代理執行高風險的 Shell
+                命令、訪問敏感文件或調用外部 API
+                前，進行實時的策略攔截與供應鏈掃描，有效防範提示詞注入與憑證盜用。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                然而，AgentGuard 生態中最具革命性的突破，在於其深度整合了由
+                Coinbase 開發的 <strong>x402 機器支付協議</strong>25。在傳統的
+                Web2 架構中，API 的商業化付費依賴 Stripe 或 PayPal
+                等法幣清算通道。這些通道高昂的基礎手續費（通常為 0.30 美元加上
+                2.9% 的抽成）完全扼殺了單次微小額度（如 0.01
+                美元甚至千分之一美分）的 API
+                調用經濟學。同時，傳統支付要求繁瑣的身分註冊與綁卡流程，這對需要高頻自動化交互的
+                AI 代理而言是不可逾越的摩擦。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                x402 協議巧妙地復刻了網際網路早期設計中被擱置的 HTTP
+                402（Payment Required）狀態碼。當 AI 代理請求 GoPlus 的安全 API
+                時，伺服器會返回 402
+                狀態碼及定價資訊；代理隨後在本地簽署一筆使用 USDC 穩定幣的無 Gas
+                交易，並將其附加在 HTTP 請求標頭（Header）中重試，最終由
+                Facilitator（協調者）在 Base 或 Polygon 等 Layer 2
+                網路上完成鏈上結算。這一過程的結算時間僅需約 2
+                秒，且網路成本低至 0.001
+                美元。透過將「身分驗證與微支付解綁」，x402 協議不僅讓 GoPlus
+                成功實現了安全 API
+                服務的按次付費（Pay-per-call）商業化變現，更為整個去中心化 AI
+                代理經濟奠定了至關重要的底層支付標準。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="去中心化安全架構-avs-與-eigenlayer-的深度融合">
+                EigenLayer AVS 融合：GoPlus 如何租用以太坊千億美元共享安全共識？
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 藉由 Restaking
+                  機制租用以太坊共識，節點質押資產執行情報驗證並受嚴厲 Slashing
+                  約束，實現去中心化與抗審查性。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                GoPlus
+                的宏大願景並非僅僅成為一家中心化的安全數據供應商，而是致力於透過整合
+                EigenLayer 的主動驗證服務（Actively Validated Services,
+                AVS），實現向去中心化安全網路的範式轉移。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在傳統的區塊鏈網路中，建立一個去中心化的計算與驗證網路需要發行全新的原生代幣，並耗費巨資吸引大量節點參與質押以維護網路共識，這不僅成本極高且容易遭受女巫攻擊（Sybil
+                Attack）。透過 AVS 架構，GoPlus
+                能夠直接「租用」以太坊千億美元級別的共享安全共識（Restaking
+                機制）。在該體系下，節點運營商（Operators）藉由質押以太坊或
+                EIGEN 代幣來執行 GoPlus
+                的安全數據驗證、惡意地址廣播與實時風險計算任務。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                根據 EigenLayer 創始人 Sreeram Kannan 對 AVS
+                定義的最新演進，這類網路應被更精確地描述為「自治且可驗證的服務（Autonomous
+                Verifiable Services）」。這意味著 GoPlus
+                網路的運行將完全無需許可，任何實體都可以自主參與質押並提供安全服務；同時，網路具備高度的可驗證性，一旦節點發布虛假的威脅情報或進行惡意欺詐，其質押資產將面臨嚴厲的沒收懲罰（Slashing）。這種架構極大地增強了
+                GoPlus 威脅情報的去中心化程度與抗審查能力。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="safetoken-protocol-與-secwarex-終端模組">
+                SafeToken 與
+                SecWareX：如何從資產發行源頭到錢包終端實現閉環保護？
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> SafeToken 提供 SlowMist
+                  審計的防 Rug 合約模板，SecWareX
+                  則在終端攔截高風險授權，曾成功在私鑰洩漏事件中保護百萬美元資產。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在資產發行的源頭端，GoPlus 推出了 SafeToken Protocol，提供經過
+                SlowMist
+                嚴格審計的開源安全代幣合約模板與專業的流動性鎖定工具（Liquidity
+                Locker）。這賦予了專案方自定義鎖倉時間與靈活費率模型的能力，有效防止開發者在吸引資金後突然撤除流動性（Rug
+                Pull），從源頭淨化了 DeFi 生態。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在終端防護方面，GoPlus 打造了
+                SecWareX（用戶安全模組），並推出了涵蓋 GoPlus App
+                與瀏覽器擴展程式的個人安全中心。該模組深度整合至各大主流錢包與
+                dApp
+                中，在使用者簽署高風險交易或授權前進行實時預警與阻斷。其防護效能已在真實世界中得到驗證——在
+                2025 年 2
+                月的某次中心化交易所（CEX）私鑰大規模洩漏事件中，GoPlus
+                成功攔截了後續的鏈上資金轉移，保護了超過 100
+                萬美元的用戶資產免受損失。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="代幣經濟學-tokenomics-與極端通縮價值捕獲">
+<span class="number-circle">5</span><span class="title-main">代幣經濟學解構：30%
+                  協議營收剛性回購銷毀如何驅動極端通縮飛輪？</span>
+</h2>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> GPS 總量固定 100
+                  億枚，透過安全 Gas 費支付、AVS 節點質押以及高達 30%
+                  協議營收在公開市場的回購銷毀，形成強大價值捕獲閉環。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong> GPS
+                代幣是協調 GoPlus
+                網路中節點營運商、數據提供者、開發者與終端用戶利益的核心樞紐。其總供應量固定為
+                10,000,000,000 枚（100 億枚），原生部署於 Base
+                網路，並跨鏈支援以太坊與 BNB
+                Chain。其分配機制與解鎖時間表經過精心設計，旨在平衡早期貢獻者的流動性需求與生態系統的長遠健康。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="初始代幣分配矩陣">
+                初始代幣分配矩陣：60.67% 生態份額如何激勵社區與節點成長？
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 生態與社區佔比 60.67%（含
+                  10% 空投及 3% 幣安 HODLer 計畫），團隊與早期投資人佔比
+                  39.33%。
+                </p>
+</div>
+<div class="responsive-table-wrapper my-8 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<table class="not-prose w-full text-sm text-left text-slate-700 dark:text-slate-200">
+<thead>
+<tr>
+<th>分配類別</th>
+<th>佔比 (%)</th>
+<th>具體用途與戰略目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>生態系統與社區增長</strong></td>
+<td><strong>60.67%</strong></td>
+<td>
+<strong>推動去中心化網路擴張與流動性建設</strong>
+                        \[cite: 1, 16\]
+                      </td>
+</tr>
+<tr>
+<td>- 社區與開發者</td>
+<td>24.67%</td>
+<td>
+                        用於激勵安全服務計算節點、數據提供者與社區開發者。
+                      </td>
+</tr>
+<tr>
+<td>- 生態增長</td>
+<td>10.00%</td>
+<td>擴大網路採用率，整合更多公鏈與合作夥伴。</td>
+</tr>
+<tr>
+<td>- 空投 (Airdrops)</td>
+<td>10.00%</td>
+<td>
+                        獎勵早期忠實用戶，其中 3% 用於幣安 HODLer 空投計畫。
+                      </td>
+</tr>
+<tr>
+<td>- 初始流動性</td>
+<td>7.00%</td>
+<td>部署於各大 CEX 與 DEX，確保交易深度與價格發現。</td>
+</tr>
+<tr>
+<td>- 行銷與市場成長</td>
+<td>6.00%</td>
+<td>用於全球市場拓展與品牌建設。</td>
+</tr>
+<tr>
+<td>- 戰略顧問</td>
+<td>3.00%</td>
+<td>獎勵為專案提供戰略指導的行業專家。</td>
+</tr>
+<tr>
+<td><strong>初始貢獻者與投資人</strong></td>
+<td><strong>39.33%</strong></td>
+<td>
+<strong>綁定核心團隊與戰略資本的長期利益</strong>
+                        \[cite: 1, 16\]
+                      </td>
+</tr>
+<tr>
+<td>- 核心團隊</td>
+<td>20.00%</td>
+<td>自 2021 年起參與建設的創始團隊與核心工程師。</td>
+</tr>
+<tr>
+<td>- 早期支持者 (私募)</td>
+<td>19.33%</td>
+<td>多輪私募融資的機構投資者與戰略夥伴。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="解鎖時間表與-magna-智能合約託管">
+                Magna 第三方智能合約託管：如何以程式碼杜絕內部違規拋售疑慮？
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 核心團隊與機構實施 6 個月
+                  Cliff 及 2 年線性歸屬，由 Trail of Bits 審計的 Magna
+                  合約鏈上強制執行。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                為避免代幣生成事件（TGE）後出現巨大的拋售壓力，GoPlus
+                針對團隊與早期投資者的份額設定了極為嚴格的解鎖約束：在 2025 年 1
+                月 16 日的 TGE 後，實施為期 6
+                個月的絕對鎖定期（Cliff），隨後進入長達 2
+                年的按月線性歸屬（Linear
+                Vesting）。這意味著早期貢獻者需要歷時數年才能獲得完整份額，彰顯了對專案長遠發展的承諾。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                為了徹底消除社區對內部人員可能違規拋售或挪用資金的疑慮，GoPlus
+                引入了業界領先的數位資產管理與託管平台
+                <strong>Magna</strong> 進行第三方智慧合約託管。Magna 提供經
+                Trail of Bits、Zellic 和 OtterSec
+                等頂級安全機構審計的代幣歸屬合約，確保每一次代幣解鎖、歸屬與空投分發都由程式碼強制執行，過程不可篡改且全網鏈上公開可見。這種軍規級別的透明度設計，在
+                Web3 領域建立了極高的信任標準。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="價值驅動-value-sinks-與極端通縮機制">
+                價值捕獲三大引擎：安全 Gas 費、節點質押與營收銷毀如何協同？
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 30%
+                  營收剛性回購銷毀不僅產生供應衝擊，更發揮信號效應，向市場傳遞充沛現金流與資產低估信號。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                GPS 的內在價值並非僅依賴於虛無縹緲的治理投票權，而是深深嵌入了
+                GoPlus 的商業變現閉環中：
+              </p>
+<blockquote>
+<p>
+                  1. <strong>安全 Gas 費支付</strong>：終端用戶、B
+                  端企業與專案方在調用 AgentGuard、DeepScan 審計或高級安全 API
+                  時，必須使用 GPS 進行服務費支付，這創造了持續的代幣買盤需求。
+                </p>
+</blockquote>
+<blockquote>
+<p>
+                  2.
+                  <strong>質押與節點營運 (Staking)</strong>：生態參與者必須質押大量 GPS
+                  代幣，才能獲得成為網路安全數據提供商或 AVS
+                  計算節點的資格，從而賺取網路手續費分成。這將大量流通中的代幣轉化為鎖倉狀態。
+                </p>
+</blockquote>
+<blockquote>
+<p>
+                  3.
+                  <strong>協議收入回購與銷毀 (Buyback &amp; Burn)</strong>：這是
+                  GPS 代幣經濟學中最為核心的通縮引擎。GoPlus 承諾將高達
+                  <strong>30% 的協議營收</strong>持續用於在公開市場回購並永久銷毀 GPS
+                  代幣。根據金融實證研究分析，代幣銷毀機制不僅透過「供應衝擊（Supply
+                  Shock）」直接提升剩餘代幣的稀缺性，更發揮了強大的「信號效應（Signaling
+                  Hypothesis）」——向市場傳遞專案方擁有充沛現金流且認為資產被嚴重低估的強烈信心。
+                </p>
+</blockquote>
+<h2 class="not-prose indicator-h2 my-12" id="危機管理-流動性修復與收益機制重塑">
+<span class="number-circle">6</span><span class="title-main">危機管理與流動性修復：434 萬做市商回購與 5
+                  億安全基金如何重塑信心？</span>
+</h2>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong>
+                  針對幣安上線初期做市商操作瑕疵，團隊果斷凍結並回購銷毀 434 萬
+                  USDT（累計銷毀 &gt;1.05 億枚 GPS），並撥款 200 萬 USDC
+                  補償零售用戶。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong> 在 2025 年
+                3 月初 GPS
+                登陸幣安交易所（Binance）期間，由於舊有做市商帳戶的操作瑕疵，導致代幣價格出現異常劇烈的波動，專案一度面臨嚴峻的信任危機。然而，創始團隊的迅速應對，不僅成功化解了危機，更將其轉化為一次徹底強化代幣通縮預期的經典案例。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="回購銷毀與用戶補償的雙管齊下">
+                回購與補償實施成效：超過 1.05 億枚 GPS 永久銷毀的市場影響
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong>
+                  連續三批次執行回購銷毀顯著提振了市場信心，並為後續長期鎖倉奠定了流動性基礎。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                針對市場波動，創始人 Mike
+                公開致歉，並迅速推出了一套堪稱業界標竿的補救與流動性修復計畫：
+              </p>
+<blockquote>
+<p>
+                  1. <strong>434 萬美元的做市商資金回購銷毀</strong>：GoPlus
+                  主動凍結了留存於幣安做市商帳戶中的 434 萬
+                  USDT。專案方承諾在隨後的 90 天內，透過 GPS/USDT
+                  交易對以高頻小額的限價單形式，在二級市場持續買入
+                  GPS，以穩定盤面並注入流動性。更重要的是，所有回購的代幣均被打入鏈上黑洞地址進行永久銷毀。截至
+                  2025 年 4 月初，該計畫已完成三批次執行，累計銷毀超過 1.05 億枚
+                  GPS 代幣，極大地提振了市場信心。
+                </p>
+</blockquote>
+<blockquote>
+<p>
+                  2.
+                  <strong>200 萬美元的直接用戶補償</strong>：針對在異常波動期間（3 月 4 日至 5
+                  日）於幣安現貨市場產生淨買入虧損的零售用戶，GoPlus 撥款 200
+                  萬美元，以 USDC
+                  穩定幣的形式直接空投至受損用戶的帳戶中，迅速平息了社群的不滿情緒。
+                </p>
+</blockquote>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="5-億枚-gps-安全基金-重塑-web3-價值循環">
+                5 億枚 GPS 安全基金：「一魚三吃」質押收益結構如何鎖定二級籌碼？
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 4 億枚獎池提供基礎
+                  APY、生態空投與銷毀增值三重回報，1
+                  億枚懸賞池激發白帽社群威脅情報貢獻。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                為了將短期的流動性修復轉化為長期的生態鎖倉，GoPlus 在 2025 年 7
+                月宣布成立規模達 5 億枚 GPS（當時估值約 1,000
+                萬美元）的安全基金，首創「安全市場化」定價模型，徹底將安全服務從使用者的「成本中心」轉變為「價值生成器」。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                該基金的分配機制精準針對了不同生態參與者的痛點：
+              </p>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span>
+<div>
+<strong>4 億枚基礎質押獎池 (Base Rewards Pool)</strong>：用戶透過質押 GPS
+                    代幣，不僅可獲得高額的基礎年化收益率（APY），還能獲得生態合作夥伴的空投獎勵（安全股息），並疊加協議
+                    30%
+                    營收回購銷毀帶來的通縮增值，形成「一魚三吃」的三重收益結構。這種設計有效吸收了二級市場的大量流動性籌碼。
+                  </div>
+</li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span>
+<div>
+<strong>1 億枚安全懸賞池 (Bounty Pool)</strong>：針對白帽駭客與社群安全從業者，只要提交有效的威脅情報或惡意地址風險報告，單次即可獲得最高
+                    10,000 枚 GPS 的懸賞。這激發了廣泛的社群參與，進一步夯實了
+                    GoPlus 情報庫的數據深度。
+                  </div>
+</li>
+</ul>
+<h2 class="not-prose indicator-h2 my-12" id="商業模式估值對標與競爭格局分析">
+<span class="number-circle">7</span><span class="title-main">商業模式估值對標：34 倍 P/S 倍數相較 CrowdStrike
+                  是否具備前瞻溢價？</span>
+</h2>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 基於年化 470 萬美元營收與
+                  1.61 億美元 FDV，GPS 的 P/S 倍數約 34x，低於龍頭
+                  CrowdStrike（43.11x），反映市場對其平台級增長潛力的定價溢價。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在評估 GoPlus Security 於二級市場的合理定價區間時，單純對標傳統
+                Web3 協議往往會產生估值偏差。由於其具備高度的 SaaS
+                軟體屬性、高經常性收入（ARR）預期，以及廣泛的 B
+                端基礎設施覆蓋，引入 Web2
+                頂尖網路安全公司的市銷率（Price-to-Sales Ratio, P/S
+                Ratio）作為估值錨點更具參考價值。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="估值對標分析-valuation-multiples">
+                橫向估值矩陣對比：CrowdStrike、SentinelOne、Forta 與 GoPlus
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 結合 SaaS 訂閱與 Web3
+                  代幣微支付模型，GoPlus
+                  在商業變現閉環與日均數據吞吐量上顯著領先去中心化競爭對手。
+                </p>
+</div>
+<div class="responsive-table-wrapper my-8 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<table class="not-prose w-full text-sm text-left text-slate-700 dark:text-slate-200">
+<thead>
+<tr>
+<th>公司/專案名稱</th>
+<th>賽道定位</th>
+<th>市值/完全稀釋估值 (FDV)</th>
+<th>市銷率 (P/S Ratio)</th>
+<th>核心業務驅動邏輯</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CrowdStrike (CRWD)</strong></td>
+<td>Web2 終端節點安全巨頭</td>
+<td>約 2,210 億美元</td>
+<td><strong>43.11x</strong> (極高溢價)</td>
+<td>
+                        具備極強的平台網路效應，壟斷了大型企業級端點防護市場。營收成長雖放緩但利潤率極高。
+                      </td>
+</tr>
+<tr>
+<td><strong>SentinelOne (S)</strong></td>
+<td>Web2 AI 驅動安全平台</td>
+<td>約 65 億美元</td>
+<td><strong>6.81x</strong> (價值窪地)</td>
+<td>
+                        主打 AI
+                        自動化威脅檢測，營收增速極快但尚未實現穩定獲利，估值倍數較受壓抑。
+                      </td>
+</tr>
+<tr>
+<td><strong>Forta (FORT)</strong></td>
+<td>Web3 去中心化威脅監控</td>
+<td>約 1,200 萬美元 FDV</td>
+<td>N/A (收入規模較小)</td>
+<td>
+                        透過機器學習監控智能合約異常行為，但缺乏微支付閉環與主動攔截能力。
+                      </td>
+</tr>
+<tr>
+<td><strong>GoPlus Security (GPS)</strong></td>
+<td>Web3 &amp; AI 模組化安全層</td>
+<td>約 1.61 億美元 FDV</td>
+<td><strong>~34x</strong> (基於年化營收預估)</td>
+<td>
+                        結合 AVS 節點網路與 x402 機器微支付，具備壟斷性的 API
+                        數據與強勁的 Token 通縮飛輪。
+                      </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                *分析指出*：根據市場機構報告推算，GoPlus 截至 2025
+                年底的年化收入規模約為 470 萬美元。在當前 GPS 代幣報價
+                $0.01612、對應 1.61 億美元 FDV 的基礎上，其 P/S 估值倍數約為 34
+                倍。這一倍數雖然遠高於
+                SentinelOne（6.8x）以及傳統軟體行業中位數（約
+                2.0x），但顯著低於行業絕對龍頭 CrowdStrike（43.11x）。
+                這顯示出加密貨幣資本市場已經敏銳地捕捉到 GoPlus 具備成為「Web3
+                領域 CrowdStrike」的平台級潛力。市場願意為其跨鏈 30
+                餘條網路的龐大數據沉澱、x402 協議帶來的 AI Agent
+                藍海增長預期，以及高達 30%
+                利潤的剛性回購銷毀承諾，給予極具前瞻性的估值溢價。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="二級市場數據與定價風險深度剖析">
+<span class="number-circle">8</span><span class="title-main">二級市場數據與定價風險：如何應對每月 1.09
+                  億枚線性解鎖的懸空拋壓 (Overhang Risk)？</span>
+</h2>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 近期暴漲 48.25%
+                  由超賣修復、Robinhood 整合與質押虹吸共振引發，但每月中旬約
+                  1.09 億枚解鎖（歷史平均回撤
+                  13.6%）構成未來兩年不可忽視的結構性拋壓。
+                </p>
+</div>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="當前市場表現與籌碼面分析">
+                籌碼與技術面解構：RSI 24.5 超賣反彈與基本面利好共振
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 24 小時交易量突破 1,100
+                  萬至 2,300 萬美元，安全基金質押池有效鎖定二級流通浮籌。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong> 根據
+                CoinGecko 及 CoinMarketCap 數據，GPS
+                代幣近期迎來了一波強悍的爆發，漲幅高達約 48.25%，價格穩定在
+                $0.01612 附近 \[cite: prompt\]。目前流通供應量約為 55.6 億至
+                58.3 億枚（佔總量 100 億枚的 55%-58%），對應的流通市值（Market
+                Cap）約在 8,900 萬至 9,400 萬美元區間，24 小時交易量突破 1,100
+                萬至 2,300 萬美元，顯示出極高的市場活躍度與充沛的流動性深度。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                從籌碼與技術面解構，此輪 48.25%
+                的劇烈拉升主要由三大催化劑共振引發：
+              </p>
+<blockquote>
+<p>
+                  1.
+                  <strong>極度超賣後的技術性修復</strong>：此前社群監測數據顯示，GPS
+                  的日線相對強弱指數（RSI）一度崩跌至 24.5
+                  的極度超賣區間，這為嗅覺敏銳的量化資金與抄底買盤提供了絕佳的入場視窗。
+                </p>
+</blockquote>
+<blockquote>
+<p>
+                  2. <strong>基本面重大利好落地</strong>：GoPlus 宣布與
+                  Robinhood Chain 等重量級交易網路完成深度整合，並成功擴展其
+                  AgentGuard 產品至核心 AI
+                  代理框架中，這大幅抬升了華爾街對其未來現金流與代幣實用性的樂觀預期。
+                </p>
+</blockquote>
+<blockquote>
+<p>
+                  3. <strong>安全基金質押的「虹吸效應」</strong>：5 億枚 GPS
+                  安全基金的高 APY
+                  質押機制，猶如巨大的海綿，吸收了二級市場上大量的浮動籌碼，使得盤面賣壓顯著減輕，主力資金得以輕易拉抬價格。
+                </p>
+</blockquote>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="結構性解鎖的懸空風險-overhang-risk">
+                每月 15/16 日解鎖考驗：歷史回測 13.6% 回撤與買盤承接拉鋸戰
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> AI
+                  敘事增量買盤與代幣通膨供應之間的拉鋸戰，核心定價權取決於 x402
+                  協議帶來的穩定幣現金流銷毀力道。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                儘管基本面擴張如火如荼，嚴謹的機構投資者仍必須正視 GPS
+                面臨的結構性拋壓——即核心團隊與私募投資者份額的定期解鎖。 自 6
+                個月的懸崖期結束後，GPS 每個月的 15 或 16
+                日都會迎來一波龐大的代幣解鎖，規模高達約 1.09 億枚
+                GPS（約佔當前流通量的 1.9% 至 2.4%，價值逾百萬美元）。
+                CoinMarketCap
+                的歷史回溯測試發出了明確的警示信號：在過去的重大解鎖事件中，GPS
+                平均會在隨後的 7 天內遭遇高達 13.6% 的價格回撤（例如 2026 年 6
+                月解鎖後四天內即大跌
+                9.4%）。這種持續性的「解鎖懸空風險（Overhang
+                Risk）」，將在未來兩年內如影隨形。因此，近期的強勢上漲本質上是一場「AI
+                敘事帶來的增量買盤需求」與「預期供應通膨」之間的劇烈拉河戰。若
+                x402 協議的真實 API
+                調用收入未能如預期般增長，以支撐足夠的回購銷毀力道，每月的解鎖拋壓仍可能階段性地壓垮價格。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="宏觀連動與競爭壁壘風險">
+                宏觀流動性與競爭風險：比特幣市占率高企下的防禦策略
+              </h3>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong> 在比特幣 56%-58%
+                  吸血效應下，需警惕大盤系統性回調風險及傳統審計巨頭業務下沉的競爭。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在宏觀流動性層面，作為基礎設施賽道的中型市值資產（Mid-cap
+                Altcoin），GPS 的定價高度受制於比特幣市占率（BTC
+                Dominance）與整體加密市場的風險偏好週期。在比特幣市占率高達
+                56%-58%
+                的吸血效應下，場外資金流入山寨幣板塊的動能容易受限，這可能導致
+                GPS 在大盤系統性回調時面臨超額拋售。 在競爭格局方面，儘管 GoPlus
+                在動態攔截與模組化整合上遙遙領先，但仍需面對傳統合約審計巨頭（如
+                CertiK）的業務下沉，以及去中心化威脅監控網路（如
+                Forta）的技術追趕。GoPlus 必須確保其基於 AVS
+                的去中心化節點網路穩定運行，並依賴其獨家支援的 x402
+                機器支付生態，才能在 AI 時代維持不可替代的技術代差優勢。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="投資結論與戰略建議">
+<span class="number-circle">9</span><span class="title-main">華爾街投資結論與戰略建議：機構級網格建倉節奏與長期價值鎖定路徑</span>
+</h2>
+<div class="lead-in-questions text-base italic text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+<p>
+<strong class="dsr-label"></strong>
+                  拒絕短線追高；建議利用每月定期解鎖引發的恐慌回撤（Overhang
+                  Dips）分批網格建倉，並 100% 參與 5
+                  億安全基金質押以對沖稀釋風險。
+                </p>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                綜合華爾街的技術分析與基本面解構，GoPlus Security (GPS)
+                無疑是當前 Web3 與 AI
+                安全交匯處，具備最深厚技術壁壘與最清晰商業變現路徑的基礎設施標的之一。其成功將傳統的
+                SaaS 安全業務（威脅 API、代碼審計）與 Web3
+                原生的極端通縮代幣經濟學（AVS 節點質押、x402 機器微支付、30%
+                利潤回購銷毀）進行了極具化學反應的融合。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong>看多邏輯 (Bullish Catalysts)：</strong>
+</p>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span>
+<div>
+<strong>跨維度的 AI 敘事</strong>：AgentGuard 產品與 x402
+                    機器微支付協議的成功落地，使 GoPlus 徹底跨出 DeFi
+                    安全的狹隘範疇，切入增長潛力呈指數級爆發的 AI
+                    代理經濟賽道，打開了全新的估值天花板。
+                  </div>
+</li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span>
+<div>
+<strong>極端通縮的鎖倉飛輪</strong>：30%
+                    協議收入的剛性回購銷毀承諾、已驗證的 434
+                    萬美元做市商回購資金兜底，以及 5
+                    億枚安全基金三重收益質押池的沉澱，共同鑄就了 GPS
+                    強大的價值捕獲引擎與供應衝擊效應。
+                  </div>
+</li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span>
+<div>
+<strong>龍頭資源的絕對護城河</strong>：Binance Labs、OKX
+                    Ventures 等頂級資本的背書，確保了 GoPlus
+                    在交易所端與各大公鏈底層的絕對市占率，其龐大的每日 3,000
+                    萬次調用數據庫形成了競爭對手難以跨越的數據壁壘。
+                  </div>
+</li>
+</ul>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong>看空與風險對沖邏輯 (Bearish/Neutral Catalysts)：</strong>
+</p>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span>
+<div>
+<strong>解鎖陣痛的週期性衝擊</strong>：未來兩年內，每月中旬高達 1.09
+                    億枚代幣的線性解鎖，將持續考驗二級市場買盤的承接韌性。歷史數據表明解鎖前後易產生
+                    10% 以上的深度回撤，要求資金具備較強的抗波動能力。
+                  </div>
+</li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span>
+<div>
+<strong>估值預期已部分兌現</strong>：在近期暴漲近 50% 觸及
+                    $0.01612 後，高達 1.6 億美元的完全稀釋估值（34倍
+                    P/S）已在一定程度上提前透支了市場對其高增長的樂觀預期。
+                  </div>
+</li>
+</ul>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong>機構級投資戰略建議</strong>：
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                針對中長線佈局的機構或高淨值價值投資者，GoPlus
+                已充分展現出成為「去中心化網路時代
+                CrowdStrike」的龍頭潛質。在交易策略上，極不建議在當前短線暴漲
+                48% 的情緒高點盲目追高；相反，投資者應高度關注每月 15/16
+                日定期解鎖前後市場所引發的恐慌性回撤（Overhang
+                Dips），利用此種技術性錯殺進行分批網格建倉。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在取得籌碼後，應積極將 GPS 資產配置於其 5
+                億安全基金的基礎質押獎池中，透過賺取高額的 APY
+                收益與潛在的生態夥伴空投，來對沖代幣總量通膨的稀釋風險。放眼未來兩至三年，GPS
+                估值能否突破十億美元級別，核心定價權將完全取決於其 AI Agent 服務
+                API 在開發者圈的真實採用率，以及 x402 協議帶來的 USDC
+                穩定幣現金流，是否足以持續支撐其 30% 收入銷毀的通縮承諾。
+              </p>
+<!-- Part 2: 文章分析 (Article Analysis) -->
+<div class="not-prose mt-16 border-t-2 border-slate-100 dark:border-slate-700 pt-10">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-8 border-b-2 border-blue-600/40 pl-4 font-noto" data-managed="human" id="article-analysis-header">
+                  文章分析
+                </h2>
+<div class="giveaway-summary mb-10">
+<p class="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+<strong class="dsr-label">[Direct Answer]</strong>
+                    GoPlus Security (GPS) 成功將傳統 Web2 SaaS
+                    軟體安全模型昇華為 Web3
+                    原生的去中心化安全協議。其核心護城河建立在「跨 30+ 鏈、日均
+                    3,000 萬次調用的威脅情報庫」與「Coinbase x402
+                    機器微支付標準」之上，並藉由 30% 營收回購銷毀與 5
+                    億枚安全基金質押池打造極端通縮價值捕獲飛輪。儘管未來面臨每月
+                    1.09 億枚 GPS 的結構性解鎖拋壓（Overhang Risk），但約 34x 的
+                    P/S 估值倍數相較於
+                    CrowdStrike（43.11x）仍展現出前瞻性重估空間。
+                  </p>
+</div>
+<!-- Step 1: 原文推論邏輯分析 (Inference Logic) -->
+<div class="mt-8 mb-10" data-managed="human">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto flex items-center gap-2.5" id="article-inference-logic">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-mono font-bold border border-slate-200 dark:border-slate-700">01</span>
+<span>文章推論邏輯分析</span>
+</h3>
+<div class="p-6 theme-bg-body dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-700/80 space-y-6">
+<div>
+<h4 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-3" id="商業模式與基礎設施價值捕獲解析">
+                        商業模式與基礎設施價值捕獲解析
+                      </h4>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+<strong class="dsr-label">[Direct Answer]</strong>
+                        報告從安全防護邊界的典範轉移（靜態審計 ➔
+                        動態運行時保護）切入，論證 AI
+                        代理時代對高頻機器微支付的剛性需求，進而推導出 GoPlus
+                        作為安全基礎設施在定價權與代幣通縮上的必然優勢。
+                      </p>
+</div>
+<div class="space-y-6 pl-4 border-l-2 border-blue-500/40 dark:border-blue-400/30">
+<div>
+<h5 class="font-bold text-slate-800 dark:text-slate-200 mb-2 text-sm md:text-base">
+                          推論鏈條一：AI 代理經濟引爆微支付安全需求
+                        </h5>
+<ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+<li>
+<strong class="dsr-label">[Support Details]</strong>
+                            傳統 Web2 支付通道基礎手續費高達 $0.30 加上
+                            2.9%，徹底阻斷了單次千分之一美分的 API 微額結算。
+                          </li>
+<li class="mt-1.5 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">
+                            ↳ <strong>[邏輯結論]</strong>：GoPlus 整合 Coinbase
+                            x402 協議，以 $0.001 網路成本和 2
+                            秒鏈上結算實現按次調用計費，奠定了 AI
+                            代理微支付安全的行業通用標準。
+                          </li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-slate-800 dark:text-slate-200 mb-2 text-sm md:text-base">
+                          推論鏈條二：三重通縮機制對沖結構性解鎖拋壓
+                        </h5>
+<ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+<li>
+<strong class="dsr-label">[Support Details]</strong>
+                            GPS 每月中旬面臨約 1.09 億枚代幣（佔流通量
+                            1.9%-2.4%）的線性解鎖，歷史回測顯示解鎖後 7
+                            天平均回撤達 13.6%。
+                          </li>
+<li class="mt-1.5 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">
+                            ↳ <strong>[邏輯結論]</strong>：30%
+                            協議營收回購銷毀承諾、434 萬 USDT
+                            做市商資金兜底（已銷毀 &gt;1.05 億枚）與 5
+                            億枚安全基金質押鎖倉，有效構建了二級市場籌碼的吸收防護網。
+                          </li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2: 敘事邊界與關鍵變數補充 (Logic Blindspots) -->
+<div class="my-10" data-managed="human">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto flex items-center gap-2.5" id="logic-blindspots">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 text-xs font-mono font-bold border border-amber-200/80 dark:border-amber-700/60">02</span>
+<span>敘事邊界與關鍵變數補充</span>
+</h3>
+<div class="p-6 theme-bg-body dark:bg-slate-900/30 rounded-xl border border-dashed border-amber-300/80 dark:border-amber-700/60 bg-amber-50/20 dark:bg-amber-950/10 space-y-4">
+<div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 text-sm font-bold uppercase tracking-wider">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>批判性盲點與邊界預警 (Critical Blindspots)</span>
+</div>
+<ul class="space-y-3 text-sm text-slate-700 dark:text-slate-300">
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">[x402 真實營收轉化率]</span>
+<span><strong class="dsr-label">[Direct Answer]</strong> 若
+                          AI Agent 商業化落地速度滯後，API 調用產生的 USDC
+                          現金流無法支撐足夠的回購銷毀規模，每月 1.09
+                          億枚解鎖將逐步轉化為實質拋壓。</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">[AVS 節點罰沒與共識風險]</span>
+<span><strong class="dsr-label">[Direct Answer]</strong>
+                          EigenLayer
+                          共享安全架構下，若驗證節點因網路延遲或惡意串通發布錯誤情報，可能引發連鎖
+                          Slashing 懲罰，衝擊情報庫公信力。</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">[比特幣市占率吸血效應]</span>
+<span><strong class="dsr-label">[Direct Answer]</strong>
+                          在比特幣市占率高達 56%-58%
+                          的流動性虹吸週期中，中型市值山寨幣（Mid-cap
+                          Altcoins）缺乏充沛場外增量資金，大盤回調時易遭遇超額拋售。</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Step 3: Mason Yang 的觀察 (Actionable Intelligence) -->
+<div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-2.5 mb-6">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-mono font-bold border border-blue-200/80 dark:border-blue-700/60">03</span>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 m-0 font-noto flex items-center gap-2" data-managed="human" id="mason-yang-observation">
+<svg class="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Mason Yang 的觀察 (Actionable Intelligence)</span>
+</h3>
+</div>
+<div class="p-6 md:p-8 theme-bg-body dark:bg-slate-900/50 border-2 border-blue-500/20 dark:border-blue-500/30 rounded-2xl shadow-sm space-y-6">
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        1. 核心命題 (Core Proposition)
+                      </strong>
+<p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-base md:text-lg">
+<strong class="dsr-label">[Direct Answer]</strong>
+                        市場短期僅將 GPS 定價為 AI
+                        概念的超賣修復，卻忽略了其作為「動態威脅情報 + x402
+                        機器支付」在 AI Agent
+                        經濟爆發期所具備的平台級定價權重構潛力。
+                      </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        2. 激勵錨點 (Incentive Anchor)
+                      </strong>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+<strong class="dsr-label">[Direct Answer]</strong>
+                        核心團隊與機構投資人份額受 Magna
+                        第三方審計合約嚴格鎖定；5
+                        億枚安全基金將質押者、白帽駭客與節點利益高度綁定，透過「基礎
+                        APY + 生態空投 + 30%
+                        營收銷毀」形成強勁的自發鎖倉正反饋。
+                      </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        3. 引爆/反轉因子 (Trigger Factor)
+                      </strong>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+<strong class="dsr-label">[Direct Answer]</strong>
+                        觀測關鍵指標為「每月 15/16 日解鎖前後 7
+                        天的價格回撤幅度」與「鏈上黑洞地址的月度銷毀量」。若單月銷毀量穩定突破
+                        3,000
+                        萬枚且解鎖拋壓被安全基金質押池有效承接，即為價值重估的實質啟動點。
+                      </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        4. 演化劇本 (Evolution Scenarios)
+                      </strong>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+<div class="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+<span class="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-sm">路徑 A (預期內)</span>
+<p class="text-xs text-slate-500 leading-relaxed">
+                            x402 協議隨 Base 與 Solana 生態 AI
+                            代理全面普及，日均 API 請求突破 5,000
+                            萬次，年化營收穩步邁向 1,000 萬美元，推動 P/S
+                            估值倍數向 CrowdStrike（43x）靠攏，FDV 突破 3
+                            億美元。
+                          </p>
+</div>
+<div class="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+<span class="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-sm">路徑 B (黑天鵝)</span>
+<p class="text-xs text-slate-500 leading-relaxed">
+                            AI 代理商業化不及預期，每月 1.09
+                            億枚代幣線性解鎖持續壓制盤面，加上比特幣系統性回調，價格回測
+                            $0.010 支撐區間。
+                          </p>
+</div>
+</div>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        5. 行動策略 (Action Strategy)
+                      </strong>
+<p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-sm md:text-base">
+<strong class="dsr-label">[Direct Answer]</strong>
+                        切忌在暴漲 48%
+                        之處盲目追高；採取「解鎖日前後恐慌錯殺分批網格建倉（Overhang
+                        Dip Buying）」策略，取得籌碼後 100% 配置於 5
+                        億安全基金基礎質押池以賺取高 APY
+                        與生態空投，對沖代幣總量通膨風險。
+                      </p>
+</div>
+</div>
+</div>
+</div>
+<!-- References & Disclaimer -->
+<div class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+<h2 class="font-bold text-slate-700 dark:text-slate-300 mb-1 text-xs m-0 p-0 border-none" id="參考資料">
+                  參考資料 (References)
+                </h2>
+<ol class="list-decimal pl-4 space-y-1 mb-4" data-managed="auto" id="content-references">
+<li>
+                    $GPS Tokenomics | GoPlus Blog,
+                    <a class="hover:text-blue-500 underline" href="https://blog.gopluslabs.io/2025/01/02/financing/$GPS%20Tokenomics/" rel="noopener noreferrer" target="_blank">https://blog.gopluslabs.io/2025/01/02/financing/$GPS%20Tokenomics/</a>
+</li>
+<li>
+                    CryptoVerse's Profile | Binance Square,
+                    <a class="hover:text-blue-500 underline" href="https://www.binance.com/en/square/profile/cryptoverse" rel="noopener noreferrer" target="_blank">https://www.binance.com/en/square/profile/cryptoverse</a>
+</li>
+<li>
+                    GoPlus Intelligence,
+                    <a class="hover:text-blue-500 underline" href="https://whitepaper.gopluslabs.io/goplus-network/the-goplus-security-layer/goplus-intelligence" rel="noopener noreferrer" target="_blank">https://whitepaper.gopluslabs.io/goplus-network/the-goplus-security-layer/goplus-intelligence</a>
+</li>
+<li>
+                    Overview | GoPlus Security,
+                    <a class="hover:text-blue-500 underline" href="https://whitepaper.gopluslabs.io/goplus-network" rel="noopener noreferrer" target="_blank">https://whitepaper.gopluslabs.io/goplus-network</a>
+</li>
+<li>
+                    2 Cybersecurity Stocks You Can Buy and Hold for the Next
+                    Decade | The Motley Fool,
+                    <a class="hover:text-blue-500 underline" href="https://www.fool.com/investing/2026/01/25/2-cybersecurity-stocks-you-can-buy-and-hold-for/" rel="noopener noreferrer" target="_blank">https://www.fool.com/investing/2026/01/25/2-cybersecurity-stocks-you-can-buy-and-hold-for/</a>
+</li>
+<li>
+                    Go+ Security - 2026 Company Profile, Team, Funding &amp;
+                    Competitors - Tracxn,
+                    <a class="hover:text-blue-500 underline" href="https://tracxn.com/d/companies/gosecurity/__aM5CChyZZ4yVUX_IUFaBJYaMFxuEeY9fwwVTj5N4Dj4" rel="noopener noreferrer" target="_blank">https://tracxn.com/d/companies/gosecurity/\_\_aM5CChyZZ4yVUX\_IUFaBJYaMFxuEeY9fwwVTj5N4Dj4</a>
+</li>
+<li>
+                    GoPlus Security Project Introduction, Team, Financing and
+                    News\_RootData | RootData,
+                    <a class="hover:text-blue-500 underline" href="https://www.rootdata.com/projects/detail/GoPlus%20Security?k=MzgxNw%3D%3D" rel="noopener noreferrer" target="_blank">https://www.rootdata.com/projects/detail/GoPlus%20Security?k=MzgxNw%3D%3D</a>
+</li>
+<li>
+                    What is GoPlus Security: Pioneering Web3's Next-Generation
+                    Security Infrastructure - BingX,
+                    <a class="hover:text-blue-500 underline" href="https://bingx.com/en/learn/article/what-is-goplus-security" rel="noopener noreferrer" target="_blank">https://bingx.com/en/learn/article/what-is-goplus-security</a>
+</li>
+<li>
+                    \# GPS Since its creation in 2020, GoPlus has b | Daniel DGI
+                    on Binance Square,
+                    <a class="hover:text-blue-500 underline" href="https://www.binance.com/en-IN/square/post/21153903913025" rel="noopener noreferrer" target="_blank">https://www.binance.com/en-IN/square/post/21153903913025</a>
+</li>
+<li>
+                    Allen Zhang - RootData,
+                    <a class="hover:text-blue-500 underline" href="https://www.rootdata.com/member/Allen%20Zhang?k=MjAyMTU%3D" rel="noopener noreferrer" target="_blank">https://www.rootdata.com/member/Allen%20Zhang?k=MjAyMTU%3D</a>
+</li>
+<li>
+                    The Web3 Security Startup Goplus Security Raises
+                    Multi-million Dollar Private Funding Round | Nasdaq,
+                    <a class="hover:text-blue-500 underline" href="https://www.nasdaq.com/press-release/the-web3-security-startup-goplus-security-raises-multi-million-dollar-private-funding" rel="noopener noreferrer" target="_blank">https://www.nasdaq.com/press-release/the-web3-security-startup-goplus-security-raises-multi-million-dollar-private-funding</a>
+</li>
+<li>
+                    GoPlus Security, a leading company in Web3 security, has |
+                    积累原始资本 on Binance Square,
+                    <a class="hover:text-blue-500 underline" href="https://www.binance.com/en/square/post/9371888536641" rel="noopener noreferrer" target="_blank">https://www.binance.com/en/square/post/9371888536641</a>
+</li>
+<li>
+                    GoPlus Security完成Private II+融資，以持續建設User Security
+                    Network | 鉅亨網- 快訊,
+                    <a class="hover:text-blue-500 underline" href="https://news.cnyes.com/news/id/5482039" rel="noopener noreferrer" target="_blank">https://news.cnyes.com/news/id/5482039</a>
+</li>
+<li>
+                    Odaily Planet Daily News Web3 security company GoPlus |
+                    Odaily星球日报 on Binance Square,
+                    <a class="hover:text-blue-500 underline" href="https://www.binance.com/en/square/post/5133100210361" rel="noopener noreferrer" target="_blank">https://www.binance.com/en/square/post/5133100210361</a>
+</li>
+<li>
+                    Cybersecurity Valuation Multiples Q2 2026: The Comps Most
+                    People Are Using Are Wrong,
+                    <a class="hover:text-blue-500 underline" href="https://www.finrofca.com/news/cybersecurity-valuation-multiples-q2-2026" rel="noopener noreferrer" target="_blank">https://www.finrofca.com/news/cybersecurity-valuation-multiples-q2-2026</a>
+</li>
+<li>
+                    Tokenomics | GoPlus Security,
+                    <a class="hover:text-blue-500 underline" href="https://whitepaper.gopluslabs.io/goplus-network/ecosystem-and-token/tokenomics" rel="noopener noreferrer" target="_blank">https://whitepaper.gopluslabs.io/goplus-network/ecosystem-and-token/tokenomics</a>
+</li>
+<li>
+                    GoPlus | The Leading Web3 and AI Agent Security Solutions,
+                    <a class="hover:text-blue-500 underline" href="https://gopluslabs.io/en" rel="noopener noreferrer" target="_blank">https://gopluslabs.io/en</a>
+</li>
+<li>
+                    DETAILED ANALYSIS OF GOPLUS SECURITY (GPS) PROJECT | Wendy
+                    on Binance Square,
+                    <a class="hover:text-blue-500 underline" href="https://www.binance.com/en/square/post/21082777097169" rel="noopener noreferrer" target="_blank">https://www.binance.com/en/square/post/21082777097169</a>
+</li>
+<li>
+                    Latest GoPlus Security (GPS) News Update - CoinMarketCap,
+                    <a class="hover:text-blue-500 underline" href="https://coinmarketcap.com/cmc-ai/goplus-security/latest-updates/" rel="noopener noreferrer" target="_blank">https://coinmarketcap.com/cmc-ai/goplus-security/latest-updates/</a>
+</li>
+<li>
+                    DeepScan V2 | Smart Contract Security Suite - GoPlus
+                    Security,
+                    <a class="hover:text-blue-500 underline" href="https://deepscan.gopluslabs.io/" rel="noopener noreferrer" target="_blank">https://deepscan.gopluslabs.io/</a>
+</li>
+<li>
+                    DeepScan V2 | Smart Contract Security Suite - GoPlus Token
+                    Audit,
+                    <a class="hover:text-blue-500 underline" href="https://deepscan.gopluslabs.io/ai-contract-audit" rel="noopener noreferrer" target="_blank">https://deepscan.gopluslabs.io/ai-contract-audit</a>
+</li>
+<li>
+                    AI-Powered Token Security - GoPlus Token Audit,
+                    <a class="hover:text-blue-500 underline" href="https://deepscan.gopluslabs.io/audit/f23bc955-d294-4896-a7d9-e92dcbb2cbc3" rel="noopener noreferrer" target="_blank">https://deepscan.gopluslabs.io/audit/f23bc955-d294-4896-a7d9-e92dcbb2cbc3</a>
+</li>
+<li>
+                    GoPlus Security Review: Web3 Risk Layer for Commerce,
+                    <a class="hover:text-blue-500 underline" href="https://www.aisystemscommerce.com/post/goplus-security-review-can-an-ai-risk-layer-make-crypto-commerce-safe-enough-to-operate" rel="noopener noreferrer" target="_blank">https://www.aisystemscommerce.com/post/goplus-security-review-can-an-ai-risk-layer-make-crypto-commerce-safe-enough-to-operate</a>
+</li>
+<li>
+                    Get Started | GoPlus Security,
+                    <a class="hover:text-blue-500 underline" href="https://whitepaper.gopluslabs.io/goplus-network/resources/get-started" rel="noopener noreferrer" target="_blank">https://whitepaper.gopluslabs.io/goplus-network/resources/get-started</a>
+</li>
+<li>
+                    How to x402: The Complete Guide to the AI Agent Payment
+                    Protocol | Simplescraper Blog,
+                    <a class="hover:text-blue-500 underline" href="https://simplescraper.io/blog/x402-payment-protocol" rel="noopener noreferrer" target="_blank">https://simplescraper.io/blog/x402-payment-protocol</a>
+</li>
+<li>
+                    x402 Protocol Overview - xpay,
+                    <a class="hover:text-blue-500 underline" href="https://docs.xpay.sh/en/x402-protocol" rel="noopener noreferrer" target="_blank">https://docs.xpay.sh/en/x402-protocol</a>
+</li>
+<li>
+                    Build a Paid API with x402 USDC Micropayments: Complete
+                    Tutorial | PROXIES.SX,
+                    <a class="hover:text-blue-500 underline" href="https://www.proxies.sx/blog/build-paid-api-x402-usdc-tutorial" rel="noopener noreferrer" target="_blank">https://www.proxies.sx/blog/build-paid-api-x402-usdc-tutorial</a>
+</li>
+<li>
+                    What is x402? | Payment Protocol for AI Agents on XDC -
+                    XinFin,
+                    <a class="hover:text-blue-500 underline" href="https://xinfin.org/what-is-x402" rel="noopener noreferrer" target="_blank">https://xinfin.org/what-is-x402</a>
+</li>
+<li>
+                    Compare EigenCloud (EIGEN) vs GoPlus Security (GPS) Price
+                    &amp; Performance - Pluang,
+                    <a class="hover:text-blue-500 underline" href="https://pluang.com/en/compare/eigen-idr-vs-gps-idr" rel="noopener noreferrer" target="_blank">https://pluang.com/en/compare/eigen-idr-vs-gps-idr</a>
+</li>
+<li>
+                    What Are Actively Validated Services (AVS)? - Chainlink,
+                    <a class="hover:text-blue-500 underline" href="https://chain.link/article/actively-validated-services-avss" rel="noopener noreferrer" target="_blank">https://chain.link/article/actively-validated-services-avss</a>
+</li>
+<li>
+                    GoPlus Research: Deep into Eigenlayer, designing and
+                    building AVS - BlockBeats,
+                    <a class="hover:text-blue-500 underline" href="https://m.theblockbeats.info/en/news/54860" rel="noopener noreferrer" target="_blank">https://m.theblockbeats.info/en/news/54860</a>
+</li>
+<li>
+                    Redefining AVS: From Actively Validated to Autonomous
+                    Verifiable Services - Eigen Labs,
+                    <a class="hover:text-blue-500 underline" href="https://www.eigenlabs.org/blog/redefining-avs-from-actively-validated-to-autonomous-verifiable-services/" rel="noopener noreferrer" target="_blank">https://www.eigenlabs.org/blog/redefining-avs-from-actively-validated-to-autonomous-verifiable-services/</a>
+</li>
+<li>
+                    SafeToken Protocol - GoPlus Security,
+                    <a class="hover:text-blue-500 underline" href="https://gopluslabs.io/en/safe-token-protocol" rel="noopener noreferrer" target="_blank">https://gopluslabs.io/en/safe-token-protocol</a>
+</li>
+<li>
+                    SlowMist Releases EOS WPS Smart Contract Security Audit
+                    Report,
+                    <a class="hover:text-blue-500 underline" href="https://slowmist.medium.com/slowmist-releases-eos-wps-smart-contract-security-audit-report-ee3c722a6079" rel="noopener noreferrer" target="_blank">https://slowmist.medium.com/slowmist-releases-eos-wps-smart-contract-security-audit-report-ee3c722a6079</a>
+</li>
+<li>
+                    GoPlus Network 是什麼？模組化使用者安全層如何提升Web3保障,
+                    <a class="hover:text-blue-500 underline" href="https://www.blocktempo.com/read-the-modular-user-security-layer-in-one-article-goplus/" rel="noopener noreferrer" target="_blank">https://www.blocktempo.com/read-the-modular-user-security-layer-in-one-article-goplus/</a>
+</li>
+<li>
+                    How GoPlus Security Enhances Web3 Security | 波段超人 on
+                    Binance Square,
+                    <a class="hover:text-blue-500 underline" href="https://www.binance.com/en/square/post/21131465076802" rel="noopener noreferrer" target="_blank">https://www.binance.com/en/square/post/21131465076802</a>
+</li>
+<li>
+                    GoPlus Security Price, GPS Price, Live Charts, and
+                    Marketcap: gps coin - Coinbase,
+                    <a class="hover:text-blue-500 underline" href="https://www.coinbase.com/price/base-goplus-security-dca5" rel="noopener noreferrer" target="_blank">https://www.coinbase.com/price/base-goplus-security-dca5</a>
+</li>
+<li>
+                    Magna | Digital Asset Management,
+                    <a class="hover:text-blue-500 underline" href="https://www.magna.so/" rel="noopener noreferrer" target="_blank">https://www.magna.so/</a>
+</li>
+<li>
+                    GoPlus Security (GPS) Price Prediction For 2026 &amp; Beyond
+                    - CoinMarketCap,
+                    <a class="hover:text-blue-500 underline" href="https://coinmarketcap.com/cmc-ai/goplus-security/price-prediction/" rel="noopener noreferrer" target="_blank">https://coinmarketcap.com/cmc-ai/goplus-security/price-prediction/</a>
+</li>
+<li>
+                    An Empirical Analysis of Token Burning Mechanisms on
+                    Cryptocurrency Price Dynamics,
+                    <a class="hover:text-blue-500 underline" href="https://www.researchgate.net/publication/395447732_An_Empirical_Analysis_of_Token_Burning_Mechanisms_on_Cryptocurrency_Price_Dynamics" rel="noopener noreferrer" target="_blank">https://www.researchgate.net/publication/395447732\_An\_Empirical\_Analysis\_of\_Token\_Burning\_Mechanisms\_on\_Cryptocurrency\_Price\_Dynamics</a>
+</li>
+<li>
+                    GoPlus Security implements the plan to buy back GPS tokens
+                    and compensate investors | CafeBit Research on Binance
+                    Square,
+                    <a class="hover:text-blue-500 underline" href="https://www.binance.com/en/square/post/21409112423873" rel="noopener noreferrer" target="_blank">https://www.binance.com/en/square/post/21409112423873</a>
+</li>
+<li>
+                    GoPlus已累計回購超1億枚GPS代幣，回購完成後將統一銷毀 -
+                    PANews,
+                    <a class="hover:text-blue-500 underline" href="https://www.panewslab.com/zh-hant/articles/wiif2j6w" rel="noopener noreferrer" target="_blank">https://www.panewslab.com/zh-hant/articles/wiif2j6w</a>
+</li>
+<li>
+                    Techub News reports that GoPlus has announced via Twitter -
+                    Binance,
+                    <a class="hover:text-blue-500 underline" href="https://www.binance.com/en/square/post/21980012394210" rel="noopener noreferrer" target="_blank">https://www.binance.com/en/square/post/21980012394210</a>
+</li>
+<li>
+                    500M GPS Token Security Fund: Rewiring Web3's Security Value
+                    Cycle | GoPlus Blog,
+                    <a class="hover:text-blue-500 underline" href="https://blog.gopluslabs.io/2025/07/24/financing/2025-07-24-500M-GPS-Token-Security-Fund-Rewiring-Web3%E2%80%99s-Security-Value-Cycle/" rel="noopener noreferrer" target="_blank">https://blog.gopluslabs.io/2025/07/24/financing/2025-07-24-500M-GPS-Token-Security-Fund-Rewiring-Web3%E2%80%99s-Security-Value-Cycle/</a>
+</li>
+<li>
+                    GoPlus launches 500 million GPS Security Fund to reshape the
+                    Web3 security value system | Bitget News,
+                    <a class="hover:text-blue-500 underline" href="https://www.bitget.com/news/detail/12560604878644" rel="noopener noreferrer" target="_blank">https://www.bitget.com/news/detail/12560604878644</a>
+</li>
+<li>
+                    CROWDSTRIKE HOLDINGS PS Ratio: 43.11 — 73% Above Median -
+                    GuruFocus,
+                    <a class="hover:text-blue-500 underline" href="https://www.gurufocus.com/term/ps-ratio/CRWD" rel="noopener noreferrer" target="_blank">https://www.gurufocus.com/term/ps-ratio/CRWD</a>
+</li>
+<li>
+                    SENTINELONE PS Ratio: 6.81 — 32% Below Median - GuruFocus,
+                    <a class="hover:text-blue-500 underline" href="https://www.gurufocus.com/term/ps-ratio/S" rel="noopener noreferrer" target="_blank">https://www.gurufocus.com/term/ps-ratio/S</a>
+</li>
+<li>
+                    2 Top Cybersecurity Stocks to Buy in June - Finviz,
+                    <a class="hover:text-blue-500 underline" href="https://finviz.com/news/80655/2-top-cybersecurity-stocks-to-buy-in-june" rel="noopener noreferrer" target="_blank">https://finviz.com/news/80655/2-top-cybersecurity-stocks-to-buy-in-june</a>
+</li>
+<li>
+                    SentinelOne vs. CrowdStrike: What Their Quarterly Revenue
+                    Trends Tell Investors.,
+                    <a class="hover:text-blue-500 underline" href="https://www.fool.com/coverage/charts/2026/05/13/sentinelone-vs-crowdstrike-what-their-quarterly-revenue-trends-tell-investors/" rel="noopener noreferrer" target="_blank">https://www.fool.com/coverage/charts/2026/05/13/sentinelone-vs-crowdstrike-what-their-quarterly-revenue-trends-tell-investors/</a>
+</li>
+<li>
+                    Forta Price: FORT/USD Live Price Chart, Market Cap &amp;
+                    News Today | CoinGecko,
+                    <a class="hover:text-blue-500 underline" href="https://www.coingecko.com/en/coins/forta" rel="noopener noreferrer" target="_blank">https://www.coingecko.com/en/coins/forta</a>
+</li>
+<li>
+                    GoPlusSecurity/awesome-goplus-security - GitHub,
+                    <a class="hover:text-blue-500 underline" href="https://github.com/GoPlusSecurity/awesome-goplus-security" rel="noopener noreferrer" target="_blank">https://github.com/GoPlusSecurity/awesome-goplus-security</a>
+</li>
+<li>
+                    Token Unlocks and Vesting Schedules - CoinMarketCap,
+                    <a class="hover:text-blue-500 underline" href="https://coinmarketcap.com/token-unlocks/" rel="noopener noreferrer" target="_blank">https://coinmarketcap.com/token-unlocks/</a>
+</li>
+<li>
+                    GoPlus Security Price Today — GPSUSD Chart - TradingView,
+                    <a class="hover:text-blue-500 underline" href="https://www.tradingview.com/symbols/GPSUSD/" rel="noopener noreferrer" target="_blank">https://www.tradingview.com/symbols/GPSUSD/</a>
+</li>
+<li>
+                    Today's GoPlus Security Price,GPS Live Chart &amp; Token
+                    Conversion - Tokocrypto,
+                    <a class="hover:text-blue-500 underline" href="https://www.tokocrypto.com/en/price/GPS" rel="noopener noreferrer" target="_blank">https://www.tokocrypto.com/en/price/GPS</a>
+</li>
+<li>
+                    GoPlus Security Price: GPS/USD Live Price Chart, Market Cap
+                    &amp; News Today | CoinGecko,
+                    <a class="hover:text-blue-500 underline" href="https://www.coingecko.com/en/coins/goplus-security" rel="noopener noreferrer" target="_blank">https://www.coingecko.com/en/coins/goplus-security</a>
+</li>
+<li>
+                    All Cryptocurrencies - CoinGecko,
+                    <a class="hover:text-blue-500 underline" href="https://www.coingecko.com/en/all-cryptocurrencies" rel="noopener noreferrer" target="_blank">https://www.coingecko.com/en/all-cryptocurrencies</a>
+</li>
+<li>
+                    Overview · OAK — OnChain Attack Knowledge,
+                    <a class="hover:text-blue-500 underline" href="https://onchainattack.org/" rel="noopener noreferrer" target="_blank">https://onchainattack.org/</a>
+</li>
+<li>
+                    From Trail of Bits' 11 Patterns to 90 Million — How Web3
+                    Security,
+                    <a class="hover:text-blue-500 underline" href="https://medium.com/@yaku_95245/from-trail-of-bits-11-patterns-to-90-million-how-web3-security-becomes-a-public-good-e21b57e69d8a" rel="noopener noreferrer" target="_blank">https://medium.com/@yaku\_95245/from-trail-of-bits-11-patterns-to-90-million-how-web3-security-becomes-a-public-good-e21b57e69d8a</a>
+</li>
+</ol>
+<p class="font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  免責聲明 (Disclaimer)
+                </p>
+<p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。</p>
+</div>
+<!-- ========================================================================== -->
+<!-- ⚠️ CRITICAL BOUNDARY: END OF ARTICLE CONTENT ⚠️ -->
+<!-- 任何內文修改絕不可越過或刪除以下閉合標籤，否則將導致右側邊欄佈局崩塌 -->
+<!-- ========================================================================== -->
+</div>
+<!-- /END main-content-area -->
+</article>
+<!-- Related Articles (Mobile bottom) -->
+<div class="mt-8 lg:hidden" data-managed="append-only" id="related-articles-container"></div>
+</div>
+<!-- /END Center Column -->
+<!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+<aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+<div class="sticky top-24 space-y-6 sidebar-scroll">
+<!-- A. Article Info Card -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  文章資訊
+                </p>
+</div>
+<dl class="divide-y divide-slate-100 dark:divide-slate-700">
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">
+                    發布日期
+                  </dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">
+                    2026-08-17
+                  </dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">
+                    分類
+                  </dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">
+                    加密貨幣與區塊鏈
+                  </dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">
+                    閱讀時間
+                  </dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">
+                    約 15 分鐘
+                  </dd>
+</div>
+</dl>
+</div>
+<!-- B. Key Findings Card -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  核心結論
+                </p>
+</div>
+<ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+<li class="px-4 py-3 flex items-start gap-2">
+<span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    GoPlus 構建跨 30+ 鏈、日均 3,000 萬次 API
+                    請求的運行時安全層，卡位 Web3 與 AI 代理交匯點。
+                  </p>
+</li>
+<li class="px-4 py-3 flex items-start gap-2">
+<span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    整合 Coinbase x402 協議實現 $0.001 機器微支付與 2
+                    秒結算，突破 AI 代理高頻調用商業化瓶頸。
+                  </p>
+</li>
+<li class="px-4 py-3 flex items-start gap-2">
+<span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    30% 協議收入回購銷毀、434 萬 USDT 做市商資金兜底與 5
+                    億枚安全基金形成極端通縮價值捕獲。
+                  </p>
+</li>
+<li class="px-4 py-3 flex items-start gap-2">
+<span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    每月 15/16 日面臨 1.09 億枚代幣解鎖（Overhang
+                    Risk），建議利用解鎖恐慌錯殺進行網格建倉並參與質押。
+                  </p>
+</li>
+</ul>
+</div>
+<!-- C. Keywords -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden"><div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">關鍵字</p>
+</div><div class="px-4 py-3 flex flex-wrap gap-1.5"><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">GoPlus Security</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">GPS</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">Web3 Security</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">AI Agent</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">Coinbase x402</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">EigenLayer</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">AVS</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">DeepScan</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">AgentGuard</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">SafeToken</span></div></div>
+<!-- D. Related Articles (Desktop sidebar) -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  延伸閱讀
+                </p>
+</div>
+<div data-managed="append-only" id="related-articles-sidebar"></div>
+</div>
+</div>
+</aside>
+<!-- /END Right Sidebar -->
+</div>
+</main>
+<!-- Footer Host -->
+<div id="footer-host"></div>
+<!-- Back to Top Button (fixed, bottom-right) -->
+<button aria-label="回到頂部" class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="back-to-top">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</button>
+<!-- Scripts -->
+<script src="../assets/js/core-taxonomy.js"></script>
+<script src="../assets/js/core-articles-data.js"></script>
+<script src="../assets/js/core-header.js"></script>
+<!-- Footer Component (自動感知並載入 ResponsiveTocComponent) -->
+<script src="../assets/js/core-footer.js"></script>
+<!-- Responsive TOC Component (若 Footer 未自動注入，此處顯式載入作為備援) -->
+<script src="../assets/js/ui-toc-responsive.js"></script>
+<script src="../assets/js/ui-toc-desktop.js"></script>
+<script src="../assets/js/widget-related-articles.js"></script>
+<script src="../assets/js/ui-section-wrapper.js"></script>
+<script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // ── 1. Layout Shell ───────────────────────────────────
+        const header = new HeaderComponent();
+        header.setHomeUrl("../index.html");
+        header.init();
+        new FooterComponent().init();
+
+        // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+        if (typeof ArticleTOC !== "undefined") {
+          new ArticleTOC().init();
+        }
+
+        // ── 3. Mobile TOC ──────────────────────────────────────
+        if (window.ResponsiveTocComponent) {
+          new ResponsiveTocComponent().init();
+        }
+
+        // ── Related Articles (Common) ──────────────────────────
+        if (window.RelatedArticlesComponent) {
+          // Related Articles - Bottom
+          new RelatedArticlesComponent()
+            .setContainerId("related-articles-container")
+            .setLimit(3)
+            .init();
+
+          // Related Articles - Sidebar
+          new RelatedArticlesComponent()
+            .setContainerId("related-articles-sidebar")
+            .setLayout("list")
+            .setShowHeader(false)
+            .setLimit(5)
+            .init();
+        }
+
+        // ── 4. Scroll Events ───────────────────────────────────
+        const progressBar = document.getElementById("scroll-progress-bar");
+        const bttBtn = document.getElementById("back-to-top");
+        const bttSidebarBtn = document.getElementById("back-to-top-sidebar");
+
+        window.addEventListener(
+          "scroll",
+          () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height =
+              document.documentElement.scrollHeight -
+              document.documentElement.clientHeight;
+
+            // Progress bar
+            if (progressBar) {
+              progressBar.style.width =
+                (height > 0 ? (winScroll / height) * 100 : 0) + "%";
+            }
+
+            // Back to top (show after 500px)
+            const isScrolled = winScroll > 500;
+            if (bttBtn) {
+              bttBtn.classList.toggle("translate-y-20", !isScrolled);
+              bttBtn.classList.toggle("opacity-0", !isScrolled);
+              bttBtn.classList.toggle("translate-y-0", isScrolled);
+              bttBtn.classList.toggle("opacity-100", isScrolled);
+            }
+            if (bttSidebarBtn) {
+              bttSidebarBtn.classList.toggle("hidden", !isScrolled);
+            }
+          },
+          { passive: true },
+        );
+
+        [bttBtn, bttSidebarBtn].forEach((btn) => {
+          if (btn)
+            btn.addEventListener("click", () =>
+              window.scrollTo({ top: 0, behavior: "smooth" }),
+            );
+        });
+      });
+    </script>
+</body>
+</html>
