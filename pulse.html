@@ -1,0 +1,1288 @@
+<!-- ==================== PULSE_TEMPLATE_GUIDE_START ====================
+     市場瞬息 (Market Pulse) 專用樣板 v4.0 (滑動視窗預渲染 + 歷史月度分片架構)
+     - 永遠維持首頁 ~350 行最新 15 則短評，極致 Token 隔離。
+     - 歷史短評自動分片至 assets/data/pulse/YYYY-MM.json，前端透過 IntersectionObserver 按需非同步載入。
+     ==================== PULSE_TEMPLATE_GUIDE_END ==================== -->
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>市場瞬息：專家短評與市場反應 | Mason Yang Blog</title>
+    <meta name="description"
+        content="收錄 Mason Yang 最新、最即時的金融分析、地緣政治觀點與量化交易專家短評。結合 D-S-R 架構與二階因果推論，提供機構級市場定價與宏觀反身性微觀洞察。">
+    <meta name="keywords" content="市場瞬息, 即時短評, 金融觀點, 地緣政治, 量化交易, 宏觀經濟, 數位資產, Web3, AI算力, 投資洞察">
+    <link rel="canonical" href="https://masonyang-blog.github.io/pulse.html">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="assets/js/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="assets/css/custom.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- RSS Feed Link -->
+    <link rel="alternate" type="application/rss+xml" title="Mason Yang Blog - 市場瞬息 (Pulse) RSS Feed" href="pulse.xml" />
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .font-noto {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* 時間軸專用樣式 */
+        .timeline-line {
+            position: absolute;
+            top: 2rem;
+            bottom: 2rem;
+            left: 1rem;
+            width: 2px;
+            background: linear-gradient(to bottom, #f97316, #cbd5e1 20%, #cbd5e1 80%, #f97316);
+            z-index: 0;
+        }
+
+        .dark .timeline-line {
+            background: linear-gradient(to bottom, #f97316, #334155 20%, #334155 80%, #f97316);
+        }
+
+        .timeline-node {
+            position: absolute;
+            left: -1.75rem;
+            top: 1.5rem;
+            width: 0.85rem;
+            height: 0.85rem;
+            border-radius: 9999px;
+            background-color: #f97316;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+            z-index: 10;
+        }
+
+        .dark .timeline-node {
+            border-color: #1e293b;
+        }
+
+        /* 標籤按鈕高亮樣式 */
+        .tag-filter-btn.active {
+            background-color: #f97316;
+            color: #ffffff;
+            border-color: #f97316;
+        }
+
+        /* 複製成功提示 Toast */
+        .toast-notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #334155;
+            font-size: 0.875rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(1rem);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .toast-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 錨點高亮動畫 */
+        @keyframes highlight-pulse-card {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.6); }
+            50% { transform: scale(1.015); box-shadow: 0 0 0 8px rgba(249, 115, 22, 0.2); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+        }
+
+        .pulse-card-highlight {
+            animation: highlight-pulse-card 1.5s ease-out;
+            border-color: #f97316 !important;
+        }
+    </style>
+
+    <!-- Schema.org JSON-LD Structured Data for LiveBlogPosting -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LiveBlogPosting",
+  "@id": "https://masonyang-blog.github.io/pulse.html#liveblog",
+  "isPartOf": {
+    "@type": "WebPage",
+    "@id": "https://masonyang-blog.github.io/pulse.html"
+  },
+  "headline": "市場瞬息：專家短評與市場反應",
+  "description": "收錄 Mason Yang 最新、最即時的市場分析、地緣政治分析與量化交易專家短評。",
+  "publisher": {
+    "@type": "Person",
+    "name": "Mason Yang",
+    "url": "https://masonyang-blog.github.io"
+  },
+  "liveBlogUpdate": [
+    {
+      "@type": "BlogPosting",
+      "headline": "比特幣終局光譜：矽基經濟結算與生息穩定幣擠出博弈",
+      "datePublished": "2026-09-12T00:00:00+08:00",
+      "articleBody": "比特幣終局已跳脫純粹法幣崩潰的單一敘事，實質演化為矽基自主 AI 微支付結算層與 PoW 熱力學實體國防威懾，同時面臨生息穩定幣 4%~5% 無風險利差的資本機會成本擠出挑戰。 在 L402 協議與 HTTP 402 原生架構下，Satoshis 成為零 KYC 機器代理的流動性計量標準；然而塔勒布吸收態歸零障礙與 OFAC 合規區塊引發的 20%~40% 受污染 UTXO 折價，正在物理層撕裂其絕對可替代性。完整博弈推導與量化模型詳見 ➔ 【深度研報】比特幣終局理論的延伸光譜：六大非傳統演變假說與系統性推演",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-09-12-115221"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "北美比特幣礦企轉型 AI 算力中心之 Take-or-Pay 估值防線",
+      "datePublished": "2026-09-12T00:00:00+08:00",
+      "articleBody": "北美比特幣礦企跨界 AI 託管的關鍵防線在於 Take-or-Pay 照付不議合約與電網稀缺指標重估，而非承擔 GPU 硬體折舊風險。合約將推論價格年降 70% 的通縮衝擊完全隔絕於租客端，推動板塊 EV/MW 邁向數據中心 REITs 的估值重構。 核心交付節點集中於 2026 至 2027H1，包括 Core Scientific 與 CoreWeave 的 590MW 長約及 Cipher 的 600MW 併網管線。群聯等企業自建設備僅屬十千瓦級邊緣部署，無法動搖百兆瓦級公用事業電網的稀缺溢價。完整博弈推導與量化模型詳見 ➔ 【深度研報】北美加密礦企轉型 AI 數據中心之投資論點查證與 2026-2027 產業週期展望",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-09-12-ai-take-or-pay"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "AI 算力資產定價範式轉移：500kV 變壓器交付瓶頸與 70% 稼動率死線",
+      "datePublished": "2026-09-06T00:00:00+08:00",
+      "articleBody": "算力租賃已由硬體轉租套利轉向由電網交付物理學與折舊會計主導的重資產時代。70% 稼動率為損益平衡死線，55% 則引爆月虧 43 萬美元現金黑洞；延長至 5.5 年折舊將觸發 ASC 360 巨額資產減損。 500kV 變壓器交期拉長至 160 週，FERC 否決核電表後直連使未通電延誤 12 個月即令 IRR 自 22% 驟降至 6.8%。CoreWeave 透過破產隔離 SPV 將 DDTL 利差壓縮至 SOFR+2.25%，而 Mooncake 解耦編排軟體則推升 MFU 至 50% 以上。完整模型推導與 60/40 非對稱資產配置架構詳見 ➔ 【深度研報】AI 算力資產定價、能源交付物理學與資本工程",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-09-06-ai-500kv-70"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "【AI 算力中心財務模型】70% 稼動率為盈虧分水嶺，Time-to-Power 延遲引爆每月 83 萬美元無效折舊",
+      "datePublished": "2026-09-06T00:00:00+08:00",
+      "articleBody": "評估 1,024 卡 H100 智算中心（初期 CapEx 4,500 萬美元、年化剛性 OpEx 1,772 萬美元），財務模型表明 70% 稼動率為營運損益分水嶺。 在每小時 2.50 美元基準租金下，55% 稼動率將產生每月 43.9 萬美元 EBIT 虧損（IRR -11.7%），而 85% 稼動率則能達成 3.61 年回收期與 17.6% IRR。電網通電週期（Time-to-Power）延遲使未通電 B200 叢集每月吞噬 83 萬美元無效折舊。資產配置防禦核心已由晶片採購轉向確定性電力儲備與 Prefill-Decode 解耦調度溢價。",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-09-06-ai-70-time-to-power-83"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "AI 算力基礎設施定價範式轉移與 70% 稼動率死線",
+      "datePublished": "2026-09-06T00:00:00+08:00",
+      "articleBody": "AI 算力基礎設施定價已由前端模型狂熱徹底轉向底層重資產物理學與嚴苛財務槓桿。1,024 卡 H100 叢集年折舊高達 1,125 萬美元（佔 OpEx 的 63.5%），將 70% 稼動率釘死為損益平衡分水嶺。 稼動率若跌破 55%，每月剛性現金流失將迅速突破 43 萬美元引發清算黑洞；變壓器交付延期長達 160 週放大 Time-to-Power 無效折舊。超額回報唯有向吉瓦級核電 PPA 與投資級資產抵押融資 (ABF) 兩端延伸。完整博弈推導與資本配置矩陣詳見 ➔ 【深度研報】AI 算力基礎設施投資 2026：如何跨越 70% 稼動率死線？",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-09-06-ai-70"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Roblox (RBLX) 資本週期覆盤：會計遞延迷思、年逾10億SBC與雙軌DCF估值重構",
+      "datePublished": "2026-09-06T00:00:00+08:00",
+      "articleBody": "Roblox (NYSE: RBLX) 二級市場定價撕裂根源於 27 個月 ASC 606 遞延攤銷與年逾 10 億美元 SBC 稀釋之間的認知時差。 儘管 FY25E 預訂額加速放量至 $66 億、13 歲以上成熟用戶時長佔比突破 50%，但扣除 SBC 後的經濟實質 FCF 直至 2025 年始由負轉正；雙軌 DCF 測算公允價值區間為 $24.20 至 $74.50，綜合加權確立基準目標價 $58.00。建議利用短線司法訴訟利空於 $35.00 以下安全邊際逢低建倉。詳見 Roblox 深度投資評估報告。",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-09-06-roblox-rblx-10sbcdcf"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "達世幣雙層安全與支付公鏈的價值沈澱悖論",
+      "datePublished": "2026-09-05T00:00:00+08:00",
+      "articleBody": "達世幣（Dash）透過雙層主節點與 ChainLocks 實現了秒級確定性結算並徹底免疫 51% 算力重組，然而在現實貨幣博弈中，貨幣的購買力穩定性始終高於結算速度。當惡性通膨地區民眾全面倒向美元穩定幣（USDT），且歐美合規 CEX 因 AEC 匿名標籤掀起下架潮，純支付公鏈正陷入隱私與合規兩頭落空的中庸困境。 全網常態鎖定 20% 至 30% 流通籌碼於主節點抵押池，牛市形成供給休克，熊市卻演變為固算法幣伺服器成本壓制下的流動性堰塞湖；其突圍生機在於 Dash Platform 將 2 秒結算層升維為 Web3 數據合約與 DPNS 身分狀態機。完整博弈推導與架構解構詳見 ➔ 【深度研報】達世幣 Dash 支付公鏈 2026：雙層架構、代幣經濟與合規困境",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-09-05-134540"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "美債 40 兆危機倒逼體外循環：《CLARITY Act》解鎖 DeFi 費用開關與 RWA 機構定價",
+      "datePublished": "2026-09-05T00:00:00+08:00",
+      "articleBody": "美債逼近 40 兆美元且年利息突破 1.1 兆美元，外國央行持倉跌破 23%，倒逼財政部依賴短天期國庫券（T-Bills）融資。由穩定幣與代幣化國債構成的鏈上美元池，已躍升為實質承接主權債務的「體外循環」吸收中樞。 《CLARITY Act》（H.R. 3633）確立客觀成熟區塊鏈測試與第 604 條非託管安全港，徹底消除 SEC 執法威脅。Uniswap 每年 2.7 億美元自由現金流有望啟動費用開關（Fee Switch），驅動治理代幣轉向 DCF 現金流貼現估值重塑。完整主權債務螺旋推導、ONDO 籌碼解鎖博弈與事件驅動大盤中性交易手冊詳見 ➔ 【深度研報】美債 RWA 與 CLARITY Act 2026：5 層資本矩陣與對沖策略",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-09-05-40-clarity-act-defi-rwa"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "【Circle 研報】降息週期 NIM 侵蝕 vs CLARITY Act 0% 資金成本壟斷：解構事件驅動跨市場對沖計畫",
+      "datePublished": "2026-09-05T00:00:00+08:00",
+      "articleBody": "Circle 本質為零資金成本負債、獲利高度依賴短期美債淨息差（NIM）的特許非銀行金融機構。基準利率每下調 100 bps 將帶來約 3.5 億至 4.0 億美元剛性減損；而美國國會《CLARITY Act》（H.R. 3633）的排他性准入與法定禁止向零售端派息條款（No-Yield Mandate），在實質上邊際化未受審計離岸對手並永久捍衛 100% 利差空間。 非線性損益平衡模型測算顯示：若利率降至 3.25%，USDC 必需流通規模需自 350 億擴增 53.7% 至 538 億美元；在公開市場建構「做多 60% COIN + 20% UNI + 20% Pendle PT-USDC，做空 50% KRE + 50% BTC-PERP」合成對沖籃子，可完全剔除大盤 Beta 波動，在 IPO 前純粹套利政策立法重估溢價。",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-09-05-circle-nim-vs-clarity-act-0"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "美日利差失衡與12兆日圓套利去槓桿的流動性絞殺",
+      "datePublished": "2026-09-03T00:00:00+08:00",
+      "articleBody": "美日利差失衡誘發的極端弱勢日圓正透過12兆美元套利交易網絡累積全球系統性風險。當日本央行被迫升息引發暴力去槓桿，初期的美債避險錯覺將迅速質變為擊穿造市商資產負債表容量的「全面美元現鈔枯竭 (Dash for Cash)」，引發跨資產無差別拋售與系統性流動性凍結。 美國單月財政赤字達4,323億美元推升30年期美債利率至5.32%，對沖基金單週平倉逾4.6萬口日圓期貨空單。回購市場SOFR飆升至5.25%與交叉貨幣基差 (CIP) 深度跌入負值，揭示在岸與離岸美元管線流動性告急。完整傳導機制深度剖析與機構防禦策略詳見 ➔ 【深度報告】美日金融危機 2026：日圓套利交易如何引爆流動性凍結？解構 SOFR 飆升與 12 兆美元去槓桿傳導",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-09-03-12"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "【半導體板塊劇烈修正 2026】 - 3 兆美元表外隱藏負債曝光如何引爆 AI CapEx 與美債折現率雙殺？",
+      "datePublished": "2026-08-19T00:00:00+08:00",
+      "articleBody": "related_url: news/20260819-semiconductor-sector-selloff-analysis.html 2026年8月19日全球半導體板塊遭遇劇烈修正（費半重挫4.98%、台股跌589點失守季線），核心誘因為荷姆茲海峽通航危機推升原油破91美元引發美債10年期殖利率飆至4.70%，疊加科技九巨擘3兆美元表外隱藏負債曝光，引發市場對AI資本開支真實變現能力的嚴格審查。 前九大科技巨擘透過特殊目的實體（SPV）累積高達1.2兆美元未啟用機房租約與1.9兆美元遠期晶片採購（如Meta Hyperion合資發債273億），遠超公開申報的6,000億CapEx。一旦終端變現放緩，龐大表外固定租約將順供應鏈引爆設備商與記憶體廠的長鞭效應；惟台積電憑藉A16/N2先進製程壟斷壁壘終場僅跌1.26%，展現結構分化下的定價防禦力。 表外隱藏負債拆解、利益主體博弈矩陣與槓鈴防禦配置詳見 ➔ 【全球半導體板塊劇烈修正 2026】深度剖析報告。",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-08-19-2026---3-ai-capex"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "輝達攜華爾街打造5000億融資平台，CME算力期貨奠定「算力美元」新秩序",
+      "datePublished": "2026-08-19T00:00:00+08:00",
+      "articleBody": "輝達聯手華爾街六大另類資產管理巨頭動員 5,000 億美元打造第三方融資平台，搭配 CME 即將於 2026 年 10 月 5 日推出的現金結算算力期貨，正式將 GPU 升維為可融資抵押的「算力美元」長期基礎設施。 2026 年全球 AI 資本支出達 7,650 億美元，首度超越油氣探勘總額（6,810 億美元）。儘管輝達提供最高 25% 殘值支持，但晶片 18~24 個月迭代週期與 5~8 年專案債務的期限錯配，使體系高度脆弱。完整博弈推導與量化模型詳見 ➔ 【深度研報】輝達GPU資產化與算力美元三大結構斷點",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-08-19-compute-dollar-nvidia-cme-futures"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "火花轉算力套利與算力美元二階推導：從微電網套利到貨幣霸權重構",
+      "datePublished": "2026-08-19T00:00:00+08:00",
+      "articleBody": "算力金融化推動全球 AI CapEx 達 7,650 億美元超越傳統油氣。資料中心微電網開創「火花轉算力套利（Spark-to-Compute Arbitrage）」，將天然氣與電網尖峰轉化為 Token 與 CME 算力期貨對沖模型；華爾街掌控硬體壟斷、美元信貸與衍生品清算權，促使「算力美元體系」接替石油美元完成第四次貨幣實體錨定。 四大壓力測試顯示，在 LTV 60% 基準下，若遭遇供給傾銷或核心模型商違約，SPV 債務回收率將暴跌至 38%~48%，影子銀行私人信貸暗藏巨大系統性脆性。完整二階推導與壓力測試模型詳見 ➔ 【算力美元二階推導 2026】 - 火花轉算力套利如何重構全球貨幣體系？為何石油美元正轉向算力美元？",
+      "url": "https://masonyang-blog.github.io/pulse.html#spark-to-compute-arbitrage-compute-dollar-2026"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "AI 巨頭掀比特幣礦場搶電潮：微軟與 OpenAI 鎖定 HPC 轉型電力資產",
+      "datePublished": "2026-08-18T00:00:00+08:00",
+      "articleBody": "AI 算力瓶頸引爆電網排隊危機，微軟、OpenAI 與 Anthropic 繞開傳統 IDC，直接向 MARA、IREN、RIOT 等比特幣礦企大舉鎖定具備高壓變電與即時通電（Powered Land）的能源資產，推動礦企商業模式從高波動算力挖礦重塑為高毛利 HPC 租賃。 微軟與 IREN 簽署 97 億美元長約、Anthropic 鎖定 RIOT 90 億美元容量；相較比特幣挖礦，HPC 託管每度電可創造高達 25 美元營收且毛利率逾 55%。礦企透過出售儲備 BTC 清償可轉債，將 4.8 GW 級發電廠與變電站轉化為 AI 擴張的終極能源護城河。",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-08-18-ai-hyperscalers-btc-mining-power"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Coinbase (COIN) 2026 戰略重估：USDC 13.5億與 Deribit 29億併購築起萬物交易所護城河",
+      "datePublished": "2026-08-18T00:00:00+08:00",
+      "articleBody": "Coinbase 已成功從單純現貨經紀商蛻變為涵蓋 USDC 利息 ($13.5B)、Deribit 衍生品 ($29B) 與 Base L2 / x402 AI 支付軌道的『萬物交易所』。 儘管零售手續費面臨壓縮與行情盤整，其訂閱與服務收入佔淨營收 48%，配合 $131.5B 龐大現金儲備與連續 14 季正向 Adjusted EBITDA，築起深厚資本護城河。詳見 Coinbase 深度投資分析報告。",
+      "url": "https://masonyang-blog.github.io/pulse.html#2026-08-18-coinbase-coin-2026-usdc-135-deribit-29"
+    }
+  ]
+}
+</script>
+</head>
+
+<body class="theme-bg-body text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        
+        <!-- 頁面標題 -->
+        <header class="mb-10 text-center md:text-left">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight mb-3 font-noto">
+                市場瞬息 (Pulse)
+            </h1>
+            <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl">
+                收錄 Mason Yang 最新、最即時的金融分析、地緣政治觀點與量化交易專家短評，深度織網，權重聚焦。
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+            
+            <!-- 篩選面板 (Sticky Sidebar) -->
+            <aside class="lg:col-span-1 lg:sticky lg:top-24 space-y-6">
+                <div class="theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm">
+                    <!-- 全文搜尋器 -->
+                    <div class="mb-6">
+                        <h2 class="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2">
+                            搜尋觀點
+                        </h2>
+                        <div class="relative">
+                            <input type="text" id="search-input" placeholder="輸入關鍵字搜尋..." class="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs border border-slate-200 dark:border-slate-700/80 theme-bg-body dark:bg-slate-900 focus:outline-none focus:border-orange-500/50 text-slate-800 dark:text-slate-200 transition-colors">
+                            <span class="absolute left-2.5 top-2 text-slate-400 dark:text-slate-500">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 年月快速導航 -->
+                    <div class="mb-6">
+                        <h2 class="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2">
+                            時間軸索引
+                        </h2>
+                        <div id="month-navigation" class="flex flex-wrap lg:flex-col gap-2 max-h-40 lg:max-h-none overflow-y-auto pr-1">
+                            <!-- JS 動態插入年月按鈕 -->
+                        </div>
+                    </div>
+
+                    <!-- 賽道篩選器 -->
+                    <div class="mb-2">
+                        <h2 class="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">
+                            賽道篩選器
+                        </h2>
+                        <div id="tag-container" class="flex flex-wrap lg:flex-col gap-2">
+                            <button class="tag-filter-btn active text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="all">
+                                全部觀點
+                            </button>
+                            <button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="ai-agent">#AI Agent</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="ai-economy">#AI 算力與機器經濟</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="amd">#AMD</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="arbitrage">#套利交易</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="btc">#BTC</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="chip-analysis">#籌碼分析</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="coinbase">#Coinbase (COIN)</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="compute-infra">#算力基礎設施</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="crude-oil">#原油</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="crypto">#加密貨幣</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="crypto-web3">#數位資產與 Web3</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="dcf-model">#DCF 模型</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="depin">#DePIN</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="eigenlayer">#EigenLayer</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="eth">#ETH</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="ethfi">#Ether.fi (ETHFI)</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="fed">#聯準會 (Fed)</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="financial-analysis">#財報分析</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="gaw">#Games Workshop (GAW)</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="gold">#黃金</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="japan">#日本</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="liquidity-crisis">#流動性危機</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="macro-economy">#總體經濟</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="macro-geopolitics">#宏觀戰略與地緣政治</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="rwa">#RWA</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="sec-inflation">#二次通膨</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="tech-ai">#科技趨勢與 AI</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="u">#Unity (U)</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="us-stocks">#美股</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="us-treasury">#美債</button>
+<button class="tag-filter-btn text-left px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700/80 hover:border-orange-500/50" data-tag="valuation-risk">#估值與 IPO 風險</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 動態牆串流 (Feed Timeline) -->
+            <section class="lg:col-span-3 space-y-6 relative">
+                
+                <!-- 時間軸垂直引線 -->
+                <div class="timeline-line"></div>
+
+                <!-- 所有的 article 卡片將編譯注入至此 -->
+                <div id="pulse-container" class="space-y-8 pl-8 md:pl-10">
+                    
+        <article id="2026-09-12-115221" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["btc", "crypto", "macro-economy"]' data-date="2026-09-12" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#BTC</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#加密貨幣</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#總體經濟</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-09-12T00:00:00+08:00" class="text-xs font-mono" datetime="2026-09-12">2026-09-12</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-09-12-115221" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-09-12-115221" data-title="比特幣終局光譜：矽基經濟結算與生息穩定幣擠出博弈" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                比特幣終局光譜：矽基經濟結算與生息穩定幣擠出博弈
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> 比特幣終局已跳脫純粹法幣崩潰的單一敘事，實質演化為矽基自主 AI 微支付結算層與 PoW 熱力學實體國防威懾，同時面臨生息穩定幣 4%~5% 無風險利差的資本機會成本擠出挑戰。<br><br><strong class="dsr-label">[Support Details]</strong> 在 L402 協議與 HTTP 402 原生架構下，Satoshis 成為零 KYC 機器代理的流動性計量標準；然而塔勒布吸收態歸零障礙與 OFAC 合規區塊引發的 20%~40% 受污染 UTXO 折價，正在物理層撕裂其絕對可替代性。<br><br>完整博弈推導與量化模型詳見 ➔ <a href="news/20260912-bitcoin-endgame-hypotheses.html">【深度研報】比特幣終局理論的延伸光譜：六大非傳統演變假說與系統性推演</a></p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260912-bitcoin-endgame-hypotheses.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：news/20260912-bitcoin-endgame-hypotheses.html
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-09-12-ai-take-or-pay" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["compute-infra", "btc", "us-stocks"]' data-date="2026-09-12" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#算力基礎設施</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#BTC</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#美股</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-09-12T00:00:00+08:00" class="text-xs font-mono" datetime="2026-09-12">2026-09-12</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-09-12-ai-take-or-pay" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-09-12-ai-take-or-pay" data-title="北美比特幣礦企轉型 AI 算力中心之 Take-or-Pay 估值防線" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                北美比特幣礦企轉型 AI 算力中心之 Take-or-Pay 估值防線
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> 北美比特幣礦企跨界 AI 託管的關鍵防線在於 Take-or-Pay 照付不議合約與電網稀缺指標重估，而非承擔 GPU 硬體折舊風險。合約將推論價格年降 70% 的通縮衝擊完全隔絕於租客端，推動板塊 EV/MW 邁向數據中心 REITs 的估值重構。<br><br><strong class="dsr-label">[Support Details]</strong> 核心交付節點集中於 2026 至 2027H1，包括 Core Scientific 與 CoreWeave 的 590MW 長約及 Cipher 的 600MW 併網管線。群聯等企業自建設備僅屬十千瓦級邊緣部署，無法動搖百兆瓦級公用事業電網的稀缺溢價。<br><br>完整博弈推導與量化模型詳見 ➔ <a href="news/20260912-crypto-miners-ai-datacenter-pivot.html">【深度研報】北美加密礦企轉型 AI 數據中心之投資論點查證與 2026-2027 產業週期展望</a></p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260912-crypto-miners-ai-datacenter-pivot.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：news/20260912-crypto-miners-ai-datacenter-pivot.html
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-09-06-ai-500kv-70" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["compute-infra", "us-stocks"]' data-date="2026-09-06" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#算力基礎設施</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#美股</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-09-06T00:00:00+08:00" class="text-xs font-mono" datetime="2026-09-06">2026-09-06</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-09-06-ai-500kv-70" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-09-06-ai-500kv-70" data-title="AI 算力資產定價範式轉移：500kV 變壓器交付瓶頸與 70% 稼動率死線" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                AI 算力資產定價範式轉移：500kV 變壓器交付瓶頸與 70% 稼動率死線
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> 算力租賃已由硬體轉租套利轉向由電網交付物理學與折舊會計主導的重資產時代。70% 稼動率為損益平衡死線，55% 則引爆月虧 43 萬美元現金黑洞；延長至 5.5 年折舊將觸發 ASC 360 巨額資產減損。<br><br><strong class="dsr-label">[Support Details]</strong> 500kV 變壓器交期拉長至 160 週，FERC 否決核電表後直連使未通電延誤 12 個月即令 IRR 自 22% 驟降至 6.8%。CoreWeave 透過破產隔離 SPV 將 DDTL 利差壓縮至 SOFR+2.25%，而 Mooncake 解耦編排軟體則推升 MFU 至 50% 以上。<br><br>完整模型推導與 60/40 非對稱資產配置架構詳見 ➔ <a href="news/20260906-ai-compute-asset-pricing-power-physics.html">【深度研報】AI 算力資產定價、能源交付物理學與資本工程</a></p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260906-ai-compute-asset-pricing-power-physics.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：【AI 算力資產定價 2026】 - 500kV 變壓器交期如何重構資產定價？為何折舊與電網引爆 ASC 360 減損？解構 70% 稼動率死線、160 週延誤與 MFU 50% 護城河
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-09-06-ai-70-time-to-power-83" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["compute-infra", "tech-ai", "ai-economy"]' data-date="2026-09-06" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#算力基礎設施</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#科技趨勢與 AI</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#AI 算力與機器經濟</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-09-06T00:00:00+08:00" class="text-xs font-mono" datetime="2026-09-06">2026-09-06</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-09-06-ai-70-time-to-power-83" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-09-06-ai-70-time-to-power-83" data-title="【AI 算力中心財務模型】70% 稼動率為盈虧分水嶺，Time-to-Power 延遲引爆每月 83 萬美元無效折舊" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                【AI 算力中心財務模型】70% 稼動率為盈虧分水嶺，Time-to-Power 延遲引爆每月 83 萬美元無效折舊
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> 評估 1,024 卡 H100 智算中心（初期 CapEx 4,500 萬美元、年化剛性 OpEx 1,772 萬美元），財務模型表明 70% 稼動率為營運損益分水嶺。<strong class="dsr-label">[Support Details]</strong> 在每小時 2.50 美元基準租金下，55% 稼動率將產生每月 43.9 萬美元 EBIT 虧損（IRR -11.7%），而 85% 稼動率則能達成 3.61 年回收期與 17.6% IRR。電網通電週期（Time-to-Power）延遲使未通電 B200 叢集每月吞噬 83 萬美元無效折舊。資產配置防禦核心已由晶片採購轉向確定性電力儲備與 Prefill-Decode 解耦調度溢價。</p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260906-ai-datacenter-financial-model.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：【AI 算力數據中心收益評估 2026】 - 如何跨越 70% 稼動率獲利分水嶺？為何 Time-to-Power 延遲引爆無效折舊？解構 1,024 卡 H100 TCO、代幣成本與財務模型
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-09-06-ai-70" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["compute-infra", "macro-economy", "valuation-risk"]' data-date="2026-09-06" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#算力基礎設施</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#總體經濟</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#估值與 IPO 風險</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-09-06T00:00:00+08:00" class="text-xs font-mono" datetime="2026-09-06">2026-09-06</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-09-06-ai-70" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-09-06-ai-70" data-title="AI 算力基礎設施定價範式轉移與 70% 稼動率死線" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                AI 算力基礎設施定價範式轉移與 70% 稼動率死線
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> AI 算力基礎設施定價已由前端模型狂熱徹底轉向底層重資產物理學與嚴苛財務槓桿。1,024 卡 H100 叢集年折舊高達 1,125 萬美元（佔 OpEx 的 63.5%），將 70% 稼動率釘死為損益平衡分水嶺。<br><br><strong class="dsr-label">[Support Details]</strong> 稼動率若跌破 55%，每月剛性現金流失將迅速突破 43 萬美元引發清算黑洞；變壓器交付延期長達 160 週放大 Time-to-Power 無效折舊。超額回報唯有向吉瓦級核電 PPA 與投資級資產抵押融資 (ABF) 兩端延伸。<br><br>完整博弈推導與資本配置矩陣詳見 ➔ <a href="news/20260906-ai-compute-infrastructure-investment.html">【深度研報】AI 算力基礎設施投資 2026：如何跨越 70% 稼動率死線？</a></p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260906-ai-compute-infrastructure-investment.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：AI 算力基礎設施：從財務數據推演投資機會與風險架構分析
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-09-06-roblox-rblx-10sbcdcf" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["us-stocks", "financial-analysis", "dcf-model"]' data-date="2026-09-06" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#美股</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#財報分析</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#DCF 模型</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-09-06T00:00:00+08:00" class="text-xs font-mono" datetime="2026-09-06">2026-09-06</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-09-06-roblox-rblx-10sbcdcf" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-09-06-roblox-rblx-10sbcdcf" data-title="Roblox (RBLX) 資本週期覆盤：會計遞延迷思、年逾10億SBC與雙軌DCF估值重構" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                Roblox (RBLX) 資本週期覆盤：會計遞延迷思、年逾10億SBC與雙軌DCF估值重構
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> Roblox (NYSE: RBLX) 二級市場定價撕裂根源於 27 個月 ASC 606 遞延攤銷與年逾 10 億美元 SBC 稀釋之間的認知時差。<strong class="dsr-label">[Support Details]</strong> 儘管 FY25E 預訂額加速放量至 $66 億、13 歲以上成熟用戶時長佔比突破 50%，但扣除 SBC 後的經濟實質 FCF 直至 2025 年始由負轉正；雙軌 DCF 測算公允價值區間為 $24.20 至 $74.50，綜合加權確立基準目標價 $58.00。建議利用短線司法訴訟利空於 $35.00 以下安全邊際逢低建倉。詳見 <a href="project/roblox.html">Roblox 深度投資評估報告</a>。</p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="project/roblox.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：【Roblox (RBLX) 2026 深度研報】 - 如何在會計遞延與 SBC 稀釋中重估沉浸式平台？預訂額 80 億與雙軌 DCF 公允價值測算
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-09-05-134540" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["crypto", "macro-economy"]' data-date="2026-09-05" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#加密貨幣</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#總體經濟</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-09-05T00:00:00+08:00" class="text-xs font-mono" datetime="2026-09-05">2026-09-05</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-09-05-134540" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-09-05-134540" data-title="達世幣雙層安全與支付公鏈的價值沈澱悖論" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                達世幣雙層安全與支付公鏈的價值沈澱悖論
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> 達世幣（Dash）透過雙層主節點與 ChainLocks 實現了秒級確定性結算並徹底免疫 51% 算力重組，然而在現實貨幣博弈中，貨幣的購買力穩定性始終高於結算速度。當惡性通膨地區民眾全面倒向美元穩定幣（USDT），且歐美合規 CEX 因 AEC 匿名標籤掀起下架潮，純支付公鏈正陷入隱私與合規兩頭落空的中庸困境。<br><br><strong class="dsr-label">[Support Details]</strong> 全網常態鎖定 20% 至 30% 流通籌碼於主節點抵押池，牛市形成供給休克，熊市卻演變為固算法幣伺服器成本壓制下的流動性堰塞湖；其突圍生機在於 Dash Platform 將 2 秒結算層升維為 Web3 數據合約與 DPNS 身分狀態機。<br><br>完整博弈推導與架構解構詳見 ➔ <a href="news/20260905-dash-blockchain-research.html">【深度研報】達世幣 Dash 支付公鏈 2026：雙層架構、代幣經濟與合規困境</a></p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260905-dash-blockchain-research.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：【達世幣 Dash 支付公鏈 2026】 - 雙層主節點如何免疫 51% 攻擊？為何面臨 SEC 匿名合規下架潮？解構 15 萬門市落地與穩定幣夾擊下的中庸困境
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-09-05-40-clarity-act-defi-rwa" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["us-treasury", "macro-economy", "crypto"]' data-date="2026-09-05" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#美債</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#總體經濟</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#加密貨幣</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-09-05T00:00:00+08:00" class="text-xs font-mono" datetime="2026-09-05">2026-09-05</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-09-05-40-clarity-act-defi-rwa" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-09-05-40-clarity-act-defi-rwa" data-title="美債 40 兆危機倒逼體外循環：《CLARITY Act》解鎖 DeFi 費用開關與 RWA 機構定價" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                美債 40 兆危機倒逼體外循環：《CLARITY Act》解鎖 DeFi 費用開關與 RWA 機構定價
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> 美債逼近 40 兆美元且年利息突破 1.1 兆美元，外國央行持倉跌破 23%，倒逼財政部依賴短天期國庫券（T-Bills）融資。由穩定幣與代幣化國債構成的鏈上美元池，已躍升為實質承接主權債務的「體外循環」吸收中樞。<br><br><strong class="dsr-label">[Support Details]</strong> 《CLARITY Act》（H.R. 3633）確立客觀成熟區塊鏈測試與第 604 條非託管安全港，徹底消除 SEC 執法威脅。Uniswap 每年 2.7 億美元自由現金流有望啟動費用開關（Fee Switch），驅動治理代幣轉向 DCF 現金流貼現估值重塑。<br><br>完整主權債務螺旋推導、ONDO 籌碼解鎖博弈與事件驅動大盤中性交易手冊詳見 ➔ <a href="news/20260905-clarity-act-rwa-investment-research.html" class="text-blue-600 dark:text-blue-400 underline font-semibold">【深度研報】美債 RWA 與 CLARITY Act 2026：5 層資本矩陣與對沖策略</a></p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260905-clarity-act-rwa-investment-research.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：【美債 RWA 與 CLARITY Act 2026】 - 40 兆主權債如何驅動鏈上體外循環？非託管安全港怎樣重塑 UNI 與 ONDO 估值？剖析 5 層資本矩陣與對沖策略
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-09-05-circle-nim-vs-clarity-act-0" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["crypto-web3", "us-treasury", "macro-economy", "arbitrage"]' data-date="2026-09-05" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#數位資產與 Web3</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#美債</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#總體經濟</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#套利交易</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-09-05T00:00:00+08:00" class="text-xs font-mono" datetime="2026-09-05">2026-09-05</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-09-05-circle-nim-vs-clarity-act-0" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-09-05-circle-nim-vs-clarity-act-0" data-title="【Circle 研報】降息週期 NIM 侵蝕 vs CLARITY Act 0% 資金成本壟斷：解構事件驅動跨市場對沖計畫" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                【Circle 研報】降息週期 NIM 侵蝕 vs CLARITY Act 0% 資金成本壟斷：解構事件驅動跨市場對沖計畫
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> Circle 本質為零資金成本負債、獲利高度依賴短期美債淨息差（NIM）的特許非銀行金融機構。基準利率每下調 100 bps 將帶來約 3.5 億至 4.0 億美元剛性減損；而美國國會《CLARITY Act》（H.R. 3633）的排他性准入與法定禁止向零售端派息條款（No-Yield Mandate），在實質上邊際化未受審計離岸對手並永久捍衛 100% 利差空間。<br><br><strong class="dsr-label">[Support Details]</strong> 非線性損益平衡模型測算顯示：若利率降至 3.25%，USDC 必需流通規模需自 350 億擴增 53.7% 至 538 億美元；在公開市場建構「做多 60% COIN + 20% UNI + 20% Pendle PT-USDC，做空 50% KRE + 50% BTC-PERP」合成對沖籃子，可完全剔除大盤 Beta 波動，在 IPO 前純粹套利政策立法重估溢價。</p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260905-circle-usdc-investment-research.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：正在導向至最新專案頁面 - 【Circle USDC 研報 2026】 - 降息週期如何衝擊淨息差？CLARITY Act 為何鞏固 0% 資金成本？解構 580 億損益平衡與合成對沖交易計畫
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-09-03-12" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["us-treasury", "macro-economy", "japan"]' data-date="2026-09-03" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#美債</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#總體經濟</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#日本</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-09-03T00:00:00+08:00" class="text-xs font-mono" datetime="2026-09-03">2026-09-03</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-09-03-12" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-09-03-12" data-title="美日利差失衡與12兆日圓套利去槓桿的流動性絞殺" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                美日利差失衡與12兆日圓套利去槓桿的流動性絞殺
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> 美日利差失衡誘發的極端弱勢日圓正透過12兆美元套利交易網絡累積全球系統性風險。當日本央行被迫升息引發暴力去槓桿，初期的美債避險錯覺將迅速質變為擊穿造市商資產負債表容量的「全面美元現鈔枯竭 (Dash for Cash)」，引發跨資產無差別拋售與系統性流動性凍結。<br><br><strong class="dsr-label">[Support Details]</strong> 美國單月財政赤字達4,323億美元推升30年期美債利率至5.32%，對沖基金單週平倉逾4.6萬口日圓期貨空單。回購市場SOFR飆升至5.25%與交叉貨幣基差 (CIP) 深度跌入負值，揭示在岸與離岸美元管線流動性告急。<br><br>完整傳導機制深度剖析與機構防禦策略詳見 ➔ <a href="news/20260903-us-japan-liquidity-crisis.html">【深度報告】美日金融危機 2026：日圓套利交易如何引爆流動性凍結？解構 SOFR 飆升與 12 兆美元去槓桿傳導</a></p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260903-us-japan-liquidity-crisis.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：【美日金融危機 2026】 - 日圓套利交易如何引爆流動性凍結？為何利差失衡誘發 Dash for Cash？解構 SOFR 飆升與 12 兆美元去槓桿傳導
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-08-19-2026---3-ai-capex" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["compute-infra", "macro-economy", "us-stocks"]' data-date="2026-08-19" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#算力基礎設施</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#總體經濟</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#美股</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-08-19T00:00:00+08:00" class="text-xs font-mono" datetime="2026-08-19">2026-08-19</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-08-19-2026---3-ai-capex" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-08-19-2026---3-ai-capex" data-title="【半導體板塊劇烈修正 2026】 - 3 兆美元表外隱藏負債曝光如何引爆 AI CapEx 與美債折現率雙殺？" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                【半導體板塊劇烈修正 2026】 - 3 兆美元表外隱藏負債曝光如何引爆 AI CapEx 與美債折現率雙殺？
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p>related_url: news/20260819-semiconductor-sector-selloff-analysis.html</p>
+<p><strong class="dsr-label">[Direct Answer]</strong> 2026年8月19日全球半導體板塊遭遇劇烈修正（費半重挫4.98%、台股跌589點失守季線），核心誘因為荷姆茲海峽通航危機推升原油破91美元引發美債10年期殖利率飆至4.70%，疊加科技九巨擘3兆美元表外隱藏負債曝光，引發市場對AI資本開支真實變現能力的嚴格審查。</p>
+<p><strong class="dsr-label">[Support Details]</strong> 前九大科技巨擘透過特殊目的實體（SPV）累積高達1.2兆美元未啟用機房租約與1.9兆美元遠期晶片採購（如Meta Hyperion合資發債273億），遠超公開申報的6,000億CapEx。一旦終端變現放緩，龐大表外固定租約將順供應鏈引爆設備商與記憶體廠的長鞭效應；惟台積電憑藉A16/N2先進製程壟斷壁壘終場僅跌1.26%，展現結構分化下的定價防禦力。</p>
+<p>表外隱藏負債拆解、利益主體博弈矩陣與槓鈴防禦配置詳見 ➔ <a href="news/20260819-semiconductor-sector-selloff-analysis.html" class="text-blue-600 dark:text-blue-400 hover:underline">【全球半導體板塊劇烈修正 2026】深度剖析報告</a>。</p>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-08-19-compute-dollar-nvidia-cme-futures" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["compute-infra", "us-stocks", "macro-economy"]' data-date="2026-08-19" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#算力基礎設施</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#美股</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#總體經濟</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-08-19T00:00:00+08:00" class="text-xs font-mono" datetime="2026-08-19">2026-08-19</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-08-19-compute-dollar-nvidia-cme-futures" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-08-19-compute-dollar-nvidia-cme-futures" data-title="輝達攜華爾街打造5000億融資平台，CME算力期貨奠定「算力美元」新秩序" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                輝達攜華爾街打造5000億融資平台，CME算力期貨奠定「算力美元」新秩序
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> 輝達聯手華爾街六大另類資產管理巨頭動員 5,000 億美元打造第三方融資平台，搭配 CME 即將於 2026 年 10 月 5 日推出的現金結算算力期貨，正式將 GPU 升維為可融資抵押的「算力美元」長期基礎設施。<br><br><strong class="dsr-label">[Support Details]</strong> 2026 年全球 AI 資本支出達 7,650 億美元，首度超越油氣探勘總額（6,810 億美元）。儘管輝達提供最高 25% 殘值支持，但晶片 18~24 個月迭代週期與 5~8 年專案債務的期限錯配，使體系高度脆弱。<br><br>完整博弈推導與量化模型詳見 ➔ <a href="news/20260819-compute-dollar-nvidia-gpu-cme-futures.html" class="text-blue-600 dark:text-blue-400 hover:underline">【深度研報】輝達GPU資產化與算力美元三大結構斷點</a></p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260819-compute-dollar-nvidia-gpu-cme-futures.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：news/20260819-compute-dollar-nvidia-gpu-cme-futures.html
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="spark-to-compute-arbitrage-compute-dollar-2026" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["compute-infra", "macro-economy", "arbitrage", "us-stocks", "liquidity-crisis"]' data-date="2026-08-19" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#算力基礎設施</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#總體經濟</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#套利交易</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#美股</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#流動性危機</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-08-19T00:00:00+08:00" class="text-xs font-mono" datetime="2026-08-19">2026-08-19</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="spark-to-compute-arbitrage-compute-dollar-2026" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="spark-to-compute-arbitrage-compute-dollar-2026" data-title="火花轉算力套利與算力美元二階推導：從微電網套利到貨幣霸權重構" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                火花轉算力套利與算力美元二階推導：從微電網套利到貨幣霸權重構
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> 算力金融化推動全球 AI CapEx 達 7,650 億美元超越傳統油氣。資料中心微電網開創「火花轉算力套利（Spark-to-Compute Arbitrage）」，將天然氣與電網尖峰轉化為 Token 與 CME 算力期貨對沖模型；華爾街掌控硬體壟斷、美元信貸與衍生品清算權，促使「算力美元體系」接替石油美元完成第四次貨幣實體錨定。<strong class="dsr-label">[Support Details]</strong> 四大壓力測試顯示，在 LTV 60% 基準下，若遭遇供給傾銷或核心模型商違約，SPV 債務回收率將暴跌至 38%~48%，影子銀行私人信貸暗藏巨大系統性脆性。完整二階推導與壓力測試模型詳見 ➔ <a href="news/20260819-compute-dollar-second-order-derivation-spark-arbitrage.html" class="text-blue-600 dark:text-blue-400 hover:underline">【算力美元二階推導 2026】 - 火花轉算力套利如何重構全球貨幣體系？為何石油美元正轉向算力美元？</a></p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="news/20260819-compute-dollar-second-order-derivation-spark-arbitrage.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：news/20260819-compute-dollar-second-order-derivation-spark-arbitrage.html
+                </a>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-08-18-ai-hyperscalers-btc-mining-power" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["compute-infra", "btc", "us-stocks"]' data-date="2026-08-18" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#算力基礎設施</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#BTC</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#美股</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-08-18T00:00:00+08:00" class="text-xs font-mono" datetime="2026-08-18">2026-08-18</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-08-18-ai-hyperscalers-btc-mining-power" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-08-18-ai-hyperscalers-btc-mining-power" data-title="AI 巨頭掀比特幣礦場搶電潮：微軟與 OpenAI 鎖定 HPC 轉型電力資產" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                AI 巨頭掀比特幣礦場搶電潮：微軟與 OpenAI 鎖定 HPC 轉型電力資產
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> AI 算力瓶頸引爆電網排隊危機，微軟、OpenAI 與 Anthropic 繞開傳統 IDC，直接向 MARA、IREN、RIOT 等比特幣礦企大舉鎖定具備高壓變電與即時通電（Powered Land）的能源資產，推動礦企商業模式從高波動算力挖礦重塑為高毛利 HPC 租賃。<br><br><strong class="dsr-label">[Support Details]</strong> 微軟與 IREN 簽署 97 億美元長約、Anthropic 鎖定 RIOT 90 億美元容量；相較比特幣挖礦，HPC 託管每度電可創造高達 25 美元營收且毛利率逾 55%。礦企透過出售儲備 BTC 清償可轉債，將 4.8 GW 級發電廠與變電站轉化為 AI 擴張的終極能源護城河。</p>
+            </div>
+            
+        </article>
+        
+
+        <article id="2026-08-18-coinbase-coin-2026-usdc-135-deribit-29" itemscope itemtype="https://schema.org/BlogPosting" data-tags='["coinbase", "ai-agent", "financial-analysis"]' data-date="2026-08-18" class="pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card">
+            <div class="timeline-node"></div>
+            <div class="flex justify-between items-start gap-4 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#Coinbase (COIN)</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#AI Agent</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#財報分析</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                    <time itemprop="datePublished" content="2026-08-18T00:00:00+08:00" class="text-xs font-mono" datetime="2026-08-18">2026-08-18</time>
+                    <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="2026-08-18-coinbase-coin-2026-usdc-135-deribit-29" aria-label="複製此觀點連結">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                    </button>
+                    <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="2026-08-18-coinbase-coin-2026-usdc-135-deribit-29" data-title="Coinbase (COIN) 2026 戰略重估：USDC 13.5億與 Deribit 29億併購築起萬物交易所護城河" aria-label="分享此觀點">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                Coinbase (COIN) 2026 戰略重估：USDC 13.5億與 Deribit 29億併購築起萬物交易所護城河
+            </h3>
+            <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                <p><strong class="dsr-label">[Direct Answer]</strong> Coinbase 已成功從單純現貨經紀商蛻變為涵蓋 USDC 利息 ($13.5B)、Deribit 衍生品 ($29B) 與 Base L2 / x402 AI 支付軌道的『萬物交易所』。<strong class="dsr-label">[Support Details]</strong> 儘管零售手續費面臨壓縮與行情盤整，其訂閱與服務收入佔淨營收 48%，配合 $131.5B 龐大現金儲備與連續 14 季正向 Adjusted EBITDA，築起深厚資本護城河。詳見 <a href="project/coinbase.html">Coinbase 深度投資分析報告</a>。</p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <a href="project/coinbase.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    延伸閱讀：【Coinbase (COIN) 2026 深度研報】 - 如何在手續費壓縮與熊市虧損中重估萬物交易所價值？USDC 13.5億與 Deribit 29億併購的護城河
+                </a>
+            </div>
+            
+        </article>
+        
+
+                    <!-- 動態滾動加載哨兵與控制器 (Dynamic Sharding Loader) -->
+                    <div id="pulse-infinite-sentinel" class="py-6 text-center">
+                        <div id="pulse-loading-spinner" class="hidden flex items-center justify-center gap-2 text-slate-400 dark:text-slate-500 text-xs font-mono py-2">
+                            <svg class="animate-spin h-4 w-4 text-orange-500" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span>載入歷史短評中...</span>
+                        </div>
+                        <button id="btn-load-more-pulse" class="hidden px-5 py-2.5 bg-white dark:bg-slate-800 hover:bg-orange-500 hover:text-white text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition-all border border-slate-200 dark:border-slate-700 shadow-sm">
+                            載入更多歷史觀點
+                        </button>
+                        <div id="pulse-end-message" class="hidden text-slate-400 dark:text-slate-600 text-xs font-mono py-4">
+                            — 已載入全量市場瞬息 —
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分頁與歸檔導航列 (Pagination & Yearly Archive Bar) -->
+                
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- 複製成功提示 Toast -->
+    <div id="toast-notify" class="toast-notification">連結已複製到剪貼簿</div>
+
+    <!-- Core Scripts -->
+    <script src="assets/js/core-header.js"></script>
+    <script src="assets/js/core-footer.js"></script>
+    <script src="assets/js/core-taxonomy.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. 初始化導航列與頁腳組件
+            if (window.HeaderComponent) {
+                new HeaderComponent().setHomeUrl('index.html').init();
+            }
+            if (window.FooterComponent) {
+                new FooterComponent().init();
+            }
+
+            // 2. 篩選與搜尋狀態機 (Client-side Tag Filtering & Full-text Search)
+            const filterState = {
+                tag: 'all',
+                searchQuery: ''
+            };
+
+            const filterButtons = document.querySelectorAll('.tag-filter-btn');
+            const searchInput = document.getElementById('search-input');
+            const toastNotify = document.getElementById('toast-notify');
+            const pulseContainer = document.getElementById('pulse-container');
+            const sentinel = document.getElementById('pulse-infinite-sentinel');
+            const spinner = document.getElementById('pulse-loading-spinner');
+            const loadMoreBtn = document.getElementById('btn-load-more-pulse');
+            const endMsg = document.getElementById('pulse-end-message');
+            const monthNav = document.getElementById('month-navigation');
+
+            function getCards() {
+                return document.querySelectorAll('.pulse-card');
+            }
+
+            function applyFilters() {
+                const tag = filterState.tag;
+                const query = filterState.searchQuery.toLowerCase().trim();
+                const cards = getCards();
+
+                cards.forEach(card => {
+                    let tagMatches = false;
+                    if (tag === 'all') {
+                        tagMatches = true;
+                    } else {
+                        try {
+                            const cardTags = JSON.parse(card.getAttribute('data-tags') || '[]');
+                            tagMatches = cardTags.includes(tag);
+                        } catch (e) {
+                            console.error('Failed to parse tags for card:', card.id, e);
+                        }
+                    }
+
+                    let searchMatches = true;
+                    if (query) {
+                        const titleEl = card.querySelector('h3');
+                        const bodyEl = card.querySelector('.pulse-card-body');
+                        const titleText = titleEl ? titleEl.textContent.toLowerCase() : '';
+                        const bodyText = bodyEl ? bodyEl.textContent.toLowerCase() : '';
+                        searchMatches = titleText.includes(query) || bodyText.includes(query);
+                    }
+
+                    if (tagMatches && searchMatches) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                updateMonthNavStatus();
+            }
+
+            function filterTag(tag) {
+                filterState.tag = tag;
+                filterButtons.forEach(btn => {
+                    if (btn.getAttribute('data-tag') === tag) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                applyFilters();
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tag = button.getAttribute('data-tag');
+                    filterTag(tag);
+                    
+                    const url = new URL(window.location);
+                    if (tag === 'all') {
+                        url.searchParams.delete('tag');
+                    } else {
+                        url.searchParams.set('tag', tag);
+                    }
+                    window.history.pushState({}, '', url);
+                });
+            });
+
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    filterState.searchQuery = searchInput.value;
+                    applyFilters();
+                });
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialTag = urlParams.get('tag');
+            if (initialTag) {
+                filterTag(initialTag);
+            }
+
+            // 3. 綁定卡片按鈕事件 (複製與分享)
+            function bindCardActions(card) {
+                const copyBtn = card.querySelector('.copy-anchor-btn');
+                if (copyBtn) {
+                    copyBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const articleId = copyBtn.getAttribute('data-id');
+                        const targetUrl = window.location.origin + window.location.pathname + '#' + articleId;
+                        navigator.clipboard.writeText(targetUrl).then(() => {
+                            toastNotify.classList.add('show');
+                            setTimeout(() => {
+                                toastNotify.classList.remove('show');
+                            }, 2000);
+                        }).catch(err => {
+                            console.error('Could not copy text: ', err);
+                        });
+                    });
+                }
+
+                const shareBtn = card.querySelector('.share-anchor-btn');
+                if (shareBtn && navigator.share) {
+                    shareBtn.classList.remove('hidden');
+                    shareBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const articleId = shareBtn.getAttribute('data-id');
+                        const articleTitle = shareBtn.getAttribute('data-title');
+                        const targetUrl = window.location.origin + window.location.pathname + '#' + articleId;
+                        navigator.share({
+                            title: articleTitle + ' | Mason Yang Blog',
+                            text: '閱讀 Mason Yang 關於「' + articleTitle + '」的市場短評：',
+                            url: targetUrl
+                        }).catch(err => {
+                            if (err.name !== 'AbortError') console.error('Share failed:', err);
+                        });
+                    });
+                }
+            }
+
+            // 為首屏靜態卡片綁定事件
+            getCards().forEach(card => bindCardActions(card));
+
+            // 4. 動態月度分片管理器 (Pulse Sharding Manager)
+            const PulseSharding = {
+                manifest: null,
+                loadedIds: new Set(),
+                pendingMonths: [],
+                isLoading: false,
+
+                async init() {
+                    getCards().forEach(card => this.loadedIds.add(card.id));
+
+                    try {
+                        const res = await fetch('assets/data/pulse/manifest.json');
+                        if (res.ok) {
+                            this.manifest = await res.json();
+                            this.buildMonthNavigation(this.manifest.months);
+                            
+                            // 收集尚未完全載入的月份
+                            this.pendingMonths = this.manifest.months
+                                .map(m => m.month)
+                                .filter(m => {
+                                    const mMeta = this.manifest.months.find(x => x.month === m);
+                                    return mMeta && mMeta.ids.some(id => !this.loadedIds.has(id));
+                                });
+                        }
+                    } catch (e) {
+                        console.warn('[Pulse] Sharding manifest fetch fallback:', e);
+                    }
+
+                    this.setupObserver();
+                    this.checkHashDeepLink();
+                    this.updateSentinelState();
+                },
+
+                buildMonthNavigation(monthsList) {
+                    if (!monthNav) return;
+                    monthNav.innerHTML = '';
+                    monthsList.forEach(mMeta => {
+                        const ym = mMeta.month;
+                        const parts = ym.split('-');
+                        const label = (parts.length === 2) ? `${parts[0]}年${parts[1]}月` : ym;
+                        const btn = document.createElement('button');
+                        btn.className = 'month-nav-btn text-left px-2.5 py-1.5 rounded-lg text-[11px] font-mono border border-slate-200/50 dark:border-slate-800/80 hover:border-orange-500/50 hover:text-orange-500 transition-all bg-slate-50/50 dark:bg-slate-900/50';
+                        btn.textContent = `${label} (${mMeta.count})`;
+                        btn.setAttribute('data-month', ym);
+                        btn.addEventListener('click', async (e) => {
+                            e.preventDefault();
+                            await PulseSharding.ensureMonthLoaded(ym);
+                            const targetCard = document.querySelector(`.pulse-card[data-date^="${ym}"]`);
+                            if (targetCard) {
+                                targetCard.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        });
+                        monthNav.appendChild(btn);
+                    });
+                    updateMonthNavStatus();
+                },
+
+                updateSentinelState() {
+                    if (this.pendingMonths.length === 0) {
+                        if (spinner) spinner.classList.add('hidden');
+                        if (loadMoreBtn) loadMoreBtn.classList.add('hidden');
+                        if (endMsg) endMsg.classList.remove('hidden');
+                    } else {
+                        if (endMsg) endMsg.classList.add('hidden');
+                    }
+                },
+
+                setupObserver() {
+                    if (!('IntersectionObserver' in window) || !sentinel) return;
+
+                    const observer = new IntersectionObserver(entries => {
+                        if (entries[0].isIntersecting && !this.isLoading && this.pendingMonths.length > 0) {
+                            this.loadNextMonth();
+                        }
+                    }, { rootMargin: '300px' });
+
+                    observer.observe(sentinel);
+                },
+
+                async loadNextMonth() {
+                    if (this.isLoading || this.pendingMonths.length === 0) return;
+                    const nextMonth = this.pendingMonths.shift();
+                    await this.loadMonthData(nextMonth);
+                    this.updateSentinelState();
+                },
+
+                async ensureMonthLoaded(month) {
+                    const idx = this.pendingMonths.indexOf(month);
+                    if (idx !== -1) {
+                        this.pendingMonths.splice(idx, 1);
+                        await this.loadMonthData(month);
+                        this.updateSentinelState();
+                    }
+                },
+
+                async loadMonthData(month) {
+                    this.isLoading = true;
+                    if (spinner) spinner.classList.remove('hidden');
+
+                    try {
+                        const res = await fetch(`assets/data/pulse/${month}.json`);
+                        if (res.ok) {
+                            const items = await res.json();
+                            items.forEach(item => {
+                                if (!this.loadedIds.has(item.id)) {
+                                    this.renderAndAppendCard(item);
+                                    this.loadedIds.add(item.id);
+                                }
+                            });
+                            applyFilters();
+                        }
+                    } catch (err) {
+                        console.error(`[Pulse] Failed to load shard for ${month}:`, err);
+                    } finally {
+                        this.isLoading = false;
+                        if (spinner) spinner.classList.add('hidden');
+                    }
+                },
+
+                renderAndAppendCard(item) {
+                    const card = document.createElement('article');
+                    card.id = item.id;
+                    card.setAttribute('itemscope', '');
+                    card.setAttribute('itemtype', 'https://schema.org/BlogPosting');
+                    card.setAttribute('data-tags', JSON.stringify(item.tags));
+                    card.setAttribute('data-date', item.date);
+                    card.className = 'pulse-card relative theme-bg-card dark:bg-slate-850 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm glass-card';
+
+                    const badgesHtml = item.tags.map(t => {
+                        return `<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold tracking-wide uppercase">#${t}</span>`;
+                    }).join('\n');
+
+                    let relatedHtml = '';
+                    if (item.related_post_url) {
+                        relatedHtml = `
+                        <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                            <a href="${item.related_post_url}" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                                延伸閱讀：${item.related_post_url}
+                            </a>
+                        </div>`;
+                    }
+
+                    card.innerHTML = `
+                        <div class="timeline-node"></div>
+                        <div class="flex justify-between items-start gap-4 mb-3">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                ${badgesHtml}
+                            </div>
+                            <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                                <time itemprop="datePublished" content="${item.date}T00:00:00+08:00" class="text-xs font-mono" datetime="${item.date}">${item.date}</time>
+                                <button class="copy-anchor-btn p-1 hover:text-orange-500 rounded transition-colors" data-id="${item.id}" aria-label="複製此觀點連結">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"></path></svg>
+                                </button>
+                                <button class="share-anchor-btn p-1 hover:text-orange-500 rounded transition-colors hidden" data-id="${item.id}" data-title="${item.title}" aria-label="分享此觀點">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l5.051-2.525m-5.051 6.566l5.051 2.525M20 12a3 3 0 11-6 0 3 3 0 016 0zm-11 7a3 3 0 11-6 0 3 3 0 016 0zm0-14a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 itemprop="headline" class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-50 mb-3 font-noto">
+                            ${item.title}
+                        </h3>
+                        <div itemprop="articleBody" class="pulse-card-body text-slate-600 dark:text-slate-300 leading-relaxed text-sm space-y-3">
+                            ${item.compiled_html}
+                        </div>
+                        ${relatedHtml}
+                    `;
+
+                    bindCardActions(card);
+                    if (sentinel) {
+                        pulseContainer.insertBefore(card, sentinel);
+                    } else {
+                        pulseContainer.appendChild(card);
+                    }
+                },
+
+                async checkHashDeepLink() {
+                    const hash = window.location.hash.replace('#', '');
+                    if (!hash) return;
+
+                    let targetCard = document.getElementById(hash);
+                    if (!targetCard && this.manifest) {
+                        // 從 manifest 查找所屬月份
+                        const foundMonth = this.manifest.months.find(m => m.ids.includes(hash));
+                        if (foundMonth) {
+                            await this.ensureMonthLoaded(foundMonth.month);
+                            targetCard = document.getElementById(hash);
+                        }
+                    }
+
+                    if (targetCard) {
+                        setTimeout(() => {
+                            targetCard.scrollIntoView({ behavior: 'smooth' });
+                            targetCard.classList.add('pulse-card-highlight');
+                        }, 250);
+                    }
+                }
+            };
+
+            function updateMonthNavStatus() {
+                const monthButtons = document.querySelectorAll('.month-nav-btn');
+                const cards = getCards();
+                monthButtons.forEach(btn => {
+                    const ym = btn.getAttribute('data-month');
+                    const hasVisibleCard = Array.from(cards).some(card => {
+                        return card.style.display !== 'none' && card.getAttribute('data-date').startsWith(ym);
+                    });
+                    if (hasVisibleCard || PulseSharding.pendingMonths.includes(ym)) {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                    } else {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.35';
+                        btn.style.cursor = 'not-allowed';
+                    }
+                });
+            }
+
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', () => PulseSharding.loadNextMonth());
+            }
+
+            PulseSharding.init();
+        });
+    </script>
+</body>
+
+</html>
