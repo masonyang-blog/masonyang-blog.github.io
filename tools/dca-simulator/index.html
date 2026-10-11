@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情境式定投與回測模擬器 (DCA Simulator) | Mason Yang Blog</title>
+    <meta name="description" content="互動式投資回測工具，讓您設定不同的進場條件（如跌破均線、回落等）與定期定額策略，並驗證歷史績效。">
+    <link rel="canonical" href="https://masonyang-blog.github.io/tools/dca-simulator/index.html">
+    <script src="../../assets/js/core/core-theme.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../assets/css/custom-tokens.css">
+    <link rel="stylesheet" href="../../assets/css/custom-typography.css">
+    <link rel="stylesheet" href="../../assets/css/custom-layout.css">
+    <link rel="stylesheet" href="../../assets/css/custom-components.css">
+    <link rel="stylesheet" href="../../assets/css/custom-article.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- 引入 Lightweight Charts (改為本地載入，確保不被阻擋) -->
+    <script src="lightweight-charts.js"></script>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200">
+    <div id="header-host"></div>
+    
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-screen">
+        <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-1.5 flex-wrap">
+                <li><a href="../../index.html" class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">首頁</a></li>
+                <li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg></li>
+                <li class="font-medium text-slate-900 dark:text-slate-100 truncate">情境式定投與回測模擬器</li>
+            </ol>
+        </nav>
+        
+        <header class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-8">
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">情境式定投與回測模擬器 (DCA Simulator)</h1>
+            <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">自行設定「無腦定投」或「跌破均線才買」等進階進場條件，並立刻回測比特幣歷史績效。透過視覺化圖表與數據看板，尋找最適合您的投資策略。</p>
+        </header>
+
+        <!-- Web App 掛載點 -->
+        <div id="dca-simulator-host"></div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Scripts -->
+    <script src="../../assets/js/core/core-header.js"></script>
+    <script src="../../assets/js/core/core-footer.js"></script>
+    <script src="btc-offline-data.js"></script>
+    <script src="app-dca-simulator.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Header & Footer
+            if (window.HeaderComponent) new HeaderComponent().setHomeUrl('../../index.html').init();
+            if (window.FooterComponent) new FooterComponent().init();
+
+            // 初始化 DCA Simulator
+            if (window.DCASimulatorComponent) {
+                new DCASimulatorComponent(document.getElementById('dca-simulator-host')).init();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+/* 依賴: custom-tokens.css */
+/* --- Typography --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+b {
+    color: var(--c-text-primary);
+    scroll-margin-top: 5rem;
+    /* Sticky header offset */
+}
+
+p,
+li,
+blockquote {
+    color: var(--c-text-secondary);
+}
+
+.prose blockquote {
+    border-left-color: var(--c-border);
+    color: var(--c-text-secondary);
+}
+
+hr,
+.border-slate-100,
+.border-slate-200 {
+    border-color: var(--c-border) !important;
+}
+
+/* --- Dark Mode Prose Overrides --- */
+/* Fixes Tailwind's overly bright prose-invert default colors */
+html.dark .prose.dark\:prose-invert h1,
+html.dark .prose.dark\:prose-invert h2,
+html.dark .prose.dark\:prose-invert h3,
+html.dark .prose.dark\:prose-invert h4,
+html.dark .prose.dark\:prose-invert strong,
+html.dark .prose.dark\:prose-invert b {
+    color: var(--c-text-primary);
+}
+
+html.dark .prose.dark\:prose-invert p,
+html.dark .prose.dark\:prose-invert li,
+html.dark .prose.dark\:prose-invert blockquote {
+    color: var(--c-text-secondary);
+}
+
+html.dark .prose.dark\:prose-invert th {
+    color: var(--c-text-tertiary) !important;
+    background-color: var(--c-bg-body) !important;
+    font-weight: 600;
+}
+
+html.dark .prose.dark\:prose-invert td {
+    color: #C5CBD6 !important; /* 表格數據獨立微亮，數據清晰明了 */
+}
+
+html.dark .prose.dark\:prose-invert table {
+    background-color: var(--c-bg-card) !important;
+}
+
+html.dark .prose.dark\:prose-invert thead {
+    border-bottom-color: var(--c-border) !important;
+}
+
+html.dark .prose.dark\:prose-invert tbody tr {
+    border-bottom-color: var(--c-border) !important;
+}
+
+/* --- UI Component: Alert --- */
+.alert {
+    border: 1px solid var(--c-border);
+    padding: 1.25rem 1.5rem;
+    border-radius: 1rem;
+    margin: 2rem 0;
+    transition: all 0.3s ease;
+    background-color: var(--c-bg-card);
+}
+
+.alert:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transform: translateY(-1px);
+}
+
+.alert-analyst {
+    background-color: var(--c-bg-soft-blue);
+    border-color: var(--c-border-soft-blue);
+    color: var(--c-text-soft-blue);
+}
+
+.alert-warning {
+    background-color: var(--c-alert-warn-bg);
+    border-color: var(--c-alert-warn-border);
+    color: var(--c-alert-warn-text);
+}
+
+.alert-risk,
+.alert-error {
+    background-color: var(--c-alert-error-bg);
+    border-color: var(--c-alert-error-border);
+    color: var(--c-alert-error-text);
+}
+
+.alert-alpha {
+    background-color: var(--c-alert-alpha-bg);
+    border-color: var(--c-alert-alpha-border);
+    color: var(--c-alert-alpha-text);
+}
+
+.alert h4,
+.alert strong {
+    color: inherit !important;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* --- UI Component: Bull/Bear Analysis --- */
+.bull-bear-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+    .bull-bear-container {
+        flex-direction: row;
+    }
+}
+
+.case-bull,
+.case-bear {
+    flex: 1;
+    background-color: var(--c-bg-card);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--c-border);
+    transition: all 0.3s ease;
+}
+
+/* 移除硬性頂部邊框，改採柔和色調或直接透明 */
+.case-bull {
+    background-color: var(--c-alert-alpha-bg);
+    border-color: var(--c-alert-alpha-border);
+}
+
+.case-bear {
+    background-color: var(--c-alert-error-bg);
+    border-color: var(--c-alert-error-border);
+}
+
+/* --- UI Component: Cards --- */
+.info-card {
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    border-radius: 0.75rem;
+    /* rounded-xl */
+    padding: 1.5rem;
+    /* p-6 */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    /* shadow-sm */
+}
+
+/* --- UI Component: Tables --- */
+.responsive-table-wrapper {
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    border: 1px solid var(--c-border);
+    margin: 1.5rem 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.responsive-table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--c-bg-card);
+}
+
+@media (max-width: 768px) {
+    .responsive-table-wrapper table {
+        width: max-content;
+        min-width: 100%;
+    }
+    /* 為行動端增加捲軸視覺引導與側邊滑動暗示 (Scroll Shadows) */
+    .responsive-table-wrapper {
+        border-bottom: 2px solid var(--c-border-soft-blue);
+        background: 
+            linear-gradient(to right, var(--c-bg-card) 30%, rgba(255,255,255,0)),
+            linear-gradient(to left, var(--c-bg-card) 30%, rgba(255,255,255,0)) 100% 0,
+            radial-gradient(farthest-side at 0 50%, rgba(0,0,0,.15), rgba(0,0,0,0)),
+            radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,.15), rgba(0,0,0,0)) 100% 0;
+        background-repeat: no-repeat;
+        background-color: var(--c-bg-card);
+        background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+        background-attachment: local, local, scroll, scroll;
+    }
+    html.dark .responsive-table-wrapper {
+        background: 
+            linear-gradient(to right, var(--c-bg-card) 30%, rgba(30,34,45,0)),
+            linear-gradient(to left, var(--c-bg-card) 30%, rgba(30,34,45,0)) 100% 0,
+            radial-gradient(farthest-side at 0 50%, rgba(0,0,0,.4), rgba(0,0,0,0)),
+            radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,.4), rgba(0,0,0,0)) 100% 0;
+        background-repeat: no-repeat;
+        background-color: var(--c-bg-card);
+        background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+        background-attachment: local, local, scroll, scroll;
+    }
+    
+    /* 進度條增厚 (Tailwind h-0.5 = 2px, h-1 = 4px) */
+    #scroll-progress-container,
+    #scroll-progress-bar {
+        height: 4px !important;
+    }
+}
+
+/* --- UI Component: Table Scrollbar Style --- */
+.responsive-table-wrapper::-webkit-scrollbar {
+    height: 5px;
+}
+
+.responsive-table-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.responsive-table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--c-divider);
+    border-radius: 10px;
+}
+
+html.dark .responsive-table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--c-border);
+}
+
+th {
+    background-color: var(--c-bg-body);
+    color: var(--c-text-secondary);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid var(--c-border);
+}
+
+td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--c-divider);
+    color: var(--c-text-primary);
+}
+
+/* Table Row Highlights */
+.tr-success { background-color: var(--c-alert-alpha-bg) !important; }
+.tr-primary { background-color: var(--c-alert-info-bg) !important; }
+.tr-danger  { background-color: var(--c-alert-error-bg) !important; }
+.tr-muted   { background-color: var(--c-bg-soft-slate) !important; }
+
+/* Invert text colors for row highlights if needed in dark mode */
+html.dark .tr-success, 
+html.dark .tr-primary,
+html.dark .tr-danger {
+    color: var(--c-text-primary);
+}
+
