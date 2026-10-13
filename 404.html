@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 找不到網頁 | Mason Yang Blog</title>
+    <meta name="robots" content="noindex, follow">
+    <meta name="description" content="找不到要求的頁面。系統將自動為您引導至最新文章或返回首頁。">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Theme Core -->
+    <script src="assets/js/core/core-theme.js"></script>
+
+    <!-- Tailwind CSS CDN & Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#15202e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(1.05); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 6s ease-in-out infinite;
+        }
+        .animate-pulse-slow-delayed {
+            animation: pulse-slow 6s ease-in-out 3s infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+    <!-- Header -->
+    <blog-header active-nav=""></blog-header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center px-4 py-16 relative overflow-hidden">
+        <!-- Background Ambient Glow -->
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-blue-500/10 dark:bg-blue-600/15 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+        <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-600/15 rounded-full blur-3xl pointer-events-none animate-pulse-slow-delayed"></div>
+
+        <div class="max-w-xl w-full text-center relative z-10">
+            <!-- Redirecting State Panel (Default Hidden) -->
+            <div id="redirect-panel" class="hidden bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-700/80 rounded-2xl p-8 shadow-xl">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 mb-5">
+                    <svg class="w-7 h-7 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                    </svg>
+                </div>
+                <div class="inline-block px-3 py-1 text-xs font-semibold tracking-wider uppercase rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 mb-3 border border-blue-200 dark:border-blue-800">
+                    歷史網址智慧導航
+                </div>
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">文章已遷移至新網址</h1>
+                <p class="text-sm text-slate-600 dark:text-slate-300 mb-6">
+                    您訪問的內容已搬遷至新路徑，系統正為您無縫導航至目標頁面...
+                </p>
+
+                <!-- Target URL Box -->
+                <div class="bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700/60 rounded-xl p-3 mb-6 text-left text-xs font-mono break-all text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                    <svg class="w-4 h-4 flex-shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                    <span id="target-url-display">載入中...</span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-100 dark:bg-slate-700/60 rounded-full h-1.5 mb-6 overflow-hidden">
+                    <div id="progress-bar" class="bg-blue-600 dark:bg-blue-500 h-1.5 rounded-full transition-all duration-1000 ease-linear w-0"></div>
+                </div>
+
+                <div class="flex items-center justify-center gap-3">
+                    <a id="immediate-redirect-btn" href="#" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-all shadow-md hover:shadow-lg">
+                        即刻前往
+                    </a>
+                    <button id="cancel-redirect-btn" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-medium text-sm transition-all">
+                        留在本頁
+                    </button>
+                </div>
+            </div>
+
+            <!-- Standard 404 Panel -->
+            <div id="not-found-panel" class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-700/80 rounded-2xl p-8 sm:p-10 shadow-xl">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 mb-6 shadow-sm">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+
+                <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3">404</h1>
+                <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-100 mb-3">找不到您請求的頁面</h2>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mb-8 max-w-md mx-auto leading-relaxed">
+                    您造訪的網址可能已更名、遷移或已不存在。您可以直接回到首頁或造訪我們精選的知識庫與研究專區。
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <a href="index.html" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-all shadow-md">
+                        返回首頁
+                    </a>
+                    <a href="apps/topic-knowledge/topic-knowledge.html" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 font-medium text-sm transition-all">
+                        主題知識庫
+                    </a>
+                    <a href="index.html#articles" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 font-medium text-sm transition-all">
+                        最新研究文章
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <blog-footer></blog-footer>
+
+    <!-- Core Scripts -->
+    <script src="assets/js/core/core-header.js"></script>
+    <script src="assets/js/core/core-footer.js"></script>
+
+    <!-- Smart Redirect Router -->
+    <script>
+        (function() {
+            // 完整歷史路徑對照字典 (Relative or Absolute)
+            const EXACT_MAP = {
+                // 1. 知識庫與工具重構
+                'post/topic-knowledge.html': 'apps/topic-knowledge/topic-knowledge.html',
+                'post/crypto-knowledge.html': 'apps/topic-knowledge/topic-knowledge.html',
+                'tools/ai-miners-sheet/ai-miners-core-metrics-benchmark.html': 'apps/ai-miners-sheet/ai-miners-core-metrics-benchmark.html',
+
+                // 2. news- 前綴歷史文章 (2026/03 系列)
+                'news/news-20260326-investment-research-guide.html': 'news/20260326-investment-research-guide.html',
+                'news/news-20260320-us-computing-infrastructure.html': 'news/20260320-us-computing-infrastructure.html',
+                'news/news-20260323-gold-crash-analysis.html': 'news/20260323-gold-crash-analysis.html',
+                'news/news-20260317-eth-surge-analysis.html': 'news/20260317-eth-surge-analysis.html',
+                'news/news-20260323-palantir-iran-war-commodities.html': 'news/20260323-palantir-iran-war-commodities.html',
+                'news/news-20260325-us-private-credit-crisis.html': 'news/20260325-us-private-credit-crisis.html',
+                'news/news-20260313-bitwise-1m.html': 'news/20260313-bitwise-1m.html',
+                'news/news-20260325-private-credit-gold-crisis.html': 'news/20260325-private-credit-gold-crisis.html',
+                'news/news-20260327-invest-research-handbook.html': 'news/20260327-invest-research-handbook.html',
+                'news/news-20260319-gold-crash-analysis.html': 'news/20260319-gold-crash-analysis.html',
+
+                // 3. 比特幣專欄重構
+                'post/topic-btc-02-price-factors.html': 'post/crypto-btc-02-price-factors.html',
+                'post/topic-btc-sovereign-liquidity.html': 'post/crypto-btc-04-sovereign-liquidity.html',
+                'post/btcoin-valuation-models.html': 'post/crypto-btc-01-valuation-models.html',
+
+                // 4. 交易策略與期權重構
+                'post/dcf-valuation-model.html': 'post/trading-strategies-dcf-valuation-model.html',
+                'post/dcf-valuation-model-guide.html': 'post/trading-strategies-dcf-valuation-model-guide.html',
+                'post/trading-strategies--commodity-futures.html': 'post/trading-strategies-commodity-futures.html',
+                'news/20260520-options-strategy-deep-research.html': 'post/trading-strategies-options-yield-enhancement-strategies.html',
+                'news/20260520-options-strategy-deep-research-part2.html': 'post/trading-strategies-options-volatility-strategies.html',
+
+                // 5. 日期連字號修正
+                'news/2026-07-02-oil-market-deep-dive.html': 'news/20260702-oil-market-deep-dive.html'
+            };
+
+            const pathname = window.location.pathname;
+            // 去除最前方的斜線
+            let normalized = pathname.replace(/^\/+/, '');
+
+            let target = EXACT_MAP[normalized];
+
+            // 若無精確匹配，嘗試智慧啟發式推導 (Heuristic fallback)
+            if (!target) {
+                // 規則 A: news/news-YYYYMMDD-... 轉為 news/YYYYMMDD-...
+                if (normalized.startsWith('news/news-')) {
+                    target = normalized.replace('news/news-', 'news/');
+                }
+                // 規則 B: post/trading-strategies--... 雙減號轉單減號
+                else if (normalized.includes('--')) {
+                    target = normalized.replace(/--+/g, '-');
+                }
+                // 規則 C: tools/ai-miners-sheet/... 轉為 apps/ai-miners-sheet/...
+                else if (normalized.startsWith('tools/ai-miners-sheet/')) {
+                    target = normalized.replace('tools/ai-miners-sheet/', 'apps/ai-miners-sheet/');
+                }
+            }
+
+            if (target) {
+                // 命中重定向
+                const origin = window.location.origin;
+                const fullTargetUrl = `${origin}/${target}`;
+
+                const redirectPanel = document.getElementById('redirect-panel');
+                const notFoundPanel = document.getElementById('not-found-panel');
+                const targetDisplay = document.getElementById('target-url-display');
+                const immediateBtn = document.getElementById('immediate-redirect-btn');
+                const cancelBtn = document.getElementById('cancel-redirect-btn');
+                const progressBar = document.getElementById('progress-bar');
+
+                if (redirectPanel && notFoundPanel) {
+                    notFoundPanel.classList.add('hidden');
+                    redirectPanel.classList.remove('hidden');
+                    targetDisplay.textContent = fullTargetUrl;
+                    immediateBtn.href = fullTargetUrl;
+
+                    // 啟動進度條
+                    requestAnimationFrame(() => {
+                        progressBar.style.width = '100%';
+                    });
+
+                    // 1.2 秒後自動跳轉
+                    const timer = setTimeout(() => {
+                        window.location.replace(fullTargetUrl);
+                    }, 1200);
+
+                    cancelBtn.addEventListener('click', () => {
+                        clearTimeout(timer);
+                        redirectPanel.classList.add('hidden');
+                        notFoundPanel.classList.remove('hidden');
+                    });
+                }
+            }
+        })();
+    </script>
+</body>
+
+</html>

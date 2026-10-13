@@ -1,0 +1,290 @@
+/* 依賴: custom-tokens.css */
+/* --- Interactive Elements --- */
+.filter-btn {
+    transition: all 0.2s;
+    background-color: var(--c-bg-card);
+    /* was #fff */
+    color: var(--c-text-secondary);
+    /* was #334155 */
+}
+
+.filter-btn.active,
+.active-filter {
+    background-color: var(--c-primary) !important;
+    color: white !important;
+}
+
+/* --- Animations --- */
+#rocket {
+    animation: fly 5s linear infinite;
+    offset-path: path('M 150 200 Q 250 50, 400 100 T 650 200');
+}
+
+@keyframes fly {
+    0% {
+        offset-distance: 0%;
+    }
+
+    100% {
+        offset-distance: 100%;
+    }
+}
+
+.factor-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.factor-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Micro-interactions */
+button,
+.filter-btn,
+summary {
+    transition: transform 0.1s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+button:active,
+.filter-btn:active {
+    transform: scale(0.98);
+}
+
+/* --- UI Component: Unlock Schedule --- */
+.unlock-schedule-container {
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+/* --- UI Component: Professional Insight --- */
+.professional-insight-card {
+    background-color: var(--c-bg-card);
+    border: 1px dashed var(--c-accent);
+    /* Dashed border for insight */
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.professional-insight-card[open] {
+    border-style: solid;
+    /* Solid when open */
+    background-color: var(--c-alert-info-bg);
+    /* Slight tint when open */
+}
+
+/* --- TradingView Utilities --- */
+.text-up,
+.text-green-600 {
+    color: var(--c-bull) !important;
+}
+
+.text-down,
+.text-red-600 {
+    color: var(--c-bear) !important;
+}
+
+/* --- Special Sections --- */
+.section-divider {
+    display: flex;
+    align-items: center;
+    color: var(--c-divider);
+}
+
+.section-divider::before,
+.section-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--c-border);
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    max-height: 55vh;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 500px;
+    }
+}
+
+/* --- UI Component: Comparison Table --- */
+.comparison-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 1rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.comparison-table thead th {
+    font-weight: 600;
+    color: var(--c-text-secondary);
+}
+
+.comparison-table tbody tr {
+    background-color: var(--c-bg-body);
+}
+
+.comparison-table tbody tr td:first-child {
+    text-align: left;
+    font-weight: 500;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+.comparison-table tbody tr td:last-child {
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.tick-mark {
+    color: var(--c-bull);
+}
+
+.cross-mark {
+    color: var(--c-bear);
+}
+
+/* Image Filter for Dark Mode */
+.dark img:not([src*=".svg"]) {
+    filter: brightness(0.85) contrast(1.1);
+}
+
+.dark .dark-invert {
+    filter: invert(1);
+}
+
+/* --- UI Component: Magazine Editorial Style (.magazine-card) --- */
+.magazine-card {
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    border-radius: 0;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.magazine-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+html.dark .magazine-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.magazine-kicker {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid currentColor;
+}
+
+.magazine-title {
+    font-size: 1.75rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: var(--c-text-primary);
+    letter-spacing: -0.025em;
+}
+
+.magazine-divider {
+    height: 1px;
+    background-color: var(--c-border);
+    margin: 1.5rem 0;
+    width: 40px;
+}
+
+/* --- UI Component: The Duel Breakdown (.magazine-duel) --- */
+.magazine-duel {
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .magazine-duel {
+        grid-template-columns: 1fr 1px 1fr;
+    }
+    .magazine-duel-divider {
+        background-color: var(--c-border);
+        width: 1px;
+        height: 100%;
+    }
+}
+
+.duel-panel {
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.duel-bg-label {
+    position: absolute;
+    font-size: 8rem;
+    font-weight: 900;
+    opacity: 0.03;
+    bottom: -1rem;
+    right: -1rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.05em;
+}
+
+.duel-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.duel-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--c-border);
+    font-size: 0.875rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.duel-item:last-child {
+    border-bottom: none;
+}
+
+.duel-item::before {
+    content: "—";
+    color: var(--c-text-tertiary);
+}
+
+/* Standard Magazine Colors */
+.text-magazine-red { color: var(--c-bear); }
+.text-magazine-green { color: var(--c-bull); }
+
+.bg-magazine-red-soft { background-color: rgba(242, 54, 69, 0.02); }
+.bg-magazine-green-soft { background-color: rgba(8, 153, 129, 0.02); }
+
+html.dark .bg-magazine-red-soft { background-color: rgba(242, 54, 69, 0.05); }
+html.dark .bg-magazine-green-soft { background-color: rgba(8, 153, 129, 0.05); }
+
