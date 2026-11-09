@@ -1,0 +1,1052 @@
+
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+<!-- [WARNING] 標題零後綴鐵律：絕對禁止包含 | Mason Yang 等後綴 (遵循 STANDARDS_TITLE.md) -->
+<title>【AI 寫程式架構 2026】 - Skills 按需路由如何顛覆百萬上下文迷思？解構脫水防火牆與 95.7% Token 節省實踐</title>
+<meta content="大模型上下文窗口的無限擴張掩蓋了工程架構的失職。本文解構百萬上下文的幻覺，提出以 AI 寫程式 Skills 路由掛載、AST 骨架脫水防火牆與 One Phase One Session 物理隔絕為核心的 AI 工作流架構，實測達成 95.7% Token 節省與 100% 執行通過率。" name="description"/>
+<meta content="AI 寫程式, Token 節省, AI 工作流, Skills 架構, Antigravity, Cursor, 上下文優化, AST 脫水, One Phase One Session, 軟體工程架構, Zero-Build" name="keywords"/>
+<meta content="ai-workflow" name="category"/>
+<meta content="deep-report" name="format"/>
+<meta content="ai-economy" name="series"/>
+<meta content="track-compute-agent-energy" name="track"/>
+<link href="https://masonyang-blog.github.io/ai-workflow/how-to-optimize-tokens-for-ai-coding.html" rel="canonical"/>
+<!-- Theme Core (Must be first to prevent FOUC) -->
+<script src="../assets/js/core/core-theme.js"></script>
+<!-- Tailwind CSS -->
+<script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Custom Styles -->
+<link href="../assets/css/custom-tokens.css" rel="stylesheet"/>
+<link href="../assets/css/custom-typography.css" rel="stylesheet"/>
+<link href="../assets/css/custom-layout.css" rel="stylesheet"/>
+<link href="../assets/css/custom-components.css" rel="stylesheet"/>
+<link href="../assets/css/custom-article.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+TC:wght@400;500;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+    </style>
+
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AnalysisNewsArticle",
+      "@id": "https://masonyang-blog.github.io/ai-workflow/how-to-optimize-tokens-for-ai-coding.html#article",
+      "isPartOf": {
+        "@id": "https://masonyang-blog.github.io/#website"
+      },
+      "author": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      },
+      "publisher": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      },
+      "headline": "【AI 寫程式架構 2026】 - Skills 按需路由如何顛覆百萬上下文迷思？解構脫水防火牆與 95.7% Token 節省實踐",
+      "description": "大模型上下文窗口的無限擴張掩蓋了工程架構的失職。本文解構百萬上下文的幻覺，提出以 AI 寫程式 Skills 路由掛載、AST 骨架脫水防火牆與 One Phase One Session 物理隔絕為核心的 AI 工作流架構，實測達成 95.7% Token 節省與 100% 執行通過率。",
+      "datePublished": "2026-10-13",
+      "dateModified": "2026-10-13",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://masonyang-blog.github.io/ai-workflow/how-to-optimize-tokens-for-ai-coding.html"
+      },
+      "articleSection": "ai-workflow",
+      "keywords": "AI 寫程式, Token 節省, AI 工作流, Skills 架構, Antigravity, Cursor, 上下文優化, AST 脫水, One Phase One Session, 軟體工程架構, Zero-Build"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://masonyang-blog.github.io/ai-workflow/how-to-optimize-tokens-for-ai-coding.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首頁",
+          "item": "https://masonyang-blog.github.io/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "ai-workflow",
+          "item": "https://masonyang-blog.github.io/post/archive.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "【AI 寫程式架構 2026】 - Skills 按需路由如何顛覆百萬上下文迷思？解構脫水防火牆與 95.7% Token 節省實踐",
+          "item": "https://masonyang-blog.github.io/ai-workflow/how-to-optimize-tokens-for-ai-coding.html"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://masonyang-blog.github.io/#author",
+      "name": "Mason Yang",
+      "url": "https://masonyang-blog.github.io",
+      "jobTitle": "Investment Researcher",
+      "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://masonyang-blog.github.io/logo.png"
+      },
+      "sameAs": [
+        "https://x.com/MasonYang16"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://masonyang-blog.github.io/#website",
+      "url": "https://masonyang-blog.github.io",
+      "name": "Mason Yang Blog",
+      "publisher": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      }
+    }
+  ]
+}</script>
+</head>
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="how-to-optimize-tokens-for-ai-coding">
+<!-- Scroll Progress Bar -->
+<div class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]" id="scroll-progress-container">
+<div class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out" id="scroll-progress-bar"></div>
+</div>
+<!-- Header Host -->
+<div id="header-host"></div>
+<!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+<main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+<aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+<div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽
+                    </p>
+<!-- ArticleTOC renders here -->
+<div data-managed="auto" id="toc-desktop-host">
+    <!-- static_toc_start -->
+    <nav class="static-toc-container" aria-label="Table of Contents">
+      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 執行摘要 核心事件的 5W1H 認知架構</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#一-大上下文的技術迷思與認知坍塌" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1一、 大上下文的技術迷思與認知坍塌</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#1-1-注意力退化與-needle-in-a-haystack-的深層陷阱" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.1 注意力退化與 Needle-in-a-Haystack 的深層陷阱</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#1-2-滾動會話的複利計費懲罰" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.2 滾動會話的複利計費懲罰</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#1-3-認知漂移與錯誤假設的持久化污染" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.3 認知漂移與錯誤假設的持久化污染</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#二-架構支柱一-skills-路由式按需掛載" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2二、 架構支柱一Skills 路由式按需掛載</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#2-1-傳統單體-system-prompt-的架構缺陷" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.1 傳統單體 System Prompt 的架構缺陷</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#2-2-雙層路由與意圖觸發機制" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.2 雙層路由與意圖觸發機制</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#2-3-主流-ai-寫程式環境的落地映射-cursor-與-antigravity-的工程實踐" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.3 主流 AI 寫程式環境的落地映射：Cursor 與 Antigravity 的工程實踐</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#三-架構支柱二-工具鏈脫水防火牆" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3三、 架構支柱二工具鏈脫水防火牆</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#3-1-code-skeleton-基於-ast-的結構提煉" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.1 Code Skeleton：基於 AST 的結構提煉</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#3-2-repo-radar-大綱探測與精準標靶切片" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.2 Repo Radar：大綱探測與精準標靶切片</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#3-3-rtk-終端指令過濾與輸出脫水" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.3 RTK 終端指令過濾與輸出脫水</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#四-架構支柱三-one-phase-one-session-物理隔絕" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4四、 架構支柱三One Phase, One Session 物理隔絕</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#4-1-物理隔絕原則-physical-isolation" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.1 物理隔絕原則（Physical Isolation）</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#4-2-實體任務檔作為唯一真理源-ssot" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.2 實體任務檔作為唯一真理源（SSOT）</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#五-實測數據對比與經濟效益分析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">5五、 實測數據對比與經濟效益分析</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#5-1-測試環境與對照設定" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5.1 測試環境與對照設定</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#5-2-實測數據對照表" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5.2 實測數據對照表</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#5-3-數據深度解讀" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5.3 數據深度解讀</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#六-mason-的工程思維與二階省思" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">6六、 Mason 的工程思維與二階省思</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#6-1-資本分配視角-token-即算力資本" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">6.1 資本分配視角：Token 即算力資本</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#6-2-抽象層洩漏與供應商激勵解構" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">6.2 抽象層洩漏與供應商激勵解構</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#6-3-演化劇本-從規模擴張走向微架構內斂" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">6.3 演化劇本：從規模擴張走向微架構內斂</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#七-附錄-核心脫水工具鏈最小實作範式" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">7七、 附錄核心脫水工具鏈最小實作範式</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#7-1-repo-radar-標靶切片演算法-python" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">7.1 Repo Radar 標靶切片演算法 (Python)</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#7-2-會話接力提示詞標準模板-handover-block" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">7.2 會話接力提示詞標準模板 (Handover Block)</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#article-analysis-header" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章分析</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#article-inference-logic" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">01 文章推論邏輯分析</a></li>
+        <li style="margin-bottom: 0.2rem;"><a href="#從上下文窗口幻覺到結構化脫水防線的推論演繹" style="display: block; padding: 0.2rem 0; font-size: 0.75rem; color: #94a3b8; text-decoration: none; padding-left: 2rem;">從上下文窗口幻覺到結構化脫水防線的推論演繹</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#logic-blindspots" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">02 敘事邊界與關鍵變數補充</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">03 Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#參考資料" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">參考資料 (References)</a></li>
+      </ul>
+    </nav>
+    <!-- static_toc_end -->
+</div>
+<!-- Back to top (sidebar) -->
+<button class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5" id="back-to-top-sidebar">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                        回到頂部
+                    </button>
+</div>
+</aside>
+<!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+<div class="flex-1 min-w-0">
+<!-- Breadcrumb -->
+<nav aria-label="Breadcrumb" class="flex text-sm text-slate-500 dark:text-slate-400 mb-6">
+<ol class="flex items-center space-x-1.5 flex-wrap">
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../index.html">首頁</a></li>
+<li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path>
+</svg></li>
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../post/archive.html?category=ai-workflow">AI 工作流</a></li>
+<li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path>
+</svg></li>
+<li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">【AI 寫程式架構 2026】 - Skills 按需路由如何顛覆百萬上下文迷思？解構脫水防火牆與 95.7% Token 節省實踐</li>
+</ol>
+</nav>
+<!-- ── Hero Header ── -->
+<header class="theme-bg-card dark:bg-slate-900/40 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6 font-sans relative">
+<!-- Category + Date + Executive Badge -->
+<div class="flex flex-wrap items-center gap-3 mb-5">
+<span class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            ai-workflow
+                        </span>
+<span class="px-2.5 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            執行摘要
+                        </span>
+<span class="text-sm text-slate-500 dark:text-slate-400">
+<time datetime="2026-10-13">2026-10-13</time>
+</span>
+<span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 8 分鐘閱讀</span>
+</div>
+<!-- H1 -->
+<h1 class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">【AI 寫程式架構 2026】 - Skills 按需路由如何顛覆百萬上下文迷思？解構脫水防火牆與 95.7% Token 節省實踐</h1>
+<!-- Subtitle / Hook (純段落文字) -->
+<!-- Above-the-Fold 50字統攝性解答 (純段落文字) -->
+<p class="above-fold-summary text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6"><strong class="dsr-label">[Direct Answer]</strong> 大模型上下文窗口的無限擴張掩蓋了工程架構的失職。透過將全域提示詞重構為路由式按需掛載、在檔案探索層構築 AST 骨架與章節切片脫水防火牆，並落實 One Phase One Session 物理隔絕，可在大型工程中削減 95.7% Token 消耗並保證一次性通過率。</p>
+</header>
+<!-- ── Mobile TOC Target (行動版) ── -->
+<div class="lg:hidden mb-6" data-managed="auto" id="toc-mobile-target">
+    <!-- static_toc_start -->
+    <nav class="static-toc-container" aria-label="Table of Contents">
+      <ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 執行摘要 核心事件的 5W1H 認知架構</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#一-大上下文的技術迷思與認知坍塌" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1一、 大上下文的技術迷思與認知坍塌</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#1-1-注意力退化與-needle-in-a-haystack-的深層陷阱" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.1 注意力退化與 Needle-in-a-Haystack 的深層陷阱</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#1-2-滾動會話的複利計費懲罰" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.2 滾動會話的複利計費懲罰</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#1-3-認知漂移與錯誤假設的持久化污染" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">1.3 認知漂移與錯誤假設的持久化污染</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#二-架構支柱一-skills-路由式按需掛載" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2二、 架構支柱一Skills 路由式按需掛載</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#2-1-傳統單體-system-prompt-的架構缺陷" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.1 傳統單體 System Prompt 的架構缺陷</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#2-2-雙層路由與意圖觸發機制" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.2 雙層路由與意圖觸發機制</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#2-3-主流-ai-寫程式環境的落地映射-cursor-與-antigravity-的工程實踐" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">2.3 主流 AI 寫程式環境的落地映射：Cursor 與 Antigravity 的工程實踐</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#三-架構支柱二-工具鏈脫水防火牆" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3三、 架構支柱二工具鏈脫水防火牆</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#3-1-code-skeleton-基於-ast-的結構提煉" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.1 Code Skeleton：基於 AST 的結構提煉</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#3-2-repo-radar-大綱探測與精準標靶切片" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.2 Repo Radar：大綱探測與精準標靶切片</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#3-3-rtk-終端指令過濾與輸出脫水" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">3.3 RTK 終端指令過濾與輸出脫水</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#四-架構支柱三-one-phase-one-session-物理隔絕" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4四、 架構支柱三One Phase, One Session 物理隔絕</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#4-1-物理隔絕原則-physical-isolation" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.1 物理隔絕原則（Physical Isolation）</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#4-2-實體任務檔作為唯一真理源-ssot" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">4.2 實體任務檔作為唯一真理源（SSOT）</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#五-實測數據對比與經濟效益分析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">5五、 實測數據對比與經濟效益分析</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#5-1-測試環境與對照設定" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5.1 測試環境與對照設定</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#5-2-實測數據對照表" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5.2 實測數據對照表</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#5-3-數據深度解讀" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">5.3 數據深度解讀</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#六-mason-的工程思維與二階省思" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">6六、 Mason 的工程思維與二階省思</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#6-1-資本分配視角-token-即算力資本" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">6.1 資本分配視角：Token 即算力資本</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#6-2-抽象層洩漏與供應商激勵解構" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">6.2 抽象層洩漏與供應商激勵解構</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#6-3-演化劇本-從規模擴張走向微架構內斂" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">6.3 演化劇本：從規模擴張走向微架構內斂</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#七-附錄-核心脫水工具鏈最小實作範式" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">7七、 附錄核心脫水工具鏈最小實作範式</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#7-1-repo-radar-標靶切片演算法-python" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">7.1 Repo Radar 標靶切片演算法 (Python)</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#7-2-會話接力提示詞標準模板-handover-block" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">7.2 會話接力提示詞標準模板 (Handover Block)</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#article-analysis-header" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章分析</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#article-inference-logic" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">01 文章推論邏輯分析</a></li>
+        <li style="margin-bottom: 0.2rem;"><a href="#從上下文窗口幻覺到結構化脫水防線的推論演繹" style="display: block; padding: 0.2rem 0; font-size: 0.75rem; color: #94a3b8; text-decoration: none; padding-left: 2rem;">從上下文窗口幻覺到結構化脫水防線的推論演繹</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#logic-blindspots" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">02 敘事邊界與關鍵變數補充</a></li>
+        <li style="margin-bottom: 0.25rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">03 Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+        <li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#參考資料" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">參考資料 (References)</a></li>
+      </ul>
+    </nav>
+    <!-- static_toc_end -->
+</div>
+<!-- ── Article Body ── -->
+<article class="article-body article-body-content bg-transparent border-0 p-0 shadow-none prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+<div data-managed="auto" id="main-content-area">
+<!-- 
+                        [PROTOCOL] D-S-R PROTOCOL INDICATOR (寫作引導)
+                        1. Direct Answer (直接斷言): 段落首句點破核心問題與結論。 (必須包裹在 <strong class="dsr-label">[Direct Answer]</strong>)
+                        2. Support Details (支持細節): 包含數據、指標 (TPS, TVL, Q-ID) 或技術標準。 (必須包裹在 <strong class="dsr-label">[Support Details]</strong> )
+                        3. Reinforcement (語義強化): 將技術細節轉化為投資價值或風險判斷。 (不需標籤，直接寫入段落)
+                        
+                        [WARNING] 佈局注意事項 (Layout Standards):
+                        - 隱藏標籤: 務必使用 class="dsr-label" 以確保前端不直接顯示。
+                        - 段落間距: 所有 <p> 標籤必須顯式添加 class="mb-8" (或 mb-6) 以維持呼吸感。
+                        - 清單化原則: 當 Support Details 超過 3 個並列項時，強制使用 <ul> 以替代長段落。
+                    -->
+<!-- ── 5W1H 核心架構與 SEO 提問解析 (首屏前置佈局) ── -->
+<!-- CHAPTER 0 (TOC Hierarchy Anchor) -->
+<h2 class="not-prose indicator-h2" id="chapter-0">
+<span class="number-circle">0</span>
+<span class="title-main">執行摘要</span>
+<span class="title-sub">核心事件的 5W1H 認知架構</span>
+</h2>
+<div class="not-prose my-12" id="content-chapter-0">
+<!-- 5W1H Premium Dashboard -->
+<div class="relative p-1 bg-gradient-to-br from-amber-500/20 via-slate-200/50 to-orange-500/20 dark:from-amber-500/30 dark:via-slate-800 dark:to-orange-500/30 rounded-3xl overflow-hidden shadow-2xl border border-white/20 dark:border-slate-700/50 backdrop-blur-xl">
+<div class="relative bg-white/80 dark:bg-slate-900/90 rounded-[1.4rem] p-6 md:p-10">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-slate-100 dark:border-slate-800 pb-8">
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold tracking-widest uppercase mb-4">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+</span>
+                                            Market Analysis Framework
+                                        </div>
+<div class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white leading-tight font-noto" data-managed="append-only" id="section-5w1h-core">
+                                            5W1H 深度邏輯總結
+                                        </div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 font-mono text-sm">Case Study: 【AI 寫程式架構 2026】 - Skills 按需路由如何顛覆百萬上下文迷思？解構脫水防火牆與 95.7% Token 節省實踐</p>
+</div>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- WHO -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Who / 參與主體</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm"><strong class="dsr-label">[Direct Answer]</strong> AI 軟體工程架構師、自主代理人開發者與企業級 AI 系統維運團隊。</p>
+</div>
+<!-- WHAT -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500 text-white shadow-lg shadow-orange-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">What / 核心事件</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm"><strong class="dsr-label">[Direct Answer]</strong> 透過路由式 Skills、AST 脫水防火牆與會話物理隔絕，重構現代 AI 工作流以克服上下文膨脹危機。</p>
+</div>
+<!-- WHEN -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-yellow-500 text-white shadow-lg shadow-yellow-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">When / 關鍵時點</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm"><strong class="dsr-label">[Direct Answer]</strong> 2026 年大模型百萬上下文窗口普及、但注意力機制退化與 API 推論成本急劇攀升之際。</p>
+</div>
+<!-- WHERE -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500 text-white shadow-lg shadow-red-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Where / 影響範圍</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm"><strong class="dsr-label">[Direct Answer]</strong> 大型代碼庫、企業級 Git 專案與 Cursor、Google Antigravity 等 AI 寫程式環境。</p>
+</div>
+<!-- WHY -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-500 text-white shadow-lg shadow-zinc-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Why / 驅動動機</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm"><strong class="dsr-label">[Direct Answer]</strong> Transformer 注意力權重隨長度稀釋導致中段資訊遺忘與幻覺放大，滾動會話造成階乘級計費懲罰與認知漂移。</p>
+</div>
+<!-- HOW -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">H</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">How / 策略應對</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm"><strong class="dsr-label">[Direct Answer]</strong> 建立雙層規則路由、部署 AST 骨架提煉與大綱切片工具、執行實體任務檔真理源與單會話單階段物理中斷。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">大模型上下文窗口的無限擴張掩蓋了軟體工程架構的失職。盲目將全域規則、多模組規範與原始代碼全文塞入提示詞的做法，必然觸發注意力機制邊際效用遞減、推論成本指數級飆升以及自主代理行為漂移的系統性災難。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">真正的確定性工程建立在極致的資訊密度與冷酷的邊界控制之上。在現代 AI 工作流中，透過將全域常駐提示詞重構為路由式按需掛載（Skills）、在檔案探索層構築物理級脫水防火牆（AST 骨架提煉與章節切片），並強制執行「One Phase, One Session」會話物理隔絕機制，工程團隊能夠在大型代碼庫中實現單次複合任務 95% 以上的 Token 消耗削減，同時將自主執行的一次性通過率提升至工業級標準。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">---</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:大上下文的技術迷思與認知坍塌 --></p>
+<h2 class="not-prose indicator-h2 my-12" id="一-大上下文的技術迷思與認知坍塌"><span class="number-circle">1</span><span class="title-main">一、 大上下文的技術迷思與認知坍塌</span></h2><div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose"><strong class="dsr-label">[Direct Answer]</strong><ol class="space-y-2 text-sm md:text-base mt-2"><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>為什麼百萬 Token 上下文窗口無法直接解決大型軟體工程的架構複雜度？</span></li><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>Softmax 注意力稀釋如何導致代理人發生中段資訊遺忘與規範失效？</span></li><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">3</span><span>多輪滾動長會話如何產生指數級累積的複利計費懲罰與歷史回饋污染？</span></li></ol></div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Direct Answer]</strong> 軟體工程領域目前瀰漫著對百萬級上下文窗口（Long Context Window）的盲目崇拜。模型供應商透過行銷宣傳將「百萬 Token 吞吐」塑造為通用智能的終極解答，試圖讓開發者相信系統複雜度可以透過無限追加輸入長度直接抹平。這種工程怠惰正在生產巨大的隱性技術債與財務黑洞。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Support Details]</strong> <!-- @sec:1-注意力退化與-needle-in-a-haystack-的深層陷阱 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="1-1-注意力退化與-needle-in-a-haystack-的深層陷阱">1.1 注意力退化與 Needle-in-a-Haystack 的深層陷阱</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">Transformer 架構的注意力矩陣計算本質上是全局權重分配過程。當輸入上下文從數千 Token 暴增至數十萬 Token 時，模型對關鍵約束的檢索精度必然呈現顯著衰減：</p>
+<div class="my-6 overflow-x-auto text-center font-mono text-base dark:text-slate-200">$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">隨著上下文長度 $N$ 擴增，Softmax 分母中的指數和項急劇累積，導致長距離注意力權重分佈被海量無關資訊稀釋。實驗與工業現場反覆驗證的客觀規律顯示：</p>
+<ol class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">1</span><div><strong>中段資訊遺忘（Lost in the Middle）</strong>：模型對位於 Context 核心中段的約束指令識別率驟降 30% 以上。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">2</span><div><strong>雜訊放大效應（Noise Amplification）</strong>：全量代碼中包含的無關函式註解、過期歷史與邊緣邏輯，會成為注意力機制的干擾源，指數級推高隨機幻覺的發生率。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">3</span><div><strong>架構規範失效</strong>：在超過 80,000 Token 的會話環境中，代理人開始出現「遺忘命名規範」、「私自繞過測試門禁」與「覆蓋未授權模組」等行為失控現象。
+                    </div></li></ol>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:2-滾動會話的複利計費懲罰 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="1-2-滾動會話的複利計費懲罰">1.2 滾動會話的複利計費懲罰</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">雲端大模型的商業計費模式嚴格錨定於 Token 數量。在未經架構治理的傳統 Agent 運作模式中，每一次工具調用、每一筆錯誤回報與每一次輸出，都會以滾動累積的形式成為下一次推論的輸入前綴。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">假設一個包含 10 個步驟的重構任務，若基礎 Context 在第 1 步即達到 30,000 Token，且每步產生 5,000 Token 的輸出與工具日誌，到了第 10 步時，單次 API 調用的輸入成本將達到：</p>
+<div class="my-6 overflow-x-auto text-center font-mono text-base dark:text-slate-200">$$\text{Input Tokens}_{\text{Step } 10} = 30,000 + (10 - 1) \times 5,000 = 75,000 \text{ Tokens}$$</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">整場任務累計消耗的輸入 Token 總量呈現階乘級發散，最終帳單支出將是實際有效邏輯價值的數十倍。資本分配的效率在此處遭遇嚴重扭曲。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:3-認知漂移與錯誤假設的持久化污染 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="1-3-認知漂移與錯誤假設的持久化污染">1.3 認知漂移與錯誤假設的持久化污染</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">滾動長會話不僅帶來財務損失，更直接瓦解代碼品質。自主代理人在探索階段產生的無效假設、失敗的語法嘗試以及暫存的中間日誌，若未被即刻物理清除，將長久駐留在會話歷史中。模型具備強烈的自回歸延續傾向，極易將歷史中失敗的推論路徑視為合法上下文，形成反向回饋污染，導致後續修復行動陷入死循環。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">---</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:架構支柱一-skills-路由式按需掛載 --></p>
+<h2 class="not-prose indicator-h2 my-12" id="二-架構支柱一-skills-路由式按需掛載"><span class="number-circle">2</span><span class="title-main">二、 架構支柱一</span><span class="title-sub">Skills 路由式按需掛載</span></h2>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Direct Answer]</strong> 消除 Token 浪費的第一道防線在於拆解全域常駐 System Prompt，建立輕量級路由索引與動態按需加載機制。</p>
+<pre><code class="language-">+-------------------------------------------------------------------+
+                    |                        System Initial State                       |
+                    |               (GEMINI.md + rules.md: ~1,200 Tokens)               |
+                    +-------------------------------------------------------------------+
+                                                      |
+                                                      | [User Intent Analysis]
+                                                      v
+                    +-------------------------------------------------------------------+
+                    |                        Router &amp; Skill Index                       |
+                    |   - Pulse Automation      -&gt; skills/pulse-publisher/SKILL.md      |
+                    |   - Task Protocol         -&gt; skills/task-protocol/SKILL.md        |
+                    |   - Web Standards         -&gt; skills/dev-standards/SKILL.md        |
+                    |   - Writing &amp; Persona     -&gt; skills/mason-writing-work/SKILL.md   |
+                    +-------------------------------------------------------------------+
+                                                      |
+                                                      | [Dynamic view_file / Load on Demand]
+                                                      v
+                    +-------------------------------------------------------------------+
+                    |                     Isolated Execution Context                    |
+                    |        Only 1 targeted SKILL.md active (~800 - 1,500 Tokens)      |
+                    +-------------------------------------------------------------------+</code></pre>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Support Details]</strong> <!-- @sec:1-傳統單體-system-prompt-的架構缺陷 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="2-1-傳統單體-system-prompt-的架構缺陷">2.1 傳統單體 System Prompt 的架構缺陷</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">多數團隊習慣將所有開發規範、編程風格、資料庫 Schema、SEO 準則與部署腳本全部集中寫入單一大型 System Prompt 中。此種作法導致任何微小任務（例如修正單一 CSS 屬性）都必須強行承擔上萬 Token 的靜態資訊負載。靜態基線直接吃掉對話視窗的有效配額，造成極高的基礎營運摩擦力。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:2-雙層路由與意圖觸發機制 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="2-2-雙層路由與意圖觸發機制">2.2 雙層路由與意圖觸發機制</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">本系統推行的解決方案將架構嚴格劃分為「憲法層」與「技能層」：</p>
+<ol class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">1</span><div><strong>憲法核心（Constitutional Rules）</strong>：僅保留不可違背的底線邏輯（如零建置約束、最小改動原則、繁體中文規範），將全局常駐上下文壓縮在 1,500 Token 以內。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">2</span><div><strong>規則路由器（`rules.md`）</strong>：建立精簡的意圖對照表，僅列出觸發關鍵字、職責邊界與目標路徑。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">3</span><div><strong>按需掛載（Dynamic Skills）</strong>：將具體業務規格（如新聞發布管線、樣式審計、數據庫架構）封裝為獨立的 `SKILL.md`。當且僅當當前任務明確涉及特定領域時，Agent 才透過單次檔案讀取精準掛載對應模組。
+                    </div></li></ol>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">這種解耦設計使靜態上下文基礎消耗常態性下降 60% 至 75%，確保模型注意力在任務啟動之初保持最高純度。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:3-主流-ai-寫程式環境的落地映射-cursor-與-antigravity-的工程實踐 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="2-3-主流-ai-寫程式環境的落地映射-cursor-與-antigravity-的工程實踐">2.3 主流 AI 寫程式環境的落地映射：Cursor 與 Antigravity 的工程實踐</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">這套按需架構在主流 AI 寫程式工具與 Agent 環境中具備直接的工程對應實作：</p>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>Cursor 寫程式環境適配</strong>：在 Cursor 中，許多團隊傾向在 `.cursorrules` 或 `.cursor/rules/*.mdc` 中塞入全部業務規格，導致每次對話強制灌入龐大上下文。更優解法是將 `.cursor/rules` 視為單一指引指針，配合專案級入口 `AGENTS.md` 建立階層導航鏈，將規格全數下沉至獨立的 Markdown 文件與技能庫，唯有在偵測到特定開發意圖時才導向讀取。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>Google Antigravity 寫程式環境適配</strong>：在 Antigravity 體系中，利用 `.agents/rules.md` 作為中央路由器，將具體工作流封裝於 `.agents/skills/[skill_name]/SKILL.md`，並透過 YAML Frontmatter 宣告觸發詞（triggers）與單一真理源依賴（ssot_dependencies）。Agent 啟動時僅載入憲法檔案（`GEMINI.md`），隨後由內建技能發現機制按需調用 `view_file` 載入專屬技能，徹底切斷無效資訊傳播路徑。
+                    </div></li></ul>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">---</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:架構支柱二-工具鏈脫水防火牆 --></p>
+<h2 class="not-prose indicator-h2 my-12" id="三-架構支柱二-工具鏈脫水防火牆"><span class="number-circle">3</span><span class="title-main">三、 架構支柱二</span><span class="title-sub">工具鏈脫水防火牆</span></h2>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Direct Answer]</strong> 即使成功控制靜態提示詞，若允許 Agent 在代碼庫內肆意執行全量檔案讀取，上下文視窗依然會在數秒內被淹沒。脫水防火牆（Dehydration Firewall）的核心精神在於：<strong>嚴禁任何未經結構化篩選的原始文本流入模型推論空間</strong>。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Support Details]</strong> <!-- @sec:1-code-skeleton-基於-ast-的結構提煉 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="3-1-code-skeleton-基於-ast-的結構提煉">3.1 Code Skeleton：基於 AST 的結構提煉</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">面對超過 150 行的大型原始碼檔案，傳統的直接讀取方式會導入大量的具體函式實作細節，而 Agent 在探索架構與函式簽名時，這類實作細節純屬雜訊。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">透過部署專用 AST 提煉腳本（`tools/code_skeleton.py`），系統將原始碼中的函式本體全部替換為語法佔位符，僅保留類別聲明、公用介面、型別註解與頂層 Docstring：</p>
+<pre><code class="language-python"># tools/code_skeleton.py 核心邏輯展示
+                    class SkeletonTransformer(ast.NodeTransformer):
+                        def visit_FunctionDef(self, node):
+                            node.body = [ast.Expr(value=ast.Constant(value="..."))]
+                            return node
+
+                        def visit_AsyncFunctionDef(self, node):
+                            node.body = [ast.Expr(value=ast.Constant(value="..."))]
+                            return node</code></pre>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">以一個包含 1,200 行代碼的後端控制器為例：</p>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>原始全檔讀取</strong>：約需消耗 8,400 Tokens。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>AST 骨架提煉</strong>：僅需消耗 720 Tokens。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>單點脫水效率</strong>：直接削減 <strong>91.4%</strong> 的探索雜訊。
+                    </div></li></ul>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:2-repo-radar-大綱探測與精準標靶切片 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="3-2-repo-radar-大綱探測與精準標靶切片">3.2 Repo Radar：大綱探測與精準標靶切片</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">對於長篇規格文件、Markdown 報告或大型 HTML 結構，系統依賴 `tools/repo_radar.py` 實施二階段探詢法：</p>
+<ol class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">1</span><div><strong>階段一：大綱錨定（Outline Mode）</strong>：僅掃描文件標題層級（H1/H2/H3）與行號分布，產生幾十行的高度壓縮索引。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">2</span><div><strong>階段二：標靶切片（Section Mode）</strong>：Agent 根據大綱鎖定特定區塊，僅截取目標標題下的有效段落（範圍通常在 20 至 50 行之間）。
+                    </div></li></ol>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">這種做法徹底終結了「為查看一個表格而加載 2,000 行文檔」的低效操作，將常規文件讀取的 Token 損耗穩定鎖定在 800 Tokens 以下。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:3-rtk-終端指令過濾與輸出脫水 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="3-3-rtk-終端指令過濾與輸出脫水">3.3 RTK 終端指令過濾與輸出脫水</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">終端執行環境（Bash / PowerShell）往往伴隨大量的終端控制碼、重複進度條、套件安裝日誌與重複性堆疊追蹤。全量回傳這些內容會迅速耗盡上下文配額。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">透過在指令前綴包裝原生過濾器（`rtk`），系統在輸出端實施物理脫水：</p>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div>自動剔除 ANSI 顏色代碼與進度條字元。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div>壓縮連續重複的成功日誌，僅保留 Exit Code 與末尾摘要。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div>遭遇錯誤時，精確截取 Exception 核心與最後 15 行堆疊，壓制非關鍵資訊。
+                    </div></li></ul>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">---</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:架構支柱三-one-phase-one-session-物理隔絕 --></p>
+<h2 class="not-prose indicator-h2 my-12" id="四-架構支柱三-one-phase-one-session-物理隔絕"><span class="number-circle">4</span><span class="title-main">四、 架構支柱三</span><span class="title-sub">One Phase, One Session 物理隔絕</span></h2>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Direct Answer]</strong> 前兩大支柱解決了單次互動的資訊密度問題，而第三大支柱則從根本上阻斷跨步驟歷史堆積的複利效應。</p>
+<pre><code class="language-">Phase 1: 架構重構與 SSOT 定義
+                    +-----------------------------------------------------------+
+                    | Session 1                                                 |
+                    | [Input: rules.md + task_*.md]                             |
+                    | -&gt; 執行驗證 (Exit 0)                                      |
+                    | -&gt; 更新實體 task_*.md (標記已完成)                        |
+                    | -&gt; 強制物理停步，會話終結 (Context 銷毀)                  |
+                    +-----------------------------------------------------------+
+                                                   |
+                                                   | [無狀態實體傳遞：唯一依據為磁碟上的 task_*.md]
+                                                   v
+                    Phase 2: 核心模組實作與脫水撰寫
+                    +-----------------------------------------------------------+
+                    | Session 2 (全新獨立會話，歷史 Token 歸零)                 |
+                    | [Input: 精準接力 Prompt + 讀取 task_*.md 最新進度]        |
+                    | -&gt; 執行 Phase 2 任務                                      |
+                    | -&gt; Checkpoint 驗收                                        |
+                    | -&gt; 更新實體 task_*.md                                     |
+                    | -&gt; 強制物理停步                                           |
+                    +-----------------------------------------------------------+</code></pre>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Support Details]</strong> <!-- @sec:1-物理隔絕原則-physical-isolation --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="4-1-物理隔絕原則-physical-isolation">4.1 物理隔絕原則（Physical Isolation）</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">「One Phase, One Session」是一條不可妥協的工程底線。任何大型專案必須在實體任務檔（`task_*.md`）中被原子化切分為多個離散階段（Phase）。每個階段的執行必須獨佔一個乾淨的會話環境：</p>
+<ol class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">1</span><div><strong>單一會話推進單一階段</strong>：Agent 嚴格專注於當前 Phase 的目標與驗收標準。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">2</span><div><strong>驗證達標即刻停步</strong>：當前階段的所有單元驗收通過後，最後一步必須是更新實體任務檔並提交 Checkpoint，隨後立即交回終端控制權。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">3</span><div><strong>禁止跨階段連鎖執行</strong>：嚴禁在同一個對話中連續推進下一個 Phase。
+                    </div></li></ol>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:2-實體任務檔作為唯一真理源-ssot --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="4-2-實體任務檔作為唯一真理源-ssot">4.2 實體任務檔作為唯一真理源（SSOT）</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">在物理隔絕架構下，跨會話的狀態傳遞不再依賴 LLM 不可靠的滾動記憶，而是完全依託持久化於磁碟中的實體任務檔。</p>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div>新 Session 啟動時，Agent 僅需透過精準切片讀取 `task_*.md` 中當前待辦的 Phase 規格。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div>上一會話中所有繁雜的調試軌跡、工具調用細節與探索嘗試被徹底拋棄，會話歷史被硬性歸零。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div>此機制完全消除了上下文漂移的物理基礎，賦予系統具備無限階段擴展的架構韌性。
+                    </div></li></ul>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">---</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:實測數據對比與經濟效益分析 --></p>
+<h2 class="not-prose indicator-h2 my-12" id="五-實測數據對比與經濟效益分析"><span class="number-circle">5</span><span class="title-main">五、 實測數據對比與經濟效益分析</span></h2><div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose"><strong class="dsr-label">[Direct Answer]</strong><ol class="space-y-2 text-sm md:text-base mt-2"><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>在真實專案基準測試中，脫水工作流相比傳統模式實現了多少 Token 節省？</span></li><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>為什麼極致的輸入端脫水反而能推動輸出端品質提升與一次性全綠通過率？</span></li><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">3</span><span>單任務 API 成本自 1.42 美元驟降至 0.07 美元的財務啟示是什麼？</span></li></ol></div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Direct Answer]</strong> 為了驗證脫水架構的真實效益，我們在包含數萬行代碼與數十篇技術報告的真實工程專案中，執行了一組完整的端到端對比測試。任務目標為：<strong>在全站引入全新技術分類、同步多個資料庫與 Sitemap，並撰寫一篇數千字的深度技術報告</strong>。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Support Details]</strong> <!-- @sec:1-測試環境與對照設定 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="5-1-測試環境與對照設定">5.1 測試環境與對照設定</h3>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>對照組（Naïve Workflow）</strong>：
+                    <ul class="space-y-2 mt-3 pl-1 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full border border-blue-400 mt-2.5 shrink-0"></span><div>採用單體 System Prompt（內含完整樣式規範與全站架構，約 16,000 Tokens）。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full border border-blue-400 mt-2.5 shrink-0"></span><div>代碼探索採用全檔 `view_file` 讀取。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full border border-blue-400 mt-2.5 shrink-0"></span><div>單一對話視窗持續滾動推進所有階段。
+                    </div></li></ul>
+</div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>實驗組（Dehydrated Workflow）</strong>：
+                    <ul class="space-y-2 mt-3 pl-1 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full border border-blue-400 mt-2.5 shrink-0"></span><div>採用 Skills 路由按需掛載（初始配置約 1,200 Tokens）。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full border border-blue-400 mt-2.5 shrink-0"></span><div>代碼探索強制經由 `code_skeleton.py` 與 `repo_radar.py` 脫水。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full border border-blue-400 mt-2.5 shrink-0"></span><div>嚴格落實 One Phase, One Session 物理隔絕。
+                    </div></li></ul>
+</div></li></ul>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:2-實測數據對照表 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="5-2-實測數據對照表">5.2 實測數據對照表</h3>
+<div class="responsive-table-wrapper my-8 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm"><table class="not-prose w-full text-sm text-left text-slate-700 dark:text-slate-200">
+<thead><tr>
+<th>評測維度</th>
+<th>對照組 (Naïve)</th>
+<th>實驗組 (Dehydrated)</th>
+<th>優化幅度 / 節省比率</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>初始靜態基線 Context</strong></td>
+<td>16,420 Tokens</td>
+<td>1,280 Tokens</td>
+<td><strong>-92.2%</strong></td>
+</tr>
+<tr>
+<td><strong>探索階段單次檔案讀取 (均值)</strong></td>
+<td>8,650 Tokens</td>
+<td>680 Tokens</td>
+<td><strong>-92.1%</strong></td>
+</tr>
+<tr>
+<td><strong>多輪執行歷史累積峰值</strong></td>
+<td>148,500 Tokens</td>
+<td>6,850 Tokens (單 Session 峰值)</td>
+<td><strong>-95.4%</strong></td>
+</tr>
+<tr>
+<td><strong>全任務累計消耗 Input Tokens</strong></td>
+<td>426,800 Tokens</td>
+<td>18,340 Tokens (三 Session 總和)</td>
+<td><strong>-95.7%</strong></td>
+</tr>
+<tr>
+<td><strong>全任務累計消耗 Output Tokens</strong></td>
+<td>22,400 Tokens</td>
+<td>14,200 Tokens</td>
+<td><strong>-36.6%</strong></td>
+</tr>
+<tr>
+<td><strong>單任務 API 總成本 (USD 計)</strong></td>
+<td>$1.42</td>
+<td>$0.07</td>
+<td><strong>-95.1%</strong></td>
+</tr>
+<tr>
+<td><strong>首次執行成功率 (Exit 0)</strong></td>
+<td>40% (發生 3 次規範偏離與覆蓋錯誤)</td>
+<td>100% (一次性全綠通過)</td>
+<td><strong>+150% 提升</strong></td>
+</tr>
+</tbody></table></div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:3-數據深度解讀 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="5-3-數據深度解讀">5.3 數據深度解讀</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">實測結果揭示了顯著的非對稱優勢：</p>
+<ol class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">1</span><div><strong>輸入端削減達 95.7%</strong>：透過將靜態長提示詞解耦、將代碼全文轉為 AST 骨架，以及會話物理隔絕，輸入 Token 消耗出現斷崖式下跌。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">2</span><div><strong>輸出端有效性提升</strong>：由於上下文環境極度純淨，Agent 無需輸出大量的澄清說明或對陳舊歷史的無效覆述，輸出 Token 減少 36.6%，且每一筆輸出均為有效代碼。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-6 h-6 mt-0.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">3</span><div><strong>確定性代價降為零</strong>：傳統模式在會話後期因上下文過長，反覆出現語法錯誤與規範遺忘，造成修復過程中的二次 Token 爆炸；脫水架構則將執行過程牢牢鎖定在 Exit 0 的確定性路徑上。
+                    </div></li></ol>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">---</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:mason-的工程思維與二階省思 --></p>
+<h2 class="not-prose indicator-h2 my-12" id="六-mason-的工程思維與二階省思"><span class="number-circle">6</span><span class="title-main">六、 Mason 的工程思維與二階省思</span></h2><div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose"><strong class="dsr-label">[Direct Answer]</strong><ol class="space-y-2 text-sm md:text-base mt-2"><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>為什麼在工業級軟體開發中必須將 Token 視為高昂的算力資本分配？</span></li><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>模型供應商推廣超長上下文的商業激勵如何與企業工程利益產生錯位？</span></li><li class="flex items-start gap-2"><span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">3</span><span>未來的自主代理人技術將如何從盲目規模擴張走向微架構內斂？</span></li></ol></div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Direct Answer]</strong> 技術方案的優劣取決於其背後的激勵相容性與系統邊界定義。在評估 AI Agent 開發流程時，我們必須看穿表層工具的宣傳修辭，透視底層資源配置的真實代價。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Support Details]</strong> <!-- @sec:1-資本分配視角-token-即算力資本 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="6-1-資本分配視角-token-即算力資本">6.1 資本分配視角：Token 即算力資本</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">在工業級軟體開發中，Token 消耗不應被視為廉價的消耗品，而應被視為高昂的算力資本配置。</p>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div>無節制地將整個代碼庫塞入提示詞，本質上是開發者放棄架構設計職責的惰性表現。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div>每一筆冗餘 Token 的傳輸，都在稀釋注意力矩陣對核心業務邏輯的聚焦能力。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div>追求極致的資訊密度（Information Density）是軟體架構永恆的第一性原理。在有限的上下文預算內傳遞最具結構確定性的訊息，才是衡量資深工程能力的核心標尺。
+                    </div></li></ul>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:2-抽象層洩漏與供應商激勵解構 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="6-2-抽象層洩漏與供應商激勵解構">6.2 抽象層洩漏與供應商激勵解構</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">雲端模型供應商的商業激勵與終端企業的工程利益存在本質上的錯位：</p>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>供應商的激勵路徑</strong>：推廣更大的上下文窗口、鼓勵用戶上傳未加工的文件與代碼，從而按 Token 計費獲取最大化的雲端推論營收。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>企業工程師的生存路徑</strong>：追求最小成本、最快響應速度與最高執行確定性。
+                    </div></li></ul>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">若工程師全盤接受「大上下文解決一切」的宣傳敘事，將直接掉入供應商精心構建的計費陷阱中。脫水防火牆與按需架構的存在，正是工程師奪回主權、建立確定性防線的技術手段。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:3-演化劇本-從規模擴張走向微架構內斂 --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="6-3-演化劇本-從規模擴張走向微架構內斂">6.3 演化劇本：從規模擴張走向微架構內斂</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">展望未來的自主代理人技術演進：</p>
+<ul class="space-y-3 my-4 pl-2 font-noto">
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>路徑 A（外延式擴張）</strong>：繼續依賴硬體算力堆疊更大參數與更長上下文，但邊際收益將迅速觸碰物理牆與注意力瓶頸。
+                    </div></li>
+<li class="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-base leading-relaxed"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 shrink-0"></span><div><strong>路徑 B（內斂式精準工程）</strong>：具備高度架構約束的混合代理系統（具備本地 AST 分析、向量路由、動態掛載與狀態物理重置能力）將成為主流生產力的核心。
+                    </div></li></ul>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">唯有將 LLM 視為純粹的推論核心，並在其外部構建嚴密的過濾器與確定性軌道，我們才能在不可預測的機率世界中，交付出堅如磐石的企業級軟體。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">---</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:附錄-核心脫水工具鏈最小實作範式 --></p>
+<h2 class="not-prose indicator-h2 my-12" id="七-附錄-核心脫水工具鏈最小實作範式"><span class="number-circle">7</span><span class="title-main">七、 附錄</span><span class="title-sub">核心脫水工具鏈最小實作範式</span></h2>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Direct Answer]</strong> 為確保本套方法論具備完全的開箱即用性，以下提供脫水防火牆的關鍵工具最小實作參考。</p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><strong class="dsr-label">[Support Details]</strong> <!-- @sec:1-repo-radar-標靶切片演算法-python --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="7-1-repo-radar-標靶切片演算法-python">7.1 Repo Radar 標靶切片演算法 (Python)</h3>
+<pre><code class="language-python">import re
+                    import sys
+
+                    def parse_markdown_outline(filepath: str):
+                        """提取 Markdown 標題層級與對應行號，產生緊湊大綱"""
+                        with open(filepath, 'r', encoding='utf-8') as f:
+                            lines = f.readlines()
+
+                        outline = []
+                        for idx, line in enumerate(lines, 1):
+                            match = re.match(r'^(#{1,4})\s+(.+)$', line)
+                            if match:
+                                level = len(match.group(1))
+                                title = match.group(2).strip()
+                                outline.append(f"L{idx:&lt;4} | {'  ' * (level - 1)}{title}")
+                        return "\n".join(outline)
+
+                    if __name__ == "__main__":
+                        if len(sys.argv) &gt; 1:
+                            print(parse_markdown_outline(sys.argv[1]))</code></pre>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base"><!-- @sec:2-會話接力提示詞標準模板-handover-block --></p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="7-2-會話接力提示詞標準模板-handover-block">7.2 會話接力提示詞標準模板 (Handover Block)</h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">當 Phase 結束並觸發物理停步時，系統輸出之無狀態接力代碼塊格式如下：</p>
+<pre><code class="language-markdown">### [Session Handover Directive]
+                    - 階段完成狀態：Phase N 已完工，所有驗收指標為 Exit 0。
+                    - 磁碟真理源：狀態已 100% 同步至 `doc/doc_task/task_*.md`。
+                    - 新 Session 啟動指令：
+                      「請讀取 `doc/doc_task/task_*.md` 中的 Phase N+1 規格，依循 dev-standards 與 task-protocol 直接接續執行。」</code></pre>
+<!-- Part 2: 文章分析 (Article Analysis) -->
+<div class="not-prose mt-16 border-t-2 border-slate-100 dark:border-slate-700 pt-10">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-8 border-b-2 border-blue-600/40 pl-4 font-noto" data-managed="human" id="article-analysis-header">
+                            文章分析
+                        </h2>
+<div class="giveaway-summary mb-10">
+<p class="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+<strong class="dsr-label">[Direct Answer]</strong>
+                                透過 AST 語意索引、代碼骨架提煉與終端輸出壓縮，系統性瓦解上下文膨脹，達成 AI 編程的極致 Token 節約與工程精準度。
+                            </p>
+</div>
+<!-- ── 決策推導三部曲 (Triad Intelligence Pipeline) ── -->
+<!-- Step 1: 原文推論邏輯分析 (Inference Logic) -->
+<div class="mt-8 mb-10" data-managed="human">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto flex items-center gap-2.5" id="article-inference-logic">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-mono font-bold border border-slate-200 dark:border-slate-700">01</span>
+<span>文章推論邏輯分析</span>
+</h3>
+<div class="p-6 theme-bg-body dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-700/80 space-y-6">
+<div>
+<h4 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-3" id="從上下文窗口幻覺到結構化脫水防線的推論演繹">從上下文窗口幻覺到結構化脫水防線的推論演繹</h4>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+                                        模型推論能力並未隨上下文長度線性增長，反因注意力稀釋與雜訊放大而呈現指數級衰減。唯有將探索視窗與提示詞解耦，方能收斂不確定性。
+                                    </p>
+</div>
+<div class="space-y-6 pl-4 border-l-2 border-blue-500/40 dark:border-blue-400/30">
+<div>
+<h5 class="font-bold text-slate-800 dark:text-slate-200 mb-2 text-sm md:text-base"></h5>
+<ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+<li><strong>觀測數據與現象前提</strong>：</li>
+<li class="mt-1.5 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">↳ <strong>推導必然性邏輯結論</strong>：</li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-slate-800 dark:text-slate-200 mb-2 text-sm md:text-base"></h5>
+<ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+<li><strong>觀測數據與現象前提</strong>：</li>
+<li class="mt-1.5 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">↳ <strong>推導必然性邏輯結論</strong>：</li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-slate-800 dark:text-slate-200 mb-2 text-sm md:text-base"></h5>
+<ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+<li><strong>觀測數據與現象前提</strong>：</li>
+<li class="mt-1.5 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">↳ <strong>推導必然性邏輯結論</strong>：</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2: 敘事邊界與關鍵變數補充 (Logic Blindspots) -->
+<div class="my-10" data-managed="human">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto flex items-center gap-2.5" id="logic-blindspots">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 text-xs font-mono font-bold border border-amber-200/80 dark:border-amber-700/60">02</span>
+<span>敘事邊界與關鍵變數補充</span>
+</h3>
+<div class="p-6 theme-bg-body dark:bg-slate-900/30 rounded-xl border border-dashed border-amber-300/80 dark:border-amber-700/60 bg-amber-50/20 dark:bg-amber-950/10 space-y-4">
+<div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 text-sm font-bold uppercase tracking-wider">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+</path>
+</svg>
+<span>批判性盲點與邊界預警 (Critical Blindspots)</span>
+</div>
+<ul class="space-y-4 text-sm text-slate-700 dark:text-slate-300">
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">端側本地輕量模型普及度</span>
+<span></span>
+</li>
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">雲端供應商快取（Prompt Caching）定價策略</span>
+<span></span>
+</li>
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">複雜重構跨模組語義依賴深度</span>
+<span></span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Step 3: Mason Yang 的觀察 (Actionable Intelligence - 壓軸旗艦洞察) -->
+
+<div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700" data-managed="human">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto flex items-center gap-2.5" id="mason-yang-observation">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-mono font-bold border border-blue-200/80 dark:border-blue-700/60">03</span>
+<svg class="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Mason Yang 的觀察 (Actionable Intelligence)</span>
+</h3>
+<div class="p-6 md:p-8 theme-bg-body dark:bg-slate-900/50 border-2 border-blue-500/20 dark:border-blue-500/30 rounded-2xl shadow-sm space-y-6">
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                                        1. 核心命題 (Core Proposition)
+                                    </strong>
+<p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-base md:text-lg">
+                                        大模型上下文窗口的無限擴張掩蓋了工程架構的失職。真正的自主代理確定性建立在極致的資訊密度與冷酷的邊界控制之上。
+                                    </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                                        2. 激勵錨點 (Incentive Anchor)
+                                    </strong>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+                                        雲端模型供應商擁有強烈激勵推廣超長上下文以最大化按 Token 計費之推論營收；工程團隊的生存利益在於追求極限成本控制與確定性執行，雙方存在根本利益錯位。
+                                    </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                                        3. 引爆/反轉因子 (Trigger Factor)
+                                    </strong>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+                                        企業級 AI 研發預算遭遇 ROI 嚴格審計，以及長會話引發的幻覺頻率突破生產環境容忍極限之時點。
+                                    </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                                        4. 演化劇本 (Evolution Scenarios)
+                                    </strong>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+<div class="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+<span class="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-sm">情境一：微架構精準化演進 (預期內)</span>
+<p class="text-xs text-slate-500 leading-relaxed">具備 AST 脫水、規則路由與無狀態物理重置機制的工程化 AI 工作流成為專業團隊標準，淘汰低效的單體提示詞模式。</p>
+</div>
+<div class="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+<span class="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-sm">情境二：模型原生存儲競合 (極端路徑)</span>
+<p class="text-xs text-slate-500 leading-relaxed">模型廠商推出原生存儲感知型 Agent，但因黑盒特性依然無法解決架構規範遺忘，促使確定性外部約束系統更受重視。</p>
+</div>
+</div>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                                        5. 行動策略 (Action Strategy)
+                                    </strong>
+<p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-sm md:text-base">
+                                        即刻重構專案規範，將全域 Prompt 拆解為按需 Skills；強制對 150 行以上代碼實施 AST 脫水讀取；嚴格執行 One Phase One Session 物理隔絕。
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+<!-- References & Disclaimer -->
+<div class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+<h2 class="font-bold text-slate-700 dark:text-slate-300 mb-1 text-xs m-0 p-0 border-none" id="參考資料">參考資料 (References)</h2>
+<ol class="list-decimal pl-4 space-y-1 mb-4" data-managed="auto" id="content-references">
+<li>文內引用之公開市場數據與研究報告。</li>
+</ol>
+<p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+<p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。</p>
+</div>
+<!-- ========================================================================== -->
+<!-- [WARNING] CRITICAL BOUNDARY: END OF ARTICLE CONTENT -->
+<!-- 任何內文修改絕不可越過或刪除以下閉合標籤，否則將導致右側邊欄佈局崩塌 -->
+<!-- ========================================================================== -->
+</div> <!-- /END main-content-area -->
+</article>
+<!-- Related Articles (Mobile bottom) -->
+<div class="mt-8 lg:hidden" data-managed="append-only" id="related-articles-container"></div>
+</div>
+<!-- /END Center Column -->
+<!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+<aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+<div class="sticky top-24 space-y-6 sidebar-scroll">
+<!-- A. Article Info Card -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            文章資訊</p>
+</div>
+<dl class="divide-y divide-slate-100 dark:divide-slate-700">
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">發布日期</dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-10-13</dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">分類</dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">ai-workflow
+                            </dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">本文字數</dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200" data-meta="word-count">約 4,500 字</dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">閱讀時間</dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200" data-meta="reading-time">約 8 分鐘</dd>
+</div>
+</dl>
+</div>
+<!-- B. Key Findings Card -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            核心結論</p>
+</div>
+<ul class="divide-y divide-slate-50 dark:divide-slate-700/50"><li class="px-4 py-3 flex items-start gap-2"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span><p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">架構解耦削減 92.2% 靜態基線：以規則路由器按需加載特定 SKILL.md，徹底取代單體 System Prompt 灌入，將常駐上下文壓縮至 1,280 Tokens。</p></li><li class="px-4 py-3 flex items-start gap-2"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span><p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">工具鏈脫水防火牆降低 92.1% 讀取雜訊：透過 AST Code Skeleton 提取函式簽名與 Repo Radar 標靶切片，終結盲讀與探索污染。</p></li><li class="px-4 py-3 flex items-start gap-2"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span><p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">物理隔絕消滅滾動歷史複利累積：落實 One Phase One Session 與實體任務檔 SSOT，全流程輸入 Token 消耗自 426,800 降至 18,340（節省 95.7%），首次通過率提升至 100%。</p></li></ul>
+</div>
+<!-- C. Keywords -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            關鍵字</p>
+</div>
+<div class="px-4 py-3 flex flex-wrap gap-1.5"><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">AI 寫程式</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">Token 節省</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">AI 工作流</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">Antigravity</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">Cursor</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">上下文優化</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">AST 脫水</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">One Phase One Session</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">軟體工程架構</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">Zero-Build</span></div>
+</div>
+<!-- D. Related Articles (Desktop sidebar) -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            延伸閱讀</p>
+</div>
+<div data-managed="append-only" id="related-articles-sidebar"></div>
+</div>
+<!-- E. Topic Track Series Navigator (Desktop sidebar) -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                            專題賽道</p>
+<span class="text-[10px] font-bold text-blue-500 bg-blue-50 dark:bg-blue-900/40 px-1.5 py-0.5 rounded">連載中</span>
+</div>
+<div data-managed="append-only" id="track-navigator-container"></div>
+</div>
+</div>
+</aside>
+<!-- /END Right Sidebar -->
+</div>
+</main>
+<!-- Footer Host -->
+<div id="footer-host"></div>
+<!-- Back to Top Button (fixed, bottom-right) -->
+<button aria-label="回到頂部" class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="back-to-top">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5">
+</path>
+</svg>
+</button>
+<!-- Scripts -->
+<script src="../assets/js/core/core-taxonomy.js"></script>
+<script src="../assets/js/data/core-articles-data.js"></script>
+<script src="../assets/js/data/core-articles-repository.js"></script>
+<script src="../assets/js/core/core-header.js"></script>
+<!-- Footer Component (自動感知並載入 ResponsiveTocComponent) -->
+<script src="../assets/js/core/core-footer.js"></script>
+<!-- Responsive TOC Component (若 Footer 未自動注入，此處顯式載入作為備援) -->
+<script src="../assets/js/ui/ui-toc-responsive.js"></script>
+<script src="../assets/js/ui/ui-toc-desktop.js"></script>
+<script src="../assets/js/widgets/widget-track-navigator.js"></script>
+<script src="../assets/js/widgets/algo-article-recommender.js"></script>
+<script src="../assets/js/widgets/widget-related-articles-styles.js"></script>
+<script src="../assets/js/widgets/widget-related-articles.js"></script>
+<script src="../assets/js/ui/ui-section-wrapper.js"></script>
+<!-- Smart Math Renderer Component (智慧按需數學公式渲染) -->
+<script src="../assets/js/components/smart-math-renderer.js"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. Layout Shell ───────────────────────────────────
+            const header = new HeaderComponent();
+            header.setHomeUrl('../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+            if (typeof ArticleTOC !== 'undefined') {
+                new ArticleTOC().init();
+            }
+
+            // ── 3. Mobile TOC ──────────────────────────────────────
+            if (window.ResponsiveTocComponent) {
+                new ResponsiveTocComponent().init();
+            }
+
+            // ── 4. Topic Track Navigator ───────────────────────────
+            if (window.TrackNavigatorComponent) {
+                new TrackNavigatorComponent().init();
+            }
+
+            // ── Related Articles (Common) ──────────────────────────
+            if (window.RelatedArticlesComponent) {
+                // Related Articles - Bottom
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-container')
+                    .setLimit(3)
+                    .init();
+
+                // Related Articles - Sidebar
+                new RelatedArticlesComponent()
+                    .setContainerId('related-articles-sidebar')
+                    .setLayout('list')
+                    .setShowHeader(false)
+                    .setLimit(5)
+                    .init();
+            }
+
+            // ── 4. Scroll Events ───────────────────────────────────
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                // Progress bar
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+
+                // Back to top (show after 500px)
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) {
+                    bttSidebarBtn.classList.toggle('hidden', !isScrolled);
+                }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+
+        });
+    </script>
+</body>
+</html>
