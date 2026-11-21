@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>思考鏈分析工作台 (Interactive CoT Studio) — 宏觀研報與 Web3 論點階層矩陣</title>
+    <meta content="Mason Yang Blog 思考鏈分析工作台 (Interactive CoT Studio)：整合凜冬將至宏觀大變局與加密貨幣 Web3 專題之思考鏈架構。提供精簡論點、完整階層樹與紅隊壓力測試等 3 種模式提示詞，支援單篇一鍵複製階層論點結構，賦能機構級投研與 AI 深度對話。" name="description"/>
+    <meta content="思考鏈, CoT Studio, 宏觀經濟, 加密貨幣, Web3, 紅隊測試, 階層樹, 提示詞工程, 投資研究, Mason Yang" name="keywords"/>
+    <link href="https://masonyang-blog.github.io/apps/cot-studio/index.html" rel="canonical"/>
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://masonyang-blog.github.io/apps/cot-studio/index.html"/>
+    <meta property="og:title" content="思考鏈分析工作台 (Interactive CoT Studio) — 宏觀研報與 Web3 論點階層矩陣"/>
+    <meta property="og:description" content="整合全站宏觀清算、產業變局與 Web3 生態之多維論點樹。支援精簡論點、完整階層樹與紅隊壓力測試三模式，提供單篇一鍵複製階層架構。"/>
+    <meta property="og:image" content="https://masonyang-blog.github.io/logo.png"/>
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../../assets/js/core/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../assets/css/custom-tokens.css">
+    <link rel="stylesheet" href="../../assets/css/custom-typography.css">
+    <link rel="stylesheet" href="../../assets/css/custom-layout.css">
+    <link rel="stylesheet" href="../../assets/css/custom-components.css">
+    <link rel="stylesheet" href="../../assets/css/custom-article.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+    <style>
+        html, body {
+            scroll-behavior: smooth;
+            background-color: #030712 !important;
+            color: #e2e8f0 !important;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(20, 184, 166, 0.6);
+        }
+    </style>
+
+    <!-- ADVANCED JSON-LD SCHEMA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://masonyang-blog.github.io/apps/cot-studio/index.html#software",
+          "name": "思考鏈分析工作台 (Interactive CoT Studio)",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "All",
+          "url": "https://masonyang-blog.github.io/apps/cot-studio/index.html",
+          "description": "面向機構級投資研究與 AI 大模型對話的思考鏈 (CoT) 提示詞與論點階層矩陣分析工具。",
+          "author": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          },
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://masonyang-blog.github.io/#author",
+          "name": "Mason Yang",
+          "url": "https://masonyang-blog.github.io",
+          "jobTitle": "Investment Researcher",
+          "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://masonyang-blog.github.io/logo.png"
+          },
+          "sameAs": [
+            "https://x.com/MasonYang16"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://masonyang-blog.github.io/#website",
+          "url": "https://masonyang-blog.github.io",
+          "name": "Mason Yang Blog",
+          "publisher": {
+            "@id": "https://masonyang-blog.github.io/#author"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://masonyang-blog.github.io/apps/cot-studio/index.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "首頁",
+              "item": "https://masonyang-blog.github.io/index.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "分析工具",
+              "item": "https://masonyang-blog.github.io/apps/cot-studio/index.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "思考鏈分析工作台 (Interactive CoT Studio)",
+              "item": "https://masonyang-blog.github.io/apps/cot-studio/index.html"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-200 min-h-screen flex flex-col font-sans selection:bg-teal-500 selection:text-white transition-colors duration-200">
+    <!-- Scroll Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]" id="scroll-progress-container">
+        <div class="h-full bg-teal-500 w-0 transition-all duration-150 ease-out" id="scroll-progress-bar"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <!-- Hero Section -->
+        <div class="mb-10 text-center sm:text-left">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-400 text-xs font-mono font-medium mb-3">
+                <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
+                Institutional CoT Studio v3.0 (2026-Q4 Edition)
+            </div>
+            <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+                思考鏈分析工作台 (Interactive CoT Studio)
+            </h1>
+            <p class="text-sm sm:text-base text-slate-400 max-w-4xl leading-relaxed">
+                整合全站宏觀清算、產業變局與 Web3 生態之多維論點架構。支援「精簡論點」、「完整階層樹」與「紅隊壓力測試」三種模式，生成具備 2026-Q4 覆核實證指標與原文查證直達錨點的提示詞指令；並提供全系列專題研報獨立階層結構一鍵複製，賦能深度人機協同與機構級策略審查。
+            </p>
+        </div>
+
+        <!-- 2026-Q4 Macro Reference Benchmark Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-lg backdrop-blur-sm">
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-1">無風險定價錨失控</div>
+                <div class="text-lg sm:text-xl font-bold font-mono text-rose-400">30Y 5.66% / 10Y 5.0%+</div>
+                <div class="text-[11px] text-slate-400 mt-1">債務 40.25 兆 / MOVE 113</div>
+            </div>
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-lg backdrop-blur-sm">
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-1">全球流動性收縮</div>
+                <div class="text-lg sm:text-xl font-bold font-mono text-amber-400">GLI -$450B / 周</div>
+                <div class="text-[11px] text-slate-400 mt-1">新低/新高股比達 4:1 抽水</div>
+            </div>
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-lg backdrop-blur-sm">
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-1">一二級估值雪崩</div>
+                <div class="text-lg sm:text-xl font-bold font-mono text-purple-400">SaaS ARR 12x-15x</div>
+                <div class="text-[11px] text-slate-400 mt-1">獨角獸中位數折價 -79.4%</div>
+            </div>
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-lg backdrop-blur-sm">
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-1">實體黃金現貨溢價</div>
+                <div class="text-lg sm:text-xl font-bold font-mono text-teal-400">$4,121 / 築底</div>
+                <div class="text-[11px] text-slate-400 mt-1">Q3 ETF 淨流入 310 億鎂</div>
+            </div>
+        </div>
+
+        <!-- Section 1: CoT Prompt Studio Controller -->
+        <section class="bg-slate-900/90 rounded-3xl border border-slate-800 shadow-2xl overflow-hidden mb-12 backdrop-blur-sm">
+            <!-- Studio Control Header -->
+            <div class="p-4 sm:p-6 border-b border-slate-800 bg-slate-950/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <!-- Topic Selection Switcher -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-400 mr-1">選擇主題：</span>
+                    <button data-topic-target="winter" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-teal-600 text-white shadow-md shadow-teal-500/20 flex items-center gap-2">
+                        <span>凜冬將至 (Winter Is Coming)</span>
+                        <span class="px-1.5 py-0.5 rounded-full bg-white/20 text-[10px] font-mono">7篇</span>
+                    </button>
+                    <button data-topic-target="crypto" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-800/80 text-slate-300 hover:bg-slate-750 hover:text-white border border-slate-700/60 flex items-center gap-2">
+                        <span>加密貨幣與 Web3 (Crypto & Web3)</span>
+                        <span class="px-1.5 py-0.5 rounded-full bg-slate-700 text-[10px] font-mono">13篇</span>
+                    </button>
+                    <button data-topic-target="ai" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-800/80 text-slate-300 hover:bg-slate-750 hover:text-white border border-slate-700/60 flex items-center gap-2">
+                        <span>AI 算力與機器經濟 (AI Economy)</span>
+                        <span class="px-1.5 py-0.5 rounded-full bg-slate-700 text-[10px] font-mono">12篇</span>
+                    </button>
+                    <button data-topic-target="gold" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-800/80 text-slate-300 hover:bg-slate-750 hover:text-white border border-slate-700/60 flex items-center gap-2">
+                        <span>黃金與法幣信用 (Gold & Currency)</span>
+                        <span class="px-1.5 py-0.5 rounded-full bg-slate-700 text-[10px] font-mono">5篇</span>
+                    </button>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center gap-2.5">
+                    <button id="btn-copy-prompt" class="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-md shadow-teal-500/20 flex items-center gap-1.5 transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        <span>一鍵複製系統 Prompt</span>
+                    </button>
+                    <button id="btn-download-prompt" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs sm:text-sm font-medium flex items-center gap-1.5 transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <span>下載 .md</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mode Selector Toolbar -->
+            <div class="px-4 sm:px-6 py-4 bg-slate-950/40 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-400 mr-1">提示詞架構模式：</span>
+                    
+                    <button data-mode-target="stress_test" class="px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all border-teal-500 bg-teal-500/15 text-teal-300 shadow-sm shadow-teal-500/10 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+                        <span>紅隊壓力測試模式 (Red Team)</span>
+                    </button>
+
+                    <button data-mode-target="detailed" class="px-3 py-1.5 rounded-xl border text-xs font-medium transition-all border-slate-700/80 bg-slate-900/90 text-slate-400 hover:border-slate-600 hover:text-slate-200 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                        <span>完整階層樹模式 (Full Tree)</span>
+                    </button>
+
+                    <button data-mode-target="concise" class="px-3 py-1.5 rounded-xl border text-xs font-medium transition-all border-slate-700/80 bg-slate-900/90 text-slate-400 hover:border-slate-600 hover:text-slate-200 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                        <span>精簡論點模式 (Concise)</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-3 text-xs font-mono text-slate-400">
+                    <span id="cot-active-topic-title" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700/60">凜冬將至 (Winter Is Coming)</span>
+                    <span id="cot-prompt-stats">計算中...</span>
+                </div>
+            </div>
+
+            <!-- Live Prompt Console Output -->
+            <div class="p-4 sm:p-6 bg-slate-950">
+                <div class="relative rounded-2xl border border-slate-800 overflow-hidden bg-slate-900/90 shadow-inner">
+                    <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-xs font-mono text-slate-400">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                            <span class="ml-2 font-semibold text-slate-300">CoT Prompt Studio Terminal</span>
+                        </div>
+                        <span class="text-[11px] text-teal-400">Markdown Ready • Direct Anchor Linked</span>
+                    </div>
+                    <pre id="cot-prompt-output" class="font-mono text-xs sm:text-sm text-slate-200 p-4 sm:p-6 overflow-x-auto max-h-[580px] leading-relaxed select-all whitespace-pre-wrap">載入中...</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: TOPIC Articles & Hierarchy Matrix -->
+        <section id="cot-articles-matrix" class="mb-12">
+            <!-- Section Header & Filter Toolbar -->
+            <div class="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl mb-6 backdrop-blur-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-400 text-xs font-mono font-medium mb-1.5 border border-teal-500/20">
+                            <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>
+                            Multi-Topic CoT Repository (37 Reports)
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+                            TOPIC 系列研報與論點結構庫
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+                            收錄全站具備完整階層樹架構之宏觀、Web3、AI 算力與黃金貨幣四大專題研報（全站共 37 篇）。每張研報卡片均配備獨立「複製論點結構」功能，格式化輸出含核心結論、H2/H3 支柱與直達錨點之 Markdown，支援一鍵餵入 AI 大模型進行定向研討。
+                        </p>
+                    </div>
+
+                    <!-- Batch Expand / Collapse Controls -->
+                    <div class="flex items-center gap-2 self-start md:self-auto shrink-0">
+                        <button id="btn-expand-all-cards" class="px-3 py-1.5 rounded-xl text-xs font-medium border border-slate-700 bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-all flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <span>展開所有論點樹</span>
+                        </button>
+                        <button id="btn-collapse-all-cards" class="px-3 py-1.5 rounded-xl text-xs font-medium border border-slate-700 bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-all flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                            <span>收合所有論點樹</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Matrix Filter Tabs -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs font-semibold text-slate-400 mr-1">專題篩選：</span>
+                        <button data-filter-target="all" class="matrix-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition-all bg-teal-600 text-white shadow-md shadow-teal-500/20 border border-teal-500 flex items-center gap-1.5">
+                            <span>全部收錄研報</span>
+                            <span class="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px] font-mono" id="filter-count-all">37</span>
+                        </button>
+                        <button data-filter-target="winter" class="matrix-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium transition-all bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-750 border border-slate-700/60 flex items-center gap-1.5">
+                            <span>凜冬將至 (Winter Is Coming)</span>
+                            <span class="px-1.5 py-0.2 rounded-full bg-slate-700 text-[10px] font-mono text-slate-300" id="filter-count-winter">7</span>
+                        </button>
+                        <button data-filter-target="crypto" class="matrix-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium transition-all bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-750 border border-slate-700/60 flex items-center gap-1.5">
+                            <span>加密貨幣與 Web3 專題</span>
+                            <span class="px-1.5 py-0.2 rounded-full bg-slate-700 text-[10px] font-mono text-slate-300" id="filter-count-crypto">13</span>
+                        </button>
+                        <button data-filter-target="ai" class="matrix-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium transition-all bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-750 border border-slate-700/60 flex items-center gap-1.5">
+                            <span>AI 算力與機器經濟</span>
+                            <span class="px-1.5 py-0.2 rounded-full bg-slate-700 text-[10px] font-mono text-slate-300" id="filter-count-ai">12</span>
+                        </button>
+                        <button data-filter-target="gold" class="matrix-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium transition-all bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-750 border border-slate-700/60 flex items-center gap-1.5">
+                            <span>黃金與法幣信用危機</span>
+                            <span class="px-1.5 py-0.2 rounded-full bg-slate-700 text-[10px] font-mono text-slate-300" id="filter-count-gold">5</span>
+                        </button>
+                    </div>
+
+                    <div class="text-xs text-slate-400 font-mono" id="matrix-display-stats">
+                        正在載入研報卡片...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cards Grid Container -->
+            <div id="articles-matrix-container" class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+                <!-- Rendered Dynamically by cot-studio.js -->
+            </div>
+
+            <!-- Full Hierarchy Archive Section (Phase 1) -->
+            <div id="topic-full-hierarchy-archive" class="mt-12 pt-8 border-t border-slate-800">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                                完整階層檔案庫
+                            </span>
+                            <span class="text-xs text-slate-400 font-mono">H2 / H3 深度論證樹狀目錄</span>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                            專題完整階層樹狀檔案庫
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+                            收錄各專題全部研報之 H2 核心支柱與 H3 論證細節樹狀結構，完整保留章節直達錨點跳轉功能。可隨上方專題篩選聯動顯示。
+                        </p>
+                    </div>
+
+                    <!-- Hierarchy Archive Batch Controls -->
+                    <div class="flex flex-wrap items-center gap-2 self-start md:self-auto shrink-0">
+                        <button id="btn-copy-all-archive-chrono" class="px-3 py-1.5 rounded-xl text-xs font-medium border border-teal-500/40 bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 hover:text-teal-200 transition-all flex items-center gap-1.5 shadow-sm">
+                            <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                            <span id="btn-copy-all-archive-text">一鍵複製全部文章論點 (按最新時間)</span>
+                        </button>
+                        <button id="btn-expand-all-archive" class="px-3 py-1.5 rounded-xl text-xs font-medium border border-slate-700 bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-all flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <span>展開所有目錄</span>
+                        </button>
+                        <button id="btn-collapse-all-archive" class="px-3 py-1.5 rounded-xl text-xs font-medium border border-slate-700 bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-all flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                            <span>收合所有目錄</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dynamic Tree Container -->
+                <div id="full-hierarchy-tree-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Rendered Dynamically by cot-studio.js -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button -->
+    <button aria-label="回到頂部" class="fixed bottom-8 right-8 z-50 bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2" id="back-to-top">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+        </svg>
+    </button>
+
+    <!-- Datasets (Zero-Build / UMD Data Modules) -->
+    <script src="../../assets/js/topics/topic-winter-cot-data.js"></script>
+    <script src="../../assets/js/topics/topic-crypto-cot-data.js"></script>
+    <script src="../../assets/js/topics/topic-ai-economy-cot-data.js"></script>
+    <script src="../../assets/js/topics/topic-gold-cot-data.js"></script>
+
+    <!-- Core Scripts -->
+    <script src="../../assets/js/core/core-header.js"></script>
+    <script src="../../assets/js/core/core-footer.js"></script>
+    <script src="./cot-studio.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 初始化 Header 與 Footer
+            const header = new HeaderComponent();
+            header.setHomeUrl('../../index.html');
+            header.init();
+            new FooterComponent().init();
+
+            // 滾動進度條與回到頂部
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                if (progressBar) {
+                    progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%';
+                }
+                const isScrolled = winScroll > 300;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+            }, { passive: true });
+
+            if (bttBtn) {
+                bttBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            }
+        });
+    </script>
+</body>
+</html>

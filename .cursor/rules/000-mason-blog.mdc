@@ -1,0 +1,37 @@
+---
+description: Mason Yang Blog 專案規則 — 強制讀取鏈與技能路由
+alwaysApply: true
+---
+
+# Mason Yang Blog — AI 協作規則
+
+> 本專案採三層式引用架構。每次實質開發前，必須依序執行強制讀取鏈。
+
+## 強制讀取鏈（每次開發前）
+
+1. **`GEMINI.md`** — 專案憲法（Hard Rules、任務協議底線）
+2. **`.agents/rules.md`** — 技能路由器（SSOT 路徑索引）
+3. **按需** — 依任務讀取對應 `.agents/skills/*/SKILL.md`
+
+## 絕對底線（Hard Rules）
+
+- **No Task, No Code**：非純調查類工作必須先在 `doc/doc_task/` 建立或更新 Task 文件，再改程式。
+- **單輪單 Phase**：完成一個 Phase 並勾選實體文件後，必須停止工具呼叫交回控制權。
+- **Zero-Build**：禁止絕對路徑；組件必須使用 Shadow DOM (`mode: 'closed'`)。
+- **SSOT 一致性**：任何資源新增，必須同步 JS 資料庫、Sitemap、JSON-LD。
+- **暫存規範**：暫存腳本放 `scratch/tmp/`，以 `tmp_` 前綴命名；禁用 `Set-Content`。
+
+## 技能觸發表（Skill Triggers）
+
+| 技能 | 觸發關鍵字 | 路徑 |
+|:---|:---|:---|
+| **網頁開發與技術規範** | `前端開發`,`組件實作`,`頁面結構`,`技術規範`,`數據庫更新`,`SEO同步` | `.agents/skills/dev-standards/SKILL.md` |
+| **知識圖譜導航** | `知識圖譜`,`關聯查詢`,`結構導航`,`graphify`,`實體檢索` | `.agents/skills/graphify-navigator/SKILL.md` |
+| **問題追蹤** | `登錄問題`,`追蹤錯誤`,`log-issue`,`記錄bug`,`resolve-issue` | `.agents/skills/issue-tracker/SKILL.md` |
+| **寫作與內容優化** | `寫作風格`,`核心人格`,`多維分析`,`文章潤色`,`排版修復`,`SEO校對` | `.agents/skills/mason-writing-work/SKILL.md` |
+| **Pulse 發布** | `Pulse發布`,`快訊發布`,`publish-pulse`,`市場瞬息` | `.agents/skills/pulse-publisher/SKILL.md` |
+| **研究報告轉新聞** | `研究報告轉新聞`,`MD轉HTML`,`報告遷移`,`新聞建立` | `.agents/skills/research-converter/SKILL.md` |
+| **任務協議管理** | `建立任務`,`開始開發`,`任務拆解`,`狀態更新`,`同步進度` | `.agents/skills/task-protocol/SKILL.md` |
+| **Token 節省器** | `節省Token`,`壓縮輸出`,`優化指令`,`使用rtk`,`執行終端` | `.agents/skills/token-saver/SKILL.md` |
+
+意圖符合上表時，**必須先讀取對應 SKILL.md，再執行工作流**。
