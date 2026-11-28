@@ -1,0 +1,3537 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+<script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-4RKTYWVLXN");
+    </script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/images/brand/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/images/brand/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<!-- [WARNING] 標題零後綴鐵律：絕對禁止包含 | Mason Yang 等後綴 (遵循 STANDARDS_TITLE.md) -->
+<title>【GEX 量化監控管線】 - 造市商負 Gamma
+ 如何引爆流動性踩踏？為何單看隱含波動率常失靈？拆解 TXO Vanna/Charm
+ 與法人雙重驗證系統</title>
+<meta content="當市場跌破 Gamma Flip 臨界點，造市商的機械性對沖將轉為順勢追殺。本手冊完整拆解美股 SPY GEX v1 原型、台灣期交所 TXO Vanna/Charm 反推運算 v2、三大法人台指期未平倉雙重驗證 v3、PCR 與 VIXTWN 擴充模組，以及 GitHub Actions 與 Apps Script 全自動跨市場戰情警報管線。" name="description"/>
+<meta content="GEX 量化監控, Gamma Exposure, TXO 台指選擇權, Vanna 與 Charm, 三大法人未平倉, 流動性微觀結構, GitHub Actions 自動化, 量化研究工具" name="keywords"/>
+<link href="https://masonyang-blog.github.io/news/20261121-gex-quant-monitoring-pipeline.html" rel="canonical"/>
+<meta content="playbook-engineering" name="category"/>
+<!-- Theme Core (Must be first to prevent FOUC) -->
+<script src="../assets/js/core/core-theme.js"></script>
+<!-- Tailwind CSS -->
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              slate: { 850: "#15202e" },
+            },
+          },
+        },
+      };
+    </script>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<!-- Custom Styles -->
+<link href="../assets/css/custom-tokens.css" rel="stylesheet"/>
+<link href="../assets/css/custom-typography.css" rel="stylesheet"/>
+<link href="../assets/css/custom-layout.css" rel="stylesheet"/>
+<link href="../assets/css/custom-components.css" rel="stylesheet"/>
+<link href="../assets/css/custom-article.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+TC:wght@400;500;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      h2[id],
+      h3[id],
+      section[id] {
+        scroll-margin-top: 6rem;
+      }
+    </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AnalysisNewsArticle",
+      "@id": "https://masonyang-blog.github.io/news/20261121-gex-quant-monitoring-pipeline.html#article",
+      "isPartOf": {
+        "@id": "https://masonyang-blog.github.io/#website"
+      },
+      "author": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      },
+      "publisher": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      },
+      "headline": "【GEX 量化監控管線】 - 造市商負 Gamma 如何引爆流動性踩踏？為何單看隱含波動率常失靈？拆解 TXO Vanna/Charm 與法人雙重驗證系統",
+      "description": "當市場跌破 Gamma Flip 臨界點，造市商的機械性對沖將轉為順勢追殺。本手冊完整拆解美股 SPY GEX v1 原型、台灣期交所 TXO Vanna/Charm 反推運算 v2、三大法人台指期未平倉雙重驗證 v3、PCR 與 VIXTWN 擴充模組，以及 GitHub Actions 與 Apps Script 全自動跨市場戰情警報管線。",
+      "datePublished": "2026-11-21",
+      "dateModified": "2026-11-21",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://masonyang-blog.github.io/news/20261121-gex-quant-monitoring-pipeline.html"
+      },
+      "articleSection": "總體研究",
+      "keywords": [
+        "GEX 量化監控",
+        "Gamma Exposure",
+        "TXO 台指選擇權",
+        "Vanna 與 Charm",
+        "三大法人未平倉",
+        "流動性微觀結構",
+        "GitHub Actions 自動化",
+        "量化研究工具"
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://masonyang-blog.github.io/#author",
+      "name": "Mason Yang",
+      "url": "https://masonyang-blog.github.io",
+      "jobTitle": "Investment Researcher",
+      "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://masonyang-blog.github.io/logo.png"
+      },
+      "sameAs": [
+        "https://x.com/MasonYang16"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://masonyang-blog.github.io/#website",
+      "url": "https://masonyang-blog.github.io",
+      "name": "Mason Yang Blog",
+      "publisher": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://masonyang-blog.github.io/news/20261121-gex-quant-monitoring-pipeline.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首頁",
+          "item": "https://masonyang-blog.github.io/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "投研策略與實戰工具",
+          "item": "https://masonyang-blog.github.io/post/trading-strategies-list-151.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "【GEX 量化監控管線】 - 造市商負 Gamma 如何引爆流動性踩踏？為何單看隱含波動率常失靈？拆解 TXO Vanna/Charm 與法人雙重驗證系統",
+          "item": "https://masonyang-blog.github.io/news/20261121-gex-quant-monitoring-pipeline.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+  <meta name="topic" content="topic-strategies-tools">
+</head>
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="20261121-gex-quant-monitoring-pipeline">
+<!-- Scroll Progress Bar -->
+<div class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]" id="scroll-progress-container">
+<div class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out" id="scroll-progress-bar"></div>
+</div>
+<!-- Header Host -->
+<div id="header-host"></div>
+<!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+<main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+<aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+<div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+              目錄導覽
+            </p>
+<!-- ArticleTOC renders here -->
+<div data-managed="auto" id="toc-desktop-host">
+<!-- static_toc_start -->
+<nav aria-label="Table of Contents" class="static-toc-container">
+<ul class="static-toc" style="
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    font-family:
+                      system-ui,
+                      -apple-system,
+                      sans-serif;
+                  ">
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#chapter-0" style="
+                        display: block;
+                        padding: 0.35rem 0;
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: #475569;
+                        text-decoration: none;
+                        border-bottom: 1px solid #f1f5f9;
+                        text-transform: uppercase;
+                      ">0 執行摘要 核心事件的 5W1H 認知架構</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#1-美股-spy-gex-核心計算與-python-實作-v1-原型" style="
+                        display: block;
+                        padding: 0.35rem 0;
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: #475569;
+                        text-decoration: none;
+                        border-bottom: 1px solid #f1f5f9;
+                        text-transform: uppercase;
+                      ">11. 美股 SPY GEX 核心計算與 Python 實作（v1 原型）</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#1-1-核心計算公式與造市商假設" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">1.1 核心計算公式與造市商假設</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#1-2-完整-python-實作程式碼" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">1.2 完整 Python 實作程式碼</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#1-3-實戰使用與擴充微調建議" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">1.3 實戰使用與擴充微調建議</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#2-高階-greeks-vanna-charm-與台灣期交所-txo-自動化管線-v2" style="
+                        display: block;
+                        padding: 0.35rem 0;
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: #475569;
+                        text-decoration: none;
+                        border-bottom: 1px solid #f1f5f9;
+                        text-transform: uppercase;
+                      ">22. 高階 Greeks（Vanna / Charm）與台灣期交所 TXO
+                      自動化管線（v2）</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#2-1-核心希臘字母與造市商對沖公式" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">2.1 核心希臘字母與造市商對沖公式</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#2-2-完整-python-自動化管線程式碼" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">2.2 完整 Python 自動化管線程式碼</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#2-3-自動化部署與-google-sheets-串接設定清單" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">2.3 自動化部署與 Google Sheets 串接設定清單</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#3-三大法人台指期雙重驗證-v3-與-github-actions-每日排程" style="
+                        display: block;
+                        padding: 0.35rem 0;
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: #475569;
+                        text-decoration: none;
+                        border-bottom: 1px solid #f1f5f9;
+                        text-transform: uppercase;
+                      ">33. 三大法人台指期雙重驗證（v3）與 GitHub Actions
+                      每日排程</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#3-1-為什麼要加入-三大法人台指期未平倉-做雙重驗證" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">3.1 為什麼要加入「三大法人台指期未平倉」做雙重驗證？</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#3-2-完整升級版-python-腳本-scripts-txo-gex-pipeline-py" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">3.2 完整升級版 Python
+                      腳本（`scripts/txo_gex_pipeline.py`）</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#3-3-github-actions-零伺服器每日自動排程設定" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">3.3 GitHub Actions 零伺服器每日自動排程設定</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#3-4-部署前最後檢查清單-3-分鐘完成" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">3.4 部署前最後檢查清單（3 分鐘完成）</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#4-擴充模組-pcr-vixtwn-指標與美股跨市場早晚報" style="
+                        display: block;
+                        padding: 0.35rem 0;
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: #475569;
+                        text-decoration: none;
+                        border-bottom: 1px solid #f1f5f9;
+                        text-transform: uppercase;
+                      ">44. 擴充模組PCR / VIXTWN 指標與美股跨市場早晚報</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#4-1-模組一-加入台灣期交所-pcr-put-call-ratio-與-vixtwn-波動率指標" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">4.1 模組一：加入台灣期交所 PCR（Put/Call Ratio）與 VIXTWN
+                      波動率指標</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#4-2-模組二-美股-spy-qqq-跨市場早晚報與雙時段排程" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">4.2 模組二：美股 SPY / QQQ 跨市場早晚報與雙時段排程</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#1-美股-spy-qqq-抓取腳本-scripts-us-gex-pipeline-py" style="
+                        display: block;
+                        padding: 0.2rem 0;
+                        font-size: 0.75rem;
+                        color: #94a3b8;
+                        text-decoration: none;
+                        padding-left: 2rem;
+                      ">1. 美股 SPY / QQQ
+                      抓取腳本（`scripts/us_gex_pipeline.py`）</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#2-github-actions-雙時段排程設定-github-workflows-cross-market-gex-yml" style="
+                        display: block;
+                        padding: 0.2rem 0;
+                        font-size: 0.75rem;
+                        color: #94a3b8;
+                        text-decoration: none;
+                        padding-left: 2rem;
+                      ">2. GitHub Actions
+                      雙時段排程設定（`.github/workflows/cross_market_gex.yml`）</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#5-google-apps-script-自動異常警報與戰情儀表板" style="
+                        display: block;
+                        padding: 0.35rem 0;
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: #475569;
+                        text-decoration: none;
+                        border-bottom: 1px solid #f1f5f9;
+                        text-transform: uppercase;
+                      ">55. Google Apps Script 自動異常警報與戰情儀表板</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#5-1-apps-script-警報與看板腳本" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">5.1 Apps Script 警報與看板腳本</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#5-2-設定-apps-script-自動觸發器-2-步驟" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">5.2 設定 Apps Script 自動觸發器（2 步驟）</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#6-雙軌視覺化升級-靜態網頁儀表板與-google-sheets-歷史趨勢圖" style="
+                        display: block;
+                        padding: 0.35rem 0;
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: #475569;
+                        text-decoration: none;
+                        border-bottom: 1px solid #f1f5f9;
+                        text-transform: uppercase;
+                      ">66. 雙軌視覺化升級靜態網頁儀表板與 Google Sheets
+                      歷史趨勢圖</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#6-1-串接靜態網頁儀表板-github-pages-json-輸出與自動-commit" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">6.1 串接靜態網頁儀表板（GitHub Pages JSON 輸出與自動
+                      Commit）</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#1-python-json-匯出模組-加入-scripts-txo-gex-pipeline-py" style="
+                        display: block;
+                        padding: 0.2rem 0;
+                        font-size: 0.75rem;
+                        color: #94a3b8;
+                        text-decoration: none;
+                        padding-left: 2rem;
+                      ">1. Python JSON 匯出模組（加入
+                      `scripts/txo_gex_pipeline.py`）</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#2-github-actions-自動-commit-push-設定" style="
+                        display: block;
+                        padding: 0.2rem 0;
+                        font-size: 0.75rem;
+                        color: #94a3b8;
+                        text-decoration: none;
+                        padding-left: 2rem;
+                      ">2. GitHub Actions 自動 Commit &amp; Push 設定</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#3-前端零依賴渲染範例-chart-js-vanilla-js" style="
+                        display: block;
+                        padding: 0.2rem 0;
+                        font-size: 0.75rem;
+                        color: #94a3b8;
+                        text-decoration: none;
+                        padding-left: 2rem;
+                      ">3. 前端零依賴渲染範例（Chart.js / Vanilla JS）</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#6-2-優化-google-sheets-歷史趨勢折線圖自動生成-apps-script" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">6.2 優化 Google Sheets 歷史趨勢折線圖自動生成（Apps
+                      Script）</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#article-analysis-header" style="
+                        display: block;
+                        padding: 0.35rem 0;
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: #475569;
+                        text-decoration: none;
+                        border-bottom: 1px solid #f1f5f9;
+                        text-transform: uppercase;
+                      ">文章分析</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#article-inference-logic" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">01 文章推論邏輯分析</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#微觀結構對沖與跨市場量化監控推論鏈" style="
+                        display: block;
+                        padding: 0.2rem 0;
+                        font-size: 0.75rem;
+                        color: #94a3b8;
+                        text-decoration: none;
+                        padding-left: 2rem;
+                      ">微觀結構對沖與跨市場量化監控推論鏈</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#logic-blindspots" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">02 敘事邊界與關鍵變數補充</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#mason-yang-observation" style="
+                        display: block;
+                        padding: 0.25rem 0;
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        text-decoration: none;
+                        padding-left: 1rem;
+                      ">03 Mason Yang 的觀察 (Actionable Intelligence)</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#參考資料" style="
+                        display: block;
+                        padding: 0.35rem 0;
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: #475569;
+                        text-decoration: none;
+                        border-bottom: 1px solid #f1f5f9;
+                        text-transform: uppercase;
+                      ">參考資料 (References)</a>
+</li>
+</ul>
+</nav>
+<!-- static_toc_end -->
+</div>
+<!-- Back to top (sidebar) -->
+<button class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5" id="back-to-top-sidebar">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              回到頂部
+            </button>
+</div>
+</aside>
+<!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+<div class="flex-1 min-w-0">
+<!-- Breadcrumb -->
+<nav aria-label="Breadcrumb" class="flex text-sm text-slate-500 dark:text-slate-400 mb-6">
+<ol class="flex items-center space-x-1.5 flex-wrap">
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../index.html">首頁</a></li>
+<li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg></li>
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../post/trading-strategies-list-151.html">投研策略與實戰工具</a></li>
+<li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg></li>
+<li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">【GEX 量化監控管線】 - 造市商負 Gamma 如何引爆流動性踩踏？為何單看隱含波動率常失靈？拆解 TXO Vanna/Charm 與法人雙重驗證系統</li>
+</ol>
+</nav>
+<!-- ── Hero Header ── -->
+<header class="theme-bg-card dark:bg-slate-900/40 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6 font-sans relative">
+<!-- Category + Date + Executive Badge -->
+<div class="flex flex-wrap items-center gap-3 mb-5">
+<span class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                總體研究
+              </span>
+<span class="px-2.5 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                執行摘要
+              </span>
+<span class="text-sm text-slate-500 dark:text-slate-400">
+<time datetime="2026-11-21">2026-11-21</time>
+</span>
+<span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 43 分鐘閱讀</span>
+</div>
+<!-- H1 -->
+<h1 class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+              【GEX 量化監控管線】 - 造市商負 Gamma
+ 如何引爆流動性踩踏？為何單看隱含波動率常失靈？拆解 TXO Vanna/Charm
+ 與法人雙重驗證系統
+            </h1>
+<!-- Subtitle / Hook (純段落文字) -->
+<!-- Above-the-Fold 50字統攝性解答 (純段落文字) -->
+<p class="above-fold-summary text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+<strong class="dsr-label">[Direct Answer]</strong>
+              衍生品造市商在負 Gamma
+              區間的機械性動態對沖，才是點燃市場流動性踩踏的微觀引擎。透過將美股
+              SPY GEX、台灣期交所 TXO 高階
+              Greeks（Vanna/Charm）與三大法人期貨淨未平倉封裝為零伺服器自動化管線，交易者得以在價格失控前精準定位造市商對沖壓力與防線臨界點。
+            </p>
+</header>
+<!-- ── Mobile TOC Target (行動版) ── -->
+<div class="lg:hidden mb-6" data-managed="auto" id="toc-mobile-target">
+<!-- static_toc_start -->
+<nav aria-label="Table of Contents" class="static-toc-container">
+<ul class="static-toc" style="
+                  list-style: none;
+                  padding: 0;
+                  margin: 0;
+                  font-family:
+                    system-ui,
+                    -apple-system,
+                    sans-serif;
+                ">
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#chapter-0" style="
+                      display: block;
+                      padding: 0.35rem 0;
+                      font-size: 0.85rem;
+                      font-weight: 700;
+                      color: #475569;
+                      text-decoration: none;
+                      border-bottom: 1px solid #f1f5f9;
+                      text-transform: uppercase;
+                    ">0 執行摘要 核心事件的 5W1H 認知架構</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#1-美股-spy-gex-核心計算與-python-實作-v1-原型" style="
+                      display: block;
+                      padding: 0.35rem 0;
+                      font-size: 0.85rem;
+                      font-weight: 700;
+                      color: #475569;
+                      text-decoration: none;
+                      border-bottom: 1px solid #f1f5f9;
+                      text-transform: uppercase;
+                    ">11. 美股 SPY GEX 核心計算與 Python 實作（v1 原型）</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#1-1-核心計算公式與造市商假設" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">1.1 核心計算公式與造市商假設</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#1-2-完整-python-實作程式碼" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">1.2 完整 Python 實作程式碼</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#1-3-實戰使用與擴充微調建議" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">1.3 實戰使用與擴充微調建議</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#2-高階-greeks-vanna-charm-與台灣期交所-txo-自動化管線-v2" style="
+                      display: block;
+                      padding: 0.35rem 0;
+                      font-size: 0.85rem;
+                      font-weight: 700;
+                      color: #475569;
+                      text-decoration: none;
+                      border-bottom: 1px solid #f1f5f9;
+                      text-transform: uppercase;
+                    ">22. 高階 Greeks（Vanna / Charm）與台灣期交所 TXO
+                    自動化管線（v2）</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#2-1-核心希臘字母與造市商對沖公式" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">2.1 核心希臘字母與造市商對沖公式</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#2-2-完整-python-自動化管線程式碼" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">2.2 完整 Python 自動化管線程式碼</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#2-3-自動化部署與-google-sheets-串接設定清單" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">2.3 自動化部署與 Google Sheets 串接設定清單</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#3-三大法人台指期雙重驗證-v3-與-github-actions-每日排程" style="
+                      display: block;
+                      padding: 0.35rem 0;
+                      font-size: 0.85rem;
+                      font-weight: 700;
+                      color: #475569;
+                      text-decoration: none;
+                      border-bottom: 1px solid #f1f5f9;
+                      text-transform: uppercase;
+                    ">33. 三大法人台指期雙重驗證（v3）與 GitHub Actions
+                    每日排程</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#3-1-為什麼要加入-三大法人台指期未平倉-做雙重驗證" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">3.1 為什麼要加入「三大法人台指期未平倉」做雙重驗證？</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#3-2-完整升級版-python-腳本-scripts-txo-gex-pipeline-py" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">3.2 完整升級版 Python
+                    腳本（`scripts/txo_gex_pipeline.py`）</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#3-3-github-actions-零伺服器每日自動排程設定" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">3.3 GitHub Actions 零伺服器每日自動排程設定</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#3-4-部署前最後檢查清單-3-分鐘完成" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">3.4 部署前最後檢查清單（3 分鐘完成）</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#4-擴充模組-pcr-vixtwn-指標與美股跨市場早晚報" style="
+                      display: block;
+                      padding: 0.35rem 0;
+                      font-size: 0.85rem;
+                      font-weight: 700;
+                      color: #475569;
+                      text-decoration: none;
+                      border-bottom: 1px solid #f1f5f9;
+                      text-transform: uppercase;
+                    ">44. 擴充模組PCR / VIXTWN 指標與美股跨市場早晚報</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#4-1-模組一-加入台灣期交所-pcr-put-call-ratio-與-vixtwn-波動率指標" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">4.1 模組一：加入台灣期交所 PCR（Put/Call Ratio）與 VIXTWN
+                    波動率指標</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#4-2-模組二-美股-spy-qqq-跨市場早晚報與雙時段排程" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">4.2 模組二：美股 SPY / QQQ 跨市場早晚報與雙時段排程</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#1-美股-spy-qqq-抓取腳本-scripts-us-gex-pipeline-py" style="
+                      display: block;
+                      padding: 0.2rem 0;
+                      font-size: 0.75rem;
+                      color: #94a3b8;
+                      text-decoration: none;
+                      padding-left: 2rem;
+                    ">1. 美股 SPY / QQQ
+                    抓取腳本（`scripts/us_gex_pipeline.py`）</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#2-github-actions-雙時段排程設定-github-workflows-cross-market-gex-yml" style="
+                      display: block;
+                      padding: 0.2rem 0;
+                      font-size: 0.75rem;
+                      color: #94a3b8;
+                      text-decoration: none;
+                      padding-left: 2rem;
+                    ">2. GitHub Actions
+                    雙時段排程設定（`.github/workflows/cross_market_gex.yml`）</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#5-google-apps-script-自動異常警報與戰情儀表板" style="
+                      display: block;
+                      padding: 0.35rem 0;
+                      font-size: 0.85rem;
+                      font-weight: 700;
+                      color: #475569;
+                      text-decoration: none;
+                      border-bottom: 1px solid #f1f5f9;
+                      text-transform: uppercase;
+                    ">55. Google Apps Script 自動異常警報與戰情儀表板</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#5-1-apps-script-警報與看板腳本" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">5.1 Apps Script 警報與看板腳本</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#5-2-設定-apps-script-自動觸發器-2-步驟" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">5.2 設定 Apps Script 自動觸發器（2 步驟）</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#6-雙軌視覺化升級-靜態網頁儀表板與-google-sheets-歷史趨勢圖" style="
+                      display: block;
+                      padding: 0.35rem 0;
+                      font-size: 0.85rem;
+                      font-weight: 700;
+                      color: #475569;
+                      text-decoration: none;
+                      border-bottom: 1px solid #f1f5f9;
+                      text-transform: uppercase;
+                    ">66. 雙軌視覺化升級靜態網頁儀表板與 Google Sheets
+                    歷史趨勢圖</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#6-1-串接靜態網頁儀表板-github-pages-json-輸出與自動-commit" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">6.1 串接靜態網頁儀表板（GitHub Pages JSON 輸出與自動
+                    Commit）</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#1-python-json-匯出模組-加入-scripts-txo-gex-pipeline-py" style="
+                      display: block;
+                      padding: 0.2rem 0;
+                      font-size: 0.75rem;
+                      color: #94a3b8;
+                      text-decoration: none;
+                      padding-left: 2rem;
+                    ">1. Python JSON 匯出模組（加入
+                    `scripts/txo_gex_pipeline.py`）</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#2-github-actions-自動-commit-push-設定" style="
+                      display: block;
+                      padding: 0.2rem 0;
+                      font-size: 0.75rem;
+                      color: #94a3b8;
+                      text-decoration: none;
+                      padding-left: 2rem;
+                    ">2. GitHub Actions 自動 Commit &amp; Push 設定</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#3-前端零依賴渲染範例-chart-js-vanilla-js" style="
+                      display: block;
+                      padding: 0.2rem 0;
+                      font-size: 0.75rem;
+                      color: #94a3b8;
+                      text-decoration: none;
+                      padding-left: 2rem;
+                    ">3. 前端零依賴渲染範例（Chart.js / Vanilla JS）</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#6-2-優化-google-sheets-歷史趨勢折線圖自動生成-apps-script" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">6.2 優化 Google Sheets 歷史趨勢折線圖自動生成（Apps
+                    Script）</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#article-analysis-header" style="
+                      display: block;
+                      padding: 0.35rem 0;
+                      font-size: 0.85rem;
+                      font-weight: 700;
+                      color: #475569;
+                      text-decoration: none;
+                      border-bottom: 1px solid #f1f5f9;
+                      text-transform: uppercase;
+                    ">文章分析</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#article-inference-logic" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">01 文章推論邏輯分析</a>
+</li>
+<li style="margin-bottom: 0.2rem">
+<a href="#微觀結構對沖與跨市場量化監控推論鏈" style="
+                      display: block;
+                      padding: 0.2rem 0;
+                      font-size: 0.75rem;
+                      color: #94a3b8;
+                      text-decoration: none;
+                      padding-left: 2rem;
+                    ">微觀結構對沖與跨市場量化監控推論鏈</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#logic-blindspots" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">02 敘事邊界與關鍵變數補充</a>
+</li>
+<li style="margin-bottom: 0.25rem">
+<a href="#mason-yang-observation" style="
+                      display: block;
+                      padding: 0.25rem 0;
+                      font-size: 0.8rem;
+                      color: #64748b;
+                      text-decoration: none;
+                      padding-left: 1rem;
+                    ">03 Mason Yang 的觀察 (Actionable Intelligence)</a>
+</li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem">
+<a href="#參考資料" style="
+                      display: block;
+                      padding: 0.35rem 0;
+                      font-size: 0.85rem;
+                      font-weight: 700;
+                      color: #475569;
+                      text-decoration: none;
+                      border-bottom: 1px solid #f1f5f9;
+                      text-transform: uppercase;
+                    ">參考資料 (References)</a>
+</li>
+</ul>
+</nav>
+<!-- static_toc_end -->
+</div>
+<!-- ── Article Body ── -->
+<article class="article-body article-body-content bg-transparent border-0 p-0 shadow-none prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+<div data-managed="auto" id="main-content-area">
+<div role="note" class="evergreen-callout my-8 p-5 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200 text-slate-700 dark:text-slate-300 not-prose dark:border-amber-800/60">
+  <p class="text-sm sm:text-base leading-relaxed m-0">
+    <strong class="text-amber-800 dark:text-amber-300">延伸深度框架：</strong>本文拆解美股 SPY GEX 與台指選擇權 TXO Vanna/Charm 造市商對沖監控管線的量化實戰。若想系統性掌握期權定價、高階 Greeks 動態管理與波動率收益增強框架，請閱讀長青指南：<a class="font-semibold text-amber-700 dark:text-amber-400 underline decoration-amber-500/50 underline-offset-4 hover:text-amber-900 dark:hover:text-amber-200" href="../post/trading-strategies-options-yield-enhancement-strategies.html">《投資策略｜期權策略與波動率博弈 (上)：系統性收益增強、Greeks 動態管理與 Portfolio Margin 機構投研報告》</a>。
+  </p>
+</div>
+<!-- 
+                        [PROTOCOL] D-S-R PROTOCOL INDICATOR (寫作引導)
+                        1. Direct Answer (直接斷言): 段落首句點破核心問題與結論。 (必須包裹在 <strong class="dsr-label">[Direct Answer]</strong>)
+                        2. Support Details (支持細節): 包含數據、指標 (TPS, TVL, Q-ID) 或技術標準。 (必須包裹在 <strong class="dsr-label">[Support Details]</strong> )
+                        3. Reinforcement (語義強化): 將技術細節轉化為投資價值或風險判斷。 (不需標籤，直接寫入段落)
+                        
+                        [WARNING] 佈局注意事項 (Layout Standards):
+                        - 隱藏標籤: 務必使用 class="dsr-label" 以確保前端不直接顯示。
+                        - 段落間距: 所有 <p> 標籤必須顯式添加 class="mb-8" (或 mb-6) 以維持呼吸感。
+                        - 清單化原則: 當 Support Details 超過 3 個並列項時，強制使用 <ul> 以替代長段落。
+                    -->
+<!-- ── 5W1H 核心架構與 SEO 提問解析 (首屏前置佈局) ── -->
+<!-- CHAPTER 0 (TOC Hierarchy Anchor) -->
+<h2 class="not-prose indicator-h2" id="chapter-0">
+<span class="number-circle">0</span>
+<span class="title-main">執行摘要</span>
+<span class="title-sub">核心事件的 5W1H 認知架構</span>
+</h2>
+<div class="not-prose my-12" id="content-chapter-0">
+<!-- 5W1H Premium Dashboard -->
+<div class="relative p-1 bg-gradient-to-br from-amber-500/20 via-slate-200/50 to-orange-500/20 dark:from-amber-500/30 dark:via-slate-800 dark:to-orange-500/30 rounded-3xl overflow-hidden shadow-2xl border border-white/20 dark:border-slate-700/50 backdrop-blur-xl">
+<div class="relative bg-white/80 dark:bg-slate-900/90 rounded-[1.4rem] p-6 md:p-10">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-slate-100 dark:border-slate-800 pb-8">
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold tracking-widest uppercase mb-4">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+</span>
+                          Market Analysis Framework
+                        </div>
+<div class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white leading-tight font-noto" data-managed="append-only" id="section-5w1h-core">
+                          5W1H 深度邏輯總結
+                        </div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 font-mono text-sm">
+                        Case Study: GEX 量化監控與跨市場自動化管線工程手冊
+                      </p>
+</div>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- WHO -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Who / 參與主體</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+                          衍生品造市商（Market
+                          Makers）與台指期三大法人（外資、投信、自營商），分別透過動態
+                          Delta 對沖與期貨淨部位主導短線邊際流動性。
+                        </p>
+</div>
+<!-- WHAT -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500 text-white shadow-lg shadow-orange-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">What / 核心事件</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+                          一套跨市場 GEX（Gamma Exposure）與高階希臘字母（Vanna
+                          /
+                          Charm）量化監控管線，涵蓋計算核心、雙重驗證矩陣、異常警報與雙軌視覺化儀表板。
+                        </p>
+</div>
+<!-- WHEN -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-yellow-500 text-white shadow-lg shadow-yellow-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">When / 關鍵時點</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+                          盤前美股收盤後（08:05
+                          TST）與盤後台股期交所資料更新後（15:30 TST），於每日
+                          0DTE 與近月合約 Gamma 集中期執行雙時段自動掃描。
+                        </p>
+</div>
+<!-- WHERE -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500 text-white shadow-lg shadow-red-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Where / 影響範圍</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+                          橫跨美股 SPY / QQQ（yfinance 選擇權鏈）與台灣期交所
+                          TXO / 台指期（TAIFEX OpenAPI），並部署於 GitHub
+                          Actions、Google Sheets 與 GitHub Pages。
+                        </p>
+</div>
+<!-- WHY -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-500 text-white shadow-lg shadow-zinc-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Why / 驅動動機</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong>
+                          當標的價格跌破 Gamma
+                          Flip，造市商從「低買高賣」的流動性緩衝墊轉為「追漲殺跌」的波動率放大器，必須以量化管線提前捕捉對沖臨界點。
+                        </p>
+</div>
+<!-- HOW -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">H</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">How / 策略應對</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+<strong class="dsr-label">[Direct Answer]</strong> 以
+                          Python Black-Scholes
+                          模型反推隱含波動率與希臘字母，結合法人淨未平倉進行四象限劇本驗證，再透過
+                          Apps Script 觸發器與靜態 JSON 儀表板推播預警。
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                市場微結構的劇烈波動，往往源自衍生品造市商在帳簿失衡時的機械性對沖。本手冊完整拆解如何從零建構一套跨市場量化監控管線：從美股
+                SPY GEX 核心計算原型（v1）、台灣期交所 TXO 與高階 Greeks（Vanna
+                / Charm）反推運算（v2）、三大法人台指期未平倉雙重驗證與 GitHub
+                Actions 排程（v3），一路擴充至 PCR / VIXTWN
+                指標、跨市場早晚報、Google Apps Script 戰情警報，以及 GitHub
+                Pages 靜態 JSON 儀表板。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<!-- @sec:美股-spy-gex-核心計算與-python-實作-v1-原型 -->
+</p>
+<h2 class="not-prose indicator-h2 my-12" id="1-美股-spy-gex-核心計算與-python-實作-v1-原型">
+<span class="number-circle">1</span><span class="title-main">1. 美股 SPY GEX 核心計算與 Python 實作（v1 原型）</span>
+</h2>
+<div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose">
+<strong class="dsr-label">[Direct Answer]</strong>
+<ol class="space-y-2 text-sm md:text-base mt-2">
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>為何美股選擇權 0DTE 至 45 DTE 近月合約集中了 80% 以上的
+                      Gamma 流動性？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>單一履約價的 GEX 公式（Gamma × OI × 100 × S² ×
+                      0.01）如何量化標的變動 1% 時的造市商美元避險曝險？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">3</span><span>在 v1 原型中，Call Wall、Put Wall 與 Gamma Flip
+                      分別對指數現貨價格產生何種磁吸或加速效應？</span>
+</li>
+</ol>
+</div>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="1-1-核心計算公式與造市商假設">
+                1.1 核心計算公式與造市商假設
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Direct Answer]</strong>
+                <a class="knowledge-link text-orange-600 dark:text-orange-400 underline decoration-dashed underline-offset-4 hover:text-orange-700 dark:hover:text-orange-300 transition-colors" data-knowledge-id="liquidity-illusion" href="../knowledge/liquidity-illusion.html" title="Liquidity Illusion (流動性幻覺) (2026)：金融崩盤的無形推手、壓力測試與風險防範">市場流動性</a>的微觀摩擦力，往往源自造市商在衍生品帳簿上的機械性對沖。要量化整體市場的
+                Gamma Exposure（GEX），業界通用 SpotGamma 與 SqueezeMetrics
+                的標準造市商假設基準：在
+                <strong>Call（買權）</strong> 端，假設散戶與機構傾向賣出 Covered
+                Call 賺取權利金，造市商被迫成為買方（Long Call），因此具備
+                <strong>正 Gamma（+1）</strong>，價格上漲時造市商必須賣出期貨避險，形成天然阻力；在
+                <strong>Put（賣權）</strong>
+                端，假設機構傾向買進保護性賣權對沖尾部風險，造市商成為賣方（Short
+                Put），因此具備
+                <strong>負 Gamma（-1）</strong>，價格下跌時造市商被迫追空期貨以維持 Delta
+                中性，進而放大市場脆弱性。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong>
+                單一履約價的 GEX 計算公式，定義為標的指數每變動 1%
+                時造市商所承受的美元避險曝險：
+              </p>
+<div class="my-6 overflow-x-auto text-center font-mono text-base dark:text-slate-200">
+                $$GEX_{\text{strike}} = \text{Gamma} \times OI \times 100 \times
+                S^2 \times 0.01$$
+              </div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                （其中 $S$ 為標的現價，$100$ 為每口美股選擇權乘數）
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="1-2-完整-python-實作程式碼">
+                1.2 完整 Python 實作程式碼
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                執行前請先安裝必要套件，完成基礎運算環境建置：
+              </p>
+<pre><code class="language-bash">uv pip install yfinance numpy pandas scipy matplotlib</code></pre>
+<pre><code class="language-python">import datetime as dt
+                    import matplotlib.pyplot as plt
+                    import numpy as np
+                    import pandas as pd
+                    from scipy.stats import norm
+                    import yfinance as yf
+
+
+                    # ---------------------------------------------------------
+                    # 1. Black-Scholes Gamma 計算函式
+                    # ---------------------------------------------------------
+                    def calc_bs_gamma(S, K, T, r, sigma):
+                        """計算歐式選擇權的 Black-Scholes Gamma (Call 與 Put 的 Gamma 理論值相同)
+
+                        S: 標的現價 | K: 履約價 | T: 距到期年化時間 | r: 無風險利率 | sigma:
+                        隱含波動率(IV)
+                        """
+                        # 避免到期時間為 0 或 IV 異常導致除以零
+                        T = np.maximum(T, 1e-5)
+                        sigma = np.maximum(sigma, 1e-4)
+
+                        d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+                        gamma = norm.pdf(d1) / (S * sigma * np.sqrt(T))
+                        return gamma
+
+
+                    # ---------------------------------------------------------
+                    # 2. 抓取 SPY 選擇權鏈並計算 GEX
+                    # ---------------------------------------------------------
+                    def get_spy_gex_profile(ticker_symbol="SPY", risk_free_rate=0.042, max_dte=45):
+                        ticker = yf.Ticker(ticker_symbol)
+
+                        # 取得最新收盤價 / 現價
+                        hist = ticker.history(period="1d")
+                        spot_price = hist["Close"].iloc[-1]
+                        print(f"[{ticker_symbol}] 目前現價: ${spot_price:.2f}")
+
+                        today = dt.datetime.now().date()
+                        expirations = ticker.options
+
+                        all_options = []
+
+                        for exp_str in expirations:
+                            exp_date = dt.datetime.strptime(exp_str, "%Y-%m-%d").date()
+                            dte = (exp_date - today).days
+
+                            # 過濾掉已到期或超過 max_dte 天的遠月合約（Gamma 主要集中在近 45 天內）
+                            if dte &lt; 0 or dte &gt; max_dte:
+                                continue
+
+                            # 轉換為年化時間 T（若為 0DTE 當天到期，給予半個交易日的殘值避免除以零）
+                            T = max(dte, 0.5) / 365.0
+
+                            opt_chain = ticker.option_chain(exp_str)
+
+                            # 處理 Calls
+                            calls = opt_chain.calls[["strike", "openInterest", "impliedVolatility"]].copy()
+                            calls["type"] = "call"
+                            calls["T"] = T
+
+                            # 處理 Puts
+                            puts = opt_chain.puts[["strike", "openInterest", "impliedVolatility"]].copy()
+                            puts["type"] = "put"
+                            puts["T"] = T
+
+                            all_options.append(calls)
+                            all_options.append(puts)
+
+                        df = pd.concat(all_options, ignore_index=True)
+
+                        # 清理無效數據（剔除 OI 為 0 或 IV 異常的合約）
+                        df = df.dropna(subset=["openInterest", "impliedVolatility"])
+                        df = df[(df["openInterest"] &gt; 0) &amp; (df["impliedVolatility"] &gt; 0.01)]
+
+                        # 計算每個合約的 Gamma
+                        df["gamma"] = calc_bs_gamma(
+                            S=spot_price,
+                            K=df["strike"].values,
+                            T=df["T"].values,
+                            r=risk_free_rate,
+                            sigma=df["impliedVolatility"].values,
+                        )
+
+                        # 計算 GEX（單位：十億美元 $ Billions / per 1% move）
+                        # Call 為正 Gamma (+1)，Put 為負 Gamma (-1)
+                        sign = np.where(df["type"] == "call", 1.0, -1.0)
+                        df["gex"] = (
+                            sign * df["gamma"] * df["openInterest"] * 100 * (spot_price**2) * 0.01
+                        ) / 1e9
+
+                        # 依履約價加總
+                        gex_by_strike = df.groupby("strike").agg(
+                            net_gex=("gex", "sum"),
+                            call_gex=("gex", lambda x: x[x &gt; 0].sum()),
+                            put_gex=("gex", lambda x: x[x &lt; 0].sum()),
+                        ).reset_index()
+
+                        # 只保留現價上下 ±12% 範圍內的履約價以便視覺化與精準計算
+                        lower_bound = spot_price * 0.88
+                        upper_bound = spot_price * 1.12
+                        gex_filtered = gex_by_strike[
+                            (gex_by_strike["strike"] &gt;= lower_bound)
+                            &amp; (gex_by_strike["strike"] &lt;= upper_bound)
+                        ].copy()
+
+                        return spot_price, gex_filtered
+
+
+                    # ---------------------------------------------------------
+                    # 3. 尋找 Call Wall、Put Wall 與 Gamma Flip 翻轉點
+                    # ---------------------------------------------------------
+                    def analyze_levels(spot_price, gex_df):
+                        # Call Wall: 正 GEX 最大的履約價
+                        call_wall_row = gex_df.loc[gex_df["call_gex"].idxmax()]
+                        call_wall = call_wall_row["strike"]
+
+                        # Put Wall: 負 GEX 最深（最小值）的履約價
+                        put_wall_row = gex_df.loc[gex_df["put_gex"].idxmin()]
+                        put_wall = put_wall_row["strike"]
+
+                        # Gamma Flip: 尋找淨 GEX 從負轉正的交叉點（利用線性內插法求精確價位）
+                        gex_df = gex_df.sort_values("strike").reset_index(drop=True)
+                        # 計算累積或局部移動平均以消除單一履約價的雜訊跳動
+                        gex_df["smooth_gex"] = gex_df["net_gex"].rolling(window=3, min_periods=1, center=True).mean()
+
+                        gamma_flip = None
+                        # 從現價附近往上下搜尋符號反轉點
+                        for i in range(len(gex_df) - 1):
+                            g1 = gex_df.loc[i, "smooth_gex"]
+                            g2 = gex_df.loc[i + 1, "smooth_gex"]
+                            k1 = gex_df.loc[i, "strike"]
+                            k2 = gex_df.loc[i + 1, "strike"]
+
+                            if g1 &lt; 0 and g2 &gt;= 0:
+                                # 線性內插計算零點
+                                gamma_flip = k1 + (0 - g1) * (k2 - k1) / (g2 - g1)
+                                # 優先取最靠近現價的翻轉點
+                                if abs(gamma_flip - spot_price) &lt; spot_price * 0.08:
+                                    break
+
+                        total_net_gex = gex_df["net_gex"].sum()
+
+                        print("\n--- 機構選擇權結構關鍵水位 ---")
+                        print(f"整體淨 Gamma (Net GEX): {total_net_gex:+.2f} Billion ($/1% move)")
+                        print(f"Call Wall (最大阻力/天花板): ${call_wall:.2f}")
+                        print(f"Put Wall  (最大支撐/地板)  : ${put_wall:.2f}")
+                        if gamma_flip:
+                            print(f"Gamma Flip (正負翻轉警戒線): ${gamma_flip:.2f}")
+                            regime = "正 Gamma (穩定器/高拋低吸)" if spot_price &gt; gamma_flip else "負 Gamma (加速器/追漲殺跌)"
+                            print(f"目前市場結構狀態           : {regime}")
+                        else:
+                            print("Gamma Flip: 當前區間內未出現正負反轉點（全區間單邊主導）")
+
+                        return call_wall, put_wall, gamma_flip
+
+
+                    # ---------------------------------------------------------
+                    # 4. 繪製 GEX 結構分布圖（銳利幾何終端機風格）
+                    # ---------------------------------------------------------
+                    def plot_gex_profile(spot_price, gex_df, call_wall, put_wall, gamma_flip, ticker="SPY"):
+                        plt.style.use("dark_background")
+                        fig, ax = plt.subplots(figsize=(12, 6), dpi=120)
+
+                        strikes = gex_df["strike"]
+                        net_gex = gex_df["net_gex"]
+
+                        # 正 GEX 用青綠色，負 GEX 用珊瑚紅
+                        colors = ["#00e676" if val &gt;= 0 else "#ff5252" for val in net_gex]
+
+                        ax.bar(strikes, net_gex, width=0.8, color=colors, alpha=0.85, edgecolor="none")
+                        ax.axhline(0, color="#888888", linewidth=1.0)
+
+                        # 標示現價 Spot
+                        ax.axvline(spot_price, color="#ffffff", linestyle="-", linewidth=1.8, label=f"Spot Price: ${spot_price:.2f}")
+
+                        # 標示 Call Wall 與 Put Wall
+                        ax.axvline(call_wall, color="#00e676", linestyle="--", linewidth=1.3, label=f"Call Wall: ${call_wall:.0f}")
+                        ax.axvline(put_wall, color="#ff5252", linestyle="--", linewidth=1.3, label=f"Put Wall: ${put_wall:.0f}")
+
+                        # 標示 Gamma Flip
+                        if gamma_flip:
+                            ax.axvline(gamma_flip, color="#ffd740", linestyle="-.", linewidth=1.8, label=f"Gamma Flip: ${gamma_flip:.2f}")
+
+                        ax.set_title(f"{ticker} Net Gamma Exposure (GEX) Profile by Strike", fontsize=14, fontweight="bold", pad=14)
+                        ax.set_xlabel("Strike Price ($)", fontsize=11)
+                        ax.set_ylabel("Net GEX ($ Billions per 1% Move)", fontsize=11)
+                        ax.grid(True, linestyle=":", alpha=0.25)
+                        ax.legend(loc="upper left", frameon=True, facecolor="#1e1e1e", edgecolor="#444444")
+
+                        plt.tight_layout()
+                        plt.show()
+
+
+                    if __name__ == "__main__":
+                        spot, gex_data = get_spy_gex_profile(ticker_symbol="SPY", max_dte=45)
+                        c_wall, p_wall, g_flip = analyze_levels(spot, gex_data)
+                        plot_gex_profile(spot, gex_data, c_wall, p_wall, g_flip, ticker="SPY")</code></pre>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="1-3-實戰使用與擴充微調建議">
+                1.3 實戰使用與擴充微調建議
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在實際部署這套原型時，參數邊界與資料清洗決定了訊號的信噪比。首先，程式預設將到期天數篩選上限設為
+                `max_dte=45`，原因在於 Black-Scholes 模型中的 Gamma 分母包含
+                $\sqrt{T}$，遠月合約（例如半年或一年後到期）的 Gamma
+                值極度微小，對造市商日內動態對沖的邊際影響幾乎可以忽略；相反地，0DTE
+                至 45 DTE 的近月合約集中了市場 80% 以上的 Gamma
+                流動性。若操作週期聚焦於當日或當週的短線結算擠壓效應，可進一步將參數收斂為
+                `max_dte=7`。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                其次，若要將計算框架遷移至台灣期交所（TXO）市場，只需替換資料擷取層。期交所每日盤後會發布完整的選擇權行情表（`opt_daily`
+                CSV 檔），實作時將 `get_spy_gex_profile`
+                的資料來源改為讀取期交所 CSV
+                的履約價、買賣權別與未平倉契約數，並以台指期現貨價與<a class="knowledge-link text-orange-600 dark:text-orange-400 underline decoration-dashed underline-offset-4 hover:text-orange-700 dark:hover:text-orange-300 transition-colors" data-knowledge-id="knl-macro-treasury-yield" href="../knowledge/knl-macro-treasury-yield.html" title="美國十年期公債殖利率 (Treasury Yield) 完整指南 2026">無風險利率</a>（約
+                `0.015`）代入同一個 `calc_bs_gamma` 函式即可。雖然期交所 CSV
+                未直接提供每檔合約的個別 IV，但實務上採用近月價平波動率或 VIXTWN
+                作為統一 `sigma`
+                參數代入，計算出的各履約價相對分布比例仍具備高度結構參考價值。最後針對盤中雜訊過濾，美股盤中調用
+                `yfinance` 時，部分缺乏流動性的深價外冷門合約會因無成交而回傳
+                `0.00001` 的畸形 `impliedVolatility`，因此程式內建
+                `df["impliedVolatility"] &gt; 0.01` 的過濾防線，從源頭截斷 Gamma
+                計算出現無限大異常值的風險。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="2-高階-greeks-vanna-charm-與台灣期交所-txo-自動化管線-v2">
+<span class="number-circle">2</span><span class="title-main">2. 高階 Greeks（Vanna / Charm）與台灣期交所 TXO
+                  自動化管線（v2）</span>
+</h2>
+<div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose">
+<strong class="dsr-label">[Direct Answer]</strong>
+<ol class="space-y-2 text-sm md:text-base mt-2">
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>當市場隱含波動率（IV）在盤中劇烈跳升 1% 時，Vanna
+                      敏感度如何迫使造市商進行順勢期貨對沖？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>為何台灣期交所 TXO
+                      管線（v2）必須透過二分法反推隱含波動率，並結合 Charm
+                      計算跨夜時間衰減對沖流？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">3</span><span>將 GEX 換算為「小台指等值口數」並串接 Google
+                      Sheets，如何讓交易者直觀評估盤面真實承接力道？</span>
+</li>
+</ol>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Direct Answer]</strong> 單純觀測一階
+                Gamma 僅能描繪靜態的籌碼地形，真正引爆市場急漲急跌與 V
+                型反轉的動力，往往來自波動率與時間維度的二階偏導數。這套 v2
+                整合架構將「台灣期交所（TAIFEX）TXO 公開 CSV
+                解析」、「二階希臘字母（GEX / Vanna /
+                Charm）造市商回補推估」，以及「Google Sheets / Webhook
+                自動化寫入與通知」串接成一條無人值守的自動化管線。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong>
+                由於期交所每日選擇權行情 CSV
+                並未直接揭露各履約價的隱含波動率（IV），本架構直接引入數值分析中的「反推隱含波動率（Newton-Raphson
+                Implied Volatility Solver）」，利用 CSV
+                內的盤後收盤價反推每一檔履約價的真實 IV，再據此精準計算
+                Gamma、Vanna 與 Charm。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="2-1-核心希臘字母與造市商對沖公式">
+                2.1 核心希臘字母與造市商對沖公式
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong>Vanna（波動率敏感度：$\frac{\partial \Delta}{\partial
+                  \sigma}$）</strong>
+                衡量隱含波動率（IV）變動 1%
+                時，造市商避險期貨部位的變化量。其數學定義為：
+              </p>
+<div class="my-6 overflow-x-auto text-center font-mono text-base dark:text-slate-200">
+                $$\text{Vanna} = -\phi(d_1) \frac{d_2}{\sigma}$$
+              </div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在進行造市商回補估算時，當市場恐慌緩解、波動率從高點回落
+                $\Delta\sigma$（例如 `-0.05`，即隱含波動率下降
+                5%）之際，造市商原本為了防禦下跌而建立的期貨空單會瞬間變成過度避險，被迫在期貨市場買回的契約口數為：
+              </p>
+<div class="my-6 overflow-x-auto text-center font-mono text-base dark:text-slate-200">
+                $$\Delta \text{Futures}_{\text{Vanna}} = -\sum (\text{Sign}
+                \times \text{Vanna} \times OI \times \Delta\sigma)$$
+              </div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong>Charm（時間衰減敏感度：$\frac{\partial \Delta}{\partial
+                  t}$）</strong>
+                則衡量時間流逝 $\Delta t$（例如距離收盤或結算僅剩最後 2
+                小時）時，選擇權 Delta 自動向 0 或 1
+                收斂歸零的速度，這也是結算日尾盤自動逼空的物理根源：
+              </p>
+<div class="my-6 overflow-x-auto text-center font-mono text-base dark:text-slate-200">
+                $$\text{Charm}_{\text{Call}} = -\phi(d_1) \frac{2rT - d_2 \sigma
+                \sqrt{T}}{2T \sigma \sqrt{T}}, \quad \text{Charm}_{\text{Put}} =
+                \text{Charm}_{\text{Call}} + r \cdot N(-d_1)
+                \text{（忽略股息）}$$
+              </div>
+<blockquote>
+<p>
+                  註：實務上無股息歐式選擇權之 Put Charm 簡化為
+                  $\text{Charm}_{\text{Call}}$
+                  加上折現修正項，兩者在近月極接近。
+                </p>
+</blockquote>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="2-2-完整-python-自動化管線程式碼">
+                2.2 完整 Python 自動化管線程式碼
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                執行本管線前，請先安裝相關網路請求與試算表串接套件：
+              </p>
+<pre><code class="language-bash">uv pip install requests pandas numpy scipy matplotlib gspread google-auth</code></pre>
+<pre><code class="language-python">import datetime as dt
+                    import io
+                    import gspread
+                    from google.oauth2.service_account import Credentials
+                    import matplotlib.pyplot as plt
+                    import numpy as np
+                    import pandas as pd
+                    import requests
+                    from scipy.stats import norm
+
+
+                    # =========================================================
+                    # 1. Black-Scholes 定價、IV 反推與高階 Greeks (Gamma / Vanna / Charm)
+                    # =========================================================
+                    def bs_price(S, K, T, r, sigma, option_type="call"):
+                        d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+                        d2 = d1 - sigma * np.sqrt(T)
+                        if option_type == "call":
+                            return S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+                        else:
+                            return K * np.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+
+
+                    def implied_volatility(price, S, K, T, r, option_type="call"):
+                        """使用牛頓法 (Newton-Raphson) 從期交所收盤價反推真實 IV"""
+                        if price &lt;= 0 or T &lt;= 0:
+                            return np.nan
+                        # 檢查是否低於內含價值（無套利下限）
+                        intrinsic = max(0.0, S - K) if option_type == "call" else max(0.0, K - S)
+                        if price &lt;= intrinsic:
+                            return 0.05  # 給予極低底線 IV 避免發散
+
+                        sigma = 0.20  # 初始猜測 20%
+                        for _ in range(50):
+                            p = bs_price(S, K, T, r, sigma, option_type)
+                            diff = p - price
+                            if abs(diff) &lt; 1e-4:
+                                return sigma
+                            d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+                            vega = S * norm.pdf(d1) * np.sqrt(T)
+                            if vega &lt; 1e-6:
+                                break
+                            sigma -= diff / vega
+                            if sigma &lt;= 0.005 or sigma &gt; 3.0:
+                                return np.nan
+                        return sigma
+
+
+                    def calc_greeks_vectorized(S, K, T, r, sigma, opt_types):
+                        """向量化計算 Gamma, Vanna, Charm"""
+                        T = np.maximum(T, 1e-5)
+                        sigma = np.maximum(sigma, 1e-4)
+
+                        d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+                        d2 = d1 - sigma * np.sqrt(T)
+                        pdf_d1 = norm.pdf(d1)
+
+                        # 1. Gamma (Call 與 Put 相同)
+                        gamma = pdf_d1 / (S * sigma * np.sqrt(T))
+
+                        # 2. Vanna (dDelta / dSigma)
+                        vanna = -pdf_d1 * (d2 / sigma)
+
+                        # 3. Charm (dDelta / dT，年化時間變化率)
+                        charm_common = -pdf_d1 * (2 * r * T - d2 * sigma * np.sqrt(T)) / (2 * T * sigma * np.sqrt(T))
+                        charm = np.where(opt_types == "call", charm_common, charm_common)
+
+                        return gamma, vanna, charm
+
+
+                    # =========================================================
+                    # 2. 下載並解析台灣期交所 (TAIFEX) 每日 TXO CSV
+                    # =========================================================
+                    def fetch_taifex_txo_csv(query_date=None):
+                        """從台灣期交所公開網址下載每日選擇權行情 CSV
+
+                        query_date: 'YYYY/MM/DD' 格式，預設為最近一個交易日
+                        """
+                        if query_date is None:
+                            today = dt.datetime.now()
+                            # 若為週末自動往回推至週五
+                            if today.weekday() == 5:
+                                today -= dt.timedelta(days=1)
+                            elif today.weekday() == 6:
+                                today -= dt.timedelta(days=2)
+                            query_date = today.strftime("%Y/%m/%d")
+
+                        url = "https://www.taifex.com.tw/cht/3/optDataDown"
+                        payload = {
+                            "down_type": "1",
+                            "queryStartDate": query_date,
+                            "queryEndDate": query_date,
+                            "commodity_id": "TXO",
+                        }
+                        headers = {"User-Agent": "Mozilla/5.0"}
+
+                        print(f"正在從台灣期交所下載 {query_date} TXO 選擇權行情 CSV...")
+                        resp = requests.post(url, data=payload, headers=headers, timeout=15)
+                        resp.encoding = "big5"  # 期交所 CSV 預設為 Big5 / CP950 編碼
+
+                        if "查無資料" in resp.text or len(resp.text) &lt; 200:
+                            raise ValueError(f"期交所 {query_date} 尚無盤後資料或為休市日。")
+
+                        df = pd.read_csv(io.StringIO(resp.text), index_col=False)
+                        # 清理欄位名稱空白
+                        df.columns = [c.strip() for c in df.columns]
+
+                        # 篩選「一般交易時段」（日盤結算數據最完整）
+                        if "交易時段" in df.columns:
+                            df = df[df["交易時段"].str.strip() == "一般"].copy()
+
+                        # 轉換數值欄位
+                        df["履約價"] = pd.to_numeric(df["履約價"], errors="coerce")
+                        df["收盤價"] = pd.to_numeric(df["收盤價"], errors="coerce")
+                        df["未平倉契約數"] = pd.to_numeric(df["未平倉契約數"], errors="coerce")
+                        df["買賣權"] = df["買賣權"].str.strip().map({"買權": "call", "賣權": "put"})
+                        df["到期月份(週別)"] = df["到期月份(週別)"].astype(str).str.strip()
+
+                        df = df.dropna(subset=["履約價", "收盤價", "未平倉契約數", "買賣權"])
+                        df = df[(df["未平倉契約數"] &gt; 0) &amp; (df["收盤價"] &gt; 0)].copy()
+
+                        return query_date, df
+
+
+                    # =========================================================
+                    # 3. 計算 TXO GEX、Vanna 與 Charm 曝險及回補買盤推估
+                    # =========================================================
+                    def analyze_txo_exposure(df, spot_index, risk_free_rate=0.015, iv_drop_sim=-0.05, hours_to_close=2.0):
+                        """spot_index: 加權指數或台指期收盤點位
+
+                        iv_drop_sim: 模擬波動率回落幅度（預設 -5%）
+                        hours_to_close: 模擬距離結算/收盤剩餘小時數（預設 2 小時）
+                        """
+                        # 僅鎖定未平倉量最大的最近兩個合約（通常是當週選 + 當月選）
+                        top_contracts = df.groupby("到期月份(週別)")["未平倉契約數"].sum().nlargest(2).index.tolist()
+                        df_near = df[df["到期月份(週別)"].isin(top_contracts)].copy()
+                        print(f"鎖定主力近月/週合約: {top_contracts}")
+
+                        # 粗估剩餘到期天數（週選約 3 天，月選約 15 天；實務可依結算日行事曆精算）
+                        df_near["dte"] = np.where(df_near["到期月份(週別)"].str.contains("W"), 3.0, 15.0)
+                        df_near["T"] = df_near["dte"] / 365.0
+
+                        # 逐列反推真實 IV
+                        ivs = []
+                        for row in df_near.itertuples():
+                            iv = implied_volatility(
+                                price=row.收盤價,
+                                S=spot_index,
+                                K=row.履約價,
+                                T=row.T,
+                                r=risk_free_rate,
+                                option_type=row.買賣權,
+                            )
+                            ivs.append(iv)
+                        df_near["iv"] = ivs
+                        df_near = df_near.dropna(subset=["iv"]).copy()
+
+                        # 計算 Greeks
+                        gamma, vanna, charm = calc_greeks_vectorized(
+                            S=spot_index,
+                            K=df_near["履約價"].values,
+                            T=df_near["T"].values,
+                            r=risk_free_rate,
+                            sigma=df_near["iv"].values,
+                            opt_types=df_near["買賣權"].values,
+                        )
+
+                        df_near["gamma"] = gamma
+                        df_near["vanna"] = vanna
+                        df_near["charm"] = charm
+
+                        # 造市商部位方向假設：Call 為正 Gamma (+1)，Put 為負 Gamma (-1)
+                        # 台指選乘數為每點 50 元台幣；小台指(MTX)乘數亦為每點 50 元（比例為 1:1）
+                        sign = np.where(df_near["買賣權"] == "call", 1.0, -1.0)
+
+                        # 1. GEX：大盤每變動 1% (spot * 0.01)，造市商必須對沖的「小台指(MTX)口數」
+                        df_near["gex_mtx_lots"] = sign * df_near["gamma"] * df_near["未平倉契約數"] * (spot_index * 0.01)
+
+                        # 2. Vanna 回補口數：當 IV 下降 iv_drop_sim (-5%) 時，造市商被迫買回的小台指口數
+                        # 註：Short Put 在 IV 下降時 Delta 上升（空單過多），因此造市商需「買回」期貨
+                        df_near["vanna_rebuy_mtx"] = -sign * df_near["vanna"] * df_near["未平倉契約數"] * iv_drop_sim
+
+                        # 3. Charm 回補口數：當時間推進 hours_to_close 小時，造市商被迫買回的小台指口數
+                        dt_years = -(hours_to_close / 24.0) / 365.0
+                        df_near["charm_rebuy_mtx"] = -sign * df_near["charm"] * df_near["未平倉契約數"] * dt_years
+
+                        # 依履約價彙整
+                        summary_df = df_near.groupby("履約價").agg(
+                            net_gex=("gex_mtx_lots", "sum"),
+                            call_gex=("gex_mtx_lots", lambda x: x[x &gt; 0].sum()),
+                            put_gex=("gex_mtx_lots", lambda x: x[x &lt; 0].sum()),
+                            vanna_flow=("vanna_rebuy_mtx", "sum"),
+                            charm_flow=("charm_rebuy_mtx", "sum"),
+                        ).reset_index()
+
+                        # 過濾現價上下 ±8% 範圍
+                        summary_df = summary_df[
+                            (summary_df["履約價"] &gt;= spot_index * 0.92) &amp; (summary_df["履約價"] &lt;= spot_index * 1.08)
+                        ].sort_values("履約價").reset_index(drop=True)
+
+                        # 找出三大關鍵水位
+                        call_wall = summary_df.loc[summary_df["call_gex"].idxmax(), "履約價"]
+                        put_wall = summary_df.loc[summary_df["put_gex"].idxmin(), "履約價"]
+
+                        summary_df["smooth_gex"] = summary_df["net_gex"].rolling(3, min_periods=1, center=True).mean()
+                        gamma_flip = None
+                        for i in range(len(summary_df) - 1):
+                            g1, g2 = summary_df.loc[i, "smooth_gex"], summary_df.loc[i + 1, "smooth_gex"]
+                            k1, k2 = summary_df.loc[i, "履約價"], summary_df.loc[i + 1, "履約價"]
+                            if g1 &lt; 0 and g2 &gt;= 0:
+                                gamma_flip = k1 + (0 - g1) * (k2 - k1) / (g2 - g1)
+                                if abs(gamma_flip - spot_index) &lt; spot_index * 0.05:
+                                    break
+
+                        metrics = {
+                            "spot": spot_index,
+                            "call_wall": float(call_wall),
+                            "put_wall": float(put_wall),
+                            "gamma_flip": round(float(gamma_flip), 1) if gamma_flip else None,
+                            "net_gex_mtx": round(float(summary_df["net_gex"].sum()), 0),
+                            "vanna_rebuy_mtx": round(float(summary_df["vanna_flow"].sum()), 0),
+                            "charm_rebuy_mtx": round(float(summary_df["charm_flow"].sum()), 0),
+                        }
+                        return summary_df, metrics
+
+
+                    # =========================================================
+                    # 4. 繪製 GEX + Vanna + Charm 雙層複合圖表
+                    # =========================================================
+                    def plot_txo_gex_vanna_charm(summary_df, metrics, query_date):
+                        plt.style.use("dark_background")
+                        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), sharex=True, gridspec_kw={"height_ratios": [2, 1]})
+
+                        strikes = summary_df["履約價"]
+                        net_gex = summary_df["net_gex"]
+                        colors = ["#00e676" if v &gt;= 0 else "#ff5252" for v in net_gex]
+
+                        # 上圖：Net GEX 柱狀圖 + 關鍵水位線
+                        ax1.bar(strikes, net_gex, width=35, color=colors, alpha=0.85)
+                        ax1.axhline(0, color="#888888", linewidth=1)
+                        ax1.axvline(metrics["spot"], color="#ffffff", linewidth=1.8, label=f"Spot: {metrics['spot']:.0f}")
+                        ax1.axvline(metrics["call_wall"], color="#00e676", linestyle="--", label=f"Call Wall: {metrics['call_wall']:.0f}")
+                        ax1.axvline(metrics["put_wall"], color="#ff5252", linestyle="--", label=f"Put Wall: {metrics['put_wall']:.0f}")
+                        if metrics["gamma_flip"]:
+                            ax1.axvline(metrics["gamma_flip"], color="#ffd740", linestyle="-.", linewidth=1.8, label=f"Gamma Flip: {metrics['gamma_flip']:.0f}")
+
+                        ax1.set_title(f"TAIFEX TXO Net GEX, Vanna &amp; Charm Profile ({query_date})", fontsize=13, fontweight="bold")
+                        ax1.set_ylabel("Net GEX (MTX Lots / 1% Move)")
+                        ax1.legend(loc="upper left", facecolor="#1e1e1e")
+                        ax1.grid(True, linestyle=":", alpha=0.25)
+
+                        # 下圖：Vanna 與 Charm 預期回補買盤曲線
+                        ax2.plot(strikes, summary_df["vanna_flow"], color="#40c4ff", linewidth=2, marker="o", markersize=3, label="Vanna Rebuy Flow (IV -5%)")
+                        ax2.plot(strikes, summary_df["charm_flow"], color="#ea80fc", linewidth=2, linestyle="--", label="Charm Rebuy Flow (2H Decay)")
+                        ax2.axhline(0, color="#888888", linewidth=1)
+                        ax2.axvline(metrics["spot"], color="#ffffff", linewidth=1.2, alpha=0.7)
+
+                        ax2.set_xlabel("Strike Price (TXO)")
+                        ax2.set_ylabel("Est. MM Rebuy (MTX Lots)")
+                        ax2.legend(loc="upper left", facecolor="#1e1e1e")
+                        ax2.grid(True, linestyle=":", alpha=0.25)
+
+                        plt.tight_layout()
+                        plt.savefig("txo_gex_report.png", dpi=150)
+                        plt.show()
+
+
+                    # =========================================================
+                    # 5. 自動寫入 Google Sheets 與發送 Webhook 通知
+                    # =========================================================
+                    def export_to_gsheets_and_notify(query_date, metrics, service_account_json="service_account.json", sheet_name="TXO_GEX_Tracker", webhook_url=None):
+                        # A. 寫入 Google Sheets
+                        try:
+                            scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+                            creds = Credentials.from_service_account_file(service_account_json, scopes=scopes)
+                            gc = gspread.authorize(creds)
+                            sh = gc.open(sheet_name).sheet1
+
+                            regime = "正 Gamma (高拋低吸)" if (metrics["gamma_flip"] and metrics["spot"] &gt; metrics["gamma_flip"]) else "負 Gamma (追漲殺跌)"
+                            row_data = [
+                                query_date,
+                                metrics["spot"],
+                                metrics["call_wall"],
+                                metrics["put_wall"],
+                                metrics["gamma_flip"] or "N/A",
+                                regime,
+                                metrics["net_gex_mtx"],
+                                metrics["vanna_rebuy_mtx"],
+                                metrics["charm_rebuy_mtx"],
+                            ]
+                            sh.append_row(row_data)
+                            print("成功將今日 TXO GEX 數據寫入 Google Sheets！")
+                        except Exception as e:
+                            print(f"Google Sheets 寫入略過或失敗（請確認憑證路徑）: {e}")
+
+                        # B. 發送通知（支援 Discord / Telegram / Slack Webhook）
+                        if webhook_url:
+                            msg = (
+                                f"📊 **台指選 TXO 機構籌碼日報 ({query_date})**\n"
+                                f"• 加權收盤：`{metrics['spot']}`\n"
+                                f"• Call Wall (天花板)：`{metrics['call_wall']}`\n"
+                                f"• Put Wall (地板)：`{metrics['put_wall']}`\n"
+                                f"• Gamma Flip (翻轉線)：`{metrics['gamma_flip']}`\n"
+                                f"• 淨 GEX 曝險：`{metrics['net_gex_mtx']:+,.0f}` 口小台\n"
+                                f"• 預估 Vanna 回補買盤 (IV -5%)：`{metrics['vanna_rebuy_mtx']:+,.0f}` 口小台\n"
+                                f"• 預估 Charm 尾盤買盤 (2H)：`{metrics['charm_rebuy_mtx']:+,.0f}` 口小台"
+                            )
+                            requests.post(webhook_url, json={"content": msg}, timeout=10)
+                            print("已發送 Webhook 推播通知！")
+
+
+                    # =========================================================
+                    # 主程式執行入口
+                    # =========================================================
+                    if __name__ == "__main__":
+                        # 1. 下載期交所最新 TXO CSV
+                        trade_date, raw_df = fetch_taifex_txo_csv()
+
+                        # 2. 輸入當日加權指數收盤價（實務可改由 yfinance '^TWII' 自動抓取）
+                        current_twii = 22500.0
+
+                        # 3. 計算 GEX、Vanna 與 Charm
+                        summary, result_metrics = analyze_txo_exposure(raw_df, spot_index=current_twii)
+                        print("\n--- 今日 TXO 籌碼結構摘要 ---")
+                        for k, v in result_metrics.items():
+                            print(f"{k}: {v}")
+
+                        # 4. 繪製並儲存圖表
+                        plot_txo_gex_vanna_charm(summary, result_metrics, trade_date)
+
+                        # 5. 寫入 Google Sheets 並發送通知（填入你的憑證與 Webhook URL 即可啟用）
+                        # export_to_gsheets_and_notify(
+                        #     query_date=trade_date,
+                        #     metrics=result_metrics,
+                        #     service_account_json="path/to/your-google-service-account.json",
+                        #     sheet_name="TXO_GEX_Tracker",
+                        #     webhook_url="https://discord.com/api/webhooks/你的WEBHOOK"
+                        # )</code></pre>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="2-3-自動化部署與-google-sheets-串接設定清單">
+                2.3 自動化部署與 Google Sheets 串接設定清單
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                要讓這套腳本在每個交易日下午 15:30（期交所盤後 CSV
+                更新後）全自動無人值守運行，僅需完成三項基礎設施配置。第一步是建立
+                Google Sheets 表頭：在 Google Drive 新增一份名為
+                `TXO_GEX_Tracker` 的試算表，並在第一列依序貼上以下 9
+                個欄位名稱：`日期 | 收盤指數 | Call Wall | Put Wall | Gamma Flip
+                | 市場結構狀態 | 淨 GEX (小台口數) | 預估 Vanna 回補 (口) | 預估
+                Charm 回補 (口)`。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                第二步是設定 Google Service Account 權限：前往 Google Cloud
+                Console 建立一個 Service Account，啟用 Google Sheets API 與
+                Google Drive API 並下載 JSON 金鑰檔案；接著打開該 JSON 檔複製
+                `"client_email"`（格式如
+                `xxx@xxx.iam.gserviceaccount.com`），回到剛剛建立的 Google
+                Sheets 點擊右上角「共用」，將該 Email 賦予編輯者權限。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                第三步則是選擇本機或雲端的排程自動執行機制：若採本機運行，可在
+                Windows Task Scheduler 建立週一至週五 15:45
+                執行的每日排程，動作指向虛擬環境 Python 執行檔（例如
+                `C:\...\venv\Scripts\python.exe`）並傳入腳本路徑即可；若追求零成本且不依賴個人電腦開機的雲端方案，可將此腳本部署至
+                GitHub Actions，設定 `cron: '45 7 * * 1-5'`（UTC 時間 07:45
+                即台灣時間 15:45），透過 GitHub Secrets 安全存放憑證與 Webhook
+                URL，即可實現每日自動更新試算表並推播戰情至手機。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="3-三大法人台指期雙重驗證-v3-與-github-actions-每日排程">
+<span class="number-circle">3</span><span class="title-main">3. 三大法人台指期雙重驗證（v3）與 GitHub Actions
+                  每日排程</span>
+</h2>
+<div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose">
+<strong class="dsr-label">[Direct Answer]</strong>
+<ol class="space-y-2 text-sm md:text-base mt-2">
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>為何單獨依賴 TXO 選擇權 GEX
+                      容易誤判造市商意圖，必須導入三大法人台指期淨未平倉進行四象限雙重驗證？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>當盤面出現「正 GEX
+                      支撐」與「外資大台淨空單擴增」的背離訊號時，對應的機構定價劇本與操作邊界為何？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">3</span><span>如何透過 GitHub Actions 與 Secrets
+                      金鑰管理，以零伺服器成本完成每日自動抓取、運算與 Google
+                      Sheets 寫入？</span>
+</li>
+</ol>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Direct Answer]</strong>
+                只觀測造市商的選擇權籌碼結構，有時仍會陷入方向誤判的盲區。這套
+                v3
+                完整自動化解決方案進一步整合了「三大法人台指期（TX）未平倉籌碼雙重驗證模組」、「證交所
+                TAIEX 收盤價與週三結算日自動精算」，以及「GitHub Actions
+                零伺服器每日自動排程（YAML）」，讓整條分析管線在每天下午 15:45
+                自動觸發並同步寫入 Google Sheets 與 Webhook 推播。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="3-1-為什麼要加入-三大法人台指期未平倉-做雙重驗證">
+                3.1 為什麼要加入「三大法人台指期未平倉」做雙重驗證？
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong>
+                單看造市商的選擇權 Gamma
+                結構（GEX）存在一個結構性盲點：公開未平倉量無法直接區分大額 Put
+                OI
+                究竟是外資主動買進避險，還是自營商單純賣出收租。將「外資台指期（TX）淨未平倉口數」與「造市商
+                Net
+                GEX」進行交叉比對，才能剝開籌碼表象，精準辨識機構的真實意圖：
+              </p>
+<div class="responsive-table-wrapper my-8 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<table class="not-prose w-full text-sm text-left text-slate-700 dark:text-slate-200">
+<thead>
+<tr>
+<th>造市商結構 (TXO GEX)</th>
+<th>外資台指期淨部位 (TX OI)</th>
+<th>市場真實劇本與機構定價邏輯</th>
+<th>操作建議</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>正 Gamma (在 Gamma Flip 之上)</strong></td>
+<td>外資淨多單增加或小幅空單</td>
+<td>
+<strong>【健康慢牛 / 區間震盪】</strong>
+                        外資現貨偏多，選擇權莊家提供下檔支撐，逢回皆有買盤承接。
+                      </td>
+<td>沿 Put Wall 偏多操作，突破 Call Wall 不追高。</td>
+</tr>
+<tr>
+<td><strong>正 Gamma (在 Gamma Flip 之上)</strong></td>
+<td>外資淨空單異常大增 (如破 4 萬口)</td>
+<td>
+<strong>【高檔鎖利避險】</strong>
+                        外資手握大量現貨，同時在期貨布空單＋賣 Call（Covered
+                        Call）鎖住獲利，天花板極硬。
+                      </td>
+<td>
+                        嚴禁追高，反彈至 Call Wall 附近適合分批減碼或做賣方。
+                      </td>
+</tr>
+<tr>
+<td><strong>負 Gamma (跌破 Gamma Flip)</strong></td>
+<td>外資淨空單持續擴大</td>
+<td>
+<strong>【機構單邊狙擊 / 流動性雪崩】</strong>
+                        外資期現貨同步偏空，加上造市商被迫追殺賣空期貨，下跌動能最強。
+                      </td>
+<td>順勢偏空操作，絕對不可在盤中盲目摸底接刀。</td>
+</tr>
+<tr>
+<td><strong>負 Gamma (跌破 Gamma Flip)</strong></td>
+<td>外資淨空單大幅回補減少</td>
+<td>
+<strong>【空頭力竭 / V 轉前兆】</strong>
+                        外資開始平倉期貨空單，一旦大盤止跌引發 VIX 回落，造市商
+                        Vanna/Charm 回補將觸發暴力軋空。
+                      </td>
+<td>空單立刻獲利了結，準備迎接右側 V 型反轉買點。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="3-2-完整升級版-python-腳本-scripts-txo-gex-pipeline-py">
+                3.2 完整升級版 Python 腳本（`scripts/txo_gex_pipeline.py`）
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                此腳本整合了證交所 TAIEX
+                自動抓價、台灣期交所週三結算日精算、三大法人期貨未平倉抓取，並直接從環境變數讀取
+                GitHub Secrets 憑證，徹底消除明文金鑰外洩風險：
+              </p>
+<pre><code class="language-python">import calendar
+                    import datetime as dt
+                    import io
+                    import json
+                    import os
+                    import gspread
+                    from google.oauth2.service_account import Credentials
+                    import numpy as np
+                    import pandas as pd
+                    import requests
+                    from scipy.stats import norm
+
+
+                    # =========================================================
+                    # 1. Black-Scholes 定價、IV 反推與高階 Greeks
+                    # =========================================================
+                    def bs_price(S, K, T, r, sigma, option_type="call"):
+                        d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+                        d2 = d1 - sigma * np.sqrt(T)
+                        if option_type == "call":
+                            return S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+                        return K * np.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+
+
+                    def implied_volatility(price, S, K, T, r, option_type="call"):
+                        if price &lt;= 0 or T &lt;= 0:
+                            return np.nan
+                        intrinsic = max(0.0, S - K) if option_type == "call" else max(0.0, K - S)
+                        if price &lt;= intrinsic:
+                            return 0.05
+
+                        sigma = 0.20
+                        for _ in range(50):
+                            p = bs_price(S, K, T, r, sigma, option_type)
+                            diff = p - price
+                            if abs(diff) &lt; 1e-4:
+                                return sigma
+                            d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+                            vega = S * norm.pdf(d1) * np.sqrt(T)
+                            if vega &lt; 1e-6:
+                                break
+                            sigma -= diff / vega
+                            if sigma &lt;= 0.005 or sigma &gt; 3.0:
+                                return np.nan
+                        return sigma
+
+
+                    def calc_greeks_vectorized(S, K, T, r, sigma, opt_types):
+                        T = np.maximum(T, 1e-5)
+                        sigma = np.maximum(sigma, 1e-4)
+                        d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+                        d2 = d1 - sigma * np.sqrt(T)
+                        pdf_d1 = norm.pdf(d1)
+
+                        gamma = pdf_d1 / (S * sigma * np.sqrt(T))
+                        vanna = -pdf_d1 * (d2 / sigma)
+                        charm = -pdf_d1 * (2 * r * T - d2 * sigma * np.sqrt(T)) / (2 * T * sigma * np.sqrt(T))
+                        return gamma, vanna, charm
+
+
+                    # =========================================================
+                    # 2. 精算台灣期交所週三結算日 DTE
+                    # =========================================================
+                    def estimate_txo_dte(contract_code, current_date):
+                        """根據期交所合約代碼（如 '202611' 或 '202611W4'）推算剩餘天數"""
+                        try:
+                            ym_str = contract_code[:6]
+                            year, month = int(ym_str[:4]), int(ym_str[4:6])
+                            cal = calendar.monthcalendar(year, month)
+                            # 找出該月所有的週三（weekday == 2）
+                            wednesdays = [week[calendar.WEDNESDAY] for week in cal if week[calendar.WEDNESDAY] != 0]
+
+                            if "W" in contract_code:
+                                week_num = int(contract_code.split("W")[1])
+                                settle_day = wednesdays[min(week_num - 1, len(wednesdays) - 1)]
+                            else:
+                                # 月選為第三個週三
+                                settle_day = wednesdays[2]
+
+                            settle_date = dt.date(year, month, settle_day)
+                            dte = (settle_date - current_date).days
+                            return max(float(dte), 0.5)  # 結算當天給予 0.5 天殘值避免除以零
+                        except Exception:
+                            return 3.0 if "W" in contract_code else 15.0
+
+
+                    # =========================================================
+                    # 3. 抓取數據：加權指數、TXO 選擇權、三大法人台指期未平倉
+                    # =========================================================
+                    def get_taiex_close(query_date_obj):
+                        """從證交所公開 API 抓取當日加權指數收盤價"""
+                        date_str = query_date_obj.strftime("%Y%m%d")
+                        url = f"https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date={date_str}&amp;type=IND&amp;response=json"
+                        resp = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=15).json()
+                        for table in resp.get("tables", []):
+                            for row in table.get("data", []):
+                                if "發行量加權股價指數" in row[0]:
+                                    return float(row[1].replace(",", ""))
+                        raise ValueError("無法取得加權指數收盤價（可能為休市日或資料尚未更新）。")
+
+
+                    def get_institutional_futures_oi(query_date_str):
+                        """從期交所抓取三大法人「臺股期貨(TX)」淨未平倉口數"""
+                        url = "https://www.taifex.com.tw/cht/3/futContractsDateDown"
+                        payload = {
+                            "queryStartDate": query_date_str,
+                            "queryEndDate": query_date_str,
+                            "commodityId": "TXF",
+                        }
+                        resp = requests.post(url, data=payload, headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+                        resp.encoding = "big5"
+                        df = pd.read_csv(io.StringIO(resp.text), index_col=False)
+                        df.columns = [c.strip() for c in df.columns]
+
+                        # 篩選臺股期貨且身分為「外資」與「投信」
+                        tx_df = df[df["商品名稱"].str.contains("臺股期貨", na=False)].copy()
+                        foreign_row = tx_df[tx_df["身份別"].str.contains("外資", na=False)]
+                        trust_row = tx_df[tx_df["身份別"].str.contains("投信", na=False)]
+
+                        foreign_net_oi = int(foreign_row["多空淨額未平倉口數"].iloc[0]) if not foreign_row.empty else 0
+                        trust_net_oi = int(trust_row["多空淨額未平倉口數"].iloc[0]) if not trust_row.empty else 0
+                        return foreign_net_oi, trust_net_oi
+
+
+                    def fetch_txo_csv(query_date_str):
+                        url = "https://www.taifex.com.tw/cht/3/optDataDown"
+                        payload = {
+                            "down_type": "1",
+                            "queryStartDate": query_date_str,
+                            "queryEndDate": query_date_str,
+                            "commodity_id": "TXO",
+                        }
+                        resp = requests.post(url, data=payload, headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+                        resp.encoding = "big5"
+                        df = pd.read_csv(io.StringIO(resp.text), index_col=False)
+                        df.columns = [c.strip() for c in df.columns]
+                        if "交易時段" in df.columns:
+                            df = df[df["交易時段"].str.strip() == "一般"].copy()
+
+                        df["履約價"] = pd.to_numeric(df["履約價"], errors="coerce")
+                        df["收盤價"] = pd.to_numeric(df["收盤價"], errors="coerce")
+                        df["未平倉契約數"] = pd.to_numeric(df["未平倉契約數"], errors="coerce")
+                        df["買賣權"] = df["買賣權"].str.strip().map({"買權": "call", "賣權": "put"})
+                        df["到期月份(週別)"] = df["到期月份(週別)"].astype(str).str.strip()
+                        return df.dropna(subset=["履約價", "收盤價", "未平倉契約數", "買賣權"])
+
+
+                    # =========================================================
+                    # 4. 核心計算與雙重驗證判讀引擎
+                    # =========================================================
+                    def run_analysis():
+                        # 使用台灣時區 (UTC+8)
+                        tw_tz = dt.timezone(dt.timedelta(hours=8))
+                        now_tw = dt.datetime.now(tw_tz).date()
+                        query_date_str = now_tw.strftime("%Y/%m/%d")
+
+                        # 1. 取得加權指數（若今日休市會直接拋出例外並安全結束排程）
+                        spot_index = get_taiex_close(now_tw)
+                        foreign_oi, trust_oi = get_institutional_futures_oi(query_date_str)
+                        df = fetch_txo_csv(query_date_str)
+                        df = df[(df["未平倉契約數"] &gt; 0) &amp; (df["收盤價"] &gt; 0)].copy()
+
+                        # 鎖定未平倉量最大的最近兩個合約
+                        top_contracts = df.groupby("到期月份(週別)")["未平倉契約數"].sum().nlargest(2).index.tolist()
+                        df_near = df[df["到期月份(週別)"].isin(top_contracts)].copy()
+
+                        # 精算 DTE 與反推 IV
+                        df_near["dte"] = df_near["到期月份(週別)"].apply(lambda c: estimate_txo_dte(c, now_tw))
+                        df_near["T"] = df_near["dte"] / 365.0
+                        r = 0.015
+
+                        df_near["iv"] = [
+                            implied_volatility(row.收盤價, spot_index, row.履約價, row.T, r, row.買賣權)
+                            for row in df_near.itertuples()
+                        ]
+                        df_near = df_near.dropna(subset=["iv"]).copy()
+
+                        gamma, vanna, charm = calc_greeks_vectorized(
+                            spot_index, df_near["履約價"].values, df_near["T"].values, r, df_near["iv"].values, df_near["買賣權"].values
+                        )
+                        sign = np.where(df_near["買賣權"] == "call", 1.0, -1.0)
+
+                        df_near["gex_mtx"] = sign * gamma * df_near["未平倉契約數"] * (spot_index * 0.01)
+                        df_near["vanna_rebuy"] = -sign * vanna * df_near["未平倉契約數"] * (-0.05)  # IV 降 5%
+                        df_near["charm_rebuy"] = -sign * charm * df_near["未平倉契約數"] * (-(2.0 / 24.0) / 365.0)  # 剩 2 小時
+
+                        summary = df_near.groupby("履約價").agg(
+                            net_gex=("gex_mtx", "sum"),
+                            call_gex=("gex_mtx", lambda x: x[x &gt; 0].sum()),
+                            put_gex=("gex_mtx", lambda x: x[x &lt; 0].sum()),
+                            vanna_flow=("vanna_rebuy", "sum"),
+                            charm_flow=("charm_rebuy", "sum"),
+                        ).reset_index()
+
+                        summary = summary[(summary["履約價"] &gt;= spot_index * 0.92) &amp; (summary["履約價"] &lt;= spot_index * 1.08)].sort_values("履約價").reset_index(drop=True)
+
+                        call_wall = float(summary.loc[summary["call_gex"].idxmax(), "履約價"])
+                        put_wall = float(summary.loc[summary["put_gex"].idxmin(), "履約價"])
+
+                        summary["smooth_gex"] = summary["net_gex"].rolling(3, min_periods=1, center=True).mean()
+                        gamma_flip = None
+                        for i in range(len(summary) - 1):
+                            g1, g2 = summary.loc[i, "smooth_gex"], summary.loc[i + 1, "smooth_gex"]
+                            k1, k2 = summary.loc[i, "履約價"], summary.loc[i + 1, "履約價"]
+                            if g1 &lt; 0 and g2 &gt;= 0:
+                                gamma_flip = round(float(k1 + (0 - g1) * (k2 - k1) / (g2 - g1)), 1)
+                                if abs(gamma_flip - spot_index) &lt; spot_index * 0.05:
+                                    break
+
+                        is_pos_gamma = True if (gamma_flip is None or spot_index &gt; gamma_flip) else False
+                        regime_str = "正 Gamma (高拋低吸)" if is_pos_gamma else "負 Gamma (追漲殺跌)"
+
+                        # 雙重驗證戰略訊號
+                        if is_pos_gamma and foreign_oi &gt; -25000:
+                            signal = "健康區間震盪：逢回 Put Wall 偏多，Call Wall 停利"
+                        elif is_pos_gamma and foreign_oi &lt;= -25000:
+                            signal = "高檔避險鎖利：天花板極硬，反彈至 Call Wall 試空/減碼"
+                        elif not is_pos_gamma and foreign_oi &lt;= -30000:
+                            signal = "負 Gamma 雙殺雪崩：外資重空+莊家追殺，順勢偏空勿摸底"
+                        else:
+                            signal = "負 Gamma 潛在逼空：密切關注 VIX 回落觸發 Vanna 急拉"
+
+                        return {
+                            "date": query_date_str,
+                            "spot": spot_index,
+                            "call_wall": call_wall,
+                            "put_wall": put_wall,
+                            "gamma_flip": gamma_flip or "N/A",
+                            "regime": regime_str,
+                            "net_gex_mtx": round(float(summary["net_gex"].sum()), 0),
+                            "vanna_rebuy_mtx": round(float(summary["vanna_flow"].sum()), 0),
+                            "charm_rebuy_mtx": round(float(summary["charm_flow"].sum()), 0),
+                            "foreign_tx_oi": foreign_oi,
+                            "trust_tx_oi": trust_oi,
+                            "strategy_signal": signal,
+                        }
+
+
+                    # =========================================================
+                    # 5. 寫入 Google Sheets 與發送通知
+                    # =========================================================
+                    def sync_outputs(metrics):
+                        # 從環境變數讀取 GitHub Secrets JSON 字串
+                        gcp_json_str = os.environ.get("GCP_SERVICE_ACCOUNT_JSON")
+                        sheet_id = os.environ.get("GOOGLE_SHEET_ID")
+                        webhook_url = os.environ.get("DISCORD_WEBHOOK_URL")
+
+                        if gcp_json_str and sheet_id:
+                            creds_dict = json.loads(gcp_json_str)
+                            scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+                            creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+                            gc = gspread.authorize(creds)
+                            sh = gc.open_by_key(sheet_id).sheet1
+
+                            row = [
+                                metrics["date"],
+                                metrics["spot"],
+                                metrics["call_wall"],
+                                metrics["put_wall"],
+                                metrics["gamma_flip"],
+                                metrics["regime"],
+                                metrics["net_gex_mtx"],
+                                metrics["vanna_rebuy_mtx"],
+                                metrics["charm_rebuy_mtx"],
+                                metrics["foreign_tx_oi"],
+                                metrics["trust_tx_oi"],
+                                metrics["strategy_signal"],
+                            ]
+                            sh.append_row(row)
+                            print("已成功寫入 Google Sheets！")
+
+                        if webhook_url:
+                            msg = (
+                                f"📊 **台股選擇權 &amp; 三大法人籌碼結構日報 ({metrics['date']})**\n"
+                                f"• 加權收盤：`{metrics['spot']:,.1f}` | 結構狀態：**{metrics['regime']}**\n"
+                                f"• Call Wall：`{metrics['call_wall']:,.0f}` | Gamma Flip：`{metrics['gamma_flip']}` | Put Wall：`{metrics['put_wall']:,.0f}`\n"
+                                f"• 淨 GEX 曝險：`{metrics['net_gex_mtx']:+,.0f}` 口小台\n"
+                                f"• 預估 Vanna 回補 (IV -5%)：`{metrics['vanna_rebuy_mtx']:+,.0f}` 口 | Charm 尾盤：`{metrics['charm_rebuy_mtx']:+,.0f}` 口\n"
+                                f"• 外資大台淨未平倉：**`{metrics['foreign_tx_oi']:+,d}`** 口 | 投信：`{metrics['trust_tx_oi']:+,d}` 口\n"
+                                f"💡 **戰略判讀：** {metrics['strategy_signal']}"
+                            )
+                            requests.post(webhook_url, json={"content": msg}, timeout=10)
+                            print("已發送 Webhook 通知！")
+
+
+                    if __name__ == "__main__":
+                        try:
+                            res = run_analysis()
+                            sync_outputs(res)
+                        except ValueError as e:
+                            print(f"今日略過執行（非交易日或資料未出）：{e}")</code></pre>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="3-3-github-actions-零伺服器每日自動排程設定">
+                3.3 GitHub Actions 零伺服器每日自動排程設定
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在你的 GitHub 儲存庫中建立路徑
+                `.github/workflows/daily_txo_gex.yml`
+                並貼上以下設定檔。系統會在週一至週五台灣時間 15:45（UTC
+                07:45）自動啟動 Ubuntu
+                容器執行腳本，完全免除自建與維護伺服器的成本：
+              </p>
+<pre><code class="language-yaml">name: Daily TXO GEX &amp; Institutional OI Pipeline
+
+                    on:
+                      schedule:
+                        # 週一至週五 UTC 07:45 執行（對應台灣時間 CST 15:45，期交所盤後數據已完整公布）
+                        - cron: '45 7 * * 1-5'
+                      workflow_dispatch: # 允許在 GitHub 網頁上手動點擊按鈕立即測試執行
+
+                    jobs:
+                      run-gex-pipeline:
+                        runs-on: ubuntu-latest
+
+                        steps:
+                          - name: Checkout repository
+                            uses: actions/checkout@v4
+
+                          - name: Set up Python 3.11
+                            uses: actions/setup-python@v5
+                            with:
+                              python-version: '3.11'
+
+                          - name: Install dependencies
+                            run: |
+                              python -m pip install --upgrade pip
+                              pip install requests pandas numpy scipy gspread google-auth
+
+                          - name: Run TXO GEX &amp; Futures OI Analysis
+                            env:
+                              GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+                              GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+                              DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+                            run: |
+                              python scripts/txo_gex_pipeline.py</code></pre>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="3-4-部署前最後檢查清單-3-分鐘完成">
+                3.4 部署前最後檢查清單（3 分鐘完成）
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                上線前的配置可分為三個快速步驟。首先準備 Google Sheets
+                欄位：在試算表第一列貼上 12 個表頭：`日期`、`加權收盤`、`Call
+                Wall`、`Put Wall`、`Gamma Flip`、`結構狀態`、`淨
+                GEX(小台)`、`Vanna 回補(口)`、`Charm 回補(口)`、`外資大台淨
+                OI`、`投信大台淨 OI`、`戰略判讀`，並從網址列複製位於 `/d/` 與
+                `/edit` 之間的那串試算表 ID。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                接著進入 GitHub Repository 的 `Settings` → `Secrets and
+                variables` → `Actions` → `New repository
+                secret`，依序新增三個環境變數：`GCP_SERVICE_ACCOUNT_JSON`
+                直接貼上整個 Google Service Account JSON
+                金鑰檔案的純文字內容（不需上傳金鑰檔到
+                Repo，確保資安零外洩）；`GOOGLE_SHEET_ID` 貼上前述試算表
+                ID（務必將試算表共用權限開給 JSON 內的
+                `client_email`）；`DISCORD_WEBHOOK_URL` 則貼上 Discord 頻道
+                Webhook 網址（若改用 Telegram Bot，僅需將腳本最後的
+                `requests.post` 替換為呼叫 Telegram `sendMessage`
+                API）。完成後，進入 GitHub Repository 的 `Actions` 分頁，點選
+                `Daily TXO GEX &amp; Institutional OI Pipeline` 並觸發 `Run
+                workflow`，即可即時驗證 Google Sheets
+                寫入與手機推播鏈路是否暢通。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="4-擴充模組-pcr-vixtwn-指標與美股跨市場早晚報">
+<span class="number-circle">4</span><span class="title-main">4. 擴充模組</span><span class="title-sub">PCR / VIXTWN 指標與美股跨市場早晚報</span>
+</h2>
+<div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose">
+<strong class="dsr-label">[Direct Answer]</strong>
+<ol class="space-y-2 text-sm md:text-base mt-2">
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>台灣期交所 PCR（Put/Call Ratio）大於 100% 與 VIXTWN
+                      波動率指標，如何輔助確認莊家下檔防線的真實強度？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>美股 SPY / QQQ 隔夜 GEX 結構與台股 TXO
+                      盤中流動性之間，存在何種跨市場風險傳導鏈？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">3</span><span>透過 GitHub Actions 雙時段排程（08:05 TST 美股早報與
+                      15:30 TST 台股晚報），如何消除跨時區資訊落差？</span>
+</li>
+</ol>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Direct Answer]</strong>
+                台股微結構的運作無法孤立於全球美元流動性之外。以下擴充模組（含第
+                5 節之 Apps Script
+                戰情看板）可直接無縫掛載於既有的自動化管線中，將單一市場的盤後統計升級為跨市場的風險預警網路。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="4-1-模組一-加入台灣期交所-pcr-put-call-ratio-與-vixtwn-波動率指標">
+                4.1 模組一：加入台灣期交所 PCR（Put/Call Ratio）與 VIXTWN
+                波動率指標
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong> 在原本的
+                `scripts/txo_gex_pipeline.py` 中新增這兩個公開資料抓取函式。PCR
+                用於衡量整體選擇權籌碼的多空力道對比（數值大於 100%
+                代表賣權未平倉量超越買權，反映莊家下檔防線較強）；而 VIXTWN
+                則直接決定了 Vanna 效應的潛在爆發力（當 VIXTWN 恐慌飆破 25～30
+                區間隨後回落時，造市商被迫回補的 Vanna 買盤往往最為猛烈）：
+              </p>
+<pre><code class="language-python">import io
+                    import pandas as pd
+                    import requests
+
+
+                    def get_taifex_pcr_and_vix(query_date_str):
+                        """從台灣期交所公開網址抓取當日 TXO Put/Call Ratio 與 VIXTWN 收盤指數
+
+                        query_date_str: 'YYYY/MM/DD' 格式
+                        """
+                        headers = {"User-Agent": "Mozilla/5.0"}
+
+                        # 1. 抓取 TXO Put/Call Ratio (買賣權未平倉量比)
+                        pcr_url = "https://www.taifex.com.tw/cht/3/pcRatioDown"
+                        pcr_payload = {
+                            "queryStartDate": query_date_str,
+                            "queryEndDate": query_date_str,
+                        }
+                        pcr_oi_ratio = None
+                        try:
+                            resp_pcr = requests.post(
+                                pcr_url, data=pcr_payload, headers=headers, timeout=15
+                            )
+                            resp_pcr.encoding = "big5"
+                            df_pcr = pd.read_csv(io.StringIO(resp_pcr.text), index_col=False)
+                            df_pcr.columns = [c.strip() for c in df_pcr.columns]
+                            if not df_pcr.empty:
+                                # 欄位名稱通常為 '買賣權未平倉量比率%'
+                                pcr_oi_ratio = float(df_pcr["買賣權未平倉量比率%"].iloc[0])
+                        except Exception as e:
+                            print(f"PCR 抓取失敗: {e}")
+
+                        # 2. 抓取臺指選擇權波動率指數 (VIXTWN)
+                        # 期交所每日提供當月 VIX 歷史/當日 CSV 下載
+                        yyyymm = query_date_str.replace("/", "")[:6]
+                        vix_url = f"https://www.taifex.com.tw/file/taifex/Dailydownload/vix/log2data/{yyyymm}new.txt"
+                        vix_close = None
+                        try:
+                            resp_vix = requests.get(vix_url, headers=headers, timeout=15)
+                            resp_vix.encoding = "big5"
+                            target_date_compact = query_date_str.replace("/", "")
+                            for line in resp_vix.text.splitlines():
+                                # 每行格式通常為：日期,時間,VIX數值... 篩選 134500 (日盤收盤)
+                                parts = [p.strip() for p in line.split(",")]
+                                if (
+                                    len(parts) &gt;= 3
+                                    and parts[0] == target_date_compact
+                                    and parts[1].startswith("1345")
+                                ):
+                                    vix_close = float(parts[2])
+                                    break
+                        except Exception as e:
+                            print(f"VIXTWN 抓取失敗: {e}")
+
+                        return pcr_oi_ratio, vix_close</code></pre>
+<blockquote>
+<p>
+<strong>串接方式</strong>：在 `run_analysis()` 中呼叫
+                  `pcr_ratio, vixtwn =
+                  get_taifex_pcr_and_vix(query_date_str)`，並將這兩個欄位一併寫入
+                  Google Sheets（接在投信大台淨 OI 之後）與 Webhook 通知訊息中。
+                </p>
+</blockquote>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="4-2-模組二-美股-spy-qqq-跨市場早晚報與雙時段排程">
+                4.2 模組二：美股 SPY / QQQ 跨市場早晚報與雙時段排程
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                台股日內開盤跳空與趨勢延續性，高度受美股隔夜表現與那斯達克、費半籌碼結構牽動。透過建立一支獨立的
+                `scripts/us_gex_pipeline.py`，系統得以在台灣時間早上
+                08:00（台股開盤前 1 小時）準時推播美股收盤 Gamma 結構，與下午
+                15:45 的台股盤後晚報形成完整的「跨市場早晚報閉環」。
+              </p>
+<h4 id="1-美股-spy-qqq-抓取腳本-scripts-us-gex-pipeline-py">
+                1. 美股 SPY / QQQ 抓取腳本（`scripts/us_gex_pipeline.py`）
+              </h4>
+<pre><code class="language-python">import datetime as dt
+                    import json
+                    import os
+                    import gspread
+                    from google.oauth2.service_account import Credentials
+                    import numpy as np
+                    import pandas as pd
+                    import requests
+                    from scipy.stats import norm
+                    import yfinance as yf
+
+
+                    def calc_bs_gamma(S, K, T, r, sigma):
+                        T = np.maximum(T, 1e-5)
+                        sigma = np.maximum(sigma, 1e-4)
+                        d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+                        return norm.pdf(d1) / (S * sigma * np.sqrt(T))
+
+
+                    def get_us_ticker_gex(symbol, max_dte=35, r=0.042):
+                        ticker = yf.Ticker(symbol)
+                        spot = float(ticker.history(period="1d")["Close"].iloc[-1])
+                        today = dt.datetime.now(dt.timezone.utc).date()
+
+                        records = []
+                        for exp_str in ticker.options:
+                            dte = (dt.datetime.strptime(exp_str, "%Y-%m-%d").date() - today).days
+                            if dte &lt; 0 or dte &gt; max_dte:
+                                continue
+                            T = max(dte, 0.5) / 365.0
+                            chain = ticker.option_chain(exp_str)
+                            for opt_type, df_opt in [("call", chain.calls), ("put", chain.puts)]:
+                                sub = df_opt[["strike", "openInterest", "impliedVolatility"]].copy()
+                                sub["type"] = opt_type
+                                sub["T"] = T
+                                records.append(sub)
+
+                        df = pd.concat(records, ignore_index=True).dropna()
+                        df = df[(df["openInterest"] &gt; 0) &amp; (df["impliedVolatility"] &gt; 0.01)]
+                        df["gamma"] = calc_bs_gamma(
+                            spot,
+                            df["strike"].values,
+                            df["T"].values,
+                            r,
+                            df["impliedVolatility"].values,
+                        )
+                        sign = np.where(df["type"] == "call", 1.0, -1.0)
+                        df["gex"] = (
+                            sign * df["gamma"] * df["openInterest"] * 100 * (spot**2) * 0.01
+                        ) / 1e9
+
+                        by_strike = (
+                            df.groupby("strike")
+                            .agg(
+                                net_gex=("gex", "sum"),
+                                call_gex=("gex", lambda x: x[x &gt; 0].sum()),
+                                put_gex=("gex", lambda x: x[x &lt; 0].sum()),
+                            )
+                            .reset_index()
+                        )
+
+                        by_strike = (
+                            by_strike[
+                                (by_strike["strike"] &gt;= spot * 0.90)
+                                &amp; (by_strike["strike"] &lt;= spot * 1.10)
+                            ]
+                            .sort_values("strike")
+                            .reset_index(drop=True)
+                        )
+
+                        call_wall = float(by_strike.loc[by_strike["call_gex"].idxmax(), "strike"])
+                        put_wall = float(by_strike.loc[by_strike["put_gex"].idxmin(), "strike"])
+
+                        by_strike["smooth"] = (
+                            by_strike["net_gex"].rolling(3, min_periods=1, center=True).mean()
+                        )
+                        gamma_flip = None
+                        for i in range(len(by_strike) - 1):
+                            g1, g2 = by_strike.loc[i, "smooth"], by_strike.loc[i + 1, "smooth"]
+                            k1, k2 = by_strike.loc[i, "strike"], by_strike.loc[i + 1, "strike"]
+                            if g1 &lt; 0 and g2 &gt;= 0:
+                                gamma_flip = round(float(k1 + (0 - g1) * (k2 - k1) / (g2 - g1)), 2)
+                                if abs(gamma_flip - spot) &lt; spot * 0.06:
+                                    break
+
+                        net_total = round(float(by_strike["net_gex"].sum()), 2)
+                        regime = (
+                            "正 Gamma"
+                            if (gamma_flip is None or spot &gt; gamma_flip)
+                            else "負 Gamma (高波動警戒)"
+                        )
+                        return {
+                            "symbol": symbol,
+                            "spot": round(spot, 2),
+                            "call_wall": call_wall,
+                            "put_wall": put_wall,
+                            "gamma_flip": gamma_flip or "N/A",
+                            "net_gex_b": net_total,
+                            "regime": regime,
+                        }
+
+
+                    def run_us_morning_brief():
+                        tw_date = dt.datetime.now(dt.timezone(dt.timedelta(hours=8))).strftime(
+                            "%Y/%m/%d"
+                        )
+                        spy = get_us_ticker_gex("SPY")
+                        qqq = get_us_ticker_gex("QQQ")
+                        vix_spot = round(
+                            float(yf.Ticker("^VIX").history(period="1d")["Close"].iloc[-1]), 2
+                        )
+
+                        # 寫入 Google Sheets 第二個分頁 ('US_GEX')
+                        gcp_json_str = os.environ.get("GCP_SERVICE_ACCOUNT_JSON")
+                        sheet_id = os.environ.get("GOOGLE_SHEET_ID")
+                        if gcp_json_str and sheet_id:
+                            creds = Credentials.from_service_account_info(
+                                json.loads(gcp_json_str),
+                                scopes=["https://www.googleapis.com/auth/spreadsheets"],
+                            )
+                            gc = gspread.authorize(creds)
+                            ws = gc.open_by_key(sheet_id).worksheet("US_GEX")
+                            ws.append_row([
+                                tw_date,
+                                vix_spot,
+                                spy["spot"],
+                                spy["call_wall"],
+                                spy["put_wall"],
+                                spy["gamma_flip"],
+                                spy["net_gex_b"],
+                                qqq["spot"],
+                                qqq["call_wall"],
+                                qqq["put_wall"],
+                                qqq["gamma_flip"],
+                                qqq["net_gex_b"],
+                            ])
+
+                        # 發送美股早報推播
+                        webhook_url = os.environ.get("DISCORD_WEBHOOK_URL")
+                        if webhook_url:
+                            msg = (
+                                f"🌅 **跨市場美股結構早報 ({tw_date} 盤前)** | CBOE VIX：`{vix_spot}`\n"
+                                f"**[SPY]** 收盤 `${spy['spot']}` ({spy['regime']}) | Net GEX: `{spy['net_gex_b']:+.2f}B`\n"
+                                f"   └ Call Wall: `${spy['call_wall']}` | Gamma Flip: `${spy['gamma_flip']}` | Put Wall: `${spy['put_wall']}`\n"
+                                f"**[QQQ]** 收盤 `${qqq['spot']}` ({qqq['regime']}) | Net GEX: `{qqq['net_gex_b']:+.2f}B`\n"
+                                f"   └ Call Wall: `${qqq['call_wall']}` | Gamma Flip: `${qqq['gamma_flip']}` | Put Wall: `${qqq['put_wall']}`"
+                            )
+                            requests.post(webhook_url, json={"content": msg}, timeout=10)
+
+
+                    if __name__ == "__main__":
+                        run_us_morning_brief()</code></pre>
+<h4 id="2-github-actions-雙時段排程設定-github-workflows-cross-market-gex-yml">
+                2. GitHub Actions
+                雙時段排程設定（`.github/workflows/cross_market_gex.yml`）
+              </h4>
+<pre><code class="language-yaml">name: Cross-Market GEX Morning &amp; Evening Pipeline
+
+                    on:
+                      schedule:
+                        # 1. 美股早報：週二至週六 UTC 00:00（對應台灣時間 08:00，美股剛收盤）
+                        - cron: '0 0 * * 2-6'
+                        # 2. 台股晚報：週一至週五 UTC 07:45（對應台灣時間 15:45，期交所盤後數據更新）
+                        - cron: '45 7 * * 1-5'
+                      workflow_dispatch:
+
+                    jobs:
+                      run-pipeline:
+                        runs-on: ubuntu-latest
+                        steps:
+                          - uses: actions/checkout@v4
+                          - uses: actions/setup-python@v5
+                            with:
+                              python-version: '3.11'
+                          - run: pip install yfinance requests pandas numpy scipy gspread google-auth
+
+                          - name: Run US Morning Brief (08:00 CST)
+                            if: github.event.schedule == '0 0 * * 2-6' || github.event_name == 'workflow_dispatch'
+                            env:
+                              GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+                              GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+                              DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+                            run: python scripts/us_gex_pipeline.py
+
+                          - name: Run Taiwan Evening Report (15:45 CST)
+                            if: github.event.schedule == '45 7 * * 1-5' || github.event_name == 'workflow_dispatch'
+                            env:
+                              GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+                              GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+                              DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+                            run: python scripts/txo_gex_pipeline.py</code></pre>
+<h2 class="not-prose indicator-h2 my-12" id="5-google-apps-script-自動異常警報與戰情儀表板">
+<span class="number-circle">5</span><span class="title-main">5. Google Apps Script 自動異常警報與戰情儀表板</span>
+</h2>
+<div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose">
+<strong class="dsr-label">[Direct Answer]</strong>
+<ol class="space-y-2 text-sm md:text-base mt-2">
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>如何利用 Google Apps Script 讀取 TXOGEX
+                      分頁數據，建立「負 GEX 極值」與「外資淨空單異常」的自動化
+                      Email/Webhook 警報？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>相較於傳統人工盯盤，設定盤後定時觸發器與異常閾值監控如何降低極端行情下的決策延遲？</span>
+</li>
+</ol>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Direct Answer]</strong>
+                當原始數據已經穩定寫入雲端試算表，最後一哩路便是建立無需人工盯盤的異常狀態觸發器。透過
+                Google 內建的 Apps Script
+                引擎，我們可以直接在試算表底層架設即時監控邏輯，當市場結構跨過臨界點時主動發出警報。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="5-1-apps-script-警報與看板腳本">
+                5.1 Apps Script 警報與看板腳本
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong> 在 Google
+                Sheets
+                中建立三個分頁：`TXO_GEX`（台股紀錄）、`US_GEX`（美股紀錄）、`Dashboard`（戰情總覽看板）。接著打開
+                Google Sheets 上方選單：`擴充功能` → `Apps
+                Script`，貼上以下程式碼並設定定時觸發條件：
+              </p>
+<pre><code class="language-javascript">/**
+                     * 每日自動檢查最新一筆籌碼結構，更新 Dashboard 看板並發送異常警報 Email
+                     */
+                    function checkMarketRegimeAndUpdateDashboard() {
+                      const ss = SpreadsheetApp.getActiveSpreadsheet();
+                      const txoSheet = ss.getSheetByName("TXO_GEX");
+                      const usSheet = ss.getSheetByName("US_GEX");
+                      let dashSheet = ss.getSheetByName("Dashboard");
+
+                      if (!dashSheet) {
+                        dashSheet = ss.insertSheet("Dashboard");
+                      }
+
+                      // 1. 讀取台股最新一列數據
+                      const txoLastRow = txoSheet.getLastRow();
+                      if (txoLastRow &lt; 2) return;
+                      const txoData = txoSheet.getRange(txoLastRow, 1, 1, 14).getValues()[0];
+                      // 欄位對應：[0]日期, [1]加權收盤, [2]CallWall, [3]PutWall, [4]GammaFlip,
+                      // [5]結構狀態, [6]淨GEX, [7]Vanna回補, [8]Charm回補, [9]外資大台淨OI,
+                      // [10]投信淨OI, [11]戰略判讀, [12]PCR%, [13]VIXTWN
+
+                      const [
+                        dateStr, spot, callWall, putWall, gammaFlip,
+                        regime, netGex, vannaFlow, charmFlow, foreignOi,
+                        trustOi, signal, pcr, vixTwn
+                      ] = txoData;
+
+                      // 2. 判斷是否觸發「高風險異常警報」條件
+                      const alerts = [];
+                      const isNegativeGamma = (typeof gammaFlip === "number" &amp;&amp; spot &lt; gammaFlip) || String(regime).includes("負 Gamma");
+
+                      if (isNegativeGamma &amp;&amp; foreignOi &lt;= -35000) {
+                        alerts.push(`🚨 【系統性雙殺警報】加權指數 (${spot}) 跌破 Gamma Flip (${gammaFlip})，且外資大台淨空單高達 ${foreignOi} 口！造市商處於負 Gamma 追殺模式，嚴禁接刀。`);
+                      }
+                      if (typeof vixTwn === "number" &amp;&amp; vixTwn &gt;= 26) {
+                        alerts.push(`⚡ 【波動率極端警戒】VIXTWN 飆升至 ${vixTwn}！若盤中出現止跌且波動率回落，將觸發約 ${vannaFlow} 口小台指的 Vanna 暴力回補買盤。`);
+                      }
+                      if (typeof pcr === "number" &amp;&amp; pcr &lt; 85) {
+                        alerts.push(`⚠️ 【下檔支撐瓦解】TXO Put/Call Ratio 降至 ${pcr}%（低於 85% 警戒線），賣方莊家退守，下檔缺乏保護。`);
+                      }
+
+                      // 3. 更新 Dashboard 戰情看板（終端機高對比視覺排版）
+                      dashSheet.clear();
+                      const dashboardLayout = [
+                        ["跨市場機構籌碼與 GAMMA 結構戰情室", "", "", "最後更新日期：", dateStr],
+                        ["", "", "", "", ""],
+                        ["【台股 TXO 核心指標】", "數值", "結構判讀 / 防線距離", "【三大法人與波動率】", "數值"],
+                        ["加權指數收盤", spot, `距離 Call Wall: ${(callWall - spot).toFixed(0)} 點`, "外資大台淨未平倉", `${foreignOi} 口`],
+                        ["Call Wall (天花板)", callWall, "造市商最大賣壓區", "投信大台淨未平倉", `${trustOi} 口`],
+                        ["Gamma Flip (翻轉線)", gammaFlip, isNegativeGamma ? "⚠️ 負 Gamma 區間" : "✅ 正 Gamma 區間", "TXO Put/Call Ratio", `${pcr || "N/A"} %`],
+                        ["Put Wall (地板)", putWall, `距離 Put Wall: ${(spot - putWall).toFixed(0)} 點`, "VIXTWN 波動率指數", vixTwn || "N/A"],
+                        ["預估 Vanna 回補 (IV -5%)", `${vannaFlow} 口小台`, "波動率回落潛在買盤", "預估 Charm 尾盤回補", `${charmFlow} 口小台`],
+                        ["", "", "", "", ""],
+                        ["系統戰略總結：", signal, "", "", ""],
+                        ["異常警報狀態：", alerts.length &gt; 0 ? alerts.join("\n") : "✅ 目前結構正常，無極端流動性異常", "", "", ""]
+                      ];
+
+                      dashSheet.getRange(1, 1, dashboardLayout.length, 5).setValues(dashboardLayout);
+
+                      // 設定看板樣式
+                      dashSheet.getRange("A1:E1").setBackground("#111827").setFontColor("#ffffff").setFontWeight("bold").setFontSize(12);
+                      dashSheet.getRange("A3:E3").setBackground("#1f2937").setFontColor("#38bdf8").setFontWeight("bold");
+                      dashSheet.getRange("A10:B10").setBackground("#fef3c7").setFontWeight("bold");
+                      if (alerts.length &gt; 0) {
+                        dashSheet.getRange("A11:E11").setBackground("#fee2e2").setFontColor("#b91c1c").setFontWeight("bold");
+                      } else {
+                        dashSheet.getRange("A11:E11").setBackground("#dcfce7").setFontColor("#15803d");
+                      }
+                      dashSheet.autoResizeColumns(1, 5);
+
+                      // 4. 若有異常警報，自動寄送高優先級 Email
+                      if (alerts.length &gt; 0) {
+                        const recipient = Session.getActiveUser().getEmail();
+                        const subject = `[緊急籌碼警報] 台股進入負 Gamma / 高波動結構 (${dateStr})`;
+                        const body = `系統偵測到以下機構籌碼與流動性異常訊號：\n\n${alerts.join("\n\n")}\n\n`
+                                   + `--- 今日關鍵水位速覽 ---\n`
+                                   + `• 加權收盤：${spot}\n`
+                                   + `• Call Wall：${callWall} | Gamma Flip：${gammaFlip} | Put Wall：${putWall}\n`
+                                   + `• 外資淨空單：${foreignOi} 口 | VIXTWN：${vixTwn}\n\n`
+                                   + `檢視完整儀表板：${ss.getUrl()}`;
+                        MailApp.sendEmail(recipient, subject, body);
+                      }
+                    }</code></pre>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="5-2-設定-apps-script-自動觸發器-2-步驟">
+                5.2 設定 Apps Script 自動觸發器（2 步驟）
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                完成腳本貼上後，僅需兩步驟即可啟用定時巡檢：首先在 Apps Script
+                編輯器左側點擊「觸發條件（鬧鐘圖示）」並選擇右下角「新增觸發條件」；接著將執行函式指定為
+                `checkMarketRegimeAndUpdateDashboard`，活動來源選擇「時間驅動」與「日計時器」，時段設定為「下午
+                4 點到 5 點」（確保在 GitHub Actions 15:45
+                寫入資料後才執行），儲存設定即可投入運作。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="6-雙軌視覺化升級-靜態網頁儀表板與-google-sheets-歷史趨勢圖">
+<span class="number-circle">6</span><span class="title-main">6. 雙軌視覺化升級</span><span class="title-sub">靜態網頁儀表板與 Google Sheets 歷史趨勢圖</span>
+</h2>
+<div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose">
+<strong class="dsr-label">[Direct Answer]</strong>
+<ol class="space-y-2 text-sm md:text-base mt-2">
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>透過 Python 自動匯出靜態 JSON 並由 GitHub Actions 自動
+                      Commit 至 GitHub
+                      Pages，如何實現零後端資料庫的即時戰情儀表板？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>Google Sheets 的 EmbeddedChartBuilder 如何自動繪製最近 30
+                      個交易日的結構防線走勢圖與機構籌碼雙軸背離圖？</span>
+</li>
+</ol>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Direct Answer]</strong>
+                數據管線若缺乏直覺的視覺化呈現，決策效率便會大打折扣。這兩個擴充模組將籌碼自動化管線徹底升級為「零後端雙軌視覺化架構」：一邊自動輸出乾淨、帶有時間序列歷史的靜態
+                JSON 並推送至 GitHub Pages 前端直接渲染；另一邊則在 Google
+                Sheets 的 `Dashboard` 分頁自動生成近 30
+                個交易日的雙軸走勢圖，兼顧外部戰情發布與內部深度覆盤。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="6-1-串接靜態網頁儀表板-github-pages-json-輸出與自動-commit">
+                6.1 串接靜態網頁儀表板（GitHub Pages JSON 輸出與自動 Commit）
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+<strong class="dsr-label">[Support Details]</strong>
+                為了讓前端靜態網頁不僅能顯示「最新一日的 Gamma Profile
+                柱狀圖」，還能畫出「近期歷史趨勢線」，建議輸出結構化的
+                `txo_gex.json`，在單一檔案內同時保留最新一日各履約價分布（`strikes_profile`）與最近
+                30 個交易日摘要序列（`history_30d`）。
+              </p>
+<h4 id="1-python-json-匯出模組-加入-scripts-txo-gex-pipeline-py">
+                1. Python JSON 匯出模組（加入 `scripts/txo_gex_pipeline.py`）
+              </h4>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在 Python 計算完 `summary`（各履約價 DataFrame）與
+                `res`（當日關鍵指標字典）後，呼叫以下函式更新並儲存 JSON 檔案：
+              </p>
+<pre><code class="language-python">import json
+                    from pathlib import Path
+
+
+                    def export_static_dashboard_json(
+                        metrics, summary_df, output_path="public/data/txo_gex.json", max_history=30
+                    ):
+                        """將最新一日 GEX 分布與近 30 日歷史序列合併寫入靜態 JSON"""
+                        file_path = Path(output_path)
+                        file_path.parent.mkdir(parents=True, exist_ok=True)
+
+                        # 讀取既有的歷史紀錄（若檔案已存在）
+                        if file_path.exists():
+                            try:
+                                with open(file_path, "r", encoding="utf-8") as f:
+                                    existing_data = json.load(f)
+                                history_list = existing_data.get("history_30d", [])
+                            except Exception:
+                                history_list = []
+                        else:
+                            history_list = []
+
+                        # 整理今日摘要紀錄（剔除重複日期並保留最新 max_history 筆）
+                        today_record = {
+                            "date": metrics["date"],
+                            "spot": metrics["spot"],
+                            "call_wall": metrics["call_wall"],
+                            "put_wall": metrics["put_wall"],
+                            "gamma_flip": (
+                                metrics["gamma_flip"] if metrics["gamma_flip"] != "N/A" else None
+                            ),
+                            "net_gex_mtx": metrics["net_gex_mtx"],
+                            "vanna_rebuy_mtx": metrics["vanna_rebuy_mtx"],
+                            "charm_rebuy_mtx": metrics["charm_rebuy_mtx"],
+                            "foreign_tx_oi": metrics["foreign_tx_oi"],
+                            "pcr": metrics.get("pcr"),
+                            "vixtwn": metrics.get("vixtwn"),
+                            "regime": metrics["regime"],
+                        }
+
+                        history_list = [
+                            item for item in history_list if item["date"] != metrics["date"]
+                        ]
+                        history_list.append(today_record)
+                        history_list = history_list[-max_history:]
+
+                        # 整理今日各履約價柱狀圖數據（僅保留必要欄位以極小化 JSON 體積）
+                        strikes_list = [
+                            {
+                                "strike": int(row["履約價"]),
+                                "net_gex": round(float(row["net_gex"]), 1),
+                                "vanna": round(float(row["vanna_flow"]), 1),
+                                "charm": round(float(row["charm_flow"]), 1),
+                            }
+                            for _, row in summary_df.iterrows()
+                        ]
+
+                        payload = {
+                            "updated_at": metrics["date"],
+                            "latest": today_record,
+                            "strikes_profile": strikes_list,
+                            "history_30d": history_list,
+                        }
+
+                        with open(file_path, "w", encoding="utf-8") as f:
+                            json.dump(payload, f, ensure_ascii=False, separators=(",", ":"))
+                        print(f"已輸出緊湊型靜態 JSON 至 {output_path}")</code></pre>
+<blockquote>
+<p>
+                  註：使用 `separators=(",", ":")` 去除多餘空白字元，可將每日
+                  JSON 檔案壓縮至 5 KB 以內，確保前端載入零延遲。
+                </p>
+</blockquote>
+<h4 id="2-github-actions-自動-commit-push-設定">
+                2. GitHub Actions 自動 Commit &amp; Push 設定
+              </h4>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在 `.github/workflows/cross_market_gex.yml` 的 `jobs`
+                區塊中，必須加上 `permissions: contents: write`，並在執行完
+                Python 腳本後加入自動推送步驟（若為跨 Repo 推送，則使用 Personal
+                Access Token `BLOG_REPO_PAT`）：
+              </p>
+<pre><code class="language-yaml">jobs:
+                      run-pipeline:
+                        runs-on: ubuntu-latest
+                        permissions:
+                          contents: write # 允許 Actions 寫回同一個 Repository
+
+                        steps:
+                          - uses: actions/checkout@v4
+                          - uses: actions/setup-python@v5
+                            with:
+                              python-version: '3.11'
+                          - run: pip install yfinance requests pandas numpy scipy gspread google-auth
+
+                          - name: Run Taiwan Evening Report (15:45 CST)
+                            env:
+                              GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+                              GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+                              DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+                            run: python scripts/txo_gex_pipeline.py
+
+                          # 情況 A：直接 Commit 回當前儲存庫的 GitHub Pages 分支
+                          - name: Commit &amp; Push Updated JSON to GitHub Pages
+                            run: |
+                              git config --local user.email "github-actions[bot]@users.noreply.github.com"
+                              git config --local user.name "github-actions[bot]"
+                              git add public/data/txo_gex.json
+                              git diff --quiet &amp;&amp; git diff --staged --quiet || (git commit -m "chore(data): update TXO GEX JSON [skip ci]" &amp;&amp; git push)</code></pre>
+<blockquote>
+<p>
+                  提示：在 commit message 中加入 `[skip ci]` 可避免這次自動 push
+                  再次觸發其他建置工作流，節省 Actions
+                  額度。若你的資料腳本與前端網站分屬兩個獨立 Repo，只需在
+                  `actions/checkout@v4` 時指定 `repository` 並傳入 `token: ${{
+                  secrets.BLOG_REPO_PAT }}` 即可直接跨庫更新。
+                </p>
+</blockquote>
+<h4 id="3-前端零依賴渲染範例-chart-js-vanilla-js">
+                3. 前端零依賴渲染範例（Chart.js / Vanilla JS）
+              </h4>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在靜態網頁 HTML 中，直接 `fetch('./data/txo_gex.json')`
+                即可在客戶端完成銳利幾何風格的雙軸圖表渲染：
+              </p>
+<pre><code class="language-javascript">async function renderGexDashboard() {
+                      const res = await fetch('./data/txo_gex.json?t=' + Date.now()); // 防止瀏覽器快取舊數據
+                      const data = await res.json();
+                      const strikes = data.strikes_profile;
+
+                      const ctx = document.getElementById('gexChart').getContext('2d');
+                      new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                          labels: strikes.map(d =&gt; d.strike),
+                          datasets: [{
+                            label: 'Net GEX (小台口數 / 1%波動)',
+                            data: strikes.map(d =&gt; d.net_gex),
+                            backgroundColor: strikes.map(d =&gt; d.net_gex &gt;= 0 ? '#00e676' : '#ff5252'),
+                            borderRadius: 0 // 銳利直角柱狀圖
+                          }]
+                        },
+                        options: {
+                          responsive: true,
+                          plugins: {
+                            title: { display: true, text: `TXO Gamma Profile (${data.updated_at}) | Spot: ${data.latest.spot}` }
+                          }
+                        }
+                      });
+                    }
+                    renderGexDashboard();</code></pre>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="6-2-優化-google-sheets-歷史趨勢折線圖自動生成-apps-script">
+                6.2 優化 Google Sheets 歷史趨勢折線圖自動生成（Apps Script）
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在 Google Sheets 的 `Dashboard` 分頁中，透過 Apps Script 的
+                `EmbeddedChartBuilder` 自動抓取 `TXO_GEX` 分頁的最近 30
+                個交易日資料，並動態生成兩張雙軸趨勢圖：第一張為<strong>結構防線與價格定位</strong>（加權指數收盤、Call
+                Wall、Put Wall、Gamma Flip
+                走勢圖），第二張為<strong>機構籌碼背離驗證</strong>（左軸為「淨
+                GEX (小台口數)」，右軸為「外資大台淨未平倉」的雙軸對比圖）。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                將以下函式貼入原本的 Apps Script 專案中，並在
+                `checkMarketRegimeAndUpdateDashboard()` 的最後一行呼叫
+                `updateDashboardCharts(ss, txoSheet, dashSheet);`
+                即可完成自動化繪圖：
+              </p>
+<pre><code class="language-javascript">/**
+                     * 在 Dashboard 分頁自動清除舊圖表並重新生成近 30 日雙軸趨勢圖
+                     */
+                    function updateDashboardCharts(ss, txoSheet, dashSheet) {
+                      // 1. 清除 Dashboard 上既有的舊圖表，避免每日重複疊加
+                      const existingCharts = dashSheet.getCharts();
+                      existingCharts.forEach(chart =&gt; dashSheet.removeChart(chart));
+
+                      const lastRow = txoSheet.getLastRow();
+                      if (lastRow &lt; 3) return; // 至少需要 2 筆歷史資料才能畫折線圖
+
+                      // 計算最近 30 筆資料的起始列（第 1 列為表頭）
+                      const lookbackDays = 30;
+                      const startRow = Math.max(2, lastRow - lookbackDays + 1);
+                      const numRows = lastRow - startRow + 1;
+
+                      // TXO_GEX 欄位索引參考 (1-based)：
+                      // Col 1: 日期 | Col 2: 加權收盤 | Col 3: Call Wall | Col 4: Put Wall
+                      // Col 5: Gamma Flip | Col 7: 淨 GEX | Col 10: 外資大台淨OI
+
+                      // -------------------------------------------------------
+                      // 圖表一：加權指數 vs. Call Wall / Put Wall / Gamma Flip 水位圖
+                      // -------------------------------------------------------
+                      const priceLevelChart = dashSheet.newChart()
+                        .setChartType(Charts.ChartType.LINE)
+                        .addRange(txoSheet.getRange(startRow, 1, numRows, 1)) // X軸：日期
+                        .addRange(txoSheet.getRange(startRow, 2, numRows, 1)) // 加權收盤
+                        .addRange(txoSheet.getRange(startRow, 3, numRows, 1)) // Call Wall
+                        .addRange(txoSheet.getRange(startRow, 4, numRows, 1)) // Put Wall
+                        .addRange(txoSheet.getRange(startRow, 5, numRows, 1)) // Gamma Flip
+                        .setOption('title', '近 30 日台股加權指數 vs. 選擇權關鍵結構水位')
+                        .setOption('width', 680)
+                        .setOption('height', 360)
+                        .setOption('backgroundColor', '#111827')
+                        .setOption('titleTextStyle', { color: '#f9fafb', fontSize: 13, bold: true })
+                        .setOption('legend', { position: 'top', textStyle: { color: '#d1d5db' } })
+                        .setOption('hAxis', { textStyle: { color: '#9ca3af', fontSize: 10 }, slantedText: true })
+                        .setOption('vAxis', { textStyle: { color: '#9ca3af' }, gridlines: { color: '#374151' } })
+                        .setOption('series', {
+                          0: { labelInLegend: '加權收盤', color: '#ffffff', lineWidth: 3 },
+                          1: { labelInLegend: 'Call Wall (天花板)', color: '#00e676', lineDashStyle: [4, 4], lineWidth: 2 },
+                          2: { labelInLegend: 'Put Wall (地板)', color: '#ff5252', lineDashStyle: [4, 4], lineWidth: 2 },
+                          3: { labelInLegend: 'Gamma Flip (翻轉線)', color: '#ffd740', lineWidth: 2 }
+                        })
+                        .setPosition(13, 1, 0, 0) // 放置於 Dashboard 第 13 列、第 1 欄下方
+                        .build();
+
+                      // -------------------------------------------------------
+                      // 圖表二：淨 GEX 曝險 vs. 外資大台淨未平倉（雙 Y 軸對照圖）
+                      // -------------------------------------------------------
+                      const dualAxisChart = dashSheet.newChart()
+                        .setChartType(Charts.ChartType.COMBO)
+                        .addRange(txoSheet.getRange(startRow, 1, numRows, 1))  // X軸：日期
+                        .addRange(txoSheet.getRange(startRow, 7, numRows, 1))  // Series 0: 淨 GEX (左軸柱狀)
+                        .addRange(txoSheet.getRange(startRow, 10, numRows, 1)) // Series 1: 外資大台淨OI (右軸折線)
+                        .setOption('title', '造市商淨 GEX 曝險 vs. 外資大台淨未平倉 (雙軸背離監測)')
+                        .setOption('width', 680)
+                        .setOption('height', 360)
+                        .setOption('backgroundColor', '#111827')
+                        .setOption('titleTextStyle', { color: '#f9fafb', fontSize: 13, bold: true })
+                        .setOption('legend', { position: 'top', textStyle: { color: '#d1d5db' } })
+                        .setOption('hAxis', { textStyle: { color: '#9ca3af', fontSize: 10 }, slantedText: true })
+                        .setOption('vAxes', {
+                          0: { title: '淨 GEX (小台口數)', textStyle: { color: '#38bdf8' }, titleTextStyle: { color: '#38bdf8' }, gridlines: { color: '#374151' } },
+                          1: { title: '外資淨未平倉 (口)', textStyle: { color: '#f472b6' }, titleTextStyle: { color: '#f472b6' }, gridlines: { color: 'transparent' } }
+                        })
+                        .setOption('series', {
+                          0: { type: 'bars', targetAxisIndex: 0, labelInLegend: '淨 GEX (左軸)', color: '#38bdf8' },
+                          1: { type: 'line', targetAxisIndex: 1, labelInLegend: '外資大台淨OI (右軸)', color: '#f472b6', lineWidth: 3 }
+                        })
+                        .setPosition(13, 6, 0, 0) // 並排放置於第 13 列、第 6 欄右側
+                        .build();
+
+                      dashSheet.insertChart(priceLevelChart);
+                      dashSheet.insertChart(dualAxisChart);
+                    }
+                    Apps Script 圖表運作細節說明：
+                    動態視窗滑動： Math.max(2, lastRow - 30 + 1) 會自動鎖定試算表最底部的 30 列紀錄；當累積超過 30 個交易日後，圖表會自動淘汰最舊的一天並納入最新一天，無需手動拉動資料範圍。
+
+                    容錯處理（Gamma Flip 為 "N/A" 時）： 如果某天市場處於極端單邊結構導致 Gamma Flip 回傳 "N/A"，Google Charts 在繪製折線圖時會自動將文字視為斷點（Gap）跳過，不會引發圖表報錯或中斷執行。</code></pre>
+<!-- Part 2: 文章分析 (Article Analysis) -->
+<div class="not-prose mt-16 border-t-2 border-slate-100 dark:border-slate-700 pt-10">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-8 border-b-2 border-blue-600/40 pl-4 font-noto" data-managed="human" id="article-analysis-header">
+                  文章分析
+                </h2>
+<div class="giveaway-summary mb-10">
+<p class="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+<strong class="dsr-label">[Direct Answer]</strong>
+                    將美股 SPY 與台灣期交所 TXO
+                    的希臘字母曝險（Gamma、Vanna、Charm）轉譯為可量化的法人籌碼交叉驗證模型，並以自動化腳本固化每日盤前盤後風控邊界。
+                  </p>
+</div>
+<!-- ── 決策推導三部曲 (Triad Intelligence Pipeline) ── -->
+<!-- Step 1: 原文推論邏輯分析 (Inference Logic) -->
+<div class="mt-8 mb-10" data-managed="human">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto flex items-center gap-2.5" id="article-inference-logic">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-mono font-bold border border-slate-200 dark:border-slate-700">01</span>
+<span>文章推論邏輯分析</span>
+</h3>
+<div class="p-6 theme-bg-body dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-700/80 space-y-6">
+<div>
+<h4 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-3" id="微觀結構對沖與跨市場量化監控推論鏈">
+                        微觀結構對沖與跨市場量化監控推論鏈
+                      </h4>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+                        本手冊的核心推論建立在「衍生品造市商帳簿失衡必將轉化為現貨與期貨的機械性訂單流」之上。透過六個模組的漸進式工程架構，將抽象的希臘字母偏微分轉譯為可每日自動化執行的口數與點位預警。
+                      </p>
+</div>
+<div class="space-y-6 pl-4 border-l-2 border-blue-500/40 dark:border-blue-400/30">
+<div>
+<h5 class="font-bold text-slate-800 dark:text-slate-200 mb-2 text-sm md:text-base">
+                          一階微觀定錨：從靜態 Gamma 到 Gamma Flip 轉折點
+                        </h5>
+<ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+<li>
+<strong>觀測數據與現象前提</strong>：近月合約（0DTE–45 DTE）掌握逾 80% Gamma
+                            曝險，造市商淨多頭或淨空頭的結構決定了其對沖方向。
+                          </li>
+<li class="mt-1.5 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">
+                            ↳ <strong>推導必然性邏輯結論</strong>：一旦價格跌破
+                            Gamma
+                            Flip，造市商對沖從逆勢維穩反轉為順勢追殺，成為波動率非線性放大的物理起點。
+                          </li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-slate-800 dark:text-slate-200 mb-2 text-sm md:text-base">
+                          二階動態補充：Vanna 與 Charm 驅動的跨日避險流
+                        </h5>
+<ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+<li>
+<strong>觀測數據與現象前提</strong>：實戰中價格變動往往伴隨隱含波動率（IV）急升與時間流逝，純
+                            Gamma 模型會低估造市商在收盤與隔夜的調整量。
+                          </li>
+<li class="mt-1.5 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">
+                            ↳ <strong>推導必然性邏輯結論</strong>：納入
+                            Vanna（波動率對 Delta 偏導）與 Charm（時間對 Delta
+                            偏導）後，能精準捕捉波動率驟降或暴漲引發的被動回補與拋壓。
+                          </li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-slate-800 dark:text-slate-200 mb-2 text-sm md:text-base">
+                          三階籌碼驗證：TXO 選擇權結構與法人期貨部位交叉比對
+                        </h5>
+<ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+<li>
+<strong>觀測數據與現象前提</strong>：選擇權數據缺乏造市商真實庫存方向（Buy/Sell
+                            主動權），單一 GEX
+                            數值在極端事件前可能出現結構失真。
+                          </li>
+<li class="mt-1.5 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">
+                            ↳
+                            <strong>推導必然性邏輯結論</strong>：引入三大法人台指期淨未平倉作為方向錨點，透過四象限矩陣過濾假訊號，並以
+                            GitHub Actions 與 Apps Script 固化每日決策流。
+                          </li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2: 敘事邊界與關鍵變數補充 (Logic Blindspots) -->
+<div class="my-10" data-managed="human">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto flex items-center gap-2.5" id="logic-blindspots">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 text-xs font-mono font-bold border border-amber-200/80 dark:border-amber-700/60">02</span>
+<span>敘事邊界與關鍵變數補充</span>
+</h3>
+<div class="p-6 theme-bg-body dark:bg-slate-900/30 rounded-xl border border-dashed border-amber-300/80 dark:border-amber-700/60 bg-amber-50/20 dark:bg-amber-950/10 space-y-4">
+<div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 text-sm font-bold uppercase tracking-wider">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>批判性盲點與邊界預警 (Critical Blindspots)</span>
+</div>
+<ul class="space-y-4 text-sm text-slate-700 dark:text-slate-300">
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">造市商淨多空假設偏差</span>
+<span>標準 GEX 計算假設造市商「淨買入 Call、淨賣出
+                          Put」，但若機構大量進行賣方覆蓋（Covered
+                          Call）或結構性商品發行，實際符號可能反轉，需透過外資期貨部位交叉校驗。</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">極端跳空與流動性抽離（Gap Risk）</span>
+<span>Black-Scholes
+                          連續對沖假設在隔夜重大宏觀事件跳空時會失效；當盤口深度驟降，造市商無法在理論點位完成對沖，實際滑點與衝擊成本將遠超模型估算。</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">盤後資料延遲與 API 結構變動</span>
+<span>本管線高度依賴 TAIFEX OpenAPI 與 yfinance
+                          免費端點；若遇期交所欄位改版或 Yahoo Finance
+                          限流，必須依賴腳本內的容錯重試與 Apps Script
+                          異常通知機制及時介入。</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Step 3: Mason Yang 的觀察 (Actionable Intelligence - 壓軸旗艦洞察) -->
+<div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700" data-managed="human">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto flex items-center gap-2.5" id="mason-yang-observation">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-mono font-bold border border-blue-200/80 dark:border-blue-700/60">03</span>
+<svg class="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Mason Yang 的觀察 (Actionable Intelligence)</span>
+</h3>
+<div class="p-6 md:p-8 theme-bg-body dark:bg-slate-900/50 border-2 border-blue-500/20 dark:border-blue-500/30 rounded-2xl shadow-sm space-y-6">
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        1. 核心命題 (Core Proposition)
+                      </strong>
+<p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-base md:text-lg">
+                        量化監控系統的終極價值，在於剝除人類面對暴跌時的敘事幻覺，將市場還原為造市商帳簿上的數學約束與強制清算口數。
+                      </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        2. 激勵錨點 (Incentive Anchor)
+                      </strong>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+                        衍生品造市商的核心生存激勵是維持帳簿 Delta
+                        中性並賺取買賣價差，絕非扛單賭方向；當價格與波動率同時越過臨界點，造市商的風險控管模型會毫不猶豫地向市場傾瀉市價對沖單。
+                      </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        3. 引爆/反轉因子 (Trigger Factor)
+                      </strong>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+                        當台指期收盤跌破 Gamma Flip 支撐位、淨 GEX
+                        轉為顯著負值（如小台等值 -15,000
+                        口以下），且外資大台淨空單同步放大時，即觸發「負 Gamma
+                        踩踏」二階加速警報。
+                      </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        4. 演化劇本 (Evolution Scenarios)
+                      </strong>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+<div class="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+<span class="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-sm">情境 A：正 GEX 區間震盪收斂（預期內）</span>
+<p class="text-xs text-slate-500 leading-relaxed">
+                            價格穩守 Gamma Flip 之上且 PCR 大於
+                            100%，造市商逢低買進、逢高賣出的對沖流將持續壓抑
+                            VIXTWN，適合區間高出低進或賣方策略。
+                          </p>
+</div>
+<div class="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+<span class="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-sm">情境 B：負 Gamma 與 Vanna
+                            共振踩踏（尾部風險）</span>
+<p class="text-xs text-slate-500 leading-relaxed">
+                            價格跌破 Put Wall 同時 IV 急飆，負 Gamma 與負 Vanna
+                            迫使造市商同步追空期貨，流動性瞬間蒸發，此時應嚴格縮減槓桿並啟動凸性保護。
+                          </p>
+</div>
+</div>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        5. 行動策略 (Action Strategy)
+                      </strong>
+<p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-sm md:text-base">
+                        以本手冊的雙時段管線建立每日盤前/盤後固定儀表板，將「Gamma
+                        Flip
+                        相對位置」與「法人期貨背離度」作為倉位上限的硬性風控開關，嚴禁在負
+                        Gamma 加速段逆勢抄底。
+                      </p>
+</div>
+</div>
+</div>
+</div>
+<!-- References & Disclaimer -->
+<div class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+<h2 class="font-bold text-slate-700 dark:text-slate-300 mb-1 text-xs m-0 p-0 border-none" id="參考資料">
+                  參考資料 (References)
+                </h2>
+<ol class="list-decimal pl-4 space-y-1 mb-4" data-managed="auto" id="content-references">
+<li>
+                    臺灣期貨交易所 (TAIFEX) — 臺指選擇權 (TXO)
+                    每日交易行情與三大法人期權統計,
+                    <a class="hover:text-blue-500 underline" href="https://www.taifex.com.tw/cht/3/optDailyMarketReport" target="_blank">Link</a>
+</li>
+<li>
+                    Cboe Global Markets — VIX Index &amp; Option Greeks
+                    Methodology,
+                    <a class="hover:text-blue-500 underline" href="https://www.cboe.com/tradable_products/vix/" target="_blank">Link</a>
+</li>
+<li>
+                    FinMind Open API — 台灣金融市場歷史數據與選擇權資料集文件,
+                    <a class="hover:text-blue-500 underline" href="https://finmind.github.io/" target="_blank">Link</a>
+</li>
+<li>
+                    GitHub Docs — Scheduling Workflows &amp; GitHub Pages Static
+                    Deployment,
+                    <a class="hover:text-blue-500 underline" href="https://docs.github.com/en/actions" target="_blank">Link</a>
+</li>
+</ol>
+<p class="font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  免責聲明 (Disclaimer)
+                </p>
+<p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。</p>
+</div>
+<!-- ========================================================================== -->
+<!-- [WARNING] CRITICAL BOUNDARY: END OF ARTICLE CONTENT -->
+<!-- 任何內文修改絕不可越過或刪除以下閉合標籤，否則將導致右側邊欄佈局崩塌 -->
+<!-- ========================================================================== -->
+</div>
+<!-- /END main-content-area -->
+</article>
+<!-- Related Articles (Mobile bottom) -->
+<div class="mt-8 lg:hidden" data-managed="append-only" id="related-articles-container"></div>
+</div>
+<!-- /END Center Column -->
+<!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+<aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+<div class="sticky top-24 space-y-6 sidebar-scroll">
+<!-- A. Article Info Card -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  文章資訊
+                </p>
+</div>
+<dl class="divide-y divide-slate-100 dark:divide-slate-700">
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">
+                    發布日期
+                  </dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">
+                    2026-11-21
+                  </dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">
+                    分類
+                  </dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">
+                    總體研究
+                  </dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">
+                    本文字數
+                  </dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200" data-meta="word-count">
+                    約 14,900 字
+                  </dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">
+                    閱讀時間
+                  </dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200" data-meta="reading-time">
+                    約 43 分鐘
+                  </dd>
+</div>
+</dl>
+</div>
+<!-- B. Key Findings Card -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  核心結論
+                </p>
+</div>
+<ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+<li class="px-4 py-3 flex items-start gap-2">
+<span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    DTE 至 45 DTE 近月合約集中市場 80% 以上 Gamma 流動性，Gamma
+                    Flip 與 Call/Put Wall 構成價格磁吸與波動率加速的結構邊界。
+                  </p>
+</li>
+<li class="px-4 py-3 flex items-start gap-2">
+<span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Vanna（波動率敏感度）與 Charm（時間衰減）決定造市商在 IV
+                    飆升或跨夜換倉時的被動期貨拋壓，單靠靜態 Gamma
+                    無法捕捉跨日對沖流。
+                  </p>
+</li>
+<li class="px-4 py-3 flex items-start gap-2">
+<span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    結合三大法人台指期淨未平倉進行雙重驗證，能有效過濾選擇權假突破雜訊，並透過
+                    GitHub Actions、Google Sheets 與 Apps Script
+                    實現零伺服器全自動戰情預警。
+                  </p>
+</li>
+</ul>
+</div>
+<!-- C. Keywords -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  關鍵字
+                </p>
+</div>
+<div class="px-4 py-3 flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">GEX 量化監控</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">Gamma Exposure</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">TXO 台指選擇權</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">Vanna 與 Charm</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">三大法人未平倉</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">流動性微觀結構</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">GitHub Actions 自動化</span><span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs">量化研究工具</span>
+</div>
+</div>
+<!-- D. Related Articles (Desktop sidebar) -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  延伸閱讀
+                </p>
+</div>
+<div data-managed="append-only" id="related-articles-sidebar"></div>
+</div>
+<!-- E. Topic Track Series Navigator (Desktop sidebar) -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  專題賽道
+                </p>
+<span class="text-[10px] font-bold text-blue-500 bg-blue-50 dark:bg-blue-900/40 px-1.5 py-0.5 rounded">連載中</span>
+</div>
+<div data-managed="append-only" id="track-navigator-container"></div>
+</div>
+</div>
+</aside>
+<!-- /END Right Sidebar -->
+</div>
+</main>
+<!-- Footer Host -->
+<div id="footer-host"></div>
+<!-- Back to Top Button (fixed, bottom-right) -->
+<button aria-label="回到頂部" class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="back-to-top">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</button>
+<!-- Scripts -->
+<script src="../assets/js/core/core-taxonomy.js"></script>
+<script src="../assets/js/data/core-articles-data.js"></script>
+<script src="../assets/js/data/core-articles-repository.js"></script>
+<script src="../assets/js/core/core-header.js"></script>
+<!-- Footer Component (自動感知並載入 ResponsiveTocComponent) -->
+<script src="../assets/js/core/core-footer.js"></script>
+<!-- Responsive TOC Component (若 Footer 未自動注入，此處顯式載入作為備援) -->
+<script src="../assets/js/ui/ui-toc-responsive.js"></script>
+<script src="../assets/js/ui/ui-toc-desktop.js"></script>
+<script src="../assets/js/widgets/widget-track-navigator.js"></script>
+<script src="../assets/js/widgets/algo-article-recommender.js"></script>
+<script src="../assets/js/widgets/widget-related-articles-styles.js"></script>
+<script src="../assets/js/widgets/widget-related-articles.js"></script>
+<script src="../assets/js/ui/ui-section-wrapper.js"></script>
+<!-- Smart Math Renderer Component (智慧按需數學公式渲染) -->
+<script src="../assets/js/components/smart-math-renderer.js"></script>
+<script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // ── 1. Layout Shell ───────────────────────────────────
+        const header = new HeaderComponent();
+        header.setHomeUrl("../index.html");
+        header.init();
+        new FooterComponent().init();
+
+        // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+        if (typeof ArticleTOC !== "undefined") {
+          new ArticleTOC().init();
+        }
+
+        // ── 3. Mobile TOC ──────────────────────────────────────
+        if (window.ResponsiveTocComponent) {
+          new ResponsiveTocComponent().init();
+        }
+
+        // ── 4. Topic Track Navigator ───────────────────────────
+        if (window.TrackNavigatorComponent) {
+          new TrackNavigatorComponent().init();
+        }
+
+        // ── Related Articles (Common) ──────────────────────────
+        if (window.RelatedArticlesComponent) {
+          // Related Articles - Bottom
+          new RelatedArticlesComponent()
+            .setContainerId("related-articles-container")
+            .setLimit(3)
+            .init();
+
+          // Related Articles - Sidebar
+          new RelatedArticlesComponent()
+            .setContainerId("related-articles-sidebar")
+            .setLayout("list")
+            .setShowHeader(false)
+            .setLimit(5)
+            .init();
+        }
+
+        // ── 4. Scroll Events ───────────────────────────────────
+        const progressBar = document.getElementById("scroll-progress-bar");
+        const bttBtn = document.getElementById("back-to-top");
+        const bttSidebarBtn = document.getElementById("back-to-top-sidebar");
+
+        let _scrollRafPending = false;
+        window.addEventListener('scroll', () => {
+            if (_scrollRafPending) return;
+            _scrollRafPending = true;
+            window.requestAnimationFrame(() => {
+                _scrollRafPending = false;
+                const winScroll = document.documentElement.scrollTop;
+                const height =
+                  document.documentElement.scrollHeight -
+                  document.documentElement.clientHeight;
+
+                // Progress bar
+                if (progressBar) {
+                  progressBar.style.transform = `scaleX(${height > 0 ? Math.min(1, Math.max(0, winScroll / height)) : 0})`;
+                }
+
+                // Back to top (show after 500px)
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                  bttBtn.classList.toggle("translate-y-20", !isScrolled);
+                  bttBtn.classList.toggle("opacity-0", !isScrolled);
+                  bttBtn.classList.toggle("translate-y-0", isScrolled);
+                  bttBtn.classList.toggle("opacity-100", isScrolled);
+                }
+                if (bttSidebarBtn) {
+                  bttSidebarBtn.classList.toggle("hidden", !isScrolled);
+                }
+              },
+              { passive: true },
+            );
+
+            [bttBtn, bttSidebarBtn].forEach((btn) => {
+              if (btn)
+                btn.addEventListener("click", () =>
+                  window.scrollTo({ top: 0, behavior: "smooth" }),
+                );
+            });
+        }, { passive: true });
+      });
+    </script>
+<script src="../assets/js/data/app-knowledge-data.js"></script>
+    <script src="../assets/js/widgets/widget-knowledge-tooltip.js"></script>
+</body>
+</html>

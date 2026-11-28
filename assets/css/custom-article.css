@@ -1,0 +1,238 @@
+/* 依賴: custom-tokens.css */
+/* --- D-S-R Protocol Labels --- */
+/* These labels are for structure/AI/SEO but should not be visible to readers */
+.dsr-label {
+    display: none !important;
+}
+
+/* --- Docs Layout (Three-Column Navigation) --- */
+.docs-layout main {
+    max-width: 1700px;
+}
+
+.docs-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-divider) transparent;
+}
+
+.docs-sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.docs-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.docs-sidebar::-webkit-scrollbar-thumb {
+    background: var(--c-divider);
+    border-radius: 10px;
+}
+
+html.dark .docs-sidebar::-webkit-scrollbar-thumb {
+    background: var(--c-border);
+}
+
+/* Right TOC Sidebar Adjustments */
+aside .border-l {
+    border-color: var(--c-border);
+}
+
+@media (max-width: 1023px) {
+    .docs-layout .lg\:hidden {
+        display: block;
+    }
+}
+
+/* --- Responsive Card Table for Long-Text (行動端長尾文字表格轉卡片佈局) --- */
+@media (max-width: 767px) {
+    .responsive-card-table table,
+    .responsive-card-table thead,
+    .responsive-card-table tbody,
+    .responsive-card-table th,
+    .responsive-card-table td,
+    .responsive-card-table tr {
+        display: block;
+        width: 100% !important;
+    }
+    
+    /* 隱藏原生表頭 */
+    .responsive-card-table thead {
+        display: none;
+    }
+    
+    /* 每一列轉為卡片 */
+    .responsive-card-table tr {
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid var(--c-border);
+    }
+    
+    /* 左欄：作為標題呈現 */
+    .responsive-card-table td:first-child {
+        font-weight: 800;
+        color: #2563eb; /* text-blue-600 */
+        margin-bottom: 0.75rem;
+        padding: 0 0 0.5rem 0 !important;
+        border-bottom: 1px dashed var(--c-border);
+    }
+    
+    html.dark .responsive-card-table td:first-child {
+        color: #60a5fa; /* text-blue-400 */
+    }
+    
+    /* 右欄：長篇文字敘述 */
+    .responsive-card-table td:last-child {
+        padding: 0 !important;
+        color: var(--c-text-primary);
+    }
+}
+
+/* --- Sticky First Column for Data Tables (多欄數據表格行動端首欄鎖定) --- */
+@media (max-width: 767px) {
+    .responsive-table-wrapper.sticky-first-col th:first-child,
+    .responsive-table-wrapper.sticky-first-col td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 10;
+        background-color: #ffffff; /* Light bg */
+        box-shadow: 2px 0 5px -2px rgba(0,0,0,0.1);
+    }
+    
+    html.dark .responsive-table-wrapper.sticky-first-col th:first-child,
+    html.dark .responsive-table-wrapper.sticky-first-col td:first-child {
+        background-color: #1e293b; /* Dark bg (slate-800) */
+        box-shadow: 2px 0 5px -2px rgba(0,0,0,0.5);
+    }
+}
+
+/* ==========================================================================
+ * 🚀 Visual-First Series Hub / 專題導讀展示廳專用樣式
+ * ========================================================================== */
+
+/* Macro Dashboard 數據看板 */
+.macro-dashboard {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 640px) {
+    .macro-dashboard {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.macro-card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    backdrop-filter: blur(12px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.dark .macro-card {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(51, 65, 85, 0.8);
+}
+
+.macro-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -8px rgba(6, 182, 212, 0.2);
+    border-color: rgba(6, 182, 212, 0.5);
+}
+
+.macro-value {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0.5rem 0 0.25rem 0;
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+html.dark .macro-value {
+    background: linear-gradient(135deg, #22d3ee 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Bento Card 系統 */
+.bento-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    background: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+html.dark .bento-card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bento-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 0 0 2px rgba(6, 182, 212, 0.4);
+}
+
+html.dark .bento-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(34, 211, 238, 0.5);
+}
+
+/* Sticky Navigator */
+.sticky-navigator {
+    position: sticky;
+    top: 4rem;
+    z-index: 40;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--c-border);
+    transition: all 0.3s ease;
+}
+
+html.dark .sticky-navigator {
+    background: rgba(15, 23, 42, 0.85);
+    border-bottom: 1px solid rgba(51, 65, 85, 0.8);
+}
+
+.nav-pill {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--c-text-secondary);
+    transition: all 0.2s ease;
+}
+
+.nav-pill:hover {
+    color: var(--c-text-primary);
+    background: var(--c-bg-soft-slate);
+}
+
+.nav-pill.active {
+    background: #06b6d4;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+html.dark .nav-pill.active {
+    background: #0891b2;
+}
+
+/* --- Related Pulse/Briefs Widget Unhydrated Fallback Styles --- */
+related-pulse-widget:not(:defined),
+related-briefs-widget:not(:defined) {
+    display: block;
+    margin: 40px 0;
+    font-family: 'Inter', 'Noto Sans TC', sans-serif;
+}
+
+

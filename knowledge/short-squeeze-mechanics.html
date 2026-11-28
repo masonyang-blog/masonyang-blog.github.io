@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4RKTYWVLXN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/brand/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/brand/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <!-- [WARNING] 標題零後綴鐵律：絕對禁止包含 | Mason Yang 等後綴 (遵循 STANDARDS_TITLE.md) -->
+    <title>什麼是軋空 (Short Squeeze)？空頭回補機制、關鍵指標與歷史風險解析</title>
+    <meta name="description"
+        content="什麼是軋空 (Short Squeeze)？軋空是指當做空比例過高的標的遭遇價格急漲或利多催化時，空方因保證金不足被迫強制平倉買回股票，進而推升股價呈非線性飆升的市場微觀結構現象。核心監測指標包含賣空佔流通股比 (Short % of Float)、回補天數 (Days to Cover) 與借券費率。">
+    <meta name="keywords" content="軋空, Short Squeeze, 空頭擠壓, 賣空比例, Short Float, 回補天數, Days to Cover, 強制平倉, 市場微觀結構, 實體消歧">
+    <link rel="canonical" href="https://masonyang-blog.github.io/knowledge/short-squeeze-mechanics.html">
+
+    <!-- Theme Core (Must be first to prevent FOUC) -->
+    <script src="../assets/js/core/core-theme.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#15202e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/custom-tokens.css">
+    <link rel="stylesheet" href="../assets/css/custom-typography.css">
+    <link rel="stylesheet" href="../assets/css/custom-layout.css">
+    <link rel="stylesheet" href="../assets/css/custom-components.css">
+    <link rel="stylesheet" href="../assets/css/custom-article.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        h2[id],
+        h3[id],
+        section[id] {
+            scroll-margin-top: 6rem;
+        }
+
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+    </style>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://masonyang-blog.github.io/knowledge/short-squeeze-mechanics.html#article",
+      "isPartOf": {
+        "@id": "https://masonyang-blog.github.io/#website"
+      },
+      "author": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      },
+      "publisher": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      },
+      "headline": "什麼是軋空 (Short Squeeze)？空頭回補機制、關鍵指標與歷史風險解析",
+      "description": "軋空是指當做空比例過高的標的遭遇價格急漲或利多催化時，空方因保證金不足被迫強制平倉買回股票，進而推升股價呈非線性飆升的市場微觀結構現象。",
+      "datePublished": "2026-11-23",
+      "dateModified": "2026-11-23",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://masonyang-blog.github.io/knowledge/short-squeeze-mechanics.html"
+      },
+      "about": [
+        {
+          "@type": "Thing",
+          "name": "Short squeeze",
+          "sameAs": "https://www.wikidata.org/wiki/Q1756173"
+        }
+      ],
+      "mentions": [
+        {
+          "@type": "Thing",
+          "name": "Short interest ratio",
+          "sameAs": "https://www.wikidata.org/wiki/Q7502175"
+        },
+        {
+          "@type": "Thing",
+          "name": "Margin (finance)",
+          "sameAs": "https://www.wikidata.org/wiki/Q1074298"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://masonyang-blog.github.io/knowledge/short-squeeze-mechanics.html#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "什麼是軋空 (Short Squeeze)？其核心運作機制為何？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "軋空是指當市場對某檔標的的做空部位高度擁擠，一旦價格因突發利多或流動性衝擊而上漲，空方會面臨虧損擴大與保證金追繳 (Margin Call)，被迫在二級市場買回股票平倉，這些強制買盤進一步推高價格，形成自我強化的正回饋循環。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "評估軋空風險最核心的三大機構指標是什麼？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "機構主要追蹤：(1) 賣空佔流通股比例 (Short % of Float) > 20% 屬高危區，> 50% 則具備極端斷頭風險；(2) 回補天數 (Days to Cover) > 5 天代表空方撤退通道狹窄；(3) 借券費率 (Borrow Fee Rate) 急劇飆升代表籌碼供給枯竭。"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://masonyang-blog.github.io/#organization",
+      "name": "Mason Yang Blog",
+      "url": "https://masonyang-blog.github.io",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://masonyang-blog.github.io/logo.png"
+      },
+      "sameAs": [
+        "https://x.com/MasonYang16"
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://masonyang-blog.github.io/#author",
+      "name": "Mason Yang",
+      "url": "https://masonyang-blog.github.io/about.html",
+      "jobTitle": "Investment Researcher",
+      "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://masonyang-blog.github.io/logo.png"
+      },
+      "sameAs": [
+        "https://x.com/MasonYang16"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://masonyang-blog.github.io/#website",
+      "url": "https://masonyang-blog.github.io",
+      "name": "Mason Yang Blog",
+      "publisher": {
+        "@id": "https://masonyang-blog.github.io/#organization"
+      }
+    },
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://masonyang-blog.github.io/knowledge/short-squeeze-mechanics.html#defined-term",
+      "name": "軋空機制",
+      "alternateName": "Short Squeeze Mechanics",
+      "description": "當做空比例過高的標的遭遇急漲，迫使空方因保證金追繳而強制平倉買回股票，進而引發價格非線性飆升的市場微觀結構現象。",
+      "termCode": "short-squeeze-mechanics",
+      "inDefinedTermSet": {
+        "@type": "DefinedTermSet",
+        "@id": "https://masonyang-blog.github.io/apps/topic-knowledge/topic-knowledge.html#glossary",
+        "name": "Mason Yang Blog 投資與加密知識庫",
+        "url": "https://masonyang-blog.github.io/apps/topic-knowledge/topic-knowledge.html"
+      },
+      "sameAs": "https://www.wikidata.org/wiki/Q1756173"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://masonyang-blog.github.io/knowledge/short-squeeze-mechanics.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首頁",
+          "item": "https://masonyang-blog.github.io/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "知識百科",
+          "item": "https://masonyang-blog.github.io/apps/topic-knowledge/topic-knowledge.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "軋空機制 (Short Squeeze Mechanics)",
+          "item": "https://masonyang-blog.github.io/knowledge/short-squeeze-mechanics.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-knowledge-id="short-squeeze-mechanics">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-container" class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]">
+        <div id="scroll-progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out"></div>
+    </div>
+
+    <!-- Header Host -->
+    <div id="header-host"></div>
+
+    <!-- MAIN: Three-Column Layout (lg+: [Left TOC] [Article] [Right Sidebar]) -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- LEFT SIDEBAR: Desktop TOC -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+                        目錄導覽</p>
+                    <div id="toc-desktop-host"></div>
+                    <button id="back-to-top-sidebar"
+                        class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                        </svg>
+                        回到頂部
+                    </button>
+                </div>
+            </aside>
+
+            <!-- CENTER: Article Content -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Breadcrumb -->
+                <nav aria-label="Breadcrumb" class="flex text-sm text-slate-500 dark:text-slate-400 mb-6">
+<ol class="flex items-center space-x-1.5 flex-wrap">
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../index.html">首頁</a></li>
+<li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg></li>
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../apps/topic-knowledge/topic-knowledge.html">知識百科</a></li>
+<li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg></li>
+<li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">軋空機制 (Short Squeeze Mechanics)</li>
+</ol>
+</nav>
+
+                <!-- Hero Header Card & GEO Key Facts Card -->
+                <header
+                    class="theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6">
+                    <div class="flex flex-wrap items-center gap-2.5 mb-5">
+                        <span
+                            class="px-2.5 py-1 bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                            RISK / MICROSTRUCTURE
+                        </span>
+                        <span
+                            class="px-2.5 py-1 bg-slate-100 dark:bg-slate-700/70 text-slate-700 dark:text-slate-200 rounded-full text-xs font-semibold">
+                            難度：進階
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            最後更新：<time datetime="2026-11-23">2026-11-23</time>
+                        </span>
+                        <span class="text-slate-300 dark:text-slate-600" aria-hidden="true">·</span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            閱讀時間：約 6 分鐘
+                        </span>
+                    </div>
+                    <h1
+                        class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">
+                        軋空機制 (Short Squeeze Mechanics)
+                    </h1>
+                    <p class="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        做空部位在單邊上漲行情中承受理論上無限的虧損風險。了解軋空如何從籌碼擁擠演變為強制平倉踩踏，是辨識高波動陷阱與極端行情反轉的關鍵能力。
+                    </p>
+
+                    <!-- GEO Key Facts Card -->
+                    <section id="key-facts" aria-label="核心定義與參數快查卡"
+                        class="rounded-xl border border-violet-200/80 dark:border-violet-800/60 bg-violet-50/50 dark:bg-slate-900/60 p-5">
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <h2 class="text-xs font-bold uppercase tracking-widest text-violet-700 dark:text-violet-300">
+                                GEO 核心定義與參數快查 (Key Facts)
+                            </h2>
+                            <span class="text-xs font-mono text-slate-500 dark:text-slate-400">short-squeeze-mechanics</span>
+                        </div>
+                        <dl class="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-sm">
+                            <div class="md:col-span-2 rounded-lg bg-white/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/70 p-3.5">
+                                <dt class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">一句話定義 (Definition)</dt>
+                                <dd class="text-slate-800 dark:text-slate-100 leading-relaxed font-medium">軋空（Short Squeeze）是指當做空比例過高的標的遭遇急漲時，空方因保證金追繳而被迫強制買回股票平倉，進而引發價格非線性飆升的市場微觀結構現象。</dd>
+                            </div>
+                            <div class="rounded-lg bg-white/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/70 p-3.5">
+                                <dt class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">核心判讀閾值 (Thresholds)</dt>
+                                <dd class="text-slate-800 dark:text-slate-100 font-mono text-xs md:text-sm leading-relaxed">Short % of Float &gt; 20% (警戒) / &gt; 50% (極端)；Days to Cover &gt; 5 天</dd>
+                            </div>
+                            <div class="rounded-lg bg-white/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/70 p-3.5">
+                                <dt class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">主要應用情境 (Use Case)</dt>
+                                <dd class="text-slate-800 dark:text-slate-100 leading-relaxed">高空單個股風險排雷、動能反轉預警、衍生品 Gamma Squeeze 疊加判讀</dd>
+                            </div>
+                        </dl>
+                    </section>
+                </header>
+
+                <!-- Mobile TOC Target -->
+                <div id="toc-mobile-target" class="lg:hidden mb-6"></div>
+
+                <!-- Article Body Card -->
+                <article
+                    class="article-body theme-bg-card dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-10 prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+
+                    <!-- 1. Why it Matters -->
+                    <section class="mb-12">
+                        <h2 id="importance" class="not-prose indicator-h2">
+                            <span class="number-circle">1</span>
+                            <span class="title-main">為什麼這個知識很重要？</span>
+                        </h2>
+                        <p>在金融市場中，作多的最大損失是本金歸零（100%），但做空的理論損失卻沒有上限。當大量避險基金針對同一檔基本面惡化的標的建立空頭部位（如高負債半導體或財務脆弱公司），市場流通籌碼會被高度鎖定；此時任何微小的正面催化劑或流動性衝擊，都可能引發「多殺空」的連鎖踩踏，令空方在單日內承受數十個百分點的斷頭虧損。</p>
+                        <div
+                            class="not-prose theme-bg-body dark:bg-slate-900/50 border border-violet-200 dark:border-violet-800/50 p-6 rounded-xl">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">核心價值</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm">
+                                識別軋空閾值能協助投資人避開「基本面正確但時機致命」的做空陷阱，同時防止誤將空頭回補買盤當作基本面長期反轉訊號而高位追漲。
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 2. Impact on Yield/Risk -->
+                    <section class="mb-12">
+                        <h2 id="impact" class="not-prose indicator-h2">
+                            <span class="number-circle">2</span>
+                            <span class="title-main">對投資收益與風險的影響</span>
+                        </h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div
+                                class="theme-bg-body dark:bg-slate-800/70 p-6 rounded-2xl border border-emerald-200/80 dark:border-emerald-800/60 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-300 flex items-center justify-center shrink-0"
+                                        aria-hidden="true">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">收益影響 (Yield)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed flex-grow">
+                                    精準辨識籌碼極端擁擠且出現催化劑（如財報超預期、併購傳聞或期權 Gamma 擠壓）的標的，可捕捉短期非線性波動溢價，或在軋空衰竭時建立高勝率左側均值回歸觀察清單。
+                                </p>
+                            </div>
+                            <div
+                                class="theme-bg-body dark:bg-slate-800/70 p-6 rounded-2xl border border-rose-200/80 dark:border-rose-800/60 flex flex-col h-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-300 flex items-center justify-center shrink-0"
+                                        aria-hidden="true">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">風險影響 (Risk)</h3>
+                                </div>
+                                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed flex-grow">
+                                    嚴格規避對賣空佔流通盤比超過 50%（甚至因裸空或多重再抵押突破 100%）的標的進行單邊裸空；同時避免在軋空尾聲（回補完成、借券費率急降）時接刀。
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. 5W1H Analysis -->
+                    <section class="mb-12">
+                        <h2 id="5w1h" class="not-prose indicator-h2">
+                            <span class="number-circle">3</span>
+                            <span class="title-main">深入解析：5W1H 模型與量化指標</span>
+                        </h2>
+                        <div
+                            class="responsive-card-table not-prose overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-6 mb-8">
+                            <table class="w-full min-w-[540px] text-left border-collapse theme-bg-card dark:bg-slate-800">
+                                <tbody class="text-sm">
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:theme-bg-body dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 whitespace-nowrap font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Who / What</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>主體與定義：</strong>
+                                            由做空機構（避險基金、量化空頭）、融券出借方（Prime Broker）與逼空買盤共同構成的微觀結構失衡；當空頭總部位佔流通股比例異常偏高時形成火藥桶。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:theme-bg-body dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            When</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>發生時機：</strong>
+                                            多發生於極端悲觀情緒達成共識後，遇上超預期財報、宏觀流動性寬鬆反彈，或散戶／期權造市商在低流動性標的集中買入價外看漲期權（Call）時。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:theme-bg-body dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Where</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>發生場域：</strong>
+                                            美股高負債中小型股、轉型爭議企業（如部分半導體、零售與迷因股）、封閉式基金（CEF）以及加密貨幣永續合約市場（負資金費率擁擠時）。</td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 dark:border-slate-700 group hover:theme-bg-body dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            Why</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>根本原因：</strong>
+                                            融券做空屬於槓桿借貸行為，受限於維持保證金門檻（Maintenance Margin）與券商強制召回權（Recall）；虧損會直接侵蝕淨值並觸發風控硬止損。</td>
+                                    </tr>
+                                    <tr class="group hover:theme-bg-body dark:hover:bg-slate-700/50 transition-colors">
+                                        <td
+                                            class="py-4 px-6 w-32 font-bold text-slate-500 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/50">
+                                            How</td>
+                                        <td class="py-4 px-6 text-slate-800 dark:text-slate-300"><strong>運作機制：</strong>
+                                            股價急漲 ➔ 空方帳面虧損擴大 ➔ 觸發 Margin Call 或借券被召回 ➔ 空方被迫以市價買回現股平倉 ➔ 買盤推升股價再漲 ➔ 引發下一批空頭斷頭，形成正回饋螺旋。</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-4">三大核心量化監測指標</h3>
+                        <div class="not-prose overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                            <table class="w-full min-w-[540px] text-left border-collapse theme-bg-card dark:bg-slate-800 text-sm">
+                                <thead>
+                                    <tr class="bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+                                        <th class="py-3 px-4 font-bold text-slate-700 dark:text-slate-200">指標名稱</th>
+                                        <th class="py-3 px-4 font-bold text-slate-700 dark:text-slate-200">計算方式</th>
+                                        <th class="py-3 px-4 font-bold text-slate-700 dark:text-slate-200">警戒 / 極端閾值</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                                    <tr>
+                                        <td class="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">Short % of Float（賣空佔流通盤比）</td>
+                                        <td class="py-3 px-4 font-mono text-xs">未平倉空單股數 ÷ 公開流通股數</td>
+                                        <td class="py-3 px-4 text-rose-600 dark:text-rose-400 font-semibold">&gt; 20% 高風險；&gt; 50% 極端斷頭區（多重再抵押可逾 100%）</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">Days to Cover（回補天數 / SIR）</td>
+                                        <td class="py-3 px-4 font-mono text-xs">未平倉空單股數 ÷ 近 20 日均成交量</td>
+                                        <td class="py-3 px-4 text-amber-600 dark:text-amber-400 font-semibold">&gt; 5 天代表流動性出口極為狹窄</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">Cost to Borrow（借券年化費率）</td>
+                                        <td class="py-3 px-4 font-mono text-xs">融券市場即時借券年化利率</td>
+                                        <td class="py-3 px-4 text-amber-600 dark:text-amber-400 font-semibold">&gt; 50%~100%+ 代表券源枯竭，隨時面臨強制召回</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- 4. Mental Model / Association -->
+                    <section class="mb-12">
+                        <h2 id="association" class="not-prose indicator-h2">
+                            <span class="number-circle">4</span>
+                            <span class="title-main">聯想與市場連動</span>
+                        </h2>
+                        <p>當你看到「賣空佔比逾 50%」或「融券餘額單月暴增」時，你的大腦應該立即建立以下的神經連結：</p>
+                        <div class="not-prose space-y-6 mt-8">
+                            <div class="theme-bg-body dark:bg-slate-900/40 border border-indigo-200 dark:border-indigo-800/50 p-5 rounded-xl">
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2.5">
+                                    <span class="w-3 h-3 rounded-full bg-indigo-500 inline-block shrink-0"></span>
+                                    <span>訊號觸發 (Trigger)</span>
+                                </h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm">
+                                    極高做空比例標的（如 FINRA 榜單上賣空佔比逾 50% 的個股）突然公告扭轉預期的財報數據，或發生看漲期權交易量暴增引發造市商 Gamma 對沖買盤。
+                                </p>
+                            </div>
+                            <div class="theme-bg-body dark:bg-slate-900/40 border border-indigo-200 dark:border-indigo-800/50 p-5 rounded-xl">
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2.5">
+                                    <span class="w-3 h-3 rounded-full bg-indigo-300 dark:bg-indigo-600 inline-block shrink-0"></span>
+                                    <span>市場反應 (Reaction)</span>
+                                </h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm">
+                                    短時間內價格呈現垂直拉升，與企業內在估值完全脫鉤；然而一旦空頭部位完成集中平倉（Short Interest 大幅下降），買盤動能將瞬間抽空，股價往往隨即出現劇烈回落。
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 5. Actionable Advice -->
+                    <section class="mb-12">
+                        <h2 id="action" class="not-prose indicator-h2">
+                            <span class="number-circle">5</span>
+                            <span class="title-main">建議行動指南</span>
+                        </h2>
+                        <div class="not-prose grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                            <div
+                                class="p-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/50">
+                                <span class="block text-xs font-bold text-blue-600 dark:text-blue-400 uppercase mb-2">觀察
+                                    (Observe)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">定期檢視 FINRA 雙週做空報告、Short % of Float 與借券費率一階導數變化。</p>
+                            </div>
+                            <div
+                                class="p-5 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-100 dark:border-amber-800/50">
+                                <span
+                                    class="block text-xs font-bold text-amber-600 dark:text-amber-400 uppercase mb-2">判斷
+                                    (Judge)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">區分「基本面真實改善」與「純粹籌碼回補驅動」，切勿將軋空漲幅誤判為長期基本面護城河。</p>
+                            </div>
+                            <div
+                                class="p-5 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
+                                <span
+                                    class="block text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase mb-2">執行
+                                    (Execute)</span>
+                                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">嚴禁單邊裸空 Short Float &gt; 50% 標的；若看空高風險資產，優先採用風險鎖定的看跌期權（Long Put）取代無限風險的融券放空。</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 6. Semantic Context -->
+                    <section class="mb-12">
+                        <h2 id="semantic-context" class="not-prose indicator-h2">
+                            <span class="number-circle">6</span>
+                            <span class="title-main">知識實體關聯圖 (Semantic Context)</span>
+                        </h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                            探索「軋空機制」與站內其他核心宏觀、估值與風險指標的拓撲連動關係（雙擊節點可直接跳轉對應知識詞條）：
+                        </p>
+                        <div id="knowledge-graph-container"
+                            class="not-prose w-full min-h-[380px] rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-50/50 dark:bg-slate-900/50 mt-4">
+                        </div>
+                    </section>
+
+                    <!-- Footer Disclaimer -->
+                    <div
+                        class="not-prose mt-12 pt-8 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500">
+                        <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">免責聲明 (Disclaimer)</p>
+                        <p>本頁面資訊僅供教育與研究參考用途，不構成任何財務或投資建議。金融與加密資產具高度波動性，請審慎評估自身風險承受度。</p>
+                        <p class="mt-4">
+                            想系統性探索更多投資與加密核心詞條？前往
+                            <a href="../apps/topic-knowledge/topic-knowledge.html"
+                                class="text-violet-600 dark:text-violet-400 font-bold hover:underline">知識庫總覽 (Knowledge Hub)</a>
+                            查閱完整圖譜與分類索引。
+                        </p>
+                    </div>
+
+                </article>
+
+                <!-- Related Articles & Research Backlinks (Mobile / Tablet Bottom) -->
+                <section aria-label="實戰研報與延伸閱讀"
+                    class="mt-8 lg:hidden theme-bg-card dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-5">
+                    <div class="mb-3">
+                        <h2 class="text-sm font-bold uppercase tracking-widest text-slate-700 dark:text-slate-200">
+                            實戰研報與延伸閱讀
+                        </h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                            引用本詞條之站內深度研報與關聯概念反查
+                        </p>
+                    </div>
+                    <div id="related-articles-container"></div>
+                </section>
+
+            </div>
+            <!-- /END Center Column -->
+
+            <!-- RIGHT SIDEBAR: Article Info Panel -->
+            <aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+                <div class="sticky top-24 space-y-4">
+
+                    <!-- A. Article Meta Card -->
+                    <div
+                        class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                知識資訊</p>
+                        </div>
+                        <dl class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">更新日期</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">2026-11-23</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">領域分類</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">風險管理 (Risk)</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">詞條難度</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">進階</dd>
+                            </div>
+                            <div class="flex justify-between items-center px-4 py-2.5">
+                                <dt class="text-xs text-slate-500 dark:text-slate-400">閱讀時間</dt>
+                                <dd class="text-xs font-medium text-slate-800 dark:text-slate-200">約 6 分鐘</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- B. Key Findings Card -->
+                    <div
+                        class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                核心重點</p>
+                        </div>
+                        <ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-violet-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">強制回補買盤形成非線性正回饋螺旋</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-violet-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">賣空佔比 &gt; 50% 與回補天數 &gt; 5 天屬高危區</p>
+                            </li>
+                            <li class="px-4 py-3 flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-violet-500 rounded-full mt-1.5 shrink-0"></span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">避險應優先採用風險鎖定之 Put 期權</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- C. Related Articles & Research Backlinks (Desktop sidebar) -->
+                    <div id="related-articles-sidebar"
+                        class="theme-bg-card dark:bg-slate-800 rounded-xl border border-violet-200/70 dark:border-violet-800/50 shadow-sm overflow-hidden">
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700 bg-violet-50/40 dark:bg-violet-950/20">
+                            <p class="text-xs font-bold uppercase tracking-widest text-violet-700 dark:text-violet-300">
+                                實戰研報與延伸閱讀</p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                                引用本詞條之深度研報反查</p>
+                        </div>
+                        <div id="related-knowledge-sidebar-host"></div>
+                    </div>
+
+                </div>
+            </aside>
+            <!-- /END Right Sidebar -->
+
+        </div>
+    </main>
+
+    <!-- Footer Host -->
+    <div id="footer-host"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        aria-label="回到頂部">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/core/core-header.js"></script>
+    <script src="../assets/js/core/core-footer.js"></script>
+    <script src="../assets/js/core/core-taxonomy.js"></script>
+    <script src="../assets/js/data/core-articles-data.js"></script>
+    <script src="../assets/js/data/core-articles-repository.js"></script>
+    <script src="../assets/js/data/app-knowledge-data.js"></script>
+    <script src="../assets/js/ui/ui-toc-responsive.js"></script>
+    <script src="../assets/js/ui/ui-toc-desktop.js"></script>
+    <script src="../assets/js/widgets/widget-knowledge-graph.js"></script>
+    <script src="../assets/js/widgets/algo-article-recommender.js"></script>
+    <script src="../assets/js/widgets/widget-related-articles-styles.js"></script>
+    <script src="../assets/js/widgets/widget-related-articles.js"></script>
+    <script src="../assets/js/components/smart-math-renderer.js"></script>
+    <script src="../assets/js/widgets/widget-knowledge-tooltip.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            new HeaderComponent().setHomeUrl('../index.html').init();
+            new FooterComponent().init();
+
+            if (typeof ArticleTOC !== 'undefined') { new ArticleTOC().init(); }
+            if (window.ResponsiveTocComponent) { new ResponsiveTocComponent().init(); }
+
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const bttBtn = document.getElementById('back-to-top');
+            const bttSidebarBtn = document.getElementById('back-to-top-sidebar');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                if (progressBar) { progressBar.style.width = (height > 0 ? (winScroll / height) * 100 : 0) + '%'; }
+
+                const isScrolled = winScroll > 500;
+                if (bttBtn) {
+                    bttBtn.classList.toggle('translate-y-20', !isScrolled);
+                    bttBtn.classList.toggle('opacity-0', !isScrolled);
+                    bttBtn.classList.toggle('translate-y-0', isScrolled);
+                    bttBtn.classList.toggle('opacity-100', isScrolled);
+                }
+                if (bttSidebarBtn) { bttSidebarBtn.classList.toggle('hidden', !isScrolled); }
+            }, { passive: true });
+
+            [bttBtn, bttSidebarBtn].forEach(btn => {
+                if (btn) btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            });
+
+            const knowledgeId = document.body.dataset.knowledgeId;
+            if (knowledgeId && window.KnowledgeGraphComponent) {
+                new KnowledgeGraphComponent()
+                    .setContainerId('knowledge-graph-container')
+                    .setHighlightId(knowledgeId)
+                    .setHeight('380px')
+                    .init();
+            }
+
+            if (knowledgeId && window.RelatedArticlesComponent) {
+                const repo = window.CoreKnowledgeRepository;
+                const item = repo ? repo.getById(knowledgeId) : null;
+                const entityName = item ? item.title : '';
+
+                if (entityName) {
+                    new RelatedArticlesComponent()
+                        .setContainerId('related-knowledge-sidebar-host')
+                        .setEntityName(entityName)
+                        .setLayout('list')
+                        .setLimit(5)
+                        .setShowHeader(false)
+                        .init();
+
+                    new RelatedArticlesComponent()
+                        .setContainerId('related-articles-container')
+                        .setEntityName(entityName)
+                        .setLayout('grid')
+                        .setLimit(3)
+                        .setShowHeader(true)
+                        .init();
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

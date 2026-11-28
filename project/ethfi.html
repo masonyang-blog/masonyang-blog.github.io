@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+<script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-4RKTYWVLXN");
+    </script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/images/brand/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/images/brand/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<!--  標題零後綴鐵律：絕對禁止包含 | Mason Yang 等後綴 (遵循 STANDARDS_TITLE.md) -->
+<title>【Ether.fi ETHFI 深度研報】— 告別 EigenLayer 再質押後，如何重估月刷 1.42 億美元的去中心化加密新銀行？解構 53% OP 營收占比、MoonPay 整合與回購真相</title>
+<meta content="深度剖析 Ether.fi (ETHFI) 全面退出 EigenLayer 再質押後的範式轉型：估值錨點從 TVL/FDV 倒掛轉向現金流定價（P/S ~9.4x–11.1x），解構 Cash 月刷 1.42 億美元、OP Mainnet 貢獻 53% 營收、MoonPay 全棧整合與 5,000 萬美元回購真相。" name="description"/>
+<meta content="Ether.fi, ETHFI, eETH, weETH, 加密新銀行, Crypto Neobank, Ether.fi Cash, 流動性質押, LST, MoonPay, OP Mainnet, Aave V4, ETHGas, 21Shares ETP, 項目研報" name="keywords"/>
+<link href="https://masonyang-blog.github.io/project/ethfi.html" rel="canonical"/>
+<meta content="asset-deep-dive" name="category"/>
+<!-- Theme Core (Must be first to prevent FOUC) -->
+<script src="../assets/js/core/core-theme.js"></script>
+<!-- Tailwind CSS -->
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              slate: { 850: "#15202e" },
+            },
+          },
+        },
+      };
+    </script>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<!-- Custom Styles -->
+<link href="../assets/css/custom-tokens.css" rel="stylesheet"/>
+<link href="../assets/css/custom-typography.css" rel="stylesheet"/>
+<link href="../assets/css/custom-layout.css" rel="stylesheet"/>
+<link href="../assets/css/custom-components.css" rel="stylesheet"/>
+<link href="../assets/css/custom-article.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+TC:wght@400;500;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      h2[id],
+      h3[id],
+      section[id] {
+        scroll-margin-top: 6rem;
+      }
+    </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AnalysisNewsArticle",
+      "@id": "https://masonyang-blog.github.io/project/ethfi.html#article",
+      "isPartOf": {
+        "@id": "https://masonyang-blog.github.io/#website"
+      },
+      "author": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      },
+      "publisher": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      },
+      "headline": "【Ether.fi ETHFI 深度研報】— 告別 EigenLayer 再質押後，如何重估月刷 1.42 億美元的去中心化加密新銀行？解構 53% OP 營收占比、MoonPay 整合與回購真相",
+      "description": "深度剖析 Ether.fi (ETHFI) 全面退出 EigenLayer 再質押後的範式轉型：估值錨點從 TVL/FDV 倒掛轉向現金流定價（P/S ~9.4x–11.1x），解構 Cash 月刷 1.42 億美元、OP Mainnet 貢獻 53% 營收、MoonPay 全棧整合與 5,000 萬美元回購真相。",
+      "datePublished": "2026-08-18",
+      "dateModified": "2026-11-24",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://masonyang-blog.github.io/project/ethfi.html"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://masonyang-blog.github.io/#author",
+      "name": "Mason Yang",
+      "url": "https://masonyang-blog.github.io",
+      "jobTitle": "Investment Researcher",
+      "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://masonyang-blog.github.io/logo.png"
+      },
+      "sameAs": [
+        "https://x.com/MasonYang16"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://masonyang-blog.github.io/#website",
+      "url": "https://masonyang-blog.github.io",
+      "name": "Mason Yang Blog",
+      "publisher": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://masonyang-blog.github.io/project/ethfi.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首頁",
+          "item": "https://masonyang-blog.github.io/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "比特幣、加密資產與 Web3",
+          "item": "https://masonyang-blog.github.io/post/topic-crypto.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "【Ether.fi ETHFI 深度研報】— 告別 EigenLayer 再質押後，如何重估月刷 1.42 億美元的去中心化加密新銀行？解構 53% OP 營收占比、MoonPay 整合與回購真相",
+          "item": "https://masonyang-blog.github.io/project/ethfi.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+  <meta name="topic" content="topic-crypto-web3">
+<!-- skip-obs-check -->
+</head>
+<body class="theme-bg-body text-slate-800 dark:bg-slate-900 dark:text-slate-200" data-article-id="ethfi" data-asset-id="ethfi">
+<!-- Scroll Progress Bar -->
+<div class="fixed top-0 left-0 w-full h-0.5 bg-transparent z-[60]" id="scroll-progress-container">
+<div class="h-full bg-blue-500 w-0 transition-all duration-150 ease-out" id="scroll-progress-bar"></div>
+</div>
+<!-- Header Host -->
+<div id="header-host"></div>
+<!-- =========================================================
+         MAIN: Three-Column Layout
+         lg+  : [Left TOC] [Article] [Right Sidebar]
+         <lg  : Single column
+    ========================================================= -->
+<main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- ─────────────────────────────────────────
+                 LEFT SIDEBAR: Desktop TOC
+            ───────────────────────────────────────── -->
+<aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+<div class="toc-sidebar sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 px-1">
+              目錄導覽
+            </p>
+<!-- ArticleTOC renders here -->
+<div data-managed="auto" id="toc-desktop-host">
+<!-- static_toc_start -->
+<nav aria-label="Table of Contents" class="static-toc-container">
+<ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 執行摘要 核心事件的 5W1H 認知架構</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#執行摘要與華爾街市場重估論點" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1執行摘要與華爾街市場重估論點</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#宏觀行業背景-以太坊質押與再質押敘事崩解" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2宏觀行業背景：以太坊質押演進與再質押敘事崩解</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#以太坊權益證明-pos-的收益壓縮與流動性壟斷" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">以太坊權益證明 (PoS) 的收益壓縮與流動性壟斷</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#再質押敘事崩解實錄-全面退出-eigenlayer" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">再質押敘事崩解實錄：全面退出 EigenLayer 與競品重排</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#協議核心架構與技術護城河-非託管與分佈式驗證者技術-dvt" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3協議核心架構與技術護城河：非託管、DVT 與資安實戰</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#非託管委託模型與底層安全架構的革新" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">非託管委託模型與底層安全架構的革新</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#智能合約安全審計與機構級防護體系" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">智能合約安全審計與 9/11 舊版 AtomicQueue 資安補遺</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#業務矩陣轉型-從底層收益協議到-去中心化新零售銀行" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4業務矩陣轉型：從純質押底層到「去中心化加密新銀行」</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#stake-純-lst-底座與幣本位黏著度" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Stake：純 LST 底座與 230 萬枚 ETH 幣本位黏著度</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#liquid-金庫規模萎縮與高利潤率策略考驗" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Liquid：金庫規模萎縮 86.4% 與策略重整</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#cash-消費級金融應用的現金牛與破圈利器" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Cash：躍居全球第二大穩定幣卡引擎與新銀行生態</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#戰略佈局與基礎設施跨越-op-mainnet-遷移與-ethgas-區塊空間期貨" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">5戰略佈局與基礎設施跨越OP Mainnet 遷移與 ETHGas 區塊空間期貨</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#基礎設施重構-從-scroll-至-optimism-的戰略躍遷" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">基礎設施重構：從 Scroll 至 Optimism 的戰略躍遷</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#ethgas-30-億美元協議-重塑以太坊區塊空間的定價權" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">ETHGas 30 億美元協議：重塑以太坊區塊空間的定價權</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#機構級合規與基礎設施整合-anchorage-fireblocks-kiln" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">機構級合規與基礎設施整合：Anchorage, Fireblocks, Kiln</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#協議財務報表-價值捕獲與代幣經濟學深度剖析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">6協議財務報表、價值捕獲與代幣經濟學深度剖析</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#營運數據與利潤模型分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">營運數據與利潤模型分析</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#代幣分配結構與解鎖懸崖-token-allocation-unlock-cliff" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">代幣分配結構與解鎖懸崖 (Token Allocation &amp; Unlock Cliff)</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#價值捕獲機制-sethfi-質押與真實利潤回購" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">價值捕獲機制：sETHFI 質押與真實利潤回購</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#系統性風險與宏觀外部挑戰評估" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">7系統性風險與宏觀外部挑戰評估</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#反身性清算瀑布-liquidation-cascades-與脫錨風險" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">反身性清算瀑布 (Liquidation Cascades) 與脫錨風險</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#eigenlayer-avs-安全依賴與複雜性風險" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">EigenLayer AVS 安全依賴與複雜性風險</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#監管合規性-sec-mica-與法幣通道封鎖風險" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">監管合規性 (SEC, MiCA) 與法幣通道封鎖風險</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#二級市場技術面結構分析與中短期推演" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">8二級市場技術面結構分析與中短期推演</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#綜合結論與資產配置戰略展望" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">9綜合結論與資產配置戰略展望</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#article-analysis-header" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章分析</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#article-inference-logic" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">01 文章推論邏輯分析</a></li>
+<li style="margin-bottom: 0.2rem;"><a href="#defi-2-0-商業模式-鏈上數據與二級市場估值重估" style="display: block; padding: 0.2rem 0; font-size: 0.75rem; color: #94a3b8; text-decoration: none; padding-left: 2rem;">DeFi 2.0 商業模式、鏈上數據與二級市場估值重估</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#logic-blindspots" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">02 敘事邊界與關鍵變數補充</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#參考資料" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">參考資料 (References)</a></li>
+</ul>
+</nav>
+<!-- static_toc_end -->
+</div>
+<!-- Back to top (sidebar) -->
+<button class="mt-8 hidden w-full text-left text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-1 py-1 flex items-center gap-1.5" id="back-to-top-sidebar">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              回到頂部
+            </button>
+</div>
+</aside>
+<!-- ─────────────────────────────────────────
+                 CENTER: Article Content
+            ───────────────────────────────────────── -->
+<div class="flex-1 min-w-0">
+<!-- Breadcrumb -->
+<nav aria-label="Breadcrumb" class="flex text-sm text-slate-500 dark:text-slate-400 mb-6">
+<ol class="flex items-center space-x-1.5 flex-wrap">
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../index.html">首頁</a></li>
+<li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg></li>
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../post/topic-crypto.html">比特幣、加密資產與 Web3</a></li>
+<li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg></li>
+<li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">【Ether.fi ETHFI 深度研報】— 告別 EigenLayer 再質押後，如何重估月刷 1.42 億美元的去中心化加密新銀行？解構 53% OP 營收占比、MoonPay 整合與回購真相</li>
+</ol>
+</nav>
+<!-- ── Hero Header ── -->
+<header class="theme-bg-card dark:bg-slate-900/40 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 md:p-10 mb-6 font-sans relative" id="chapter-0">
+<!-- Category + Date + Executive Badge -->
+<div class="flex flex-wrap items-center gap-3 mb-5">
+<span class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                加密貨幣與 Web3 投資
+              </span>
+<span class="px-2.5 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 rounded-full text-xs font-bold uppercase tracking-wide">
+                執行摘要
+              </span>
+<span class="text-sm text-slate-500 dark:text-slate-400">
+<time datetime="2026-11-24">最後更新：2026-11-24</time><span class="text-xs text-slate-400 dark:text-slate-500 ml-1.5">（原初版：2026-08-18）</span>
+</span>
+<span class="text-xs text-slate-400 dark:text-slate-500 ml-auto">約 18 分鐘閱讀</span>
+</div>
+<!-- H1 -->
+<h1 class="text-2xl md:text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight mb-4 font-noto">【Ether.fi ETHFI 深度研報】— 告別 EigenLayer 再質押後，如何重估月刷 1.42 億美元的去中心化加密新銀行？解構 53% OP 營收占比、MoonPay 整合與回購真相</h1>
+<!-- Subtitle / Hook (純段落文字) -->
+<p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+              退出 EigenLayer 再質押、去中心化加密新銀行範式轉移與現金流重估邏輯
+            </p>
+<!-- Above-the-Fold 50字統攝性解答 (純段落文字) -->
+<p class="above-fold-summary text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+<strong class="dsr-label">[Direct Answer]</strong>
+              Ether.fi (ETHFI) 已全面退出 EigenLayer 再質押並將 weETH 還原為純粹的以太坊 LST，營運核心全面轉向去中心化加密新銀行，憑藉 Cash 月刷 1.42 億美元、OP Mainnet 貢獻 53% 營收與 MoonPay 全棧整合，將估值邏輯從 TVL 倒掛重構為現金流定價（P/S ~9.4x–11.1x）。
+            </p>
+</header>
+<!-- ── Mobile TOC Target (行動版) ── -->
+<div class="lg:hidden mb-6" data-managed="auto" id="toc-mobile-target">
+<!-- static_toc_start -->
+<nav aria-label="Table of Contents" class="static-toc-container">
+<ul class="static-toc" style="list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#chapter-0" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">0 執行摘要 核心事件的 5W1H 認知架構</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#執行摘要與華爾街市場重估論點" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">1執行摘要與華爾街市場重估論點</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#宏觀行業背景-以太坊質押與再質押敘事崩解" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">2宏觀行業背景：以太坊質押演進與再質押敘事崩解</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#以太坊權益證明-pos-的收益壓縮與流動性壟斷" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">以太坊權益證明 (PoS) 的收益壓縮與流動性壟斷</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#再質押敘事崩解實錄-全面退出-eigenlayer" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">再質押敘事崩解實錄：全面退出 EigenLayer 與競品重排</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#協議核心架構與技術護城河-非託管與分佈式驗證者技術-dvt" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">3協議核心架構與技術護城河：非託管、DVT 與資安實戰</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#非託管委託模型與底層安全架構的革新" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">非託管委託模型與底層安全架構的革新</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#智能合約安全審計與機構級防護體系" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">智能合約安全審計與 9/11 舊版 AtomicQueue 資安補遺</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#業務矩陣轉型-從底層收益協議到-去中心化新零售銀行" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">4業務矩陣轉型：從純質押底層到「去中心化加密新銀行」</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#stake-純-lst-底座與幣本位黏著度" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Stake：純 LST 底座與 230 萬枚 ETH 幣本位黏著度</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#liquid-金庫規模萎縮與高利潤率策略考驗" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Liquid：金庫規模萎縮 86.4% 與策略重整</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#cash-消費級金融應用的現金牛與破圈利器" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Cash：躍居全球第二大穩定幣卡引擎與新銀行生態</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#戰略佈局與基礎設施跨越-op-mainnet-遷移與-ethgas-區塊空間期貨" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">5戰略佈局與基礎設施跨越OP Mainnet 遷移與 ETHGas 區塊空間期貨</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#基礎設施重構-從-scroll-至-optimism-的戰略躍遷" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">基礎設施重構：從 Scroll 至 Optimism 的戰略躍遷</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#ethgas-30-億美元協議-重塑以太坊區塊空間的定價權" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">ETHGas 30 億美元協議：重塑以太坊區塊空間的定價權</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#機構級合規與基礎設施整合-anchorage-fireblocks-kiln" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">機構級合規與基礎設施整合：Anchorage, Fireblocks, Kiln</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#協議財務報表-價值捕獲與代幣經濟學深度剖析" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">6協議財務報表、價值捕獲與代幣經濟學深度剖析</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#營運數據與利潤模型分析" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">營運數據與利潤模型分析</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#代幣分配結構與解鎖懸崖-token-allocation-unlock-cliff" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">代幣分配結構與解鎖懸崖 (Token Allocation &amp; Unlock Cliff)</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#價值捕獲機制-sethfi-質押與真實利潤回購" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">價值捕獲機制：sETHFI 質押與真實利潤回購</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#系統性風險與宏觀外部挑戰評估" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">7系統性風險與宏觀外部挑戰評估</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#反身性清算瀑布-liquidation-cascades-與脫錨風險" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">反身性清算瀑布 (Liquidation Cascades) 與脫錨風險</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#eigenlayer-avs-安全依賴與複雜性風險" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">EigenLayer AVS 安全依賴與複雜性風險</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#監管合規性-sec-mica-與法幣通道封鎖風險" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">監管合規性 (SEC, MiCA) 與法幣通道封鎖風險</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#二級市場技術面結構分析與中短期推演" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">8二級市場技術面結構分析與中短期推演</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#綜合結論與資產配置戰略展望" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">9綜合結論與資產配置戰略展望</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#article-analysis-header" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">文章分析</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#article-inference-logic" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">01 文章推論邏輯分析</a></li>
+<li style="margin-bottom: 0.2rem;"><a href="#defi-2-0-商業模式-鏈上數據與二級市場估值重估" style="display: block; padding: 0.2rem 0; font-size: 0.75rem; color: #94a3b8; text-decoration: none; padding-left: 2rem;">DeFi 2.0 商業模式、鏈上數據與二級市場估值重估</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#logic-blindspots" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">02 敘事邊界與關鍵變數補充</a></li>
+<li style="margin-bottom: 0.25rem;"><a href="#mason-yang-observation" style="display: block; padding: 0.25rem 0; font-size: 0.8rem; color: #64748b; text-decoration: none; padding-left: 1rem;">Mason Yang 的觀察 (Actionable Intelligence)</a></li>
+<li style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><a href="#參考資料" style="display: block; padding: 0.35rem 0; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: none; border-bottom: 1px solid #f1f5f9; text-transform: uppercase;">參考資料 (References)</a></li>
+</ul>
+</nav>
+<!-- static_toc_end -->
+</div>
+<!-- ── Article Body ── -->
+<article class="article-body article-body-content bg-transparent border-0 p-0 shadow-none prose prose-slate dark:prose-invert max-w-none prose-lg leading-relaxed prose-headings:font-bold prose-h2:text-3xl prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:rounded-r-lg prose-blockquote:not-italic">
+<div data-managed="auto" id="main-content-area">
+<!-- 
+                         D-S-R PROTOCOL INDICATOR (寫作引導)
+                        1. Direct Answer (直接斷言): 段落首句點破核心問題與結論。 (必須包裹在 <strong class="dsr-label">[Direct Answer]</strong>)
+                        2. Support Details (支持細節): 包含數據、指標 (TPS, TVL, Q-ID) 或技術標準。 (必須包裹在 <strong class="dsr-label">[Support Details]</strong> )
+                        3. Reinforcement (語義強化): 將技術細節轉化為投資價值或風險判斷。 (不需標籤，直接寫入段落)
+                        
+                         佈局注意事項 (Layout Standards):
+                        - 隱藏標籤: 務必使用 class="dsr-label" 以確保前端不直接顯示。
+                        - 段落間距: 所有 <p> 標籤必須顯式添加 class="mb-8" (或 mb-6) 以維持呼吸感。
+                        - 清單化原則: 當 Support Details 超過 3 個並列項時，強制使用 <ul> 以替代長段落。
+                    -->
+<!-- ── 5W1H 核心架構與 SEO 提問解析 (首屏前置佈局) ── -->
+<!-- CHAPTER 0 (TOC Hierarchy Anchor) -->
+<h2 class="not-prose indicator-h2" id="chapter-0">
+<span class="number-circle">0</span>
+<span class="title-main">執行摘要</span>
+<span class="title-sub">核心事件的 5W1H 認知架構</span>
+</h2>
+<div class="not-prose my-12" id="content-chapter-0">
+<!-- 5W1H Premium Dashboard -->
+<div class="relative p-1 bg-gradient-to-br from-amber-500/20 via-slate-200/50 to-orange-500/20 dark:from-amber-500/30 dark:via-slate-800 dark:to-orange-500/30 rounded-3xl overflow-hidden shadow-2xl border border-white/20 dark:border-slate-700/50 backdrop-blur-xl">
+<div class="relative bg-white/80 dark:bg-slate-900/90 rounded-[1.4rem] p-6 md:p-10">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-slate-100 dark:border-slate-800 pb-8">
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold tracking-widest uppercase mb-4">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+</span>
+                          Market Analysis Framework
+                        </div>
+<div class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white leading-tight font-noto" data-managed="append-only" id="section-5w1h-core">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 not-prose">
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60">
+<div class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
+                                WHO / 主體
+                              </div>
+<div class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1">
+                                Ether.fi (ETHFI) 協議團隊與 DAO
+                              </div>
+<div class="text-xs text-slate-600 dark:text-slate-400">
+                                創始人 Mike Silagadze 領導的團隊，由
+                                Coinfund、Maelstrom、Bullish
+                                等機構支持，已從 LRT 轉型為「純 LST 底層＋去中心化加密新銀行」。
+                              </div>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60">
+<div class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
+                                WHAT / 事實
+                              </div>
+<div class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1">
+                                TVL/FDV 收斂至 7.66x，Cash 月刷 1.42 億美元
+                              </div>
+<div class="text-xs text-slate-600 dark:text-slate-400">
+                                總 TVL 36.96 億美元、FDV 4.82 億美元；Cash
+                                累積 15 萬張活躍卡、累計刷卡破 11.72 億美元（10
+                                月 1.42 億），OP 貢獻 53% 營收。
+                              </div>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60">
+<div class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
+                                WHEN / 時點
+                              </div>
+<div class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1">
+                                2026 Q4 完成轉型，邁向 2027/02 歸屬節點
+                              </div>
+<div class="text-xs text-slate-600 dark:text-slate-400">
+                                2026 Q4 完成全面退出 EigenLayer 與 OP Mainnet
+                                遷移驗收，並邁向 2027 年 2 月 18 日內部人最終鏈下合約歸屬節點。
+                              </div>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60">
+<div class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
+                                WHERE / 場域
+                              </div>
+<div class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1">
+                                以太坊、OP Mainnet、MoonPay 軌道與歐洲 ETP
+                              </div>
+<div class="text-xs text-slate-600 dark:text-slate-400">
+                                OP Mainnet 貢獻 53% 營收；整合 MoonPay 全球銀行軌道（ACH/SWIFT/SEPA）、Visa 支付網關與 21Shares 歐洲 ETP。
+                              </div>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60">
+<div class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
+                                WHY / 動機
+                              </div>
+<div class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1">
+                                割捨低效再質押，轉向消費金融現金流定價
+                              </div>
+<div class="text-xs text-slate-600 dark:text-slate-400">
+                                鑑於再質押收益遠遜純質押且風險溢價不足，以無罰沒風險的純 LST（weETH）為底層，建構垂直整合 Web3 加密新銀行。
+                              </div>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60">
+<div class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
+                                HOW / 機制
+                              </div>
+<div class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1">
+                                Stake-Liquid-Cash 矩陣、Aave V4 與 ETHGas
+                              </div>
+<div class="text-xs text-slate-600 dark:text-slate-400">
+                                以 230 萬枚 ETH 純質押為底座，靠 Cash（4% Borrow Mode）與 Aave V4（借貸破 5,079 萬美元）創造現金流，輔以 3 年 30 億美元 ETHGas 流動性承諾。
+                              </div>
+</div>
+</div>
+</div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 font-mono text-sm">
+                        項目研報: Ether.fi (ETHFI)
+                      </p>
+</div>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- WHO -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Who / 參與主體</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                          Ether.fi 協議、DAO 社區、weETH/eETH 持有者、OP Mainnet（Aave V4）與 MoonPay 銀行通道
+                        </p>
+</div>
+<!-- WHAT -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500 text-white shadow-lg shadow-orange-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">What / 核心事件</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                          總 TVL 36.96 億美元，FDV 4.82 億美元（TVL/FDV 7.66x），Cash 累計刷卡破 11.72 億美元、10 月單月 1.42 億美元、活躍卡 15 萬張
+                        </p>
+</div>
+<!-- WHEN -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-yellow-500 text-white shadow-lg shadow-yellow-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">When / 關鍵時點</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                          2026 Q4 完成退出 EigenLayer 與 OP Mainnet 轉移，邁向 2027/02/18 最終合約歸屬節點
+                        </p>
+</div>
+<!-- WHERE -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500 text-white shadow-lg shadow-red-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Where / 影響範圍</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                          以太坊 Mainnet、OP Mainnet（53% 營收）、MoonPay 全球銀行軌道（ACH/SWIFT/SEPA）與歐洲 21Shares ETP
+                        </p>
+</div>
+<!-- WHY -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-500 text-white shadow-lg shadow-zinc-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">W</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Why / 驅動動機</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                          再質押風險溢價失效，轉以純 LST 低風險底層驅動加密新零售銀行現金流
+                        </p>
+</div>
+<!-- HOW -->
+<div class="group p-6 rounded-2xl theme-bg-body dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-amber-500/50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition-transform group-hover:scale-110">
+<span class="font-bold text-lg">H</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">How / 策略應對</span>
+</div>
+<p class="text-slate-700 dark:text-slate-200 leading-relaxed text-sm">
+                          純 LST＋Cash 四級會員與 Borrow Mode＋OP Mainnet Aave V4＋ETHGas 3 年 30 億美元流動性承諾
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<h2 class="not-prose indicator-h2 my-12" id="執行摘要與華爾街市場重估論點">
+<span class="number-circle">1</span><span class="title-main">執行摘要與華爾街市場重估論點</span>
+</h2>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在 2026 年第四季的加密貨幣資本市場中，去中心化金融（DeFi）正經歷一場從「代幣釋放與積分補貼」向「真實金融科技現金流（Fintech Cash Flow）」的結構性重估。過去三個月內，Ether.fi（ETHFI）並非僅經歷單純的數據波動，而是完成了<strong>底層商業敘事的結構性反轉</strong>：協議已正式全面退出 EigenLayer 再質押，將主力資產 eETH 與 weETH 還原為純粹的以太坊流動性質押代幣（LST），並將營運重心全面轉向以 <strong>Ether.fi Cash Visa 簽帳卡、MoonPay 全棧法幣通道與 OP Mainnet 上的 Aave V4 借貸市場</strong>為核心支柱的「去中心化加密新銀行（Crypto Neobank）」。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                截至 2026 年 11 月 24 日，受以太坊幣價回落至約 1,700 美元區間與 Liquid 自動化金庫規模縮水的雙重影響，Ether.fi 的總價值鎖定（TVL）自 2026 年 8 月中位數（67 億美元）回落至 <strong>36.96 億美元</strong>（其中 Stake 佔 32.81 億美元，但 eETH 總供應量仍穩守約 230 萬枚 ETH，展現極高的幣本位黏著度）。與此同時，ETHFI 代幣價格位於 <strong>0.46 至 0.52 美元</strong>區間，流通市值與完全稀釋估值（FDV）分別落於 4.46 億至 4.82 億美元（名義流通率已達 96.5%–97%，FDV/MC 收斂至約 1.0 倍）。這意味著「TVL 與 FDV 高達 15 倍倒掛」的舊估值錨點已修正收斂至約 <strong>7.66 倍</strong>。在過半協議營收已來自「低資產鎖倉、高消費週轉」的新銀行業務背景下，華爾街與機構投資者的估值邏輯必須從單純的資產鎖倉倍數，全面切換至以<strong>市銷率（P/S 約 9.4x–11.1x）</strong>為核心的現金流定價框架。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                從二階與三階商業數據觀察，Ether.fi 正處於「再質押退場 vs. 消費金融變現」的雙向博弈核心。截至 2026 年 11 月下旬，Ether.fi 近 30 日總手續費達 <strong>1,366 萬美元</strong>、協議營收達 <strong>383 萬美元</strong>（年化 4,341 萬美元，近 30 日年化運行速率約 4,596 萬美元）。其中，OP Mainnet 憑藉僅佔總 TVL 9.3% 的資產規模，貢獻了高達 <strong>53.0%（203 萬美元）</strong> 的協議月營收，首度超越以太坊主網；而 Ether.fi Cash 已累積 50 萬名會員與 15 萬張活躍卡，累計刷卡突破 <strong>11.72 億美元</strong>，10 月單月更創下 <strong>1.42 億美元</strong>歷史新高（佔全球穩定幣簽帳卡市佔 10.3%，躍居全球第二）。配合 10 月 6 日落地的 MoonPay 全棧虛擬銀行帳戶整合與 9 月 22 日掛牌的 21Shares 歐洲實物 ETP，協議基本面正加速金融科技化。然而，市場亦須正視 DefiLlama 錄得近多月持幣者收益（Holders Revenue）歸零、部分回購代幣實質轉作刷卡回饋補貼，以及 55.21% 內部人籌碼依賴鏈下合約歸屬至 2027 年 2 月等真實變數。本報告將從底層敘事反轉、資安實戰、新銀行矩陣、財報損益、回購真相與<a class="knowledge-link text-orange-600 dark:text-orange-400 underline decoration-dashed underline-offset-4 hover:text-orange-700 dark:hover:text-orange-300 transition-colors" data-knowledge-id="shadow-banking" href="../knowledge/shadow-banking.html" title="Shadow Banking (影子銀行) (2026)：核心定義、監管套利與系統性風險全解析">系統性風險</a>等多維度進行深度剖析，為投資者提供客觀的重估依據。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="宏觀行業背景-以太坊質押與再質押敘事崩解">
+<span class="number-circle">2</span><span class="title-main">宏觀行業背景</span><span class="title-sub">以太坊質押演進與再質押敘事崩解</span>
+</h2>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="以太坊權益證明-pos-的收益壓縮與流動性壟斷">
+                以太坊權益證明 (PoS) 的收益壓縮與流動性壟斷
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                自以太坊完成合併並全面過渡至權益證明（PoS）機制後，原生質押收益率隨著參與驗證節點數量的激增而持續受到無情壓縮。數據顯示，截至 2026 年中，以太坊網絡中已有約
+                33.3% 的流通供應量（約合 4,020 萬枚 ETH）被長期鎖定在質押合約中。在如此龐大的資本參與下，原生共識層的基礎年化收益率（APR）已降至
+                2.78% 左右，即便加上 MEV（最大可提取價值）所帶來的 0.3% 至 0.8%
+                額外補償，整體質押收益率也僅能維持在 3% 至 4%
+                的低位區間。對於追求高資本效率的機構資金而言，單純的原生質押已失去超額回報吸引力。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在此宏觀環境下，Lido Finance 憑藉先發優勢與強大的網絡效應，持續穩居以太坊流動性質押（LST）市場龍頭（截至 2026 年 11 月 20 日 TVL 報 <strong>170.6 億美元</strong>），其發行的 stETH 成為整個 DeFi
+                領域事實上的基準抵押品。然而，2024 年至 2025 年間市場曾一度寄望透過「流動性再質押（LRT）」突破單純 LST 的收益率天花板，卻在 2026 年迎來了殘酷的商業現實檢驗。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="再質押敘事崩解實錄-全面退出-eigenlayer">
+                再質押敘事崩解實錄：全面退出 EigenLayer 與競品重排
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                2026 年第二季至第三季，曾經爆紅的流動性再質押（LRT）商業模式正式步入退潮期，而 Ether.fi 的決斷最為徹底。根據區塊鏈情報機構 Bitquery 於 2026 年 10 月 1 日發布的逐日鏈上追蹤報告，截至 2026 年 3 月 30 日，Ether.fi 旗下節點運營商原持有 EigenLayer 上 318 萬枚原生再質押 ETH 中的 <strong>226 萬枚（市佔率高達 71%）</strong>，堪稱 EigenLayer 生態的最大支柱。然而，自 <strong>2026 年 4 月 21 日至 7 月 8 日</strong>短短不到三個月內，Ether.fi 分四輪將其在 EigenLayer 的原生再質押部位砍除逾 99%，餘額驟降至僅 <strong>5,869 枚 ETH</strong>（其中 7 月 7 日晚間兩小時內，單一地址即透過 72 筆交易從三家節點商撤出 745,594 枚 ETH）。至 2026 年 8 月，Ether.fi 正式調整產品結構，將 EigenLayer 再質押曝險從主力代幣 eETH 與 weETH 中全面移除，官方文件明確宣告兩者「不再附帶額外的再質押收益或 EigenLayer 罰沒風險」，並規劃於 2026 年底前全數移除驗證者的 EigenPod 提款憑證。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                執行長 Mike Silagadze 於 2026 年 9 月底接受 CoinDesk 採訪時直言：「再質押已經沒有像樣的收益機會，質押者也對其風險存有顧慮，因此我們決定退出。」第三方鏈上數據印證了此一商業判斷：2025 年各類積分空投補貼陸續退場後，EigenLayer 於 2025 年 4 月正式啟動罰沒（Slashing）機制，使潛在風險轉化為可被定價的真實本金損失，但主動驗證服務（<a class="knowledge-link text-orange-600 dark:text-orange-400 underline decoration-dashed underline-offset-4 hover:text-orange-700 dark:hover:text-orange-300 transition-colors" data-knowledge-id="modular-blockchain" href="../knowledge/modular-blockchain.html" title="模組化區塊鏈 (Modular Blockchain)">AVS</a>）的安全採購需求始終未能支撐足額風險溢價。CoinDesk 引用 DefiLlama 2026 年 9 月 8 日的統計顯示，整個再質押產業鎖定約 100.2 億美元資產，單週僅產生約 10 萬美元手續費；反觀傳統流動性質押以 518.7 億美元 TVL 創造了 2,735 萬美元單週手續費——<strong>以每美元擔保資產計算，純質押收益約為再質押的 53 倍</strong>。與此同時，EigenLayer 自身的 TVL 從 2025 年 8 月峰值 220.6 億美元萎縮約 77% 至約 51 億美元，並已更名為 <strong>EigenCloud</strong>，將主打產品轉向「可驗證運算（Verifiable Computing）」。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                加速整個 LRT 板塊信心瓦解的關鍵觸發事件，是 <strong>2026 年 4 月 18 日 Kelp DAO 跨鏈橋遭駭事件</strong>。攻擊者透過社交工程滲透與 RPC 投毒，利用其 1-of-1 單一驗證器跨鏈配置缺陷，在 46 分鐘內憑空鑄造 116,500 枚無資產支撐的 rsETH（價值約 <strong>2.92 億至 2.93 億美元</strong>），並存入 Aave 借出真實 ETH，引發約 60 億美元資金自 Aave 撤離。該事件突顯出在缺乏實質超額收益補償的情況下，LRT 包裝層與跨鏈橋本身即構成額外攻擊面。根據 CoinDesk 統計，撇除 Ether.fi 後，Renzo、Kelp、Swell、Puffer Finance 與 Bedrock 等前五大剩餘 LRT 協議於 2026 年第二季合計毛利僅剩 <strong>95.3 萬美元</strong>（較三季前的 218 萬美元大減 56%），其中 Puffer Finance 單季毛利僅 21,590 美元、Swell 僅 22,370 美元。
+              </p>
+<div class="not-prose my-8 overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-sm">
+<table class="w-full text-left border-collapse text-sm">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200">
+<th class="py-3.5 px-4 font-bold">協議名稱</th>
+<th class="py-3.5 px-4 font-bold">當前賽道分類 (2026/11)</th>
+<th class="py-3.5 px-4 font-bold">最新 TVL 規模</th>
+<th class="py-3.5 px-4 font-bold">競爭格局與關鍵備註</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900/40 text-slate-700 dark:text-slate-300">
+<tr>
+<td class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Lido Finance</td>
+<td class="py-3 px-4">以太坊純 LST 龍頭</td>
+<td class="py-3 px-4 font-mono">170.6 億美元</td>
+<td class="py-3 px-4">Ether.fi 質押底層的真實對標對象（約佔其規模 19.2%）</td>
+</tr>
+<tr class="bg-amber-50/40 dark:bg-amber-900/10">
+<td class="py-3 px-4 font-semibold text-amber-700 dark:text-amber-300">Ether.fi</td>
+<td class="py-3 px-4 font-medium">純 LST 底層＋加密新銀行</td>
+<td class="py-3 px-4 font-mono font-semibold">36.96 億（Stake 32.81 億）</td>
+<td class="py-3 px-4">DefiLlama 已重分類為 Liquid Staking，脫離衰退中的 LRT 板塊</td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Kelp DAO</td>
+<td class="py-3 px-4">LRT 流動性再質押</td>
+<td class="py-3 px-4 font-mono">6.21 億美元</td>
+<td class="py-3 px-4">2026/04 跨鏈橋遭駭 2.92–2.93 億美元，9 月起訴 LayerZero</td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Renzo</td>
+<td class="py-3 px-4">LRT 流動性再質押</td>
+<td class="py-3 px-4 font-mono">0.77 億美元</td>
+<td class="py-3 px-4">較 8 月（0.89 億）持續萎縮，全 LRT 板塊 28 協議合計僅 8.12 億</td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Puffer Finance</td>
+<td class="py-3 px-4">LRT 流動性再質押</td>
+<td class="py-3 px-4 font-mono">0.18 億美元</td>
+<td class="py-3 px-4">2026 Q2 單季毛利僅剩 21,590 美元，商業變現面臨瓶頸</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 class="not-prose indicator-h2 my-12" id="協議核心架構與技術護城河-非託管與分佈式驗證者技術-dvt">
+<span class="number-circle">3</span><span class="title-main">協議核心架構與技術護城河</span><span class="title-sub">非託管、DVT 與資安實戰</span>
+</h2>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="非託管委託模型與底層安全架構的革新">
+                非託管委託模型與底層安全架構的革新
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                儘管退出再質押賽道，Ether.fi 在流動性質押賽道中建立的核心護城河依然穩固——即其獨創的「非託管（Non-custodial）」質押架構。在傳統的流動性質押解決方案（如
+                Lido 或中心化交易所質押）中，用戶必須將提款憑證（Withdrawal
+                Credentials）與驗證者密鑰交由協議或少數節點運營商控制。這種設計在底層邏輯上引入了中心化風險或多重簽名合約的單點故障隱患，一旦運營商遭到黑客攻擊或發生內部作惡，用戶的底層
+                ETH 將面臨不可挽回的損失。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                Ether.fi 的技術架構允許用戶在將 ETH
+                委託給專業節點運營商運營的同時，利用智能合約與密鑰分割技術，始終保留對提款憑證的絕對控制權。這種架構確保了即使協議本身或節點運營商遭遇毀滅性打擊，用戶依然可以憑藉自身的密鑰將質押的
+                ETH 安全撤回。此外，協議深度整合了分佈式驗證者技術（DVT），透過將單個驗證者節點的運營權限分散至多個獨立的運營商，進一步降低了單一運營商宕機或被惡意控制所導致的網絡罰沒（Slashing）風險。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="智能合約安全審計與機構級防護體系">
+                智能合約安全審計與 9/11 舊版 AtomicQueue 資安補遺
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                Ether.fi 核心合約採用 5/7 多重簽名（Multi-sig）控制，所有針對智能合約的升級與關鍵參數調整均受制於嚴格的 5 天時間鎖（Timelock），唯有在緊急安全事件下觸發的黑名單暫停功能除外。協議並已完成多達 14 次的全面代碼審計，涵蓋 Sigma Prime、Consensys Diligence、ChainSafe、Trail of Bits、Certora、StateMind、Hexens 與 MixBytes 等頂尖安全團隊，同時於 Immunefi 和 Hackenproof 常態化運行最高 25 萬美元的漏洞賞金計劃。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                然而，2026 年下半年的一宗實戰資安事件為協議的遺留合約管理敲響了警鐘。<strong>2026 年 9 月 11 日（UTC 07:20，台灣時間下午 3 時 20 分）</strong>，ether.fi Liquid 金庫過去使用、由 Veda 建構並於 2024 年 3 月部署的舊版不可升級提款排隊合約 <code>AtomicQueue</code>（地址 <code>0xd45884b5...</code>）遭到攻擊。漏洞主因為 <code>solve()</code> 函式欠缺存取控制（Access Control），允許呼叫者任意指定 solver 地址而不驗證簽章或身分。攻擊者先部署無價值代幣並建立虛假兌換請求，再將曾對該舊合約留有未撤銷授權的受害者填寫為 solver，進而自 11 個受害錢包轉走 <strong>14.45 枚 liquidETH</strong>（其中單一最大受害者損失 12.37 枚）與 <strong>7.05 枚 USDC</strong>，隨即於 Uniswap 兌換為 <strong>15.45 枚 ETH</strong>（約值 <strong>3.8 萬至 4.33 萬美元</strong>）並轉入 Tornado Cash；官方事後報告另指出 Arbitrum 上有約 2,257 枚 sETHFI 受波及。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                這起事件具備兩層深度技術啟示：第一，<strong>全部 11 個受害地址皆為具備合約程式碼的智慧錢包</strong>——包含 <strong>7 個經 EIP-7702 升級的一般錢包（EOA）</strong>、3 個 Coinbase Smart Wallet 與 1 個代理合約——由於普通無程式碼錢包在合約回呼 <code>finishSolve()</code> 時會失敗回滾，僅有接受未知回呼的智慧錢包觸發了轉帳，暴露出以太坊導入 EIP-7702 帳戶抽象後與老舊不可升級 DeFi 合約交互的新型攻擊面；第二，<strong>Ether.fi 的隔離與危機處理表現穩健</strong>：核心 eETH/weETH 質押合約、協議國庫與現行 Liquid 金庫部位均完全無損，安全監控夥伴 Hypernative 於 1 分鐘內發出警報，團隊約 3 小時內即透過轉帳鉤子（Transfer Hook）將舊合約列入黑名單（Operator Denylist），並於<strong>事發當日（約 9 小時後）由團隊多簽全額賠付所有受損用戶</strong>。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="業務矩陣轉型-從底層收益協議到-去中心化新零售銀行">
+<span class="number-circle">4</span><span class="title-main">業務矩陣轉型</span><span class="title-sub">從純質押底層到「去中心化加密新銀行」</span>
+</h2>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在創始人 Mike Silagadze（曾創辦知名教育科技公司 Top Hat）的帶領下，Ether.fi 於 2025 至 2026 年完成根本性的戰略轉型——不再受困於同質化的再質押費率戰，而是將自身重塑為垂直整合的 Web3 加密新銀行（Crypto Neobank），依託於相互咬合的三大產品支柱：Stake、Liquid 與 Cash。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="stake-純-lst-底座與幣本位黏著度">
+                Stake：純 LST 底座與 230 萬枚 ETH 幣本位黏著度
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                經過 2026 年 8 月的結構重整，Stake 板塊已從過去強調「三重收益堆疊」的 LRT，全面轉型為<strong>低風險純以太坊 LST 底座</strong>。主力代幣 eETH 與封裝版本 weETH 已正式移除 EigenLayer 再質押曝險與 AVS 罰沒風險；對於仍願承擔額外風險以換取再質押收益的少數用戶，協議另行於競爭對手 <strong>Symbiotic</strong> 之上推出獨立選配代幣 <strong>weETHs</strong>（惟其規模極小，2026 年 11 月初市值僅約 1,909 萬美元）。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                儘管截至 2026 年 11 月 24 日 ether.fi Stake 的美元計價 TVL 回落至 <strong>32.81 億美元</strong>（較 2025 年 8 月峰值 124.26 億美元回落 73.6%），但鏈上數據顯示 <strong>eETH 總供應量仍穩守約 230 萬枚 ETH</strong>（主網 weETH 池規模約 38 億美元），美元 TVL 縮水主因來自 ETH 幣價回落至約 1,700 美元區間。這證實了 Ether.fi 核心質押業務具備極高的「幣本位黏著度」，且受惠於整合超過 400 個 DeFi 協議與 17 條跨鏈網絡的<a class="knowledge-link text-orange-600 dark:text-orange-400 underline decoration-dashed underline-offset-4 hover:text-orange-700 dark:hover:text-orange-300 transition-colors" data-knowledge-id="liquidity-coverage-ratio" href="../knowledge/liquidity-coverage-ratio.html" title="Liquidity Coverage Ratio (LCR) (2026)：核心定義、巴塞爾協議與金融體系防禦擠兌全解析">流動性護城河</a>，weETH 依然是 Aave 與 Pendle 等頭部協議的核心底層生息抵押品。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="liquid-金庫規模萎縮與高利潤率策略考驗">
+                Liquid：金庫規模萎縮 86.4% 與策略重整
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                相較於 Stake 的幣本位韌性與 Cash 的爆發成長，負責跨鏈自動化 DeFi 策略金庫的 <strong>ether.fi Liquid</strong> 在 2026 年則面臨了真實的資金撤離考驗。雖然 Liquid 的管理費率（1.25% 至 2%）使其單位資產利潤率高於基礎質押，且曾分配資金至 Plume 網絡的 nBASIS 金庫探索 RWA 收益，但鏈上財報顯示，Liquid 的總鎖倉量已從 2025 年 2 月 1 日的歷史高點 <strong>20.38 億美元</strong>，一路下滑至 2026 年 11 月 23 日的 <strong>2.76 億美元（大幅萎縮 86.4%）</strong>。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                伴隨規模縮水，Liquid 單季毛利亦從 2025 年第一季的 197 萬美元大減 79.9% 至 2026 年第三季的 <strong>39.6 萬美元</strong>（2026 Q4 截至 11 月下旬僅錄得 9.98 萬美元）。這反映出在鏈上無風險利率下行與空投預期消退後，純粹的自動化機槍池（Yield Vault）難以單獨支撐長期規模擴張，迫使 Ether.fi 將增長引擎全面交棒給直接面向終端消費者的 Cash 業務。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="cash-消費級金融應用的現金牛與破圈利器">
+                Cash：躍居全球第二大穩定幣卡引擎與新銀行生態
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                Ether.fi Cash 已從早期的破圈實驗，正式成長為支撐協議估值的核心現金牛。根據鏈上支付追蹤平台 Paymentscan 與 MaiCoin 彙整截至 2026 年 11 月的最新數據，Cash 平台已累積約 <strong>50 萬名會員</strong>與 <strong>15 萬張活躍卡片</strong>（較 8 月份的 7 萬張翻倍成長）。自 2025 年 4 月推出以來，累計鏈上刷卡總額已突破 <strong>11.72 億美元</strong>，累計處理 <strong>1,491 萬筆交易</strong>，覆蓋 <strong>12.87 萬個獨立地址</strong>。觀察單月成長軌跡，其月度刷卡額從 2025 年 9 月的 2,406 萬美元一路攀升至 2026 年 8 月的 1.095 億美元、9 月的 1.288 億美元，並於 <strong>2026 年 10 月創下 1.419 億美元（約 1.42 億美元）的歷史新高</strong>（年增率高達 <strong>323.7%</strong>，年化刷卡運行速率達 17.0 億美元），單月佔據全球穩定幣簽帳卡總交易量的 <strong>10.3%</strong>，躍居<strong>全球第二大穩定幣卡片計畫</strong>，在同為 Rain 發卡體系的競品中領先 KAST（1.21 億美元）、Karta（5,363 萬美元）與 Plasma One（3,015 萬美元）。更值得注意的是，即使過去 12 個月比特幣曾歷經約 27% 的回調，Ether.fi 月度刷卡量仍在過去 15 個月中有 13 個月維持正成長，證明大量用戶正將其作為日常房租與雜貨支付帳戶，消費行為與加密投機週期明顯脫鉤。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在產品經濟學與會員體系上，Cash 透過精細化的設計鎖定高黏著度資金：
+              </p>
+<ul class="list-disc pl-6 mb-6 space-y-2 text-slate-700 dark:text-slate-200 text-base">
+<li><strong>4% 年化利率 Borrow Mode（借貸消費模式）</strong>：用戶無需預先賣出加密資產或兌換法幣，而是以金庫內生息資產為超額抵押借出 USDC 或 EURC 直接消費，年化借款利率為 <strong>4%</strong>；在多數稅務管轄區，由於借款屬債務而非處分資產收入，可有效避免即時觸發資本利得稅事件。</li>
+<li><strong>3%–4% 消費回饋與四級會員制度</strong>：基礎消費提供 <strong>3% 至 4%</strong> 回饋（以 ETHFI 發放並鎖定 7 天，2026 年 9 月起改為滿 5 美元手動領取制）。會員分為 <strong>Core、Luxe、Pinnacle 與 VIP</strong> 四級，用戶可透過消費積分、Liquid 存款或<strong>無鎖倉質押 sETHFI</strong> 快速解鎖高階權益（享 0% 外匯加價，基礎匯費為 1%；每月 10 次免費 ATM 提款；以及 10%–30% 訂閱服務加碼回饋）。</li>
+<li><strong>2026 年 8 月新銀行全產品擴張</strong>：伴隨新銀行改版，App 內已新增<strong>代幣化股票（如 xStocks）與貴金屬交易</strong>功能；雖然獨立分析師 Surf AI 指出代幣化股票受限於地區合規與發行方依賴，現階段主要作為「獲客與留存誘因」而非核心獲利引擎，但已顯著強化了 Ether.fi 作為一站式財富管理入口的定位。</li>
+</ul>
+<h2 class="not-prose indicator-h2 my-12" id="戰略佈局與基礎設施跨越-op-mainnet-遷移與-ethgas-區塊空間期貨">
+<span class="number-circle">5</span><span class="title-main">戰略佈局與基礎設施跨越</span><span class="title-sub">OP Mainnet 營收驗收、MoonPay 整合與 ETHGas 實況</span>
+</h2>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                為了支撐龐大的去中心化加密新銀行版圖與機構級服務需求，Ether.fi 在 2026 年下半年於基礎設施與傳統金融對接層面完成了多項實質落地，從 L2 結算遷移驗收一路延伸至全球法幣清算軌道與歐洲受監管證券市場。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="基礎設施重構-從-scroll-至-optimism-的戰略躍遷">
+                基礎設施重構：OP Mainnet 遷移驗收與 Aave V4 借貸放量
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                2026 年上半年，Ether.fi 將原佈局於 Scroll（zkEVM）的 30 萬帳戶與早期 Cash 業務無縫遷移至 Optimistic Rollup 架構的 OP Mainnet。截至 2026 年 11 月 24 日，這場遷移已從「技術計畫」進入「商業變現驗收期」：根據 DefiLlama 分鏈數據，Scroll 上的協議 TVL 已萎縮至僅剩 4.9 萬美元、近 30 日手續費與營收雙雙歸零；反觀 OP Mainnet 僅承載 <strong>3.448 億美元 TVL</strong>（僅佔全協議總 TVL 的 9.3%），卻在過去 30 日內創造高達 <strong>203 萬美元協議營收</strong>，佔全協議 30 日總營收（383 萬美元）約 <strong>53.0%</strong>，首度超越承載 33.47 億美元 TVL 的以太坊主網（30 日營收 181 萬美元）。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                推升 OP Mainnet 單位資本變現密度躍升的核心動能，來自 2026 年 8 月的新銀行全產品擴張。除了新增<strong>代幣化股票（如 xStocks）</strong>與<strong>貴金屬交易</strong>作為獲客誘因外（受限於地區合規與發行方依賴，定位偏向生態留存而非核心利潤來源），Ether.fi 正式在 Optimism 上部署了以 <strong>Aave V4</strong> 為底層架構的專屬借貸市場（EtherFi Borrowing Market）。根據 Blockworks 0xResearch 與 DefiLlama 追蹤，該借貸市場活躍貸款餘額自 8 月中旬起快速攀升：10 月 19 日達 4,210 萬美元，至 <strong>2026 年 11 月 24 日已正式突破 5,079 萬美元</strong>。這是一項具備代幣經濟意義的關鍵門檻——當 Cash 在 Aave V4 實例上的貸款規模站上 5,000 萬美元後，借貸利息營收將開始納入 ETHFI 回購資金流。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="moonpay-全棧法幣與虛擬銀行帳戶整合">
+                2026 年 10 月重磅進展：MoonPay 全棧法幣與虛擬銀行帳戶整合
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                2026 年 10 月 6 日，Ether.fi 宣布全面部署 <strong>MoonPay 全棧架構（Full Infrastructure Stack）</strong>，於維持用戶自主託管（Self-Custody）的前提下，直接打通傳統銀行體系的全球出入金與清算通道。該合作涵蓋四大原生產品模組：第一，<strong>MoonPay Headless Ramps</strong>，將刷卡買幣與法幣出入金無縫嵌入 App 原生介面，無需跳轉外部網頁；第二，<strong>MoonPay Trade</strong>，於後台自動完成跨鏈路由與深度流動性兌換；第三，<strong>MoonPay Enterprise</strong>，為每位用戶配置具獨立帳號與銀行路由號碼的<strong>虛擬銀行帳戶</strong>，直接對接 <strong>ACH、Fedwire、SWIFT、Faster Payments、SEPA 與 Open Banking</strong>，支援直接收取薪資或營收並於數秒內提現至實體銀行帳戶；第四，<strong>MoonPay Crypto Deposits</strong>，支援從比特幣、Solana 錢包或中心化交易所轉入資產並自動兌換為帳戶餘額，全套服務採<strong>單次統一 KYC 驗證（Unified Verification）</strong>。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                共同創辦人兼 CGO Rok Kopp 對此明確表態：「Ether.fi 的對標標準不是其他加密產品，而是用戶每天早上打開的那款主流銀行 App。」這種「自託管錢包核心＋邊緣串接持牌支付基礎設施」的架構，使 Ether.fi 無需逐國申領繁瑣的銀行執照，即可高效推進跨區域法幣服務擴張。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="ethgas-30-億美元協議-重塑以太坊區塊空間的定價權">
+                ETHGas 30 億美元協議：驗證者流動性承諾與 8 億美元預訂實況
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在機構級基礎設施領域，Ether.fi 於 2026 年 4 月 15 日宣布與 ETHGas 達成戰略協議。針對該協議的財務性質，必須做出精準校準：其本質為 Ether.fi 承諾於<strong>三年內投入 30 億美元規模的 ETH 作為「驗證者流動性（Validator Liquidity）」</strong>，並非立即入帳的營收合約。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                根據 Crypto Briefing 截至 2026 年 10 月 27 日的追蹤報導，獲 Polychain Capital 領投 1,200 萬美元種子輪的 ETHGas，透過將以太坊 12 秒區塊切分為子區塊，為受監管機構提供約 <strong>50 毫秒的驗證者簽章預確認（Preconfirmation）</strong>、整塊預訂權，以及在區塊建構上游即執行制裁篩查的 <strong>Policy Engine 合規層</strong>。截至 2026 年 10 月，ETHGas 整體已取得<strong>超過 8 億美元的機構級區塊空間預訂承諾</strong>，並於東京、首爾與新加坡（TOKEN2049）展開亞太機構路演。惟須明確揭露的是，目前公開資料尚未揭露 ETHGas 與 Ether.fi 之間具體的收益分成比率或實際入帳金額，因此該業務宜定性為中長期的驗證者增益選擇權，尚無法量化計入當期盈利模型。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="機構級合規與基礎設施整合-anchorage-fireblocks-kiln">
+                機構級合規通道：Anchorage, Fireblocks 與 21Shares 歐洲實物 ETP
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在機構合規通道建設上，Ether.fi 除了整合 Anchorage Digital（美國合格託管）、Fireblocks、Cactus 與 Kiln 等企業級基礎設施外，更於 <strong>2026 年 9 月 22 日</strong>迎來重要傳統金融里程碑：歐洲數位資產發行商 <strong>21Shares</strong> 正式於巴黎泛歐交易所（Euronext Paris，歐元計價）與阿姆斯特丹泛歐交易所（Euronext Amsterdam，美元計價）掛牌 <strong>100% 實物支持的 ether.fi ETP（交易代碼：ETHFI，ISIN：CH1608218819，管理費率 2.50%）</strong>，使歐洲傳統券商與金融機構首度能透過受監管證券帳戶直接配置 ETHFI 敞口。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="協議財務報表-價值捕獲與代幣經濟學深度剖析">
+<span class="number-circle">6</span><span class="title-main">協議財務報表、價值捕獲與代幣經濟學深度剖析</span>
+</h2>
+<div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose">
+<strong class="dsr-label">[Direct Answer]</strong>
+<ol class="space-y-2 text-sm md:text-base mt-2">
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>為何 TVL/FDV 倒掛從 15 倍收斂至約 7.66 倍？估值錨點如何切換至現金流 P/S（9.4x–11.1x）？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>名義流通率達 96.5%–97%，為何仍潛伏 55.21% 鏈下合約風險？「5,000 萬美元回購」與持幣者收益 $0 的真相為何？</span>
+</li>
+</ol>
+</div>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="營運數據與利潤模型分析">
+                營運數據與利潤模型分析：新舊引擎剪刀差與現金流定價
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                檢視 DefiLlama 追蹤的細分協議季度損益表，可清楚看見 Ether.fi 正處於陣痛與轉型並行的「新舊動能切換期」：核心質押（Stake）受 ETH 幣價回落至約 1,700 美元區間及退出 EigenLayer 影響，毛利呈現逐季收縮；而 OP Mainnet 上的新銀行與借貸業務則接棒成為增長主力。
+              </p>
+<div class="responsive-table-wrapper my-8 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<table class="not-prose w-full text-sm text-left text-slate-700 dark:text-slate-200">
+<thead>
+<tr>
+<th>季度</th>
+<th>Stake 總營收 (Gross Rev)</th>
+<th>Stake 毛利 (Gross Profit)</th>
+<th>核心 ETH 質押毛利</th>
+<th>EigenLayer 獎勵毛利</th>
+<th>Liquid 毛利 (Gross Profit)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2024 Q4</strong></td>
+<td>$50.05M</td>
+<td>$10.97M</td>
+<td>$4.01M</td>
+<td>$6.27M</td>
+<td>$1.51M</td>
+</tr>
+<tr>
+<td><strong>2025 Q1</strong></td>
+<td>$44.89M</td>
+<td>$10.86M</td>
+<td>$3.78M</td>
+<td>$6.24M</td>
+<td>$1.97M</td>
+</tr>
+<tr>
+<td><strong>2025 Q2</strong></td>
+<td>$41.25M</td>
+<td>$9.49M</td>
+<td>$3.53M</td>
+<td>$5.04M</td>
+<td>$1.84M</td>
+</tr>
+<tr>
+<td><strong>2025 Q3（峰值）</strong></td>
+<td><strong>$75.81M</strong></td>
+<td><strong>$17.12M</strong></td>
+<td><strong>$6.52M</strong></td>
+<td><strong>$7.56M</strong></td>
+<td>$0.88M</td>
+</tr>
+<tr>
+<td><strong>2025 Q4</strong></td>
+<td>$58.61M</td>
+<td>$11.92M</td>
+<td>$5.19M</td>
+<td>$5.75M</td>
+<td>$0.65M</td>
+</tr>
+<tr>
+<td><strong>2026 Q1</strong></td>
+<td>$42.16M</td>
+<td>$8.36M</td>
+<td>$3.76M</td>
+<td>$4.00M</td>
+<td>$0.19M</td>
+</tr>
+<tr>
+<td><strong>2026 Q2</strong></td>
+<td>$31.80M</td>
+<td>$6.46M</td>
+<td>$2.82M</td>
+<td>$2.87M</td>
+<td>$0.19M</td>
+</tr>
+<tr>
+<td><strong>2026 Q3</strong></td>
+<td><strong>$26.63M</strong></td>
+<td><strong>$4.91M</strong></td>
+<td><strong>$2.41M</strong></td>
+<td><strong>$2.47M</strong></td>
+<td><strong>$0.40M</strong></td>
+</tr>
+<tr>
+<td><strong>2026 Q4（截至 11/23）</strong></td>
+<td>$17.12M</td>
+<td>$3.11M</td>
+<td>$1.56M</td>
+<td>$1.56M</td>
+<td>$0.10M</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                上述報表揭示了兩項關鍵觀察。首先，ether.fi Stake 單季毛利已自 2025 年第三季高峰（1,712 萬美元）連續四季下滑至 2026 年第三季的 <strong>491 萬美元（年減 71.3%）</strong>，且退出前 EigenLayer 獎勵仍佔 Stake 毛利約半壁江山，意味退出再質押短期內會進一步壓抑質押端帳面利潤；同時 Liquid 金庫單季毛利亦從 2025 Q1 的 197 萬美元大減 79.9% 至 2026 Q3 的 39.6 萬美元。其次，管理層口徑與第三方鏈上報表存在張力：執行長 Silagadze 於 2026 年 9 月受訪時指出卡片業務佔月營收比重已從 1 月的 17% 躍升至 7 月的 46%，並預估今年整體營收年費率成長 38%（但未公開計算基準）；相對地，在 DefiLlama 合併追蹤口徑下，截至 2026 年 11 月 24 日全協議近 30 日總手續費為 <strong>1,366 萬美元</strong>（過去一年年化 1.777 億美元）、近 30 日協議營收為 <strong>383 萬美元</strong>（年化 <strong>4,341 萬美元</strong>，按近 30 日推算運行速率為 <strong>4,596 萬美元</strong>），雖較 2026 年 6 月低點（279 萬美元）逐月回溫，整體規模仍低於 2025 年峰值。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                在估值錨點上，截至 2026 年 11 月 21 日至 24 日，ETHFI 流通市值與 FDV 落於 <strong>4.46 億至 4.82 億美元</strong>區間，<strong>TVL/FDV 已自早期 15 倍以上收斂至 7.66 倍</strong>。當過半營收已來自「低資產鎖倉、高消費週轉」的新銀行與借貸業務時，單純 TVL/FDV 已不足以反映商業本質。改採現金流倍數衡量：以 DefiLlama 4.823 億美元 FDV 對照年化營收 4,341 萬美元，<strong>FDV/年化營收為 11.1 倍</strong>（按近 30 日年化運行速率計為 <strong>10.5 倍</strong>；Castle Labs 以 4.455 億美元市值計算之 <strong>P/S 為 9.4 倍</strong>；FDV/年化總手續費約 <strong>2.7 倍</strong>），在具備真實現金流的 DeFi 藍籌中處於合理偏低水位。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="代幣分配結構與解鎖懸崖-token-allocation-unlock-cliff">
+                代幣分配結構更新：名義流通率近全解鎖，但潛伏鏈下合約與集中風險
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                ETHFI 總供應量硬性限制為 10 億枚。早期研報「高 FDV、低流通」的靜態描述已不符現況：根據 CoinMarketCap、Castle Labs 與 Finst 截至 2026 年 11 月 21 日的數據，ETHFI 名義流通量已達 <strong>9.65 億至 9.6535 億枚</strong>（佔總上限 <strong>96.5%–97%</strong>，CoinGecko 與 MetaMask 計入約 99.9%–100%），<strong>FDV 與流通市值的比值已收斂至 1.0 倍</strong>，帳面通膨稀釋懸崖已大致反映。
+              </p>
+<div class="responsive-table-wrapper my-8 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<table class="not-prose w-full text-sm text-left text-slate-700 dark:text-slate-200">
+<thead>
+<tr>
+<th>分配與籌碼維度</th>
+<th>佔比 / 規模</th>
+<th>2026 年 11 月最新結構與潛在風險</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>名義流通供給 (Circulating)</strong></td>
+<td>96.5% – 97%</td>
+<td>約 9.65 億枚（總上限 10 億枚），FDV/MC 已收斂至 ~1.0x。</td>
+</tr>
+<tr>
+<td><strong>投資人與核心貢獻者（初始分配）</strong></td>
+<td>55.21%（33.74% + 21.47%）</td>
+<td>投資人兩年期歸屬、核心貢獻者三年期歸屬，最終歸屬期延續至 <strong>2027 年 2 月 18 日</strong>。</td>
+</tr>
+<tr>
+<td><strong>鏈下託管合約約束風險</strong></td>
+<td>無鏈上智能合約鎖倉</td>
+<td>MaiCoin 揭露：尚在歸屬期內的代幣已預先轉入受益人錢包，完全仰賴鏈下託管協議或法律合約約束。</td>
+</tr>
+<tr>
+<td><strong>單一內部人集中度與做市借幣</strong></td>
+<td>10.17% / 1,100 萬枚</td>
+<td>鏈上存在單一內部人錢包持有約 10.17% 總供應量；基金會另向做市商出借約 1,100 萬枚 ETHFI。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                因此，投資人不可誤判賣壓已 100% 出清，仍須持續追蹤 <strong>2027 年 2 月 18 日</strong>最終合約歸屬節點前後的鏈上大額異動。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="價值捕獲機制-sethfi-質押與真實利潤回購">
+                價值捕獲真相：「5,000 萬美元回購」與持幣者收益 $0 之四層辨析
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                2026 年秋季市場對 ETHFI 回購機制爆發爭議，導火線在於 DefiLlama 與 Castle Labs 儀表板均顯示，Ether.fi 自 2026 年 5 月至 11 月的<strong>持幣者收益（Holders Revenue）連續歸零</strong>（歷史累計停留在 1,659 萬美元）。綜合多方獨立追蹤，事實並非單純的「全面停擺」，而是存在四層結構性落差：
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                第一，2025 年 10 月核准的「5,000 萬美元國庫回購計畫（幣價低於 3 美元啟動）」本質屬於<strong>支出授權上限（Spending Cap）</strong>，而非已執行的買盤承諾，3 美元亦非官方目標價。第二，執行狀態存在口徑分歧：MaiCoin 指出基金會曾於 2026 年 4 月至 9 月間暫停相關回購；官方於 8 月 13 日宣布啟動程式化回購，Blockworks 0xResearch 更追蹤到自 9 月 7 日當週起 Ether.fi Labs 已累計向基金會劃轉 <strong>148 萬美元</strong>（含連續三週固定每週 22.5 萬美元），KuCoin 專欄則於 11 月 10 日更正早期誤判源自 tokenbuybacks.app 數據失真，顯示市場須直接查核基金會公開錢包（<code>0x2f5301a3...</code>）鏈上交易。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                第三，也是最核心的估值盲點——<strong>「回購並轉作刷卡回饋」不等於銷毀通縮</strong>。自 2026 年 8 月起，基金會將相當比例的回購 ETHFI 留存用於發放用戶激勵與 Ether.fi Cash 的 3%–4% 刷卡回饋。僅 11 月 16 日當週，Ether.fi 即發放高達 <strong>57.1 萬美元的 ETHFI 刷卡回饋</strong>（用戶於 7 天鎖定期滿後即可於二級市場賣出變現）；同時 Labs 劃轉給基金會的週回購資金停滯於 22.5 萬美元，顯示回購規模尚未與消費增速同步放量。第四，<strong>政策裁量風險與法律權利邊界</strong>：ETHFI 回購與分配全屬治理裁量（僅需 100 萬枚 ETHFI 即達法定與通過門檻），而非寫死於智能合約的不可竄改 Fee Switch；簽約主體為開曼群島實體 <strong>Ether.Fi SEZC</strong>（創辦人持有 25%–50% 股權控制權），ETHFI 並不賦予持幣者股權、法定分紅或可強制執行之收益求償權。採 Findas「務實中間定價法」，sETHFI 當前最明確的實用價值在於<strong>免鎖倉解鎖 Cash 高階會員權益與治理參與</strong>，估值模型須計入較高的政策變更折現率。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="系統性風險與宏觀外部挑戰評估">
+<span class="number-circle">7</span><span class="title-main">系統性風險與宏觀外部挑戰評估</span>
+</h2>
+<div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose">
+<strong class="dsr-label">[Direct Answer]</strong>
+<ol class="space-y-2 text-sm md:text-base mt-2">
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>全面退出 EigenLayer 後，eETH/weETH 的清算脫錨與包裝層跨鏈風險如何演變？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>轉型加密新銀行後，為何消費信貸壞帳、傳統銀行監管與回購政策裁量躍升為核心風險？</span>
+</li>
+</ol>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                隨著 Ether.fi 於 2026 年下半年正式退出 EigenLayer 並全面轉向消費級加密新銀行，其系統性風險版圖已發生結構性重排：原有的 AVS 罰沒威脅大幅降級，取而代之的是消費金融信貸壞帳、傳統銀行與證券合規、以及代幣回購政策裁量風險。
+              </p>
+<div class="responsive-table-wrapper my-8 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<table class="not-prose w-full text-sm text-left text-slate-700 dark:text-slate-200">
+<thead>
+<tr>
+<th>風險類別</th>
+<th>風險權重變化（對比 8 月初版）</th>
+<th>2026 年 11 月最新風險內涵與監控重點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>EigenLayer AVS 罰沒風險</strong></td>
+<td><strong>大幅降級（已結構性剝離）</strong></td>
+<td>eETH/weETH 已全面退出 EigenLayer，移除 AVS 罰沒風險；僅主動選用 weETHs（Symbiotic）的少數用戶仍承擔再質押風險。</td>
+</tr>
+<tr>
+<td><strong>反身性清算與包裝層跨鏈風險</strong></td>
+<td><strong>維持中高（焦點轉移）</strong></td>
+<td>Kelp DAO 4 月因跨鏈橋單點驗證遭駭 2.92–2.93 億美元，警示跨鏈橋與 DeFi 借貸抵押的可組合性風險依然高企；須持續監控 Aave 參數與提款流動性。</td>
+</tr>
+<tr>
+<td><strong>消費金融信貸與壞帳風險（新增）</strong></td>
+<td><strong>大幅升級（核心新風險）</strong></td>
+<td>隨 OP Mainnet 上 Aave V4 借貸規模突破 5,079 萬美元，協議實質承擔消費信貸核貸、抵押品清算參數、呆帳控制與支付詐欺風險。</td>
+</tr>
+<tr>
+<td><strong>傳統銀行與證券監管風險</strong></td>
+<td><strong>大幅升級（脫離模糊地帶）</strong></td>
+<td>業務延伸至虛擬銀行帳戶（ACH/SWIFT/SEPA）、Visa 簽帳卡、代幣化股票與貴金屬，高度依賴 MoonPay、Visa 與發卡機構合規通道穩定性。</td>
+</tr>
+<tr>
+<td><strong>回購政策裁量與法律結構風險（新增）</strong></td>
+<td><strong>高風險（定價折價主因）</strong></td>
+<td>回購與分配屬治理裁量而非硬性合約分紅；ETHFI 無股權/分紅求償權；55.21% 內部人分配無鏈上鎖倉至 2027/02。</td>
+</tr>
+<tr>
+<td><strong>遺留合約與帳戶抽象交互風險（新增）</strong></td>
+<td><strong>中低（須常態化盤點）</strong></td>
+<td>9/11 AtomicQueue 事件揭示已棄用第三方合約與 EIP-7702 智慧錢包殘留授權的長尾隱患。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="反身性清算瀑布-liquidation-cascades-與脫錨風險">
+                反身性清算瀑布 (Liquidation Cascades) 與包裝層跨鏈風險
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                儘管 eETH 與 weETH 已移除 EigenLayer 罰沒風險、還原為純粹的以太坊 LST，但作為 Aave 等借貸協議的核心抵押品，極端行情下若發生 DEX 流動性枯竭或預言機報價延遲，仍可能觸發高 LTV 循環借貸倉位的反身性清算。此外，2026 年 4 月 18 日 Kelp DAO 跨鏈橋遭駭 2.92–2.93 億美元並波及 Aave 借貸池的事件，再次警示「跨鏈橋單點配置與包裝層可組合性」是當代 DeFi 最具破壞力的傳染源，Ether.fi 須持續維持保守的跨鏈驗證與提款流動性緩衝。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="eigenlayer-avs-安全依賴與複雜性風險">
+                AVS 風險退場與新興核心威脅：Aave V4 消費信貸壞帳與遺留合約交互
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                原有「EigenLayer AVS 罰沒風險」已隨 2026 年夏季全面撤資而結構性剝離，目前僅限於主動選用 Symbiotic 底層代幣 weETHs（市值約 1,909 萬美元）的極少數用戶。取而代之的頭號業務風險是<strong>消費金融信貸與壞帳風險</strong>：隨著 OP Mainnet 上 Aave V4 借貸市場活躍餘額突破 5,079 萬美元，Ether.fi 實質承擔了類似傳統銀行信用卡發卡行的核貸風控、急跌行情抵押品清算效率、呆帳撥備與盜刷詐欺控管，其營運容錯率遠低於單純的節點質押。同時，9 月 11 日舊版 AtomicQueue 事件亦證明已棄用第三方合約與 EIP-7702 智慧錢包殘留授權的長尾隱患需要常態化盤點。
+              </p>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 mt-10 mb-4 font-noto border-l-4 border-amber-500 pl-3" id="監管合規性-sec-mica-與法幣通道封鎖風險">
+                傳統銀行、證券監管 (SEC, MiCA) 與回購政策裁量風險
+              </h3>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                當業務從鏈上質押延伸至對接 ACH、Fedwire、SWIFT、SEPA 的虛擬銀行帳戶、Visa 簽帳卡以及代幣化股票（xStocks）與貴金屬交易時，Ether.fi 已正式進入傳統銀行業、反洗錢（AML/KYC）與證券監管的深水區，其法幣變現通道高度依賴 MoonPay、Visa 與合作發卡機構的合規許可。一旦任一區域監管機構收緊對穩定幣結算或代幣化股票的執法標準，將直接衝擊獲客與現金流。此外，ETHFI 缺乏鏈上硬性分紅開關、回購受限於治理裁量及內部人 55.21% 鏈下合約歸屬至 2027 年 2 月的結構性缺陷，亦是二級市場給予估值折價的主因。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="二級市場技術面結構分析與中短期推演">
+<span class="number-circle">8</span><span class="title-main">二級市場技術面結構分析與中短期推演</span>
+</h2>
+<div class="lead-in-questions text-base text-slate-600 dark:text-slate-400 mt-2 mb-4 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm not-prose">
+<strong class="dsr-label">[Direct Answer]</strong>
+<ol class="space-y-2 text-sm md:text-base mt-2">
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">1</span><span>8 月突破 0.45 美元後，10 月反彈至 0.68–0.69 美元與 11 月回落至 0.46–0.52 美元的結構如何拆解？</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold shrink-0 not-italic mt-0.5">2</span><span>97.6% 成交集中於 CEX 下，0.44–0.46 美元防守區與 0.571 / 0.653–0.682 美元壓力帶如何推演？</span>
+</li>
+</ol>
+</div>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                回顧 2026 年 8 月初版研報的技術推演：當時 ETHFI 盤整於 0.38–0.47 美元區間，研報預判若放量突破 0.45 美元阻力將展開波段反彈。隨後三個月的實際走勢驗證了上半段推演——受惠於 9 月 22 日 21Shares 歐洲 ETP 上市、10 月 6 日 MoonPay 全棧整合公告與 Cash 刷卡額屢創新高，ETHFI 於 9 月至 10 月放量突破 0.45 美元，並於 <strong>2026 年 10 月中旬反彈至 0.68–0.69 美元波段高點</strong>（市值一度回升至約 6.68 億美元，11 月 10 日仍守在 0.63 美元附近），惟未能觸及 0.81 美元目標即遇壓回落。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                進入 2026 年 11 月中旬，隨加密市場整體走弱（市場恐懼與貪婪指數落入極度恐懼 22），ETHFI 近 30 日回撤約 <strong>31%</strong>，於 11 月 19 日至 24 日回落至 <strong>0.46–0.52 美元區間</strong>（較 2024 年 3 月 27 日歷史高點 8.53–8.57 美元仍深跌約 94%，但距離 2026 年 6 月 5 日創下的歷史低點 <strong>0.2665–0.2671 美元</strong>仍保有約 75%–90% 緩衝空間）。交易流動性結構方面，ETHFI 日均成交量約 <strong>2,580 萬至 3,810 萬美元</strong>（週轉率約 5.2%–8.6%），其中 <strong>97.6% 集中於中心化交易所（CEX）</strong>，DEX 僅佔 2.4%，市值位列全球加密資產第 67 名（不含穩定幣，Castle 口徑）至第 77–80 名（CoinMarketCap 口徑）。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                截至 2026 年 11 月下旬，關鍵技術價位全面切換至最新結構：上方短期多空分界阻力位於 <strong>0.5709 美元</strong>（11 月 13 日大跌前收盤價），進階重壓區位於 <strong>0.6532–0.6818 美元</strong>（10 月至 11 月波段高點），而中期估值心理關卡仍為 <strong>1.00 美元</strong>（對應約 10 億美元 FDV，需仰賴新銀行營收延續成長、可鏈上驗證的淨回購與大盤回暖共振方具挑戰基礎）；下方短期防守支撐位於 <strong>0.4409–0.4603 美元</strong>（近 30 日與 11 月盤中低點），若日線有效失守，下一道結構支撐將下移至 <strong>0.3502 美元</strong>（2026 年 8 月 6 日波段低點），極端底部則維持於 <strong>0.267 美元</strong>（2026 年 6 月歷史絕對低點）。
+              </p>
+<h2 class="not-prose indicator-h2 my-12" id="綜合結論與資產配置戰略展望">
+<span class="number-circle">9</span><span class="title-main">綜合結論與資產配置戰略展望</span>
+</h2>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                綜上所述，Ether.fi 在 2026 年下半年展現了極為罕見的戰略決斷力：主動割捨低效的 EigenLayer 再質押敘事，將主力資產 weETH 還原為純粹安全的以太坊 LST 底座，並成功將 OP Mainnet 上的 Ether.fi Cash（月刷 1.42 億美元、佔全球穩定幣卡 10.3%）與 Aave V4 借貸（突破 5,079 萬美元）打造成貢獻逾半協議營收的核心引擎，再透過 MoonPay 全棧整合打通傳統銀行清算軌道。
+              </p>
+<p class="dark:text-slate-200 leading-relaxed text-slate-700 mb-6 text-base">
+                然而，投資人必須對「商業成功」與「代幣價值捕獲」之間的落差保持高度清醒。應移除早期對「sETHFI 16.65% 固定真實年化」與「5,000 萬美元強制護盤」的樂觀假設——在現階段，質押 sETHFI 的核心現實功用為<strong>零鎖倉解鎖 Cash 高階會員權益（Luxe/Pinnacle 免外匯加價與高回饋上限）與治理參與</strong>。在 P/S 約 9.4x–11.1x 的合理估值區間內，未來能否迎來實質估值重估，取決於以下五項 2026 Q4–2027 Q1 可逐月查核的硬指標：
+              </p>
+<div class="p-5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 mb-6">
+<ol class="space-y-3 text-sm md:text-base text-slate-700 dark:text-slate-300 list-decimal pl-5">
+<li><strong>Cash 刷卡規模與單位經濟效益</strong>：月度消費額能否穩步突破 1.5 億–2 億美元，且在扣除刷卡回饋補貼（目前每週約 57.1 萬美元）後維持正向淨利潤率。</li>
+<li><strong>Aave V4 借貸放量與風控品質</strong>：OP Mainnet 借貸餘額站上 5,079 萬美元後能否持續擴大並實際挹注回購資金流，同時維持零重大呆帳。</li>
+<li><strong>回購透明度與淨通縮效應</strong>：基金會回購支出是否隨營收同步放量（打破目前每週停滯於 22.5 萬美元的格局），且鏈上可獨立驗證淨分配予 sETHFI 或永久縮減流通盤，而非僅用於回收發放刷卡回饋。</li>
+<li><strong>2027 年 2 月最終歸屬節點考驗</strong>：追蹤 2027 年 2 月 18 日內部人鏈下合約歸屬期屆滿前後，單一 10.17% 內部人地址與做市商借幣（1,100 萬枚）的鏈上籌碼異動。</li>
+<li><strong>傳統金融法幣通道穩定度</strong>：監控 MoonPay 虛擬銀行帳戶與 Visa 發卡合作在歐美及亞洲銀行與證券監管趨嚴下的持續營運穩定性。</li>
+</ol>
+</div>
+<!-- Part 2: 文章分析 (Article Analysis) -->
+<div class="not-prose mt-16 border-t-2 border-slate-100 dark:border-slate-700 pt-10">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-8 border-b-2 border-blue-600/40 pl-4 font-noto" data-managed="human" id="article-analysis-header">
+                  文章分析
+                </h2>
+<div class="giveaway-summary mb-10">
+<p class="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+<strong class="dsr-label">[Direct Answer]</strong>Ether.fi (ETHFI) 2026/11 深度重估分析：消費金融真實成長 vs. 代幣價值捕獲落差
+                  </p>
+</div>
+<!-- ── 決策推導三部曲 (Triad Intelligence Pipeline) ── -->
+<!-- Step 1: 原文推論邏輯分析 (Inference Logic) -->
+                DeFi 2.0 商業模式、鏈上數據與二級市場估值重估
+                <div class="mt-8 mb-10" data-managed="human">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto flex items-center gap-2.5" id="article-inference-logic">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-mono font-bold border border-slate-200 dark:border-slate-700">01</span>
+<span>文章推論邏輯分析</span>
+</h3>
+<div class="p-6 theme-bg-body dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-700/80 space-y-6">
+<div>
+<h4 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-3" id="defi-2-0-商業模式-鏈上數據與二級市場估值重估">
+                        DeFi 2.0 商業模式、鏈上數據與二級市場估值重估
+                      </h4>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+                        透過純 LST 底層黏著度、OP Mainnet 現金流占比、P/S 定價切換與基金會鏈上回購審計進行實證驗證
+                      </p>
+</div>
+<div class="space-y-6 pl-4 border-l-2 border-blue-500/40 dark:border-blue-400/30">
+<div>
+<h5 class="font-bold text-slate-800 dark:text-slate-200 mb-2 text-sm md:text-base">
+                          關鍵推論鏈條：從再質押敘事撤退到金融科技現金流定價
+                        </h5>
+<ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+<li>
+<strong>事實前提</strong>：ether.fi 全面退出 EigenLayer，eETH/weETH 維持約 230 萬枚 ETH 幣本位黏著度；同時 Cash 月刷卡額突破 1.42 億美元、OP Mainnet 貢獻 53% 營收、Aave V4 借貸突破 5,079 萬美元並整合 MoonPay 全球銀行軌道。
+                          </li>
+<li class="mt-1.5 text-blue-700 dark:text-blue-400 font-medium whitespace-pre-line">
+                            ↳
+                            <strong>邏輯結論</strong>：估值邏輯已從「TVL/FDV 資產倒掛（收斂至 7.66x）」切換為「現金流 P/S 定價（9.4x–11.1x）」，惟代幣價格修復仍受制於回購轉發刷卡回饋與政策裁量折價。
+                          </li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2: 敘事邊界與關鍵變數補充 (Logic Blindspots) -->
+<div class="my-10" data-managed="human">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 font-noto flex items-center gap-2.5" id="logic-blindspots">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 text-xs font-mono font-bold border border-amber-200/80 dark:border-amber-700/60">02</span>
+<span>敘事邊界與關鍵變數補充</span>
+</h3>
+<div class="p-6 theme-bg-body dark:bg-slate-900/30 rounded-xl border border-dashed border-amber-300/80 dark:border-amber-700/60 bg-amber-50/20 dark:bg-amber-950/10 space-y-4">
+<div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 text-sm font-bold uppercase tracking-wider">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>批判性盲點與邊界預警 (Critical Blindspots)</span>
+</div>
+<ul class="space-y-3 text-sm text-slate-700 dark:text-slate-300">
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">關鍵變數 1</span>
+<span><strong>回購轉發刷卡回饋與政策裁量折價</strong>：DefiLlama 錄得持幣者收益連續歸零，部分回購實為採購每週 ~57.1 萬美元的刷卡回饋代幣，且 Ether.Fi SEZC 法律結構並未賦予持幣者硬性分紅求償權。</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">關鍵變數 2</span>
+<span><strong>2027/02 鏈下合約歸屬與籌碼集中風險</strong>：名義流通率雖達 96.5%–97%，但 55.21% 初始內部人分配無智能合約鏈上鎖倉至 2027 年 2 月 18 日，且存在單一 10.17% 內部人錢包。</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="font-bold text-slate-900 dark:text-slate-100 shrink-0">關鍵變數 3</span>
+<span><strong>消費信貸壞帳與傳統金融合規通道</strong>：Aave V4 借貸餘額突破 5,079 萬美元後，信貸呆帳與 MoonPay/Visa 法幣清算合規穩定性將直接左右淨利潤率。</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Step 3: Mason Yang 的觀察 (Actionable Intelligence - 壓軸旗艦洞察) -->
+<div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
+<!-- H3 Title Header -->
+<div class="flex items-center gap-2.5 mb-6">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-mono font-bold border border-blue-200/80 dark:border-blue-700/60">03</span>
+<h3 class="not-prose text-xl font-bold text-slate-900 dark:text-slate-100 m-0 font-noto flex items-center gap-2" data-managed="human" id="mason-yang-observation">
+<svg class="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Mason Yang 的觀察 (Actionable Intelligence)</span>
+</h3>
+</div>
+<!-- 5 大決策維度卡片 (Five-Dimensional Action Framework) -->
+<div class="p-6 md:p-8 theme-bg-body dark:bg-slate-900/50 border-2 border-blue-500/20 dark:border-blue-500/30 rounded-2xl shadow-sm space-y-6">
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        1. 核心命題 (Core Proposition)
+                      </strong>
+<p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-base md:text-lg">
+                        「消費金融真實成長 vs. 代幣價值捕獲落差」— Ether.fi 以 Cash 月刷 1.42 億美元與 OP 53% 營收確立新銀行商業模式，但 ETHFI 須證明淨回購能打破裁量折價。
+                      </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        2. 激勵錨點 (Incentive Anchor)
+                      </strong>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+                        非託管純 LST 底座（230 萬枚 ETH）、MoonPay 虛擬銀行帳戶整合、Aave V4 借貸突破 5,079 萬美元觸發利息回購流，以及 sETHFI 免鎖倉解鎖 Cash 高階會員權益。
+                      </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        3. 引爆/反轉因子 (Trigger Factor)
+                      </strong>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+                        聚焦 2026 Q4–2027 Q1 五項硬指標：Cash 月刷突破 1.5–2 億美元、週回購資金突破 22.5 萬美元停滯、以及 2027 年 2 月 18 日內部人鏈下合約歸屬節點的籌碼考驗。
+                      </p>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        4. 演化劇本 (Evolution Scenarios)
+                      </strong>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+<div class="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+<span class="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-sm">路徑 A (現金流兌現)</span>
+<p class="text-xs text-slate-500 leading-relaxed">
+                            Cash 單位經濟轉正且 Aave V4 利息推升淨回購，帶動幣價站穩 0.571 美元並挑戰 0.682 / 1.00 美元估值修復。
+                          </p>
+</div>
+<div class="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+<span class="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-sm">路徑 B (價值捕獲失效)</span>
+<p class="text-xs text-slate-500 leading-relaxed">
+                            回購持續滯後於刷卡回饋發放，疊加 2027/02 內部人減持或法幣通道合規受阻，失守 0.44 美元後回測 0.35 / 0.267 美元。
+                          </p>
+</div>
+</div>
+</div>
+<div>
+<strong class="text-slate-900 dark:text-slate-100 block mb-2 font-noto flex items-center gap-2">
+<span class="w-1.5 h-4 bg-blue-600 rounded-full"></span>
+                        5. 行動策略 (Action Strategy)
+                      </strong>
+<p class="text-slate-800 dark:text-slate-200 leading-relaxed font-bold text-sm md:text-base">
+                        採「務實中間定價法」：以產品體驗與 sETHFI 卡級權益為主、二級市場現貨配置須嚴守 0.44–0.46 美元結構防守區，並將基金會鏈上錢包淨回購列為加碼唯一前置條件。
+                      </p>
+</div>
+</div>
+</div>
+</div>
+<!-- References & Disclaimer -->
+<div class="not-prose mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500 space-y-1.5">
+<h2 class="font-bold text-slate-700 dark:text-slate-300 mb-1 text-xs m-0 p-0 border-none" id="參考資料">
+                  參考資料 (References)
+                </h2>
+<ol class="list-decimal pl-4 space-y-1 mb-4" data-managed="auto" id="content-references">
+<li>
+                    ether.fi TVL, Fees, Revenue &amp; Volume - DefiLlama,
+                    <a class="hover:text-blue-500 underline" href="https://defillama.com/protocol/ether.fi" rel="noopener noreferrer" target="_blank">https://defillama.com/protocol/ether.fi</a>
+</li>
+<li>
+                    ether.fi Stake TVL, Revenue &amp; Fees - DefiLlama,
+                    <a class="hover:text-blue-500 underline" href="https://defillama.com/protocol/ether.fi-stake" rel="noopener noreferrer" target="_blank">https://defillama.com/protocol/ether.fi-stake</a>
+</li>
+<li>
+                    ether.fi Liquid TVL, Revenue &amp; Fees - DefiLlama,
+                    <a class="hover:text-blue-500 underline" href="https://defillama.com/protocol/ether.fi-liquid" rel="noopener noreferrer" target="_blank">https://defillama.com/protocol/ether.fi-liquid</a>
+</li>
+<li>
+                    EtherFi Borrowing Market TVL, Revenue &amp; Fees - DefiLlama,
+                    <a class="hover:text-blue-500 underline" href="https://defillama.com/protocol/etherfi-borrowing-market" rel="noopener noreferrer" target="_blank">https://defillama.com/protocol/etherfi-borrowing-market</a>
+</li>
+<li>
+                    ETHFI (ether.fi) 是什麼？從 liquid restaking 轉型 crypto neobank 的完整解析 - MaiCoin Blog,
+                    <a class="hover:text-blue-500 underline" href="https://blog.maicoin.com/2026/11/13/what-is-ethfi-ether-fi/" rel="noopener noreferrer" target="_blank">https://blog.maicoin.com/2026/11/13/what-is-ethfi-ether-fi/</a>
+</li>
+<li>
+                    Ether.fi 退出 EigenLayer：再質押收益枯竭與轉型新銀行 - 鏈新聞 ABMedia,
+                    <a class="hover:text-blue-500 underline" href="https://abmedia.io/etherfi-exits-eigenlayer-restaking-neobank" rel="noopener noreferrer" target="_blank">https://abmedia.io/etherfi-exits-eigenlayer-restaking-neobank</a>
+</li>
+<li>
+                    ether.fi's EigenLayer Exit: 2.25M ETH Pulled in 11 Weeks - Bitquery,
+                    <a class="hover:text-blue-500 underline" href="https://bitquery.io/investigations/etherfi-eigenlayer-exit" rel="noopener noreferrer" target="_blank">https://bitquery.io/investigations/etherfi-eigenlayer-exit</a>
+</li>
+<li>
+                    Ether.fi Deploys MoonPay's Full Infrastructure Stack - PR Newswire,
+                    <a class="hover:text-blue-500 underline" href="https://www.prnewswire.com/news-releases/etherfi-deploys-moonpays-full-infrastructure-stack-to-bring-money-in-around-and-out-of-a-self-custodial-neobank-302900288.html" rel="noopener noreferrer" target="_blank">https://www.prnewswire.com/news-releases/etherfi-deploys-moonpays-full-infrastructure-stack-to-bring-money-in-around-and-out-of-a-self-custodial-neobank-302900288.html</a>
+</li>
+<li>
+                    ether.fi (ETHFI) Market Cap, Revenue and Holder Yield - Castle Labs,
+                    <a class="hover:text-blue-500 underline" href="https://castlelabs.io/research/top-100-crypto/ether-fi-ethfi" rel="noopener noreferrer" target="_blank">https://castlelabs.io/research/top-100-crypto/ether-fi-ethfi</a>
+</li>
+<li>
+                    Ether.fi Cash Onchain Card Metrics - Paymentscan,
+                    <a class="hover:text-blue-500 underline" href="https://paymentscan.xyz/cards/etherfi" rel="noopener noreferrer" target="_blank">https://paymentscan.xyz/cards/etherfi</a>
+</li>
+<li>
+                    The ETHFI Buyback Catch - Blockworks 0xResearch Newsletter,
+                    <a class="hover:text-blue-500 underline" href="https://blockworks.com/newsletter/0xresearch/issue/post_ced34f21-9277-43fc-8c3a-e05d0b219d3a" rel="noopener noreferrer" target="_blank">https://blockworks.com/newsletter/0xresearch/issue/post_ced34f21-9277-43fc-8c3a-e05d0b219d3a</a>
+</li>
+<li>
+                    ether.fi Liquid Exploit Forensics (Legacy AtomicQueue) - BlackHart,
+                    <a class="hover:text-blue-500 underline" href="https://blackhart.io/hacks/etherfi-liquid-atomicqueue-arbitrary-solver-drain" rel="noopener noreferrer" target="_blank">https://blackhart.io/hacks/etherfi-liquid-atomicqueue-arbitrary-solver-drain</a>
+</li>
+<li>
+                    慢霧：ether.fi 提款合約遭駭 15.45 ETH，受害者全是智慧錢包 - 動區 BlockTempo,
+                    <a class="hover:text-blue-500 underline" href="https://www.blocktempo.com/etherfi-atomicqueue-exploit-drains-smart-wallets-eip7702-approvals-tornado-cash/" rel="noopener noreferrer" target="_blank">https://www.blocktempo.com/etherfi-atomicqueue-exploit-drains-smart-wallets-eip7702-approvals-tornado-cash/</a>
+</li>
+<li>
+                    Sep 11: Incident - legacy AtomicQueue exploit (Veda) - ether.fi Docs,
+                    <a class="hover:text-blue-500 underline" href="https://etherfi.gitbook.io/etherfi/security/security-and-risks/incident-management/sep-11-incident-legacy-atomicqueue-exploit" rel="noopener noreferrer" target="_blank">https://etherfi.gitbook.io/etherfi/security/security-and-risks/incident-management/sep-11-incident-legacy-atomicqueue-exploit</a>
+</li>
+<li>
+                    21Shares Expands Product Suite with Launches of ether.fi ETP - GlobeNewswire,
+                    <a class="hover:text-blue-500 underline" href="https://www.globenewswire.com/news-release/2026/09/22/3365982/0/en/21shares-expands-product-suite-with-launches-of-ether-fi-etp-ethfi-and-zcash-etp-zcash.html" rel="noopener noreferrer" target="_blank">https://www.globenewswire.com/news-release/2026/09/22/3365982/0/en/21shares-expands-product-suite-with-launches-of-ether-fi-etp-ethfi-and-zcash-etp-zcash.html</a>
+</li>
+<li>
+                    ETHGas Institutional Blockspace Reservations Exceed $800M - Crypto Briefing,
+                    <a class="hover:text-blue-500 underline" href="https://cryptobriefing.com/ethgas-institutions-reserve-ethereum-blockspace/" rel="noopener noreferrer" target="_blank">https://cryptobriefing.com/ethgas-institutions-reserve-ethereum-blockspace/</a>
+</li>
+<li>
+                    Ether.fi (ETHFI) Tokenomics: Supply, Staking, and Utility - Findas,
+                    <a class="hover:text-blue-500 underline" href="https://www.findas.org/tokenomics-review/the-tokenomics-of-ether-fi-ethfi" rel="noopener noreferrer" target="_blank">https://www.findas.org/tokenomics-review/the-tokenomics-of-ether-fi-ethfi</a>
+</li>
+<li>
+                    ETHFI Buyback Program | Governance - ether.fi GitBook,
+                    <a class="hover:text-blue-500 underline" href="https://etherfi.gitbook.io/gov/ethfi-buyback-program" rel="noopener noreferrer" target="_blank">https://etherfi.gitbook.io/gov/ethfi-buyback-program</a>
+</li>
+<li>
+                    再質押泡沫破滅！ether.fi 退出 EigenLayer 轉戰加密新銀行 - 動區 BlockTempo,
+                    <a class="hover:text-blue-500 underline" href="https://www.blocktempo.com/restaking-gold-rush-over-ether-fi-exits-eigenlayer-neobank-pivot/" rel="noopener noreferrer" target="_blank">https://www.blocktempo.com/restaking-gold-rush-over-ether-fi-exits-eigenlayer-neobank-pivot/</a>
+</li>
+<li>
+                    Liquid Restaking Protocols - TVL, Fees, &amp; Revenue - DefiLlama,
+                    <a class="hover:text-blue-500 underline" href="https://defillama.com/protocols/liquid-restaking" rel="noopener noreferrer" target="_blank">https://defillama.com/protocols/liquid-restaking</a>
+</li>
+<li>
+                    Save, Grow, Spend. Do more with your crypto | ether.fi,
+                    <a class="hover:text-blue-500 underline" href="https://www.ether.fi/" rel="noopener noreferrer" target="_blank">https://www.ether.fi/</a>
+</li>
+</ol>
+<p class="font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  免責聲明 (Disclaimer)
+                </p>
+<p>本頁面資訊僅供教育與參考用途，不構成任何財務建議。</p>
+</div>
+<!-- ========================================================================== -->
+<!--  CRITICAL BOUNDARY: END OF ARTICLE CONTENT  -->
+<!-- 任何內文修改絕不可越過或刪除以下閉合標籤，否則將導致右側邊欄佈局崩塌 -->
+<!-- ========================================================================== -->
+</div>
+<!-- /END main-content-area -->
+</article>
+<!-- Related Articles (Mobile bottom) -->
+<div class="mt-8 lg:hidden" data-managed="append-only" id="related-articles-container"></div>
+</div>
+<!-- /END Center Column -->
+<!-- ─────────────────────────────────────────
+                 RIGHT SIDEBAR: Article Info Panel
+            ───────────────────────────────────────── -->
+<aside class="hidden lg:block w-56 xl:w-60 shrink-0">
+<div class="sticky top-24 space-y-6 sidebar-scroll">
+<!-- A. Article Info Card -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  文章資訊
+                </p>
+</div>
+<dl class="divide-y divide-slate-100 dark:divide-slate-700">
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">
+                    發布日期
+                  </dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">
+                    2026-08-18
+                  </dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">
+                    分類
+                  </dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">
+                    加密貨幣與 Web3 投資
+                  </dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">本文字數</dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">約 10,900 字</dd>
+</div>
+<div class="flex justify-between items-center px-4 py-2.5">
+<dt class="text-xs text-slate-500 dark:text-slate-400">
+                    閱讀時間
+                  </dt>
+<dd class="text-xs font-medium text-slate-800 dark:text-slate-200">
+                    約 15 分鐘
+                  </dd>
+</div>
+</dl>
+</div>
+<!-- B. Key Findings Card -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  核心結論
+                </p>
+</div>
+<ul class="divide-y divide-slate-50 dark:divide-slate-700/50">
+<li class="px-4 py-3 flex items-start gap-2">
+<span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></span>
+<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    核心結論
+                  </p>
+</li>
+</ul>
+</div>
+<!-- C. Keywords -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden"><div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">關鍵字</p>
+</div><div class="px-4 py-3 flex flex-wrap gap-1.5"><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">Ether.fi</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">ETHFI</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">eETH</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">流動性再質押</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">LRT</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">EigenLayer</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">Lido</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">Visa信用卡</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">OP Mainnet</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">ETHGas</span></div></div>
+<!-- D. Related Articles (Desktop sidebar) -->
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  延伸閱讀
+                </p>
+</div>
+<div data-managed="append-only" id="related-articles-sidebar"></div>
+</div>
+</div>
+</aside>
+<!-- /END Right Sidebar -->
+</div>
+</main>
+<!-- Footer Host -->
+<div id="footer-host"></div>
+<!-- Back to Top Button (fixed, bottom-right) -->
+<button aria-label="回到頂部" class="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 translate-y-20 opacity-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="back-to-top">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</button>
+<!-- Scripts -->
+<script src="../assets/js/core/core-taxonomy.js"></script>
+<script src="../assets/js/data/core-articles-data.js"></script>
+<script src="../assets/js/data/core-articles-repository.js"></script>
+<script src="../assets/js/core/core-header.js"></script>
+<!-- Footer Component (自動感知並載入 ResponsiveTocComponent) -->
+<script src="../assets/js/core/core-footer.js"></script>
+<!-- Responsive TOC Component (若 Footer 未自動注入，此處顯式載入作為備援) -->
+<script src="../assets/js/ui/ui-toc-responsive.js"></script>
+<script src="../assets/js/ui/ui-toc-desktop.js"></script>
+<script src="../assets/js/widgets/algo-article-recommender.js"></script>
+<script src="../assets/js/widgets/widget-related-articles-styles.js"></script>
+<script src="../assets/js/widgets/widget-related-articles.js"></script>
+<script src="../assets/js/ui/ui-section-wrapper.js"></script>
+<script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // ── 1. Layout Shell ───────────────────────────────────
+        const header = new HeaderComponent();
+        header.setHomeUrl("../index.html");
+        header.init();
+        new FooterComponent().init();
+
+        // ── 2. Desktop TOC (Left Sidebar) ─────────────────────
+        if (typeof ArticleTOC !== "undefined") {
+          new ArticleTOC().init();
+        }
+
+        // ── 3. Mobile TOC ──────────────────────────────────────
+        if (window.ResponsiveTocComponent) {
+          new ResponsiveTocComponent().init();
+        }
+
+        // ── Related Articles (Common) ──────────────────────────
+        if (window.RelatedArticlesComponent) {
+          // Related Articles - Bottom
+          new RelatedArticlesComponent()
+            .setContainerId("related-articles-container")
+            .setLimit(3)
+            .init();
+
+          // Related Articles - Sidebar
+          new RelatedArticlesComponent()
+            .setContainerId("related-articles-sidebar")
+            .setLayout("list")
+            .setShowHeader(false)
+            .setLimit(5)
+            .init();
+        }
+
+        // ── 4. Scroll Events ───────────────────────────────────
+        const progressBar = document.getElementById("scroll-progress-bar");
+        const bttBtn = document.getElementById("back-to-top");
+        const bttSidebarBtn = document.getElementById("back-to-top-sidebar");
+
+        window.addEventListener(
+          "scroll",
+          () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height =
+              document.documentElement.scrollHeight -
+              document.documentElement.clientHeight;
+
+            // Progress bar
+            if (progressBar) {
+              progressBar.style.width =
+                (height > 0 ? (winScroll / height) * 100 : 0) + "%";
+            }
+
+            // Back to top (show after 500px)
+            const isScrolled = winScroll > 500;
+            if (bttBtn) {
+              bttBtn.classList.toggle("translate-y-20", !isScrolled);
+              bttBtn.classList.toggle("opacity-0", !isScrolled);
+              bttBtn.classList.toggle("translate-y-0", isScrolled);
+              bttBtn.classList.toggle("opacity-100", isScrolled);
+            }
+            if (bttSidebarBtn) {
+              bttSidebarBtn.classList.toggle("hidden", !isScrolled);
+            }
+          },
+          { passive: true },
+        );
+
+        [bttBtn, bttSidebarBtn].forEach((btn) => {
+          if (btn)
+            btn.addEventListener("click", () =>
+              window.scrollTo({ top: 0, behavior: "smooth" }),
+            );
+        });
+      });
+    </script>
+<script src="../assets/js/data/app-knowledge-data.js"></script>
+    <script src="../assets/js/widgets/widget-knowledge-tooltip.js"></script>
+</body>
+</html>

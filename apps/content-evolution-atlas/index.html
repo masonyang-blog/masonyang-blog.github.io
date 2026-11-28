@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/brand/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/brand/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <!-- 內部治理工具隔離：不進索引、不加 JSON-LD、不進 sitemap -->
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- @validation-skip-sidebar -->
+  <title>Content Evolution Atlas — 全站點線面與文章關聯視覺化儀表板</title>
+  <meta name="description" content="Mason Yang Blog 內部內容治理儀表板：整合四級演化指標、點線面拓撲與全站真實超連結網絡，協助追蹤 Callout 回灌、時間軸保鮮與孤兒節點。" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" crossorigin href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Theme Core (Must be first to prevent FOUC) -->
+  <script src="../../assets/js/core/core-theme.js"></script>
+
+  <!-- Tailwind CSS -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              850: '#15202e',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../../assets/css/custom-tokens.css" />
+  <link rel="stylesheet" href="../../assets/css/custom-typography.css" />
+  <link rel="stylesheet" href="../../assets/css/custom-layout.css" />
+  <link rel="stylesheet" href="../../assets/css/custom-components.css" />
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300" data-article-id="content-evolution-atlas">
+  <!-- Header Host -->
+  <div id="header-host"></div>
+
+  <main class="flex-grow py-6 px-3 sm:px-6 lg:px-8 max-w-[1680px] w-full mx-auto">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="flex text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-4">
+      <ol class="flex items-center space-x-1.5 flex-wrap">
+        <li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../../index.html">首頁</a></li>
+        <li>
+          <svg class="w-3.5 h-3.5 text-slate-300 dark:text-slate-600" fill="currentColor" viewBox="0 0 20 20">
+            <path clip-rule="evenodd" fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"></path>
+          </svg>
+        </li>
+        <li class="font-medium text-slate-900 dark:text-slate-100">Content Evolution Atlas</li>
+      </ol>
+    </nav>
+
+    <!-- Header Banner & View Switcher -->
+    <section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 sm:p-6 mb-6">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">
+              INTERNAL GOVERNANCE · NOINDEX
+            </span>
+            <span id="atlas-meta-generated" class="text-xs text-slate-500 dark:text-slate-400 font-mono">
+              資料載入中...
+            </span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white font-noto">
+            Content Evolution <span class="text-blue-600 dark:text-blue-400">Atlas</span>
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1.5 max-w-3xl">
+            全站「點／線／面」拓撲與四級演化治理儀表板 — 快速診斷下一步該補哪條線、哪個點缺權重、哪篇長青文該保鮮。
+          </p>
+        </div>
+
+        <!-- View Tabs + Search -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-shrink-0">
+          <div class="relative flex-grow sm:w-56">
+            <input
+              id="atlas-search-input"
+              type="search"
+              placeholder="搜尋標題、路徑或標籤..."
+              aria-label="搜尋圖譜節點"
+              class="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
+            />
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="M21 21l-4.35-4.35"></path>
+            </svg>
+          </div>
+          <div class="inline-flex rounded-xl bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700" role="tablist" aria-label="視圖切換">
+            <button
+              id="tab-btn-dashboard"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-view="dashboard"
+              class="flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-300 shadow-sm"
+            >
+              視圖 A｜演化總覽
+            </button>
+            <button
+              id="tab-btn-graph"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-view="graph"
+              class="flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+            >
+              視圖 C｜關聯網絡
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Error / Empty Fallback Banner -->
+    <div id="atlas-error-banner" class="hidden mb-6 p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 text-sm"></div>
+
+    <!-- ===================================================================== -->
+    <!-- 視圖 A：演化健康度 Dashboard -->
+    <!-- ===================================================================== -->
+    <section id="atlas-view-dashboard" class="space-y-6">
+      <!-- 四級演化漏斗 KPI -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">四級演化漏斗與連結健康度</h2>
+          <span id="atlas-edge-summary" class="text-xs text-slate-500 dark:text-slate-400 font-mono"></span>
+        </div>
+        <div id="atlas-kpi-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
+      </div>
+
+      <!-- Top 5 優先行動佇列 -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 sm:p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Top 5 優先行動佇列</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">點擊任一行動項目，自動切換至視圖 C 定位節點並開啟 Inspector 修補建議。</p>
+          </div>
+          <span class="text-xs font-mono text-slate-400 dark:text-slate-500">來源：evolution.action_queue</span>
+        </div>
+        <div id="atlas-action-queue" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3"></div>
+      </div>
+
+      <!-- 全站 6 大主題指標新鮮度面板（僅內部 Atlas 顯示，嚴禁前台渲染） -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 sm:p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">全站 6 大主題指標新鮮度 (Metrics Freshness)</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">比對中央帳本更新日與 Hub 最新引用研報日期；點擊任一主題或落後長青文可直接定位至圖譜節點。</p>
+          </div>
+          <div id="atlas-metrics-freshness-summary" class="flex flex-wrap items-center gap-1.5 text-[11px]"></div>
+        </div>
+        <div id="atlas-metrics-freshness-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3"></div>
+        <div id="atlas-metrics-evergreen-gaps" class="mt-4 pt-4 border-t border-slate-200/80 dark:border-slate-800"></div>
+      </div>
+
+      <!-- Topic 狀態矩陣 & Tag 賽道熱圖 -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <!-- Topic 狀態矩陣 -->
+        <div class="xl:col-span-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 sm:p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">核心主題演化矩陣 (Topics)</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">點擊主題列即可進入該主題圖譜</p>
+            </div>
+          </div>
+          <div id="atlas-topic-matrix" class="space-y-2.5"></div>
+        </div>
+
+        <!-- Tag 細分賽道熱圖 -->
+        <div class="xl:col-span-7 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 sm:p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">細分賽道狀態熱圖 (Tags)</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">點擊標籤卡片以關鍵字過濾圖譜節點</p>
+            </div>
+            <div class="flex flex-wrap gap-1.5 text-[11px]">
+              <span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">POST_ACTIVE</span>
+              <span class="px-2 py-0.5 rounded-md bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300">TOPIC_READY</span>
+              <span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">READY_FOR_POST</span>
+              <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">ACCUMULATING</span>
+            </div>
+          </div>
+          <div id="atlas-tag-heatmap" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[540px] overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 視圖 C：點線面關聯網絡 + Inspector Drawer -->
+    <!-- ===================================================================== -->
+    <section id="atlas-view-graph" class="hidden space-y-4">
+      <!-- Filter Bar -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 space-y-3">
+        <!-- Row 1: Mode, Topic, Anomaly Filter, Reset -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Topology / Tree -->
+          <div class="inline-flex rounded-xl bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700">
+            <button id="graph-mode-topology" type="button" data-mode="topology" class="px-3 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-300 shadow-sm">
+              Topology
+            </button>
+            <button id="graph-mode-tree" type="button" data-mode="tree" class="px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300">
+              Tree
+            </button>
+          </div>
+
+          <!-- Topic Select -->
+          <select id="filter-topic-select" aria-label="篩選主題" class="px-3 py-1.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+            <option value="all">全部主題 (All Topics)</option>
+          </select>
+
+          <!-- Anomaly Filter Select -->
+          <select id="filter-anomaly-select" aria-label="異常診斷篩選" class="px-3 py-1.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+            <option value="all">全部節點</option>
+            <option value="orphan">僅孤兒節點 (In=0)</option>
+            <option value="no_callout">缺 Callout (News)</option>
+            <option value="no_timeline">缺時間軸 / 待保鮮 (Post)</option>
+          </select>
+
+          <!-- Edge Toggles -->
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs cursor-pointer select-none">
+            <input id="toggle-entity-link" type="checkbox" class="rounded text-amber-500 focus:ring-amber-500" />
+            <span class="text-slate-700 dark:text-slate-200">顯示 entity_link</span>
+          </label>
+
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs cursor-pointer select-none">
+            <input id="toggle-gap-suggest" type="checkbox" class="rounded text-rose-500 focus:ring-rose-500" />
+            <span class="text-slate-700 dark:text-slate-200">顯示 gap_suggest (虛線)</span>
+          </label>
+
+          <div class="ml-auto flex items-center gap-2">
+            <button id="btn-copy-structure" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700 transition-colors" title="複製 AI 結構快照至剪貼簿">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <span id="copy-structure-label">AI 快照 (0)</span>
+            </button>
+            <button id="btn-reset-filters" type="button" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors">
+              重置篩選
+            </button>
+          </div>
+        </div>
+
+        <!-- Row 2: Layer Checkboxes + Live Stats -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div id="layer-filter-group" class="flex flex-wrap items-center gap-1.5"></div>
+          <div id="graph-live-stats" class="text-xs font-mono text-slate-500 dark:text-slate-400"></div>
+        </div>
+      </div>
+
+      <!-- Graph Canvas + Inspector Drawer -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+        <!-- Graph Container -->
+        <div class="lg:col-span-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+          <div class="h-[460px] sm:h-[560px] lg:h-[660px] w-full relative">
+            <mason-knowledge-graph id="atlas-graph-engine" class="block w-full h-full"></mason-knowledge-graph>
+          </div>
+          <!-- Legend Footer -->
+          <div class="px-4 py-2.5 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-slate-600 dark:text-slate-400">
+            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>面 Topic Hub</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>線 Post</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>線 News</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span>線 AI-Workflow</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>點 Knowledge</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>點 Project</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>脈衝 Pulse</span>
+            <span class="inline-flex items-center gap-1.5 ml-auto"><span class="w-4 border-t-2 border-dashed border-rose-500"></span>gap_suggest 修補建議</span>
+          </div>
+        </div>
+
+        <!-- Inspector Drawer -->
+        <aside id="atlas-inspector" class="lg:col-span-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 sm:p-5 lg:max-h-[708px] lg:overflow-y-auto">
+          <div id="inspector-empty" class="py-12 text-center space-y-2">
+            <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 mx-auto flex items-center justify-center text-slate-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 8v4m0 4h.01"></path>
+              </svg>
+            </div>
+            <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">點擊左側任一節點開啟 Inspector</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
+              選中節點後將自動展開 1-Hop 關聯鄰居，檢視 In/Out-Links、演化缺口與一鍵複製 Markdown 修補清單。
+            </p>
+          </div>
+          <div id="inspector-content" class="hidden space-y-4"></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Feedback -->
+  <div id="atlas-toast" class="fixed bottom-5 right-5 z-50 hidden px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-semibold shadow-lg"></div>
+
+  <!-- Footer Host -->
+  <div id="footer-host"></div>
+
+  <!-- Core Components & SSOT Data Layers (Relative Paths) -->
+  <script src="../../assets/js/core/core-header.js"></script>
+  <script src="../../assets/js/core/core-footer.js"></script>
+  <script src="../../assets/js/core/core-taxonomy.js"></script>
+  <script src="../../assets/js/data/core-articles-data.js"></script>
+  <script src="../../assets/js/data/core-articles-repository.js"></script>
+  <script src="../../assets/js/data/app-knowledge-data.js"></script>
+  <script src="../../assets/js/data/pulse-data.js"></script>
+  <script src="../../assets/data/content-evolution-atlas.js"></script>
+  <script src="../../assets/js/apps/app-knowledge-graph.js"></script>
+  <script src="../../assets/js/apps/app-evolution-atlas.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof HeaderComponent === 'function') {
+        new HeaderComponent().init();
+      }
+      if (typeof FooterComponent === 'function') {
+        new FooterComponent().init();
+      }
+      if (typeof EvolutionAtlasApp === 'function') {
+        new EvolutionAtlasApp().init();
+      }
+    });
+  </script>
+</body>
+</html>

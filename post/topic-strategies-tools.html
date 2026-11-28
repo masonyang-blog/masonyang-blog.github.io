@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            gtag('config', 'G-4RKTYWVLXN');
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/brand/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/brand/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <title>投研策略與實戰工具：系統化交易模型、DCF 估值與互動工作站中樞</title>
+    <meta name="description" content="聚合 151+ 系統化交易策略、DCF 與 EV/MW 估值工作站、期權微結構 GEX 監控與零建置互動投研終端，建立可驗證、可複用的機構級決策框架。">
+    <meta name="keywords" content="投研策略, 交易策略百科, DCF 估值, AlphaVal Workstation, 期權波動率, GEX, 礦企對標表, 專題總覽">
+    <link rel="canonical" href="https://masonyang-blog.github.io/post/topic-strategies-tools.html">
+
+    <meta name="category" content="playbook-engineering">
+    <meta name="topic" content="topic-strategies-tools">
+    <meta name="tags" content="trading-strategies, dcf, options, workstation, quantitative">
+    <meta name="update-note" content="Layer 1C 投研策略與實戰工具戰略專題中樞上線。">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="投研策略與實戰工具：系統化交易模型、DCF 估值與互動工作站中樞">
+    <meta property="og:description" content="系統化交易策略百科、投研 SOP 與 Zero-Build 估值工作站總覽。">
+    <meta property="og:url" content="https://masonyang-blog.github.io/post/topic-strategies-tools.html">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": "https://masonyang-blog.github.io/post/topic-strategies-tools.html#webpage",
+          "url": "https://masonyang-blog.github.io/post/topic-strategies-tools.html",
+          "name": "投研策略與實戰工具：系統化交易模型、DCF 估值與互動工作站中樞",
+          "description": "系統化交易策略百科、投研 SOP 與 Zero-Build 估值工作站總覽。",
+          "inLanguage": "zh-Hant",
+          "datePublished": "2026-11-28",
+          "dateModified": "2026-11-28",
+          "author": { "@id": "https://masonyang-blog.github.io/#author" },
+          "publisher": { "@id": "https://masonyang-blog.github.io/#author" },
+          "about": [
+            { "@type": "Thing", "name": "系統化交易策略" },
+            { "@type": "Thing", "name": "DCF 與 EV/MW 估值工具" }
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://masonyang-blog.github.io/#author",
+          "name": "Mason Yang",
+          "url": "https://masonyang-blog.github.io/about.html"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://masonyang-blog.github.io/post/topic-strategies-tools.html#breadcrumb",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://masonyang-blog.github.io/index.html" },
+            { "@type": "ListItem", "position": 2, "name": "投研策略與實戰工具", "item": "https://masonyang-blog.github.io/post/topic-strategies-tools.html" }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://masonyang-blog.github.io/post/topic-strategies-tools.html#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "如何結合長青策略百科與互動工作站進行跨資產估值？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "先透過 151+ 策略百科與 DCF / 期權微結構指南確立市場體制（例如負 Gamma 波動放大或高無風險利率區間），再進入 AlphaVal Workstation 與十一大 AI 礦企對標表進行即時 EV/MW 與現金流敏感度試算。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "為何 AI 資料中心與礦企估值基準必須追蹤 EV/MW？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "傳統本益比受 GPU 加速折舊干擾嚴重；以 EV/MW（企業價值除以已確保電力容量）對標北維吉尼亞 ~$2,700 萬/MW 的已出租併購基準，能更精準衡量電力護城河的重置價值。"
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <script src="../assets/js/core/core-theme.js"></script>
+    <script src="../assets/js/data/core-articles-data.js"></script>
+    <script src="../assets/js/data/core-articles-repository.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { slate: { 850: '#15202e' } },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                        noto: ['Noto Sans TC', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Roboto Mono', 'monospace']
+                    }
+                }
+            }
+        };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="../assets/css/custom-tokens.css">
+    <link rel="stylesheet" href="../assets/css/custom-typography.css">
+    <link rel="stylesheet" href="../assets/css/custom-layout.css">
+    <link rel="stylesheet" href="../assets/css/custom-components.css">
+    <link rel="stylesheet" href="../assets/css/custom-article.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        html { scroll-behavior: smooth; }
+        h2[id], h3[id], section[id] { scroll-margin-top: 6rem; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] .chevron-icon { transform: rotate(180deg); }
+        .grid-bg {
+            background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .dark .grid-bg {
+            background-image: radial-gradient(rgba(129, 140, 248, 0.10) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased selection:bg-indigo-500/20 selection:text-indigo-700 dark:selection:text-indigo-300" data-article-id="topic-strategies-tools">
+
+    <div id="header-host"></div>
+
+    <main>
+        <section class="relative border-b border-slate-200 dark:border-slate-800/90 grid-bg overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12 lg:pt-14 lg:pb-16">
+                <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-5 font-mono">
+                    <a href="../index.html" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">HOME</a>
+                    <span>/</span>
+                    <span class="text-indigo-700 dark:text-indigo-400 font-semibold">TOPIC-STRATEGIES-TOOLS · 投研策略與實戰工具</span>
+                </nav>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <div class="lg:col-span-8">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20 mb-4">
+                            <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+                            LAYER 1C 戰略專題中樞 · 策略方法論與互動終端總覽
+                        </div>
+
+                        <h1 class="text-3xl sm:text-4xl lg:text-[2.65rem] font-black tracking-tight text-slate-900 dark:text-white leading-[1.18] font-noto mb-5">
+                            投研策略與實戰工具：<br class="hidden sm:inline">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400">
+                                系統化交易模型、DCF 估值與零建置工作站
+                            </span>
+                        </h1>
+
+                        <div class="above-fold-summary p-4 sm:p-5 rounded-xl bg-white/90 dark:bg-slate-900/80 border-l-4 border-indigo-500 shadow-sm border border-slate-200/80 dark:border-slate-800 mb-7">
+                            <p class="text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed font-noto">
+                                <strong class="font-mono text-xs uppercase tracking-wider text-indigo-700 dark:text-indigo-400 mr-2">[Direct Answer]</strong>
+                                本中樞整合全站 151+ 交易策略百科、DCF 與 EV/MW 估值框架、期權 GEX 微結構監控及 4 大純原生互動工作台，將宏觀與產業研究轉化為可量化、可回測的機構級決策工作流。
+                            </p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-3">
+                            <a href="./tools-ai-valuation-workstation.html"
+                               class="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:text-slate-950 shadow-sm shadow-indigo-500/20 transition">
+                                <span>開啟 AlphaVal 估值工作站</span>
+                                <span class="font-mono text-xs">↗</span>
+                            </a>
+                            <a href="./trading-strategies-list-151.html"
+                               class="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-400 transition">
+                                <span>瀏覽 151 交易策略總表</span>
+                                <span class="font-mono text-xs">↗</span>
+                            </a>
+                            <a href="#section-master-matrix"
+                               class="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                                瀏覽策略矩陣 ↓
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-4">
+                        <div class="rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+                            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-slate-800">
+                                <span class="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">HUB TELEMETRY</span>
+                                <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">SSOT SYNCED</span>
+                            </div>
+                            <dl class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <dt class="text-xs text-slate-500 dark:text-slate-400">聚合策略文檔</dt>
+                                    <dd id="telemetry-article-count" class="font-mono text-2xl font-bold text-slate-900 dark:text-white mt-0.5">--</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-xs text-slate-500 dark:text-slate-400">系統化模型</dt>
+                                    <dd class="font-mono text-2xl font-bold text-indigo-600 dark:text-indigo-400 mt-0.5">151+</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-xs text-slate-500 dark:text-slate-400">核心工具終端</dt>
+                                    <dd class="font-mono text-lg font-bold text-slate-900 dark:text-white mt-0.5">4 Apps</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-xs text-slate-500 dark:text-slate-400">最近實證校準</dt>
+                                    <dd id="telemetry-generated-at" class="font-mono text-sm font-semibold text-slate-700 dark:text-slate-300 mt-1.5">--</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-9">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                            KEY BOUNDARIES · 關鍵臨界點監控
+                        </h2>
+                        <span class="text-[11px] font-mono text-slate-400 hidden sm:inline">RED: TRIGGERED · AMBER: WARNING · EMERALD: NORMAL</span>
+                    </div>
+                    <div id="topic-kpi-strip" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                        <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 animate-pulse h-24"></div>
+                        <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 animate-pulse h-24"></div>
+                        <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 animate-pulse h-24"></div>
+                        <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 animate-pulse h-24"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 lg:py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <span class="text-xs font-mono font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">ZONE 02 · CORE PLAYBOOK PILLARS</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white font-noto mt-1">
+                        核心策略與估值長青指南
+                    </h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                <a href="./trading-strategies-list-151.html" class="group p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/70 shadow-sm transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">INDEX · 151</span>
+                            <span class="text-xs text-slate-400 group-hover:text-indigo-500 transition">↗</span>
+                        </div>
+                        <h3 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">151 交易策略總表</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">跨資產策略分類索引，覆蓋技術面、基本面、固收與套利模型。</p>
+                    </div>
+                </a>
+                <a href="./tools-ai-valuation-workstation.html" class="group p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/70 shadow-sm transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">WORKSTATION</span>
+                            <span class="text-xs text-slate-400 group-hover:text-indigo-500 transition">↗</span>
+                        </div>
+                        <h3 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">AlphaVal 估值工作站</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">EV/MW 算力估值與 IREN $42.79 實盤基準互動試算。</p>
+                    </div>
+                </a>
+                <a href="./trading-strategies-dcf-valuation-model.html" class="group p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/70 shadow-sm transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">DCF MODEL</span>
+                            <span class="text-xs text-slate-400 group-hover:text-indigo-500 transition">↗</span>
+                        </div>
+                        <h3 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">DCF 現金流折現指南</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">高無風險利率下的 WACC 敏感度與成長股定價邊界。</p>
+                    </div>
+                </a>
+                <a href="./trading-strategies-options-volatility-strategies.html" class="group p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/70 shadow-sm transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">OPTIONS · GEX</span>
+                            <span class="text-xs text-slate-400 group-hover:text-indigo-500 transition">↗</span>
+                        </div>
+                        <h3 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">期權與波動率策略</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">Gamma Flip、Vanna/Charm 對沖流與極端尾部保護。</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="py-12 lg:py-14 border-y border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-6">
+                    <span class="text-xs font-mono font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">ZONE 03 · LAYER 3 INTERACTIVE CONVERSION DECK</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white font-noto mt-1">
+                        專屬互動終端：從洞察到實戰試算
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <a href="../apps/ai-miners-sheet/index.html"
+                       class="group relative overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 hover:border-indigo-500 p-6 text-white transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="font-mono text-xs px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">APP · BENCHMARK</span>
+                                <span class="font-mono text-sm text-slate-400 group-hover:text-indigo-300 transition">↗</span>
+                            </div>
+                            <h3 class="text-lg font-bold font-noto mb-2">十一大 AI 礦企核心數據對標表</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">即時比較算力轉型礦企的電力儲備、合約積壓與 EV/MW 估值折價。</p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800 text-xs font-mono text-indigo-400 flex items-center justify-between">
+                            <span>電力儲備 / EV/MW 排行</span>
+                            <span>啟動終端 →</span>
+                        </div>
+                    </a>
+                    <a href="../apps/cot-studio/index.html"
+                       class="group relative overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 hover:border-indigo-500 p-6 text-white transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="font-mono text-xs px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">APP · THINKING</span>
+                                <span class="font-mono text-sm text-slate-400 group-hover:text-indigo-300 transition">↗</span>
+                            </div>
+                            <h3 class="text-lg font-bold font-noto mb-2">思考鏈分析工作台 (CoT Studio)</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">結構化推演宏觀因果鏈、邏輯樹與紅隊風控假設。</p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800 text-xs font-mono text-indigo-400 flex items-center justify-between">
+                            <span>多維推演 / 紅隊審查</span>
+                            <span>啟動終端 →</span>
+                        </div>
+                    </a>
+                    <a href="../apps/content-evolution-atlas/index.html"
+                       class="group relative overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 hover:border-indigo-500 p-6 text-white transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="font-mono text-xs px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">APP · ATLAS</span>
+                                <span class="font-mono text-sm text-slate-400 group-hover:text-indigo-300 transition">↗</span>
+                            </div>
+                            <h3 class="text-lg font-bold font-noto mb-2">全站點線面知識演化圖譜</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">視覺化檢視 23 檔實體頁、專題中樞與長青指南的拓樸連結健康度。</p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800 text-xs font-mono text-indigo-400 flex items-center justify-between">
+                            <span>拓樸圖譜 / 新鮮度稽核</span>
+                            <span>啟動終端 →</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 lg:py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-4">
+                <span class="text-xs font-mono font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">ZONE 04 · LAYER 1B CONCEPT ENTITY HUBS</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white font-noto mt-1">
+                    核心概念百科 <span class="text-sm font-normal text-slate-500 dark:text-slate-400">(點擊術語膠囊檢視 Answer-First 定義)</span>
+                </h2>
+            </div>
+            <div id="concept-pills-container" class="flex flex-wrap gap-2.5"></div>
+            <div id="concept-preview-box" class="hidden mt-4 p-4 sm:p-5 rounded-xl bg-white dark:bg-slate-900 border border-indigo-500/50 shadow-sm transition-all">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <span id="concept-preview-code" class="font-mono text-xs px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-semibold"></span>
+                            <h3 id="concept-preview-title" class="font-bold text-base text-slate-900 dark:text-white"></h3>
+                        </div>
+                        <p id="concept-preview-desc" class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+                        <p id="concept-preview-threshold" class="text-xs font-mono text-amber-700 dark:text-amber-400 mt-2"></p>
+                    </div>
+                    <button id="concept-preview-close" type="button" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-sm font-mono px-2 py-1">✕</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-master-matrix" class="py-14 lg:py-16 border-t border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/20 scroll-mt-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-7">
+                    <div>
+                        <span class="text-xs font-mono font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">ZONE 05 · VALUE CHAIN MATRIX</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white font-noto mt-1">
+                            4 維策略與工具導讀矩陣
+                        </h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1.5">
+                            依交易方法論與估值工具維度分流，點擊卡片抽屜直達核心模型章節。
+                        </p>
+                    </div>
+                    <div class="relative w-full md:w-64">
+                        <input id="matrix-search-input" type="search" placeholder="篩選策略、模型或工具..."
+                            class="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition">
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 10.5a7.5 7.5 0 0013.15 6.15z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div id="pillar-tabs" role="tablist" aria-label="策略維度篩選"
+                     class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 mb-6 border-b border-slate-200 dark:border-slate-800"></div>
+                <div id="topic-matrix-container" data-topic="topic-strategies-tools" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+            </div>
+        </section>
+
+        <section class="py-14 border-t border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-8">
+                    <span class="text-xs font-mono font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">ZONE 06 · GEO STRUCTURED FAQ</span>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white font-noto mt-1 mb-5">
+                        核心問題與直接解答
+                    </h2>
+                    <div class="space-y-3">
+                        <details class="group rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-5" open>
+                            <summary class="flex items-center justify-between gap-4 cursor-pointer font-semibold text-sm sm:text-base text-slate-900 dark:text-white font-noto">
+                                <span>如何結合長青策略百科與互動工作站進行跨資產估值？</span>
+                                <span class="chevron-icon text-slate-400 transition-transform font-mono text-xs">▼</span>
+                            </summary>
+                            <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                先透過 151+ 策略百科與 DCF / 期權微結構指南確立市場體制（例如負 Gamma 波動放大或高無風險利率區間），再進入 AlphaVal Workstation 與十一大 AI 礦企對標表進行即時 EV/MW 與現金流敏感度試算。
+                            </p>
+                        </details>
+                        <details class="group rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
+                            <summary class="flex items-center justify-between gap-4 cursor-pointer font-semibold text-sm sm:text-base text-slate-900 dark:text-white font-noto">
+                                <span>為何 AI 資料中心與礦企估值基準必須追蹤 EV/MW？</span>
+                                <span class="chevron-icon text-slate-400 transition-transform font-mono text-xs">▼</span>
+                            </summary>
+                            <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                傳統本益比受 GPU 加速折舊干擾嚴重；以 EV/MW（企業價值除以已確保電力容量）對標北維吉尼亞 ~$2,700 萬/MW 的已出租併購基準，能更精準衡量電力護城河的重置價值。
+                            </p>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4">
+                    <div class="rounded-2xl bg-slate-100/80 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 text-xs space-y-3">
+                        <div class="font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 pb-2 border-b border-slate-200 dark:border-slate-800">
+                            ENTITY DISAMBIGUATION &amp; RAG CARD
+                        </div>
+                        <div>
+                            <span class="font-semibold text-slate-700 dark:text-slate-300">核心覆蓋系統：</span>
+                            <span class="text-slate-600 dark:text-slate-400">151 策略總表、AlphaVal DCF、GEX 微結構、AI 礦企對標表、演化圖譜</span>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-slate-700 dark:text-slate-300">所屬主題與路由：</span>
+                            <span class="font-mono text-indigo-700 dark:text-indigo-400">topic-strategies-tools · Layer 1C CollectionPage</span>
+                        </div>
+                        <div class="pt-2 border-t border-slate-200 dark:border-slate-800">
+                            <span class="font-semibold text-slate-700 dark:text-slate-300 block mb-1.5">橫向關聯專題中樞：</span>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="./topic-us-equities.html" class="underline decoration-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">美股個股與估值重定價</a>
+                                <a href="./topic-ai-economy.html" class="underline decoration-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">AI 經濟學</a>
+                                <a href="./topic-winter-is-coming.html" class="underline decoration-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">凜冬將至</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <noscript>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 p-5 border border-slate-300 rounded-xl">
+                    <h3 class="font-bold text-base mb-2">投研策略與實戰工具核心指南靜態索引</h3>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li><a href="./trading-strategies-list-151.html">151 交易策略總表</a></li>
+                        <li><a href="./tools-ai-valuation-workstation.html">AlphaVal AI 估值工作站</a></li>
+                        <li><a href="./trading-strategies-dcf-valuation-model.html">DCF 現金流折現模型指南</a></li>
+                        <li><a href="./trading-strategies-options-volatility-strategies.html">期權與波動率策略指南</a></li>
+                    </ul>
+                    <!-- METRICS_NOSCRIPT:START -->
+                    <h4 class="font-bold text-sm mt-4 mb-2">核心追蹤指標帳本摘要（同步日期：2026-11-28）</h4>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li><strong>系統化策略百科收錄</strong>：151+ 實戰策略模型（基準：橫跨技術/基本/固收/期權/期貨）— 全系列長青策略指南已接軌實證時間軸與相關工具工作站 <a href="../post/trading-strategies-list-151.html">[來源 2026-11-28]</a></li>
+                        <li><strong>AI 資料中心併購估值錨</strong>：~$2,700 萬 / MW (北維吉尼亞)（基準：IREN 靜態對齊 $42.79 基準）— AlphaVal Workstation 已同步修正靜態市價基準，反映已出租算力資產溢價 <a href="../post/tools-ai-valuation-workstation.html">[來源 2026-11-28]</a></li>
+                        <li><strong>期權做市商 GEX 狀態監控</strong>：Negative Gamma 警戒（基準：年終考核與 Vanna/Charm 效應）— 跌破 Gamma Flip 後造市商順週期對沖放大跨資產日內波動 <a href="../post/trading-strategies-options-volatility-strategies.html">[來源 2026-11-28]</a></li>
+                        <li><strong>Zero-Build 互動投研終端</strong>：4 大互動工作台運行中（基準：CoT / DCF / 礦企表 / 演化圖譜）— 全站純原生 JS + Shadow DOM 封裝，支援離線與瀏覽器即時試算 <a href="../apps/cot-studio/index.html">[來源 2026-11-28]</a></li>
+                    </ul>
+                    <!-- METRICS_NOSCRIPT:END -->
+                </div>
+            </noscript>
+        </section>
+    </main>
+
+    <div id="footer-host"></div>
+
+    <script src="../assets/js/core/core-header.js"></script>
+    <script src="../assets/js/core/core-footer.js"></script>
+    <script src="../assets/js/topics/topic-strategies-tools-cot-data.js"></script>
+    <script src="../assets/js/topics/topic-hub-renderer.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.HeaderComponent) {
+                new HeaderComponent().setHomeUrl('../index.html').init();
+            }
+            if (window.FooterComponent) {
+                new FooterComponent().init();
+            }
+            const topicData = window.TOPIC_STRATEGIES_TOOLS_COT_DATA;
+            if (topicData) {
+                const genEl = document.getElementById('telemetry-generated-at');
+                if (genEl && topicData.generated_at) {
+                    genEl.textContent = topicData.generated_at;
+                }
+                if (window.TopicHubRenderer) {
+                    window.TopicHubRenderer.init({ data: topicData });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

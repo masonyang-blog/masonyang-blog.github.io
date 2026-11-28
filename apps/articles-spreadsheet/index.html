@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-4RKTYWVLXN"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-4RKTYWVLXN');
+  </script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" href="../../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/brand/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/brand/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<!-- SEO & METADATA -->
+<!-- @validation-skip-sidebar -->
+<title>全站文章資料庫與試算表終端</title>
+<meta content="Mason Yang Blog 的機構級結構化文章資料庫與試算表過濾終端。支援多維度篩選、表頭排序與一鍵匯出 TSV/CSV 供 Google Sheet 與 Excel 分析。" name="description"/>
+<meta content="Mason Yang, 文章資料表, 結構化資料, 投資報告, 試算表匯出, 知識管理" name="keywords"/>
+<link href="https://masonyang-blog.github.io/apps/articles-spreadsheet/index.html" rel="canonical"/>
+<meta content="F1sAja4V6KTk17SiojYOS8UF1GP9-hu8TXI8iVKQ27Y" name="google-site-verification"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+TC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Core (Must be first to prevent FOUC) -->
+<script src="../../assets/js/core/core-theme.js"></script>
+<!-- Tailwind CSS -->
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              850: '#15202e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Custom Styles -->
+<link href="../../assets/css/custom-tokens.css" rel="stylesheet"/>
+<link href="../../assets/css/custom-typography.css" rel="stylesheet"/>
+<link href="../../assets/css/custom-layout.css" rel="stylesheet"/>
+<link href="../../assets/css/custom-components.css" rel="stylesheet"/>
+<link href="../../assets/css/custom-article.css" rel="stylesheet"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://masonyang-blog.github.io/apps/articles-spreadsheet/index.html",
+      "isPartOf": {
+        "@id": "https://masonyang-blog.github.io/#website"
+      },
+      "headline": "全站文章資料庫與試算表終端",
+      "description": "Mason Yang Blog 的機構級結構化文章資料庫與試算表過濾終端。支援多維度篩選、表頭排序與一鍵匯出 TSV/CSV 供 Google Sheet 與 Excel 分析。",
+      "url": "https://masonyang-blog.github.io/apps/articles-spreadsheet/index.html",
+      "about": [
+        {
+          "@type": "Thing",
+          "name": "Spreadsheet",
+          "sameAs": "https://www.wikidata.org/wiki/Q183258"
+        },
+        {
+          "@type": "Thing",
+          "name": "Database",
+          "sameAs": "https://www.wikidata.org/wiki/Q8513"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://masonyang-blog.github.io/#author",
+      "name": "Mason Yang",
+      "url": "https://masonyang-blog.github.io",
+      "jobTitle": "Investment Researcher",
+      "description": "專注於總體經濟、股市分析與 Web3 領域的研究者。",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://masonyang-blog.github.io/logo.png"
+      },
+      "sameAs": [
+        "https://x.com/MasonYang16"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://masonyang-blog.github.io/#website",
+      "url": "https://masonyang-blog.github.io",
+      "name": "Mason Yang Blog",
+      "publisher": {
+        "@id": "https://masonyang-blog.github.io/#author"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://masonyang-blog.github.io/apps/articles-spreadsheet/index.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首頁",
+          "item": "https://masonyang-blog.github.io/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "全站文章資料庫與試算表終端",
+          "item": "https://masonyang-blog.github.io/apps/articles-spreadsheet/index.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300" data-article-id="articles-spreadsheet">
+<div class="lg:hidden mb-8" id="toc-mobile-target"></div>
+<!-- Header Host -->
+<div id="header-host"></div>
+<main class="flex-grow py-8 px-4 sm:px-6 lg:px-8 max-w-[1600px] w-full mx-auto">
+<nav aria-label="Breadcrumb" class="flex text-sm text-slate-500 dark:text-slate-400 mb-6">
+<ol class="flex items-center space-x-1.5 flex-wrap">
+<li><a class="hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="../../index.html">首頁</a></li>
+<li><svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg></li>
+<li class="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[180px]">全站文章資料庫與試算表終端</li>
+</ol>
+</nav>
+<!-- 頁面標題列 -->
+<div class="mb-8">
+<h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white font-noto">
+        全站文章資料庫與<span class="text-blue-600 dark:text-blue-400">試算表終端</span>
+</h1>
+<div class="above-fold-summary bg-blue-50/80 dark:bg-slate-800/80 border-b-2 border-blue-600/40 p-4 my-4 rounded-r-xl">
+<p class="text-sm md:text-base font-medium text-slate-800 dark:text-slate-200 leading-relaxed m-0"><strong class="dsr-label">[Direct Answer]</strong>
+          本篇研究《全站文章資料庫與試算表終端》針對當前市場核心機制進行量化拆解，透過機構級觀點與結構化邏輯，提供決策者高期望值的行動指南與邊界風險測算。</p>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-2 max-w-3xl">
+        這裡是 Mason Yang Blog 的全站內容集散中心。透過結構化標籤與年份過濾器，您可以快速篩選所需主題，並直接複製為 TSV 或下載 CSV 匯入您的個人知識庫。
+      </p>
+</div>
+<!-- 試算表 Web Component 宿主 -->
+<div class="w-full" id="spreadsheet-host">
+<!-- STATIC_FALLBACK_START -->
+<noscript>
+<div class="overflow-x-auto bg-white dark:bg-slate-900 shadow-md rounded-lg p-6 my-4 border border-slate-200 dark:border-slate-800">
+<p class="mb-4 text-amber-600 dark:text-amber-400 font-semibold font-noto">偵測到 JavaScript 已停用或未載入。以下是靜態降級 HTML 列表：</p>
+<table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 font-noto text-sm">
+<thead class="bg-slate-50 dark:bg-slate-800">
+<tr>
+<th class="px-4 py-3 text-left font-bold text-slate-700 dark:text-slate-200">日期</th>
+<th class="px-4 py-3 text-left font-bold text-slate-700 dark:text-slate-200">文章標題</th>
+<th class="px-4 py-3 text-left font-bold text-slate-700 dark:text-slate-200">分類</th>
+<th class="px-4 py-3 text-left font-bold text-slate-700 dark:text-slate-200">摘要描述</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-28</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261128-btc-value-capture-ic-memo.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【比特幣價值捕獲與配置評估】 - AI 與穩定幣繁榮為何無法推升 BTC？數位黃金避險為何失效？解構 0.67% 手續費與 88.2% 期貨定價權</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">紅隊審查與風控預警</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">截至 2026 年 11 月底，比特幣現貨 ETF（IBIT）YTD 重挫 -31.38%、最大回撤 -53.68%，與 S&P 500 30 天相關係數飆至 +0.80。本文透過實證數據解構穩定幣絕緣、0.67% 手續費枯竭、AI 35 倍創投虹吸與 88.2% 期貨定價權，提出投委會不予增配紀律框架。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-28</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/topic-strategies-tools.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投研策略與實戰工具：系統化交易模型、DCF 估值與互動工作站中樞</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">系統化交易策略百科、投研 SOP 與 Zero-Build 估值工作站總覽。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-28</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/topic-us-equities.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">美股個股與估值重定價：AI 軟體、航太前沿與 SaaS 現金流中樞</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">拆解高利率體制下美股垂直個股財報、護城河與 Pre-IPO 流動性重定價邏輯。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-27</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crude-oil-geopolitics-pricing-framework.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【能源定價框架】原油地緣風險溢價與供需結構 - 霍爾木茲權力租金、通膨傳導與跨資產避險實戰指南</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">原油市場的真實定價取決於地緣風險溢價、邊際開採與補庫成本鐵底、以及能源通膨向貨幣政策的雙向傳導。本文蒸餾霍爾木茲海峽權力租金、TDA 相變預警、OPEC+ 財政博弈與跨資產避險矩陣，建立可複用的能源週期實戰框架。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-27</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/us-stock-ai-valuation-liquidity-guide.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美股估值框架】AI 時代美股估值極限與流動性清算指南 - 從 P/S 泡沫、SaaS 定價權轉移到避險配置模型</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">當美股科技板塊平均市銷率突破 8.1 倍、公募 SaaS Rule of 40 達標率跌破 20%，且 Pre-IPO 管道累積 3.12 兆美元形成一二級市場倒掛，美股正進入估值重定價與流動性清算週期。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261124-brain-hardware-rehab-bdnf-workflow.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【大腦硬體復健工程】 - 代謝滅火如何逆轉海馬迴萎縮？為何運動能重啟前額葉？解構 BDNF 施肥三階段與嵌入式工作流</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">隨筆與跨界觀察</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">修復憂鬱大腦必須遵循「先降發炎、再長突觸、最後鍛鍊控制力」的生物學次序。透過進食順序控糖、骨骼肌吸收 70%-80% 餐後葡萄糖、零光害神經膠淋巴排毒與 BDNF 施肥三階段，能在低能耗下重建神經機能。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261124-depression-neuro-rehab-guide.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【心理健康與大腦復健路線圖】 - 從神經生物學到快樂重建：高效工作者的系統性自癒全景指南（三部曲總覽）</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">隨筆與跨界觀察</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本總覽路線圖整合高效工作者心理健康與大腦復健三部曲，建立「臨床鑑別→硬體代謝→心智重塑」的系統性自癒架構，並提供精準分流導覽，協助讀者依自身狀態定位切入點。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261124-depression-neurobiology-inflammation-anhedonia.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【憂鬱症神經生物學解密】 - 慢性發炎如何劫持大腦快樂迴路？為何高功能者會斷崖失能？解構犬尿氨酸路徑與三大病理循環</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">隨筆與跨界觀察</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">臨床憂鬱症並非抗壓性不足，而是神經傳導、免疫發炎與代謝失衡觸發的系統性失調。當發炎細胞因子活化 IDO 酵素劫持色胺酸轉化為神經毒素喹啉酸，大腦會主動降頻並引發安能快感缺失與高功能代償崩潰。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261124-mental-identity-rehab-anhedonia-recovery.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【心理身份重塑與快樂重建】 - 問題外化如何打破疾病認同？為何掌握感能重啟多巴胺？解構高功能陪伴與四階段感官校準</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">隨筆與跨界觀察</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">當大腦發炎平息後，復健進入心智軟體重構。透過敘事治療問題外化與兩分鐘微習慣打破「我等於疾病」的認同黏著，並依循感官喚醒、微光存摺、掌握感激活與數位斷食四階段，安全重校多巴胺 D2 受體基線。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261124-walmart-agentic-commerce-gateway.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【代理商務與沃爾瑪戰略】 - AI 導購如何讓購物籃暴增 40%？為何沃爾瑪敢開窗而亞馬遜築牆？解構 Sparky、Agent Gateway 與 AIO 生死線</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">沃爾瑪透過 Sparky 情境式打包讓 AI 購物籃暴增 40%、使用量年增 129%，並以基於 MCP 的 Agent Gateway 與 Agent Profiles 實現「受控開放」，在開放外部 AI 代理導流的同時牢牢鎖住商品推薦權與客戶支付主權。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/agentic-commerce-business-models.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【代理商務商業模式】 - 新網路憲法如何改寫交易與定價？為何中階品牌面臨出清？解構六大新物種與四維變形檢核表</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">新網路憲法徹底重寫價值計價、價格發現與信任機制。商業模式正加速變形為原子化按次收費、A2A 反向拍賣與蜂群團購、買方省錢分潤代理、極端啞鈴型分裂、KYA 與 AI 責任險，以及 API 數據海關六大新物種。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/agentic-commerce-macro-trends.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AI 電商大趨勢】 - 代理商務如何重塑人類眼球經濟？為何 Stripe 數據暴增 80 倍？解構四層協議與啞鈴型品牌宿命</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">AI 電商正從服務人類眼球的 Web 2.0 全面切換至代理商務時代。Stripe 數據顯示 AI 代理日均交易額暴增 7,982%，旅遊與 3C 家電率先被接管；品牌須建構 AEO 數據基建與四層協議能力，並於無頭供應鏈或情緒體驗品牌間果斷選邊。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/ai-compute-infrastructure-guide.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【核心機制】AI 算力基礎設施投資框架 - 電力併網瓶頸、TCO 折舊模型與資本週期實戰指南</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">AI 算力基礎設施已轉型為受電力併網週期與三年技術折舊制約的重資產公用事業。本文拆解 500kV 變壓器 160 週交期瓶頸、70% 稼動率損益死線、GPU 抵押債風險傳導與都市邊緣微算力單元經濟模型。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/gold-btc-macro-hedge-framework.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【黃金與比特幣跨資產宏觀避險框架】 - 實體儲備錨與數位流動性海綿如何分工？解構相關性反轉、美債殖利率傳導與槓鈴配置法則</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">拆解黃金與比特幣在美債週期與流動性衝擊下的定價分化，從跨波段實證時間軸驗證相關性從 -0.88 負相關切換至 +1 同步清算的條件，建立雙核槓鈴配置框架。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/gold-liquidity-crisis-mechanism.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【流動性危機下的黃金定價】 - 為何危機初期黃金反而暴跌？解構現金為王錯殺機制、三階段演變與信用重估訊號</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">拆解流動性危機初期黃金遭強制變現錯殺的底層機制，透過多波段歷史實證時間軸與三階段實戰觀察框架，區分短期流動性擠兌與長期主權信用重估。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/market-microstructure-chip-analysis-guide.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【核心機制】市場微觀結構與籌碼分析框架 - 空頭擠壓、可轉債套利壓制與機構擁擠度實戰指南</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">市場定價的短期邊界由微觀籌碼結構與強制清算規則主導。本文系統化拆解借券與融券強制回補軋空、可轉債 Delta 動態放空壓制、13F 機構擁擠度及鏈上空頭瀑布四大機制，建立跨市場籌碼審計與風控框架。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/topic-mental-health-rehab.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">高效工作者、交易者與研究員的心理健康保健提醒：神經生物學、BDNF 硬體復健與決策認知防護全景</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">隨筆與跨界觀察</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">專為高效工作者、金融交易者與深度研究員設計的心理健康保健提醒與大腦復健中樞：整合犬尿氨酸路徑與微笑憂鬱警訊、回撤期皮質醇防護、BDNF 三階段硬體修復與 Anhedonia 多巴胺校準框架。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-23</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261123-agentic-commerce-endgame-protocols-valuation.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【代理商務終局篇】 - 協議戰爭如何重寫網路憲法？誰能對非人類經濟體徵收終極過路費？解構四層協議、雙軌結算與資本重估地圖</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Cloudflare 數據顯示全球機器流量已於 2026 年 5 月正式超越人類流量，代理商務正從旅遊（43%）與零售（34%）戰場滲透至底層基礎設施。本文解構 MCP、UCP、ACP 與 AP2 四層開放協議憲法，剖析 Stripe Link、Visa/Mastercard 與穩定幣 x402 的雙軌結算博弈、AI 入口的受託人變現死結，以及 Cloudflare 等賣水人帝國的資本重估地圖。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-23</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261123-agentic-commerce-retail-amazon-shopify.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【代理商務與零售版圖】 - AI 代理人如何抽乾 Amazon 廣告印鈔機？為何 Shopify 開放生態反成最大軍火商？解構 34% 零售佔比、FBA 物理壁壘與零忠誠度重定價</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Stripe 2026 年 11 月數據顯示零售業已成為佔比 34% 的代理商務第二大戰場，其中家居電子 22.9% 與日常剛需 40.9% 率先被演算法接管。本文透過三層穿透分析 Amazon $500B+ 廣告印鈔機的拆彈危機、Shopify 結盟 Stripe 的開放軍火庫紅利，以及 Walmart 10 英里實體門市如何成為演算法無法繞過的物理護城河。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-23</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261123-agentic-commerce-stripe-ota.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【代理商務與 Stripe 結算】 - AI 代理人如何碾碎 OTA 霸權？為何 80 倍成長直擊旅遊與零售？解構 43% 交易佔比與 MCP 直連協議</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Stripe 實證數據顯示 AI 代理日均交易額兩個月暴漲近 80 倍（7,982%），其中旅遊業佔 43%、零售佔 34%。當個人 AI 繞過搜尋與比價介面透過 API 與 MCP 直連底層庫存，Expedia、Booking.com 與 Airbnb 依賴注意力套利與打包摩擦的高抽成商業模式正加速重定價。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-21</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261121-gex-quant-monitoring-pipeline.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【GEX 量化監控管線】 - 造市商負 Gamma 如何引爆流動性踩踏？為何單看隱含波動率常失靈？拆解 TXO Vanna/Charm 與法人雙重驗證系統</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">當市場跌破 Gamma Flip 臨界點，造市商的機械性對沖將轉為順勢追殺。本手冊完整拆解美股 SPY GEX v1 原型、台灣期交所 TXO Vanna/Charm 反推運算 v2、三大法人台指期未平倉雙重驗證 v3、PCR 與 VIXTWN 擴充模組，以及 GitHub Actions 與 Apps Script 全自動跨市場戰情警報管線。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-21</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261121-liquidity-crisis-market-microstructure.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【流動性危機與微結構】 - 準備金枯竭如何引爆負 Gamma 瀑布？為何 Vanna 與 Charm 反轉軋空？解構 Call/Put Wall 與對沖防線</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">當銀行準備金跌破安全邊際，市場定價權將從基本面移交給造市商演算法風控。本文拆解負 Gamma 死亡螺旋、主經紀商 Haircut 雙重斷血、Vanna 與 Charm 引發的 V 型軋空反轉，並提供利用 TAIFEX 與 CBOE 免費 OI 數據手動推估 Call Wall、Put Wall 與 Gamma Flip 的實戰方法論。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261119-gold-btc-november-selloff-attribution.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【黃金與比特幣重挫歸因】 - Fed升息與企業發債如何引爆跨資產賣壓？解構2.91%實質利率與流動性真相</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">截至2026年11月17日，美國期中選舉後通膨與就業數據強於預期，迫使市場定價Fed於12月再度升息，推升10年期TIPS實質殖利率至2.91%、美元指數觸及103.70。疊加科技巨頭逾3,707億美元發債抽資與Anthropic逾600億美元IPO吸金，黃金下探3,831美元、比特幣觸及62,006美元。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/docs-dual-system-life-reset-handbook.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【心智模型專題】雙系統人生重啟與神經行為重塑 - 身分與目標重塑引擎實戰指南</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">隨筆與跨界觀察</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">多數行為改變計畫在 14 天內崩潰，根源在於用前額葉語言硬體強行對抗基底核生存腳本。本手冊整合 Dan Koe 高維認知架構與 Chase Hughes 底層神經重編程，建構「身分與目標重塑引擎」，透過反願景威脅建模、環境預測誤差與 66 天 F.E.A.R. 閉環，將意志力內耗轉化為自動化神經迴路。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-18</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/anthropic.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">Anthropic（ANT）破兆美元 IPO：如何定價美國算力殖民主義與跨期套利？主權賣權、二階傳導與納指納入量化總覽</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Anthropic（ANT）破兆美元 IPO 代表 AI 產業從全球硬體自由貿易切換至美國算力殖民主義。本文整合機構執行摘要、主權賣權定價理論、雲端與硬體二階傳導、三大貝他中性配對交易、NDX 快速納入被動買盤與 2027 年 37 億股解禁量化博弈模型。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-17</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261117-gold-btc-nov-selloff-attribution.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【黃金與比特幣 11 月同步重挫歸因】Fed 升息預期與 1.88 兆美元發債潮如何重擊兩大資產？</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">截至 2026 年 11 月 17 日，美國 10 年期 TIPS 實質殖利率攀升至 2.91%、Fed 12 月升息機率逼近 100%，疊加美國投資級企業債 1.88 兆美元歷史發債潮抽乾美元流動性，導致現貨黃金跌破 4,000 美元下探 3,831 美元、比特幣回測 62,006 美元。本文逐一驗證五大市場假說，並拆解央行 321 噸買盤與比特幣 ETF 23.5 億美元流出的結構性分歧。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-11-17</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/iren.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">IREN Ltd (NASDAQ: IREN) 深度投資研究：極端恐慌定價下的 AI 能源與算力價值錯殺</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度解析 IREN Ltd (NASDAQ: IREN) 從比特幣礦工向高毛利 Neocloud AI 雲端基礎設施的結構性轉型、同業估值折價與 60 億美元資本開支稀釋壓力測試。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-26</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-ai-microstructure-edge.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">AI 時代的市場共識崩塌與微觀博弈優勢構建</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文深度剖析大型語言模型與高頻演算法在公開資訊同質化下的踩踏效應，揭示傳統宏觀 Alpha 衰竭機制。透過 Kyle 點差模型、Cartea 訂單流不平衡（OFI）與做市商負 Gamma 順週期拋售，建構基於極限流動性斷層修復與非對稱限價掛單的統計套利優勢，經實證檢驗具備顯著統計學 Alpha。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-26</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/unity.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Unity 股票深度投資分析】 - Vector AI 引擎如何重塑遊戲廣告定價權？為何 Runtime Fee 撤回不足以修復信任？解構 Unity 困境反轉與競爭格局</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Unity 取消 Runtime Fee 回歸 SaaS 訂閱並提價，雖然短期關閉 IronSource 廣告網路產生一次性資產減損，但將深層 Runtime 行為數據正式接入 Vector AI 廣告引擎，將使 Unity 從傳統引擎工具轉型為 AI 廣告數據壟斷巨頭，迎來財務拐點與估值重估。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-25</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261025-taiwan-cross-border-crime-governance.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【台灣黑灰產與移工體制】如何借鑒大西洋三角貿易瓦解 5 兆地下經濟？剖析 10 萬失聯移工與金融 AML 防線潰敗機制</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">隨筆與跨界觀察</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深入剖析台灣達 5 兆規模之地下經濟與黑灰產業鏈。借鑒大西洋黑奴三角貿易架構，揭示東南亞移工如何被拆解為體力勞動、人頭金融帳戶與通訊跳板，並探討母國高額債役拘束、十萬失聯勞工與金融 AML/KYC 防線潰敗成因，提出落實雇主付費原則與跨國司法聯防之制度解方。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-25</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261025-taiwan-election-strategy-psychology.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【台灣選戰策略】沈伯洋人設去極化與小水滴動員分析：從青鳥到洋流的群眾心理學</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">隨筆與跨界觀察</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深入解析2026台北市長選戰中沈伯洋的人設去極化與支持者符號重構工程，從認知心理學與群眾傳播機制拆解「青鳥」至「小水滴」的流體動員策略、接受許可結構搭建及朝野攻防成效。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../ai-workflow/ecommerce-ai-agent-guide.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">電商專用 AI Agent 落地實戰全書：從商業真相、系統架構、演算法博弈到工業代碼實現｜全景旗艦版</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">電商專用 AI Agent 生產級落地核心在於專用 Harness 架構工程與狀態機控制。全景整合阿里國際站 107 Benchmark 復盤、Sourcing 到 Listing 全鏈路閉環、五層毛利穿透、五長制 MAS 多智能體協同及 Guardrails 原始碼實裝。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-13</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261013-ai-compute-asset-pricing-stress-test.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">AI 算力資產定價與物理邊界壓力測試：電網瓶頸、次級折價與私募信貸斷裂</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">紅隊審查與風控預警</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度量化 AI 超大規模資料中心（Hyperscale DC）的物理與金融雙重約束：500kV 變壓器交付期拉長至 160 週導致 ASC 360 資產減損臨界提列；矽基壽命與信貸久期錯配疊加 35% 次級處置基差引發私募信貸斷裂；廣域網延遲使分散式算力 MFU 崩塌至 3-8%，全面重構吉瓦級資本開支的宏觀風控對沖定價。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-13</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261013-gold-currency-stress-test.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">全球黃金超級週期與貨幣危機假說紅隊審查：極端流動性踩踏與宏觀傳導反駁推演</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">紅隊審查與風控預警</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">在評估黃金從大宗商品轉向主權安全信用屬性的過程中，市場普遍存在去美元化購金脫鉤實質利率的假說。本報告透過紅隊審查，推演當10年期美債實質收益率維持高位且去美元化流動性面臨飽和時，零孳息特性的隱性資本成本將劇烈放大；一旦COMEX期現溢價收斂與紙黃金去槓桿，將促使金價面臨實質購買力中樞的深層定價重構。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-13</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../ai-workflow/how-to-optimize-tokens-for-ai-coding.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AI 寫程式架構】 - Skills 按需路由如何顛覆百萬上下文迷思？解構脫水防火牆與 95.7% Token 節省實踐</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">大模型上下文窗口的無限擴張掩蓋了工程架構的失職。本文解構百萬上下文的幻覺，提出以 AI 寫程式 Skills 路由掛載、AST 骨架脫水防火牆與 One Phase One Session 物理隔絕為核心的 AI 工作流架構，實測達成 95.7% Token 節省與 100% 執行通過率。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-11</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261011-global-macro-cross-asset-liquidation.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球跨資產清算與滯脹重置】 - 美債長端定價錨失控如何引爆跨資產解耦？為何私人信貸連兩季觸發5%贖回上限？解構美債殖利率5.6%與反身性清算機制</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">解構2026年全球宏觀跨資產清算：荷姆茲常態化對抗與實質薪資負增長阻斷貨幣寬鬆，30年期美債殖利率突破5.66%引發長端定價錨失控，私人信貸連續觸發5%贖回上限，揭示跨資產風險重置機制。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-04</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261004-ai-ugc-equity-research.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AI-UGC 產業價值鏈重構】 - 雙向網絡平台如何捕獲超額報酬？從技術擴散到長尾商業化的股票投資研究</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">生成式 AI 將數位內容邊際生產成本壓至趨近於零，產業超額報酬轉移至雙向網絡平台與封閉清算生態。深度剖析美股 9 大核心標的投資評級：超額配置 Roblox (RBLX)、Unity (U)；中性配置 Meta (META)、Alphabet (GOOGL)、Shopify (SHOP)、Amazon (AMZN)、Microsoft (MSFT)；審慎低配 Adobe (ADBE)、Cloudflare (NET)。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-04</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261004-manufacturing-shakeout-synthesis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【中國高端製造業大淘汰賽】 - 光伏與新能源汽車的共性規律、結構差異與終局推演：產能出清週期下的企業生存法則與投資策略</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">中國光伏與新能源汽車正同步步入殘酷產能出清週期。深入剖析兩者供需失衡、以價換量與「量增利縮」的共性規律，拆解 B2B 大宗標準品與 B2C 耐用消費品在定價權、技術折舊與地緣防禦的結構差異，並確立四大生存法則與 2026-2028 終局投資配置策略。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-03</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261003-cognitive-outsourcing-urban-edge-computing.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AI 認知外包與邊緣算力】 - 心智機能退化如何掏空組織中層？為何推論浪潮逼迫數據中心公用事業化？拆解都市微電網單元經濟與實體落地真相</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深入剖析 AI 認知外包引發的人類心智機能退化與組織漏斗化，解構數據中心由訓練轉向 24/7 推論的公用事業化重組，並評估充電樁、智慧零售與微電網邊緣運算的落地商業模型。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-10-03</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20261003-coinbase-tokenized-finance-ousd.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Coinbase】代幣化金融如何顛覆傳統清算？為何 OUSD 催化 450 美元估值重估？解析 4 大流動性機制、38% 淨利率與 70% 週期回撤邊界</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深入剖析代幣化金融體系與新一代聯盟型合規穩定幣 OUSD 的宏觀傳導機制，並量化拆解 Coinbase (NASDAQ: COIN) 在 100% 短債儲備、38% 頂峰淨利率與 Base 生態爆發下的 450 至 600 美元估值重估上限與 70% 週期回撤邊界。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/institutional-year-end-market-structure.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【年終流動性崩塌機制】 - 為什麼秋末市場頻繁出現微觀結構抽離？華爾街考核與做市商去風險的三大定量因子</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">全球權益與固定收益市場在每年第四季度（以及作為先導窗口的 9 月中旬）頻繁展現出與總體經濟基本面嚴重脫鉤的極端微觀結構波動與流動性抽離現象。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-18</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/tools-ai-valuation-workstation.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">AlphaVal Workstation — 法人級 AI 基本面估值與同業對標工作站</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">AlphaVal Workstation — 法人級 AI 基本面估值與同業對標工作站。整合 DCF 模型、EV/MW 乘數與同業對標分析，提供即時動態估值試算。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260914-yen-carry-trade-liquidation.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【日元套息清算】 - 跨國負債錯配如何引爆流動性黑洞？為何黃金短暫淪為提款機？解構 1 兆美元敞口、20 倍清算乘數與跨市場踩踏定錨</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度解構全球日元套息交易清算機制：測算 1 兆美元表內外日元敞口與 CFTC 投機極值，以金融工程數學模型解析 20 倍保證金清算乘數與流動性黑洞，深度複盤 2024 年 8 月 5 日黑色星期一閃崩因果，並剖析極端去槓桿期黃金避險異象與跨資產定價修復時間窗口。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-13</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260913-frontier-ai-capital-cycle.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【前沿 AI 資本週期】 - 巨頭為何倡議放慢步調？如何以道德敘事掩護去槓桿？拆解 7,000 億 CapEx、GPU 抵押債與六千億美元營收缺口</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">解讀 Anthropic Dario Amodei 倡議放慢步調與科技巨頭呼應背後的深層資本週期：剖析 2026 年 7,000 億美元 CapEx 囚徒困境、Scaling Law 收益遞減、紅杉 6,000 億營收缺口、GPU 私人信貸影子銀行與 Nvidia 賣方信貸兜底，並對比 2000 年光纖泡沫推演軟著陸與硬著陸情境。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-12</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260912-bitcoin-endgame-hypotheses.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【比特幣終局】 - 矽基 AI 與生息穩定幣如何重塑貨幣本位？為何吸收態障礙與合規審查引爆雙軌撕裂？解構 2100 萬枚稀缺性、PoW 熱力學威懾與全網算力博弈</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">在全球總體經濟學、貨幣哲學與密碼學的既有論述中，關於比特幣終局（Endgame）的探討多聚焦於主流的五大基準假說：法幣崩潰推動的「惡性比特幣化」、明尼阿波利斯聯準會與歐洲央行所主張的「主權防禦性扼殺與平衡預算自衛」、佐爾坦·波扎爾構想的「布雷頓森林體系 III 外部中立儲備錨」、華爾街衍生品與託管壟斷造成的「金融去勢與紙比特幣化」，以及由區塊獎勵遞減引發的「安全預算枯竭與量子破密危機」。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-12</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260912-crypto-miners-ai-datacenter-pivot.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【礦企轉型 AI】 - Take-or-Pay 合約如何鎖定獲利加速度？群聯模式自建設備是否衝擊數據中心？拆解 EV/MW 估值重構、電網併網瓶頸與 500 億美元資金缺口</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度查證北美比特幣礦企轉型 AI/HPC 數據中心之四大核心投資論點：解析 Take-or-Pay 長期託管合約如何隔絕 Token 價格通縮、群聯 5,000 萬私有化模型對底層公用事業電網的供需層級隔離，並推演 EV/MW 資產重估、2026-2027 交付排程與 VanEck 500 億美元融資缺口風險。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-06</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260906-ai-compute-asset-pricing-power-physics.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AI 算力資產定價】 - 500kV 變壓器交期如何重構資產定價？為何折舊與電網引爆 ASC 360 減損？解構 70% 稼動率死線、160 週延誤與 MFU 50% 護城河</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">在生成式人工智慧與大型語言模型推動的技術競賽中，資本市場初期普遍將算力租賃視為一種高週轉、輕資產的硬體套利模式。投資者假設只要向晶片供應商大量採購加速卡並部署於託管機房，即可在次級市場獲取高達每小時 4.00 至 8.00 美元的暴利現貨租</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-06</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260906-ai-compute-infrastructure-investment.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">AI 算力基礎設施：從財務數據推演投資機會與風險架構分析</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">解構 1,024 卡 H100 叢集 4,500 萬美元 CapEx 與 70% 稼動率損益平衡點。剖析核電 PPA、120kW DLC 液冷、CoreWeave 85 億美元投資級融資、ASC 360 資產減損與機構投資人盡職調查矩陣。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-06</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260906-ai-datacenter-financial-model.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AI 算力數據中心收益評估】 - 如何跨越 70% 稼動率獲利分水嶺？為何 Time-to-Power 延遲引爆無效折舊？解構 1,024 卡 H100 TCO、代幣成本與財務模型</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">評估單位算力收益以及算力數據中心資產的財務回報，解構1,024卡H100之4,500萬美元CapEx與1,772萬美元OpEx結構，推演70%稼動率獲利分水嶺與Time-to-Power無效折舊風險。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-06</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/roblox.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Roblox (RBLX) 深度研報】 - 如何在會計遞延與SBC稀釋中重估沉浸式平台？預訂額80億與雙軌DCF公允價值測算</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Roblox Corporation (NYSE: RBLX) 資本週期覆盤與長期投資價值評估。解構 27 個月 ASC 606 遞延收入黑箱、年逾 10 億美元 SBC 稀釋實質，透過雙軌 DCF 模型測算 $24-$75 估值區間，確立 $58.00 基準目標價。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-05</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260905-clarity-act-rwa-investment-research.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美債 RWA 與 CLARITY Act】 - 40 兆主權債如何驅動鏈上體外循環？非託管安全港怎樣重塑 UNI 與 ONDO 估值？剖析 5 層資本矩陣與對沖策略</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">美債逼近 40 兆且年利息突破 1.1 兆美元，外國央行減持迫使短債滾動。《CLARITY Act》劃定 SEC 與 CFTC 界線並設立非託管安全港，解鎖 UNI 費用開關與 ONDO 資本封裝。本文建構 5 層全景矩陣與市場中性事件驅動策略。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-05</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260905-dash-blockchain-research.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【達世幣 Dash 支付公鏈】 - 雙層主節點如何免疫 51% 攻擊？為何面臨 SEC 匿名合規下架潮？解構 15 萬門市落地與穩定幣夾擊下的中庸困境</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">達世幣（Dash）憑藉雙層主節點架構、ChainLocks 確定性安全與自融資 DAO 國庫在支付領域立足，但在惡性通膨地區遭遇美元穩定幣降維打擊，二級市場更面臨 AEC 匿名標籤下架與 SEC 未註冊證券審查。本研報深度解構其技術防護、代幣通縮模型、CrayPay 15 萬門市整合與 Evolution 平台轉型前景。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-05</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/circle.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Circle USDC 研報】 - 降息週期如何衝擊淨息差？CLARITY Act 為何鞏固 0% 資金成本？解構 580 億損益平衡與合成對沖交易計畫</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文為機構級專題研報：剖析 Circle (USDC) 資產負債表實質、總經降息每 100 bps 帶來 4 億美元利差侵蝕，以及《CLARITY Act》法定 0% 資金成本壟斷護城河。測算 580 億損益平衡發行規模，並建構「多 COIN/UNI/PT-USDC + 空 KRE/BTC」合成對沖套利策略。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-09-03</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260903-us-japan-liquidity-crisis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美日金融危機】 - 日圓套利交易如何引爆流動性凍結？為何利差失衡誘發 Dash for Cash？解構 SOFR 飆升與 12 兆美元去槓桿傳導</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">美日利差失衡與極端日圓匯率正透過12兆美元套利交易網絡累積全球系統性風險。本文深度解構從美債長端利率飆升、日本央行被迫緊縮、高風險資產拋售，到SOFR飆升與離岸美元CIP深度偏離的「全面美元現鈔枯竭 (Dash for Cash)」真實傳導鏈。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260819-compute-dollar-nvidia-gpu-cme-futures.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【算力美元】 - 輝達GPU資產化如何重塑資本秩序？CME期貨對沖與5000億美元融資的三大結構斷點</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度剖析輝達 5,000 億美元華爾街融資聯盟與 CME 算力期貨對沖機制。解構石油美元轉向算力美元的全球宏觀變局，以及硬體折舊錯配、物理交付與循環融資的三大系統性斷點。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260819-compute-dollar-second-order-derivation-spark-arbitrage.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【算力美元二階推導】 - 火花轉算力套利如何重構全球貨幣體系？為何石油美元正轉向算力美元？解構四大壓力測試與 Sovereign AI 主權防線</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">紅隊審查與風控預警</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度推導算力金融化二階與三階巨觀效應：火花轉算力套利機制、能源與Token定價模型、石油美元轉向算力美元的貨幣霸權循環，以及四大極端情境壓力測試與 Sovereign AI 主權防線。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260819-semiconductor-sector-selloff-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球半導體板塊劇烈修正】 - Meta 270億表外債如何刺破 AI 估值？為何輝達、台積電與美光遭遇長鞭效應？解構費半暴跌真相</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年8月19日全球半導體板塊遭遇劇烈修正，費半狂瀉4.98%、台股跌589點。本文深度剖析 Meta、Google、Oracle 等科技巨擘3兆美元表外隱藏負債（如 Meta Hyperion 273億發債），解析油價飆升與美債殖利率破4.7%下，輝達 (NVDA)、美光 (MU)、ASML 設備廠所面臨的長鞭效應，以及台積電 (TSMC) 憑藉先進製程壟斷展現的定價防禦力。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-faq-hub.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">全站 FAQ Hub：比特幣投資、宏觀分析與鏈上指標常見問題</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Mason Yang Blog 官方常見問題中心。彙整比特幣估值、宏觀經濟影響、鏈上週期數據等核心問答。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/topic-core.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">全球加密資產宏觀戰略報告</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026 年加密市場進入「複雜的穩定性」新常態。本報告深度解構全球流動性傳導、GENIUS 法案監管紅利、機構化時代與 RWA/AI 代理經濟等核心敘事，為 2026 年加密市場提供生存與獲利的戰略指南。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-dcf-valuation-model.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投資策略｜動態雙軌制 DCF 估值計算機：NVDA 隱含預期反推</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">零建置雙軌制估值系統：結合正向折現與 Bisection 數值逼近反向解題。調整滑桿即刻體驗 WACC 複利蒸發效應與市場隱含預期反推。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-18</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/coinbase.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Coinbase (COIN) 深度研報】 - 如何在手續費壓縮與熊市虧損中重估萬物交易所價值？USDC 13.5億與 Deribit 29億併購的護城河</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Coinbase Global, Inc. (NASDAQ: COIN) 深度投資與企業戰略研究報告。剖析 USDC 13.5 億利息收入、Deribit 29 億併購、Base Layer-2 與 x402 AI 支付協議的商業護城河。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-18</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/ethfi.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Ether.fi ETHFI 深度研報】— 告別 EigenLayer 再質押後，如何重估月刷 1.42 億美元的去中心化加密新銀行？解構 53% OP 營收占比、MoonPay 整合與回購真相</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度剖析 Ether.fi (ETHFI) 全面退出 EigenLayer 再質押後的範式轉型：估值錨點從 TVL/FDV 倒掛轉向現金流定價（P/S ~9.4x–11.1x），解構 Cash 月刷 1.42 億美元、OP Mainnet 貢獻 53% 營收、MoonPay 全棧整合與 5,000 萬美元回購真相。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-17</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260817-crypto-ai-vc-investment-strategy.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【創投 Crypto 與 AI 投資策略】 - 去中心化算力如何顛覆雲端巨頭？為何 40% 資金湧向 DePIN？解構 io.net 成本驟降 70% 與 x402 代理人支付協議</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年全球科技巨頭超過3000億美元的AI資本支出引發嚴重中心化壟斷，驅動40%加密創投資金湧向Web3+AI融合領域。本報告解構a16z、Multicoin、Founders Fund等頂級VC在DePIN算力套利、Jolt zkVM密碼學驗證與x402代理人微支付等四大賽道的投資邏輯與混合代幣模型。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-17</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/gaw.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Games Workshop (GAW) 深度投資分析】 - 實體桌遊霸主 how 跨越數位鴻溝？為何 38% 營運利潤率無可撼動？拆解 IP 授權與亞馬遜影視變現路徑</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度剖析 Games Workshop (GAW) 如何從封閉模型製造商轉型為全球娛樂 IP 巨頭，解構其 70% 高毛利率、極致營運槓桿、76.7% ROCE 與《星際戰士2》跨媒介爆發性增長，並橫向對標 11 家全球頂級 IP 娛樂巨頭。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-17</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/goplus.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【GoPlus Security (GPS) 投資分析】 - Web3 用戶安全網絡如何構築數據護城河？為何每日調用破 3,000 萬次？解構模組化安全架構與代幣激勵模型</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度剖析 GoPlus Security (GPS) 模組化安全層、日均 3,000 萬次 API 調用、Coinbase x402 機器微支付協議、EigenLayer AVS 去中心化架構、30% 協議收入回購銷毀與解鎖懸空風險。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-16</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/topic-crypto.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">比特幣、加密資產與 Web3 生態全景：主權流動性、RWA 美債代幣化、合規監管與 DeFAI 架構</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">系統性解構比特幣與 Web3 加密生態四維架構：從主權流動性與鏈上指標、RWA 美債代幣化與合規法案、L1 公鏈底層技術，到 DeFAI 與流動性籌碼博弈。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-16</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/bitway.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Bitway BTW 機構級投資分析】 - 比特幣原生 DeFi 如何重構流動性溢價？為何密碼學驗證是關鍵？解構跨鏈清算與系統性風險</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度解構 Bitway (BTW) 比特幣原生 DeFi 基礎設施。探討 31 億美元估值背後高達 40 倍的 FDV/TVL 溢價、FROST 門限簽名密碼學架構、99.01% 籌碼集中度與衍生品軋空定價機制。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-16</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/velvet.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Velvet Capital VELVET DeFAI】 - 跨鏈 DeFAI 協議如何重構資產管理？為何意圖架構享有估值溢價？解構技術護城河與市場演化</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度解構 Velvet Capital (VELVET) 跨鏈 DeFAI 基礎設施。探討 1900% 暴漲背後的逼空機制、MC/TVL 高達 594 倍的估值溢價、多智能體 AI 協同網絡與真實收益代幣經濟學。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-09</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260809-saas-rule-of-40-2026.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球 SaaS Rule of 40 破滅】 - 僅 20% 企業達標如何重定估值？解構 EV/ARR 溢價與財務分化</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">全球公募 SaaS 僅 20% 達標 Rule of 40，達標者享有 74% 估值溢價（EV/Rev 4.8x vs 2.7x）。本文深度比對 CWAN、NOW、FROG 等領軍企業財報，拆解 AI 推論成本下的 Rule of X 演化。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-07</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260807-unity-applovin-q2-2026-earnings.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Unity vs AppLovin 財報對決】 - Vector AI 如何驅動暴漲 16%？解構手遊廣告定價權拐點</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Q2 財報後 Unity (U) 憑 Vector AI 動能與提早轉盈預期大漲 16.12%，AppLovin (APP) 則因現金流落後急跌 23%。本文量化對比兩大平台 Playable Ads 壁壘與定價權轉移。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-03</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260803-global-gold-investment-analysis-report.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球黃金投資定價權重塑】 - 央行儲備框架與微觀流動性如何預示大宗商品超級週期？</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">綜合20份頂級機構研報，解析黃金自$5,595天價回調後之定價轉折：央行信念買盤、財政主導與AISC</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-03</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260803-gold-macro-liquidity-crisis-review.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球宏觀流動性危機與黃金定價重估】 - 核心論點如何通過事實驗證？為何黃金在流動性收縮中逆勢上漲？解構後續研究框架與配置策略</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深入解析2026年黃金自$5,595歷史天價回調至$4,044的雙重機制：沃什休克療法引發30年期美</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-01</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260801-crypto-miners-ai-transition-institutional-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【北美礦企 AI 轉型機構級量化分析】 - 雙軌競爭力如何重塑礦企選股邏輯？為何 PPA 懸崖威脅轉型時間表？解構籌碼結構與機構持倉變化</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度評估9大標的估值矩陣、現金燃燒率、PPA電力懸崖、GB200液冷工程壁壘、4大壓力測試情境與可轉債套利機制。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-01</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260801-crypto-mining-ai-hpc-stocks.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【北美礦企 AI 轉型全景白皮書】九大個股深度評析 × 機構量化估值矩陣 × PPA電力與可轉債籌碼微觀解構</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">比特幣減半與 Hash Price 歷史低點倒逼採礦業者轉型 AI 資料中心。GW 級已聯網電力容量為超大型雲端商縮短 75% 部署時程。本文深度拆解 9 大標的估值矩陣、PPA 懸崖、GB200 液冷改造、4 大壓力測試與可轉債套利籌碼結構。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-08-01</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260801-us-crypto-miners-ai-stocks-valuation-guide.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【北美礦企轉型 AI/HPC 全景白皮書】九大個股深度調研：估值倍數重組、PPA 電力懸崖與籌碼微觀全解析</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">比特幣減半與 Hash Price 歷史低點倒逼採礦業者轉型 AI 資料中心。GW 級已聯網電力容量為超大型雲端商縮短 75% 部署時程。本文深度拆解 9 大標的估值矩陣、PPA 懸崖、GB200 液冷改造、4 大壓力測試與可轉債套利籌碼結構。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-07-29</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260729-ai-financing-risk.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AI 算力融資風險與金融傳導】 - 算力狂飆如何製造系統性融資泡沫？為何私募信貸曝險集中算力基礎設施？解構 CapEx 過剩與流動性壓力測試</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">紅隊審查與風控預警</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">影子銀行與私人信貸如何成為 AI 資料中心 CAPEX 的隱形引擎？晶片商與實驗室之間的循環融資如何透過資產代換傳導？這是否會在資產折舊加速時引發系統性金融連鎖反應？</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-07-23</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260723-google-oracle-spillover.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Google 財報對 Oracle 的溢出效應】 - 雲端資本支出狂飆如何觸發 Oracle 數據庫遷移潮？為何 AI 工作負載重塑企業軟體定價權？解構算力需求傳導鏈</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度解構 Alphabet 2026 Q2 財報高達 449 億美元資本支出對 Oracle (OCI) 的溢出效應，評估其 6,380 億美元 RPO 訂單、S&P 降評至 BBB- 與 OpenAI 客戶集中度風險。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-07-21</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260721-unity-investment-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Unity 股票深度投資分析】 - Vector AI 引擎如何重塑遊戲廣告定價權？為何 Runtime Fee 撤回不足以修復信任？解構 Unity 困境反轉與競爭格局</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Unity 取消 Runtime Fee 回歸 SaaS 訂閱並提價，雖然短期關閉 IronSource 廣告網路產生一次性資產減損，但將深層 Runtime 行為數據正式接入 Vector AI 廣告引擎，將使 Unity 從傳統引擎工具轉型為 AI 廣告數據壟斷巨頭，迎來財務拐點與估值重估。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-07-18</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260718-openai-finance-crisis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【OpenAI 財務危機情境推演】 - 星門超算資本開支如何引發 Oracle 溢出效應？為何 50 億美元年虧損難以為繼？解構 AI 泡沫破裂與流動性傳導路徑</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度剖析 OpenAI 財務現況與極端現金消耗。揭露 Oracle 在「星門計畫」中的結構性不對等與財務陷阱，推演悲觀環境下引發的全球 AI 連續泡沫崩潰與半導體產業寒冬。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-07-02</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260702-memory-short-selling-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【記憶體產業放空戰略】 - 現貨與合約價背離如何鎖定放空拐點？為何強制回補是致命軋空陷阱？解構 DRAM 景氣循環與借券賣出避險機制</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">紅隊審查與風控預警</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文解析2026年記憶體產業見頂回檔，定義現貨與合約價死亡交叉為放空之領先訊號，揭示借券賣出為避開除權息強制回補軋空陷阱的法門。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-07-02</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260702-oil-market-deep-dive.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球原油市場深度分析】 - 價格崩跌原因如何反向支撐 100 美元重返預測？為何 OPEC+ 減產策略失去效力？解構供需結構與地緣風險溢價重定</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年全球原油價格因地緣政治降溫、史無前例的需求破壞及戰略儲備極限釋放，從126美元高點暴跌40%至70美元區間。本報告深度解析原油市場探底成本支撐，並分析2027年供應過剩背景下重返百元大關的極端情境與長期能源轉型博弈。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-06-12</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260612-spacex-ipo-valuation-break-risk.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【SpaceX IPO 估值破發風險】 - 2000 億美元被動指數配置如何反噬大盤？為何短期債務與極端稀釋引發流動性踩踏？解構星鏈現金流與三大市場劇本</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文分析 SpaceX IPO 估值泡沫及短期債務，推演臉書式、Uber式與Rivian式三種破發劇本，指出被動基金重平衡將排擠科技巨頭並引發系統性流動性反噬。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-06-12</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/topic-ai-economy.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">AI 大經濟全景：算力電力基建、資本週期與代理商務應用</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">系統性解構 AI 大經濟四層價值鏈：從底層矽基與電網基建、前沿模型資本開支風險，到生產級 AI Agent 工程與代理商務（Agentic Commerce）商業變現。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-31</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260531-us-debt-gold-btc-impact.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美債危機對黃金與比特幣的影響】 - 美國國債評級崩潰如何引爆雙資產共振上漲？為何財政赤字加速法幣信用重估？解構宏觀避險傳導路徑</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深入分析 2026 年美國國債危機如何透過財政主導體制重構全球資產定價。本文證實黃金突破 $6,000 與比特幣邁向 $150,000 的核心路徑。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-30</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260530-btc-hedge-strategy.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【比特幣多空對沖與量化套利】 - 如何建構 Delta 中性組合？解構共整合配對與資金費率套利</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">市場中立型加密基金年化報酬達 14.4%，顯著領先單邊做多策略。本文實測比特幣與 ETH、MSTR 的共整合性配對，詳解 Ornstein-Uhlenbeck 模型、卡爾曼濾波器與資金費率套利參數。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-29</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260528-gold-btc-crash-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【流動性危機下黃金與比特幣同步崩盤】 - 資產定價權重塑如何導致避險資產無差別拋售？為何此次崩盤具結構必然性？解構範式轉移與長期配置意義</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年5月28日黃金與比特幣同步崩盤，核心在於荷莫茲海峽危機引發的能源通膨，迫使聯準會沃什體系展現鷹派立場，帶動美債殖利率突破5.1%。同時，GENIUS法案下的機構化轉型使比特幣淪為高貝塔風險資產。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-29</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/allora.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Allora ALLO 去中心化 AI 網路研究】 - DeFAI 架構如何實現市場預測去中心化？為何 ALLO 代幣激勵機制優於傳統預測市場？解構鏈上 AI 推理層競爭格局</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深入解析 Allora (ALLO) 去中心化 AI 網路的核心技術。從模型協調網路 (MCN) 到基於遺憾最小化的預測聚合，了解其如何重塑 DeFi 定價與智慧預言機的未來。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-28</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260528-stock-crash-risk.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美股崩盤風險終局評估】 - 宏觀背離如何加速流動性陷阱形成？為何信貸週期轉折點已越過臨界值？解構高位閃崩觸發條件與防禦性配置優先序</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">紅隊審查與風控預警</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">當前美股高達36倍的本益比與「停滯性通膨」的總經環境嚴重背離，結合商業不動產與企業債的再融資懸崖，系統性崩盤倒數計時已正式啟動。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-27</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260527-memory-supercycle-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【記憶體超級週期解析】 - AI 驅動 HBM 需求如何排擠傳統 DRAM 產能？為何價格傳導邏輯出現斷層？解構三星、SK 海力士與美光的競局</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文深度解析 2024-2026 記憶體超級循環的核心動能，指出 AI 算力對 HBM 的剛性需求引發殘酷的 3:1 產能排擠，導致價格傳導至模組廠迎來獲利爆發。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-26</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260526-mara-ai-transition-valuation.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【挖礦股估值重塑】 - MARA 與 IREN 轉型 AI 算力如何衝擊傳統 EV/Hashrate 估值？為何 MSTR 資本困境成對比基準？解構雙軌競爭力與 CapEx 懸崖</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年比特幣減半後，MARA與IREN等礦企正透過轉型AI算力與HPC數據中心迎來估值重塑。本文深度解析MARA收購Long Ridge及Starwood合資案，對比微策略(MSTR)流動性緊縮困境，驗證算力板塊的Alpha收益。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-26</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260526-web4-agent-driven-intelligent-network.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Web4 AI Agent 智慧網路架構】 - EIP-7702 如何釋放代理人自主決策能力？為何 Anoma 意圖架構顛覆傳統交易邏輯？解構 DePIN 算力變革與去中心化未來</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文深入剖析 Web4 時代的技術底層，闡述 AI Agent 如何結合 Anoma 意圖網路、EIP-7702 帳戶抽象與 DePIN 去中心化實體基礎設施，將 Web3 的數位所有權轉化為機器自主運作的 M2M 全智能經濟體。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-26</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/spacex.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【SpaceX IPO 估值方法論深度研究】 - S-1 財務招股書如何揭露星鏈現金流真相？為何 2,000 億美元估值需要被動指數支撐？解構太空經濟與衛星網路商業模式</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">SpaceX 預計二零二六年六月掛牌上市，目標估值達一點七五兆至二兆美元。本文深度剖析高盛、摩根大通等機構採用之 SOTP、TAM 與市場錨定等估值模型，並解構星鏈獲利、xAI 算力黑洞與指數被動資金擠壓效應。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-25</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260525-trump-midterm-crisis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【川普期中危機與金融風險推演】 - 商業地產 CRE 爆雷如何與政治週期共振？為何聯準會內鬥加劇市場不確定性？解構資產防禦配置的最優先序</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文對比2008年金融海嘯，深度推演2026年川普政府期中選舉年面臨的金融危機與政治決策共振。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260524-global-macro-financial-crisis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球金融市場崩跌機制解構】 - 美債收益率飆升如何引發比特幣跌破 75,000？為何凸性對沖拆解造成黃金回調？解構多重宏觀衝擊的連鎖崩潰路徑</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文深度剖析2026年5月全球跨資產共振拋售。重點推演30年期美債收益率與MBS負凸性拋售螺旋，剖析比特幣跌破75,000美元的流動性傳導機制。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-22</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-commodity-futures.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投資策略｜大宗商品期貨量化策略：解密 CTA 管理期貨與期限結構獲利法則</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">面對 2026 年通膨與地緣政治波動，如何透過量化模型獲利？深入解析大宗商品期貨的期限結構、展期收益，以及銅金比、金銀比等機構級宏觀套利策略。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-21</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260521-amd-valuation-deception.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AMD 估值騙局解密】 - 投行 AI 樂觀敘事如何遭遇現實撞擊？為何 MI350 產能瓶頸引發殺估值？拆解營收虛增與真實供需真相</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">紅隊審查與風控預警</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文深度拆解華爾街投行調高 AMD 目標價背後的敘事騙局，分析 x86 伺服器 CPU 的結構性風險、CoWoS 產能分配真相及 TCO 真實成本。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-21</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260521-clarity-act-legislative-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【CLARITY Act 數位資產監管框架】 - 美國金融監管重塑如何影響加密資產分類？為何地緣政治博弈滲透立法進程？解構商品與證券邊界重劃的市場衝擊</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年美國《清晰法案》(CLARITY Act) 將終結 SEC 與 CFTC 的管轄權之爭。本文剖析數位資產三類劃分、穩定幣收益禁令背後的銀行業博弈、中國 BSN 封鎖政策，以及 DeFi 開發者保護條款，為機構投資者提供最硬核的合規與投資指南。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-21</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-alternative-assets.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投資策略｜替代資產投資與跨市場交易策略：從 ETF 套利到宏觀對沖</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">當傳統股債配置失效，唯有穿透微觀結構與跨市場溢出效應，方能捕捉真正的 Alpha。本文深度解析 10 大替代資產類別的定價邏輯與交易機制。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-20</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-fixed-income-credit-structured-strategies.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投資策略｜固定收益投資策略深度解析（下）：掌握信用利差、CDS 基差與 MBS 結構化套利關鍵</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026 年「Higher for Longer」利率環境下，固定收益市場正迎來巨大機遇。本文深度解密信用利差套利、CDS 負基差以及可轉債 Gamma 交易等機構級量化策略。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-20</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-fixed-income-interest-rate-strategies.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投資策略｜固定收益投資策略深度解析（上）：殖利率曲線、國債基準與蝶式曲率交易</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年全球利率「Higher for Longer」環境下，結構化信用策略正經歷板塊移動。本文深度解構信用利差套利、CDS基差、可轉債Gamma交易及MBS負凸性異象，揭示金融工程如何將風險拆解並轉化為絕對報酬。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-20</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-options-volatility-strategies.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投資策略｜期權策略與波動率博弈 (下)：進階多腿組合、投資組合保證金與 Volmageddon 尾部風險復盤</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文深度復盤 2018 波動率末日 (Volmageddon) 死亡螺旋，並解析跨式 (Straddle)、勒式 (Strangle)、鐵鷹式等進階多腿期權組合的 Greeks 避險與 Portfolio Margin 投資組合保證金資本效率。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-20</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-options-yield-enhancement-strategies.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投資策略｜期權策略與波動率博弈 (上)：系統性收益增強、Greeks 動態管理與 Portfolio Margin 機構投研報告</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文實測剖析波動率風險溢價 (VRP) 理論，深度解析備兌買入 (Covered Call)、現金擔保賣出看跌 (Cash-Secured Put)、鐵鷹式等九大期權策略的 Greeks 動態博弈、組合保證金效率及波動率末日 (Volmageddon) 系統性風險防範。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260519-ap2-agent-payments-protocol.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AP2 代理支付協議架構】 - 密碼學信任框架如何支撐 AI 代理商務自主交易？為何傳統支付基礎設施無法滿足代理人需求？解構全球代理支付標準演進路徑</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文探討 Google Cloud 與 Coinbase 聯手推出的 AP2 代理支付協議，實測證明其能利用 SD-JWT 與可驗證數位憑證 (VDC) 為 AI 代理交易建立不可否認的密碼學審計軌跡。深入剖析 Mandate 狀態機、x402 穩定幣結算與 FIDO 聯盟的全球標準化進程，助極致投資者佈局機器經濟底層網路。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-fundamental-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投資策略｜基本面分析：量化多因子選股模型與風格因子實證研究 (投研方法論)</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">系統性資產定價因子與模型建構實證報告。針對價值、質量、應計、資產負債表結構、風險及規模等十一項核心因子進行深度剖析，並推導基於應計項目去偏、CLI 週期輪動與不交易區間控制的動態配置策略。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-technical-analysis-strategies.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投資策略｜技術分析與量化交易策略：系統性多因子與統計套利研究</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文全面解構系統性技術分析與現代量化交易架構：涵蓋多因子動能與行為金融機制、頻域濾波與布林帶體制切換、隱性背離與量價協同、OU過程與Copula統計套利、分數階差分與元標籤機器學習、通縮夏普比率（DSR）及凱利資金管理。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-18</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-dcf-valuation-model-guide.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">投資策略｜貼現現金流模型 (DCF) 估值實務：揭秘外資如何用貼現現金流尋找低估黑馬？</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">為什麼傳統 DCF 估值模型常常失效？本文帶你拆解外資投行的 7 大實務建模階段，從三表勾稽到 WACC 測算，手把手建構 2026 年最具防禦力的企業定價系統。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-17</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260517-gold-valuation-and-risk-assessment.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【黃金戰略配置與風險定價】 - 流動性枯竭如何扭曲避險溢價？為何量子計算威脅重構黃金角色？解構沃什休克療法下的資產配置框架</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026全球金融架構面臨重構，黃金正轉變為多極化貨幣戰略錨點。本文深度解析首72小時變現拋售潮、聯準會沃許休克療法及量子末日下實體黃金的極端溢價，構建機構級黃金估值與防禦配置框架。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-17</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260517-memory-semiconductor-short-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【記憶體半導體做空戰略】 - AI 超級週期如何掩蓋結構性供過於求？為何 HBM 需求無法支撐 DRAM 均線？解構軋空風險與估值重設時間表</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">紅隊審查與風控預警</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">全球記憶體半導體受惠 AI 算力通膨出現歷史新高估值，本文深度解析美光與 SanDisk 之「3比1」晶圓排擠效應與 RPO 契約保護機制，並揭示在極度超買技術背離下的做空進出場策略與重大軋空風險。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-17</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260517-us-pre-ipo-bubble-and-liquidity-flight.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美股 Pre-IPO 泡沫與流動性逃命潮】 - 二級市場兩極化如何反映 VC 退出壓力？為何一二級倒掛成系統性風險訊號？解構 Pre-IPO 流動性陷阱</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年美股 Pre-IPO 市場呈現極端結構性大分流：AI 獨角獸如 OpenAI、SpaceX 狂享 40-80x ARR 估值狂飆，而舊時代 SaaS 獨角獸則在私人二級市場面臨 50%-65% 折價拋售。本文深度拆解一二級市場倒掛風險與流動性轉移真相。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-17</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/topic-winter-is-coming.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">宏觀經濟、地緣博弈與硬資產全景：美債定價錨、私人信貸危機、日圓套息與黃金超級週期</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">系統性追蹤全球宏觀流動性收縮與實體清算三階因果鏈：涵蓋美債長端利率、私人信貸影子銀行、黃金與能源地緣定價權、日圓套息交易與負 Gamma 流動性微結構。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-16</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260516-global-market-selloff-and-investment-strategy.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球金融市場潰敗深度研究】 - 多重宏觀衝擊如何觸發聯準會體制轉換？為何美聯儲喪失信譽引發連鎖拋售？解構危機應對投資策略與資產配置重組</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年5月全球金融市場面臨「股債金幣」共振式崩盤。本文深度剖析霍爾木茲海峽危機引發二次通脹、美聯儲沃許上任啟動激進縮表，以及無風險利率突破5%對風險資產定價的毀滅性重構，並給出分批進場的實戰指引。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-16</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260516-us-stock-valuation-extremes-and-short-squeeze-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美股估值極端與軋空風險】 - AI 籌碼擁擠與高 P/S 溢價如何反轉？解構量化警戒閾值與崩跌訊號</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">當美股科技板塊平均市銷率突破 8.0x、機構 13F 集中度逾 70%，市場正同時累積均值回歸與暴力軋空風險。本文拆解 P/S 極值、Short Float 警戒閾值與防禦輪動策略。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-15</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260515-gold-price-strategic-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【黃金價格走勢與 5,000 美元目標】 - 回撤 16% 如何確認長牛？央行購金與沃什衝擊關鍵撐壓</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">金價劇烈回撤 16% 並非牛市終結，而是鷹派人事預期下的去槓桿洗盤。央行實體購金與去美元化趨勢仍支撐黃金中長線結構性買盤，本文拆解關鍵技術支撐位、機構重倉邏輯與分批佈局訊號。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-15</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/topic-gold-currency-crisis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">黃金超級週期與貨幣危機全景：央行儲備重構、實質利率脫鉤、AISC 地板與紅隊壓力測試</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">系統性解構黃金從大宗商品轉向主權安全信用錨的底層邏輯：涵蓋央行信念買盤、AISC 成本地板、首 72 小時流動性變現潮、COMEX 期現去槓桿與紅隊證偽推演。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260514-china-new-energy-capacity-export-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【中國新能源產能過剩與全球出口】 - 太陽能與電動車出海如何重塑全球能源版圖？為何西方貿易壁壘無法阻擋成本競爭優勢？解構中國綠能出口路徑</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度分析 2026 年中國新能源產業「新三樣」產能監測、鏡像貿易數據缺口與出口路徑轉移。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260514-global-stagflation-crisis-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球停滯性通膨審查】 - 能源供給衝擊如何推升二次通膨？為何央行貨幣政策陷入兩難？解構滯脹週期下的跨資產防禦配置</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度分析 2026 年荷姆茲海峽封鎖引發的全球滯脹危機，探討供應鏈癱瘓、負實際工資與金融系統性風險。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-13</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260513-china-ai-competitive-advantage-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【中國 AI 產業競爭力架構】 - 能源成本優勢如何彌補硬體封鎖缺口？為何本土算力效率超越西方預期？解構 DeepSeek 路徑與產出效率指標</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本研報深度拆解中國 AI 產業的系統性競爭力。分析證實，透過「東數西算」的能源紅利、國產晶片的集群補償及極致的 MoE 演算法效率，中國正構建一套與西方迥異的高產出電性比 (Inference-per-Watt) 生產體系。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-13</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260513-us-inflation-oil-rates-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美國二次通膨燃燒】 - CPI 3.8% 與 PPI 6% 如何引爆聯準會政策兩難？為何油價復甦重燃通膨預期？解構利率路徑重定與跨資產衝擊傳導</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">美國 CPI 升至 3.8%，且 4 月份核心 PPI 年增幅飆升至 6%，觸發能源-通膨-利率的非對稱鏈條重估。深度拆解通膨二次燃燒背景下的投資策略。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-12</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260512-ev-charging-bottleneck-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【特斯拉兆瓦級能源與電網瓶頸】 - 超充基礎設施如何觸碰電網整合天花板？為何自動駕駛能耗需求加劇電力供需矛盾？解構特斯拉成長瓶頸與能源戰略</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文深入分析特斯拉從汽車銷售向能源與 AI 服務轉型的結構性瓶頸。實測數據顯示，自動駕駛車隊將新增 400 TWh 電力需求，而 120 週的變壓器供應鏈交期與 3,000A 的熱管理極限已成為限制其成長的實體邊界。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-11</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260511-china-energy-strategic-hedging.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【中國能源封鎖突圍戰略】 - 非對稱成本優勢如何瓦解美國「能源門票」霸權？為何產能海嘯成為最有效的地緣反制工具？解構能源主權競爭的新格局</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本研報解析 2026 年霍爾木茲海峽危機下，權力本質如何從「控制咽喉」轉向「提供生命維持系統」。詳解中國如何透過「除法博弈」將產能轉化為全球通縮救贖，並透過「產能-債務-支付」閉環重構獨立於美元霸權的新全球秩序。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-05-11</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260511-metalogic-hormuz-gate-of-power.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【荷莫茲海峽能源霸權報告】 - 美國護航權如何轉化為全球金融租金？為何霍爾木茲成為最具戰略價值的能源節點？解構《The Gate of Power》論述框架</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本研報披露 2026 年「史詩之怒行動」後霍爾木茲海峽的控制權性質轉向制度化尋租與「加法博弈」 (Gate Strategy)，剖析美國如何將護航權轉化為全球金融租金，並對全球製造業與資產估值產生結構性衝擊。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-23</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260423-iran-irgc-btc-fees.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【伊朗 IRGC 比特幣通道費深度研究】 - 霍爾木茲海峽數位關卡如何收取能源過路費？為何制裁體系無法阻斷鏈上資金流？解構地緣政治與加密金融交叉風險</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本研報披露伊朗革命衛隊在霍爾木茲海峽強制實施的比特幣與穩定幣通行費機制，剖析其技術架構、法律爭議、地緣政治衝突以及「數位主權金融」的範式演變。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-20</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/trading-strategies-list-151.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">《151 種交易策略》完整詳細清單：量化交易員的策略百科全書</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本清單收錄了《151 Trading Strategies》書中完整的量化交易策略目錄，是量化交易研究的核心參考索引。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-18</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260418-bitcoin-rise-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【比特幣突破 78,000 美元機制解構】 - 地緣衝突與政策驅動如何啟動機構資產重估？為何沃什衝擊加速法幣信用逃逸？解構 CLARITY Act 與鏈上籌碼結構</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文分析證實荷姆茲海峽開放帶來的風險偏好回升，疊加「沃什衝擊」引發的機構配置轉型，驅動比特幣站上 7.8 萬美元。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-18</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/mstr.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【MSTR 微策略股價成長機制】 - 比特幣收益率飛輪如何驅動 NAV 溢價持續擴張？為何傳統 EPS 估值框架失效？解構槓桿式 BTC 累積策略與資本市場博弈</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本研報解析 MSTR 股價增長的核心邏輯：透過發行 STRC 優先股與債券融資，不斷推升每股比特幣含量 (BTC Yield)，實現數位國庫的範式轉移。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-15</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260415-gray-rhino-market-crash-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球流動性收縮灰犀牛】 - 39 兆美債與私人信貸如何引發共振踩踏？為何高利率環境抽乾流動性？解構資產重定價的三大引爆點</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026 年全球市場正面臨三大「灰犀牛」（通膨二次反潰、供應鏈癱瘓與私募信貸清算）並行。本文解析解析範式轉移背後的非線性機制。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260414-ravedao-price-surge-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【RaveDAO 2100% 暴漲真相解構】 - 30 億市值如何在流動性蜃樓中瞬間蒸發？為何鏈上活躍度無法支撐極端估值？解構 RAVE 代幣機制與散戶踩踏路徑</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">紅隊審查與風控預警</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度解析 2026 年 4 月 RaveDAO (RAVE) 暴漲背後的「流動性蜃樓 (Liquidity Mirage)」。揭發低流動性環境下的市值誤區、FDV 現實斷裂及自體循環交易警訊，提供最冷靜的市場風險評估。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260414-tda-geopolitical-intelligence-dashboard.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【TDA 地緣政治情報深度預警系統】 - 拓撲數據分析如何捕捉非線性相變訊號？為何荷姆茲海峽衝突模擬優於傳統情報模型？解構地緣風險對沖策略框架</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年全球地緣政治與拓撲數據分析 (TDA) 深度預警系統（2026 Q3 翻新版）。本文利用持續同調、貝蒂數 (Betti numbers) 與 L2 範數識別市場斷裂徵兆，並針對荷姆茲海峽衝突提供物理極限模擬與 TACO 算子對沖策略。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-13</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260413-compute-power-ai-mining-report.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【算力產業轉型深度報告】 - 比特幣礦企如何跨界 AI 基礎設施？為何電力稀缺性成核心競爭壁壘？解構 PPA 電價合約與 GPU 算力租賃商業模式</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026年全球數字算力產業深度分析。詳解比特幣礦業轉型 AI 託管、NVIDIA Rubin 硬件革新、Neoclouds 洗牌及能源主權競爭。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-13</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/mara.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【MARA Holdings 深度投資分析】 - Q3 財報拆解、1.9 GW 電力折價與 AI/HPC 轉型估值重塑</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">截至 2026 年 11 月中旬與 Q3 2026 財報基準，深度解析 MARA Holdings (NASDAQ: MARA) 的估值折價與轉型拐點。涵蓋 22.13 億美元隱含營運 EV、單枚 BTC 三層開採成本拆解、累計減債 14 億美元與 5 億美元庫藏股、Long Ridge 505 MW 電廠 FERC 核准、Matagorda 2 GW 儲備、Starwood JV 與 Exaion 7,900 萬美元合約。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-10</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260410-btc-investment-opportunity-prediction.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【比特幣 BTC 投資機會與支撐預測】 - 機構買盤如何守住 7 萬關口？解構空頭擠壓與突破訊號</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">比特幣在 $70,000 關口獲得機構 ETF 買盤強力支撐，疊加 $60 億空頭清算壓力聚集，站穩 $72,800 與突破 $75,150 將觸發軋空主升浪。本文拆解地緣談判變數與鏈上關鍵指標。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-03</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260403-stagflation-crisis-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【全球停滯性通膨風暴】 - 三高危機如何終結降息預期？為何實質利率重創股債平衡？解構荷莫茲海峽油價傳導與避險資產定價權</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度研究 2026 年地緣衝突如何演變為全球性滯脹威脅，分析「高油價、高通膨、高利率」三殺機制對權益、債券及避險資產的結構性重創。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-04-01</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260401-jpy-systemic-risk-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【日圓套息交易系統性風險】 - 美債共生結構如何製造全球金融破口？為何 BOJ 升息觸發跨資產拋售浪潮？解構流動性危機下的日圓平倉路徑</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文實測解析日圓套利交易崩潰對全球流動性的連鎖反應，監測關鍵金融閾值與系統性風險觸發器。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-30</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260330-jpy-exchange-rate-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【日圓匯率危機與跌破 160】 - 中東能源衝擊如何瓦解避險屬性？解構 Carry Trade 拆解與流動性逆流</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">日圓跌破 160 關口創 1986 年以來新低，中東衝突推升能源進口實需拋盤，徹底瓦解日圓避險屬性。本文量化拆解 5,000 億美元套利交易存量、美日實質利差與三大反轉觸發指標。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-29</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260329-2026Q2-gold-investment-price-analysis-2026-2030.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【黃金超級週期定價】 - 央行買盤如何重塑 5 年目標位？解構 AISC 成本地板與流動性拐點</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文深度剖析 2026 年 Q2 黃金價格波動邏輯。黃金定價已從商品屬性轉向主權安全屬性，實質利率脫鉤與央行購金是主驅動力。展望 2026-2030 年金價挑戰 $6,000 以上。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-29</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-btc.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">比特幣高密度研報：從主權儲備到 BTCFi 的全景圖</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">比特幣已完成從非對稱博弈資產向主權級戰略儲備資產的範式轉移。本專題深度合成 8 篇核心研報，揭示 2026 年比特幣的最終定價權、MSTR 飛輪機制以及 BTCFi 生態的爆發路徑。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-28</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260328-tech-trends-2026-2031.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【未來五年科技大趨勢】- 邏輯推理如何識別下一波科技革命浪潮？為何 AI、量子計算與生物科技形成超級融合？解構未來十年的投資機會座標系</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026-2031 年將跨越康波週期轉折點，面臨能源算力一體化、主權算力割據、Q-Day 與代理人經濟變革。真實性將成為最高溢價資產。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-27</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260327-invest-research-handbook.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【專業投資研究實戰手冊】 - 機構級操作如何建立可重複的 Alpha 挖掘系統？為何心智模型庫決定長期超額收益？解構五力分析與情境模擬的深度實戰應用</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">TL;DR: 本手冊提供機構級投資研究的標準化作業程序，從持有期校準到貝葉斯概率更新，建立系統化決策架構，識別市場溢價不對稱。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-26</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260326-investment-research-guide.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【高價值投資研究操作指南】 - 思維邊界如何決定分析深度上限？為何機構級研究框架優先於市場情緒追蹤？解構從洞察到決策執行的完整投研方法論</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本指南旨在幫助投資研究員跳脫「資訊堆砌」的困境，建立一套能產生 Alpha（超額報酬） 的研究體系。涵蓋五力檢查表、三大核心模塊與情境分析工具，助你將研究轉化為具體決策動作。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-25</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260325-private-credit-gold-crisis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【私人信貸危機與黃金】 - 1.8 兆美元影子銀行如何引爆清算潮？為何金價先跌後暴漲？解構 PIK 債務陷阱與法幣信用重估</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深剖美國私人信貸市場結構性轉變及其帶來的系統性風險，探討「以債養債 (PIK)」與「贖回閘門」如何推動金價在 2026 年進入兩階段博弈。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-25</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260325-us-private-credit-crisis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美國私人信貸系統性危機】 - 影子銀行如何隱蔽 1.8 兆壞帳？解構 BDC 限制贖回與流動性枯竭</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">美國 1.8 兆美元私人信貸市場出現 PIK 實物付息翻倍與 BDC 限制贖回警訊。本文拆解影子銀行 Mark-to-model 估值掩蓋手法，以及危機向黃金、科技股與數位資產的二階傳導路徑。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-23</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260323-gold-crash-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【黃金暴跌與反彈轉機】 - 流動性清算如何砸盤？賣壓出清後的關鍵支撐位與反轉訊號</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">金價自高點急跌 15% 是基本面反轉還是流動性錯殺？實質利率飆升與保證金強制去槓桿引發機構拋售黃金補倉；一旦清算賣壓出清，關稅通膨預期降溫將帶來反彈轉機，本文拆解關鍵支撐位與分批配置訊號。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-23</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/palantir.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Palantir 戰略重估】 - AIP 如何引爆 70% 營收增長？為何「史詩憤怒行動」重塑大宗商品鏈？解構本體論架構與國防訂閱經濟</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度剖析 Palantir 在 2026 年初的演變：從營收增長 70% 的金融爆發，到「史詩憤怒行動」中的演算法戰爭實踐，及其對全球大宗商品供應鏈的結構性重塑。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-23</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/siren.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Siren AI SIREN 代理交易與迷因】 - AI Agent 如何融合迷因文化與動態自主交易？為何代理人經濟重構籌碼分佈？解構智慧合約與流動性池</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Siren AI (SIREN) 是一個基於 BNB Chain 的去中心化 AI 平台。它結合了希臘神話與尖端 AI 技術，核心組件 SirenAIAgent 提供「Golden」與「Crimson」雙重人格，為投資者提供從保守數據分析到大膽高風險進攻的多元交易策略。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-22</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260322-oil-gold-usd-btc-eth-global-macro-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【油金匯幣跨資產宏觀分析】 - 原油失衡如何傳導至金價？美元強勢壓制 BTC 與五大資產聯動</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">地緣政治引發荷姆茲海峽危機，導致原油飆升至 112 美元，比特幣逆勢上漲 12% 展現數位避險屬性，而黃金因流動性清算意外回撤。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-21</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260321-ai-computing-assets.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AI 算力資產重估與未來應用】 - NVIDIA Rubin 架構如何重塑算力定價標準？為何 DePIN 算力拓撲挑戰雲端壟斷？解構「算力黑洞」效應與投資機遇</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本文深度剖析 2026 年傑文斯悖論下的 AI 算力資產價值，對比 NVIDIA H100 等級機型與 DePIN 網路相比傳統比特幣挖礦的差異。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-20</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260320-ai-agent-economy.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【AI Agent 經濟體系與機器支付】 - 自主代理如何重構金融交易基礎設施？為何區塊鏈成為機器支付結算層？解構 AI Agent 商業模式與投資機會</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度分析 AI Agent 自主經濟體的興起與區塊鏈支付基建的範式轉移，探討「機器支付」對 Web3 生態的長遠影響。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-20</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260320-us-computing-infrastructure.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美國算力基礎設施產業投資】 - 電力稀缺性如何成為 AI 轉型的最終瓶頸？為何比特幣礦場搶占電廠位置？解構從挖礦到 AI 電廠的資產重估邏輯</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本報告深度分析 2026 年美國上市礦企從「挖礦」轉向「AI 數據中心」的結構性變革。電力資源已成為 AI 時代的戰略高地，成功的轉型企業正經歷估值重估。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-19</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260319-gold-crash-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【黃金暴跌原因解析】 - 實質利率飆升如何引爆清算拋售？地緣能源悖論重置金價地板</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">事件歸因與市場追蹤</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度剖析 2026 年 3 月 19 日黃金暴跌的核心驅動因素，涵蓋點陣圖修正、凱文沃什提名、能源通膨與技術性清算瀑布等維度。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-17</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260317-eth-surge-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【以太幣上漲動能與機構質押】 - 貝萊德 ETHB 與 Layer2 如何鎖定供給？解構 ETH 價格傳導與風險</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">以太幣突破 $2,300 的核心動能來自機構級生息需求與供給緊縮：貝萊德質押 ETF (ETHB) 吸引長線資金鎖倉，疊加 Layer2 流量與空頭回補。本文解析 ETH 上行目標與聯準會鷹派轉向的潛在回測風險。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-16</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/ondo.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Ondo Finance ONDO RWA 美債代幣化】 - USDY 機制如何實現鏈上美債收益？為何機構合規管道重構 DeFi 資本效率？解構收益傳導與清算風險</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Ondo Finance (ONDO) 是 RWA 賽道的領頭羊。本文深入解析其 USDY 與 OUSG 產品機制、代幣經濟模型與未來投資展望。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-btc-01-valuation-models.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">比特幣估值模型：從數位黃金到網路效應的多元維度分析</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">比特幣價值幾何？本文深度解析五大估值維度：資產對標法、網路效應（梅特卡夫定律）、供給側模型（S2F）與冪律模型。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-btc-02-price-factors.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">比特幣價格因素曼陀羅 (Mandala)：8 大核心維度與 64 個關鍵指標深度展開</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">分析影響比特幣價格的 8 大核心維度與 64 個關鍵指標。涵蓋宏觀經濟、代幣經濟、機構採用與鏈上數據的視覺化工具。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-macro.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">Messari Research: 全球宏觀戰略深度報告</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">機構級研究報告：2026 年全球宏觀戰略與加密資產流動性傳導機制深度解析。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-meme.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">迷因幣 (Meme Coin) 生存指南：從狗狗幣到注意力經濟的投機框架</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">迷因幣是加密市場注意力經濟的終極體現。本文解析迷因幣背後的文化共識與社群動力，並提供 C.A.T. 風險管理框架。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-rwa.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">現實世界資產 (RWA) 深度指南：資產代幣化、Ondo 與 BlackRock 佈局</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">RWA (現實世界資產) 是連接 TradFi 與 DeFi 的萬億級橋樑。深度拆解 BlackRock BUIDL 基金與 Ondo Finance 如何將美債與房地產代幣化，並探討 T.R.U.S.T. 評估框架。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-stablecoin.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">穩定幣 (Stablecoin) 深度指南：USDT、USDC 與算法穩定幣的風險與未來</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">加密貨幣市場的流動性基石。深度解析法幣儲備型與算法穩定幣的運作原理、風險與未來趨勢。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-tech.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">區塊鏈關鍵技術 (TECH)：模組化、ZK 與預測市場深度解析</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深入解析驅動 Web3 大規模採用的核心技術。模組化、ZK 與預測市場的技術底層深度拆解。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-13</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260313-bitwise-1m.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Bitwise 預測比特幣衝擊百萬美元】 - 機構資產配置如何引爆流動性海嘯？為何主權財富基金入場改變 S2F 供需曲線？解構 Matt Hougan 論點機制</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Bitwise CIO Matt Hougan 揭示比特幣邁向百萬美元的邏輯矩陣。本研究解析 SoV 市場擴張與 ETF 機構效應。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-11</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260311-btc-oil-macro-matrix.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【比特幣與石油的全變量宏觀矩陣】 - 地緣戰略如何重塑大宗商品與加密資產連動關係？為何能源價格成為 BTC 底部定價錨點？解構宏觀避險傳導</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">破解原油、黃金、美元與比特幣的宏觀連鎖反應。本研究提出「非線性矩陣」分析法，揭示惡性通膨與衰退情境下的資金轉向邏輯。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-09</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-btc-03-macro-analysis.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">比特幣與宏觀經濟分析：CPI、M2、美債與聯準會 7 大指標深度解析</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">深度解析 7 大宏觀數據（CPI、M1、M2、美元貶值、10yr 美債、30yr 房貸利率、聯準會資產負債表）如何共同驅動比特幣長線週期。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-09</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/btc.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【比特幣 BTC 投資分析】 - 數位黃金如何對抗法幣通膨？為何區塊鏈共識機制決定稀缺性？解構機構配置與減半效應</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">比特幣 (BTC) 是什麼？本文深度解析其工作量證明 (PoW) 機制與 2100 萬枚稀缺性。2026 年更新版整合了 S2F 模型審計、GENIUS 法案對主權儲備的影響、現貨 ETF AUM 數據與 BTCFi 生態發展，為 2026 年宏觀配置提供實戰框架。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-09</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/eth.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【以太坊 ETH 升級與生態】 - 智能合約與 PoS 機制如何重構金融？為何 Layer 2 擴展決定 Gas 費率？解構 Staking 收益率與生態壁壘</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">以太坊 (ETH) 是什麼？本文深度解析智能合約原理、PoS 權益證明機制、Layer 2 擴容方案以及 ETH 作為「數位石油」的投資價值。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-09</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/solana.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Solana SOL 效能與生態】 - 歷史證明 PoH 架構如何實現高 TPS 極致效能？為何 Meme 幣與 DePIN 生態首選 Solana？解構網路中斷與估值天花板</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Solana (SOL) 為什麼被稱為「以太坊殺手」？本文深入探討其 PoH 技術優勢、Sealevel 平行處理能力特點。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-09</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/tao.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Bittensor TAO 去中心化 AI】 - 子網競爭機制如何驅動分散式算力與 AI 模型？為何去中心化 AI 推理突破巨頭壟斷？解構代幣經濟學與算力效率</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Bittensor (TAO) 為什麼稱之為 AI 界的比特幣？本文解析 Yuma 共識、子網 (Subnets) 競爭機制，以及去中心化算力。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-06</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260306-us-computing-infrastructure-ai-transformation.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【美國算力基礎設施與 AI 轉型】 - 電力稀缺性如何驅動算力重估？為何比特幣礦場轉型 AI 資料中心成最佳路徑？解構電廠併網與資產評價</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026 年初美國算力產業核心邏輯已轉向「電力容量變現效率」。本文實測分析顯示：頂尖轉型礦企 AI 營收佔比預計突破 60%，企業估值正從 4x EBITDA 轉向 20x EBITDA，電力已成為 AI 巨頭搶奪的戰略高地。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-03-05</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-btc-04-sovereign-liquidity.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">五大鏈上指標共振：為什麼現在可能是比特幣的週期低點？</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">比特幣週期低點在哪裡？本文透過 MVRV Z-Score、Power Law Corridor、2-Year MA Multiplier 與彩虹圖等核心鏈上指標，深度解析當前市場的估值狀態。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-01-25</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../project/chainlink.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Chainlink LINK 預言機與 RWA】 - CCIP 跨鏈協議如何打破資訊孤島？為何預言機網路成為 Web3 金融基石？解構 RWA 代幣化與機構整合</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">標的與協議拆解</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026 華爾街深度研究報告：解析 Chainlink (LINK) 在 4 兆美元 RWA 浪潮、SVR 智慧價值捕獲、Grayscale GLNK 信託溢價、AI 代理 x402 支付與渣打銀行 $200 估值模型中的絕對護城河。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2026-01-24</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../news/20260124-tom-lee-2026.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">【Tom Lee 預測實測深度分析】 - 比特幣 25 萬美元論點如何通過鏈上驗證？為何美股 20% 回調預警比市場預期更早觸發？解構多頭框架與反身性機制</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">Fundstrat 創始人 Tom Lee 預測比特幣將在 2026 年達 25 萬美元，但股市恐面臨 20% 深度修正。本報導解析其代際財富轉移核心邏輯。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2025-10-14</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-why.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">Why Crypto？一份關於數位資產所有權的深度心理學分析</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">產業結構與週期</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">本報告旨在深入剖析全球範圍內不同群體採用加密貨幣的核心動機。揭示對抗通膨、追求主權與擁抱創新背後的底層邏輯。</td>
+</tr>
+<tr>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap text-slate-500 dark:text-slate-400 font-mono">2025-10-13</td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800"><a href="../../post/crypto-investment-guide.html" class="text-blue-600 dark:text-blue-400 no-underline font-bold transition-colors hover:text-blue-800 dark:hover:text-blue-300">加密貨幣市場進入策略：ETF、概念股與交易所深度比較</a></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 whitespace-nowrap"><span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md text-xs text-slate-700 dark:text-slate-300 font-medium">方法論、工具與工程</span></td>
+<td class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-[13px] leading-normal">2026 數位資產投資指南：分析 ETF、概念股與交易所管道的優劣，提供安全高效的佈局框架。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</noscript>
+<!-- STATIC_FALLBACK_END -->
+</div>
+</main>
+<!-- Footer Host -->
+<div id="footer-host"></div>
+<!-- Components & Dependencies -->
+<script src="../../assets/js/core/core-header.js"></script>
+<script src="../../assets/js/core/core-footer.js"></script>
+<script src="../../assets/js/core/core-taxonomy.js"></script>
+<script src="../../assets/js/data/core-articles-data.js"></script>
+<script src="../../assets/js/data/core-articles-repository.js"></script>
+<script src="../../assets/js/apps/engine-articles-filter.js"></script>
+<script src="../../assets/js/apps/app-articles-spreadsheet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // 初始化 Header
+      new HeaderComponent().init();
+
+      // 初始化 Footer
+      new FooterComponent().init();
+
+      // 初始化試算表組件
+      new ArticlesSpreadsheetComponent()
+        .setDebug(false)
+        .init();
+    });
+  </script>
+<aside class="hidden lg:block w-64 xl:w-72 flex-shrink-0 space-y-6">
+<div id="toc-desktop-host"></div>
+<div class="theme-bg-card dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden mb-4"><div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">關鍵字</p>
+</div><div class="px-4 py-3 flex flex-wrap gap-1.5"><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">Mason Yang</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">文章資料表</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">結構化資料</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">投資報告</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">試算表匯出</span><span class="tag-chip px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-medium">知識管理</span></div></div>
+</aside>
+<script src="../../assets/js/data/app-knowledge-data.js"></script>
+    <script src="../../assets/js/widgets/widget-knowledge-tooltip.js"></script>
+</body>
+</html>
